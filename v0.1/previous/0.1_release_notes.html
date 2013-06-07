@@ -1,0 +1,247 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>XDress 0.1 Release Notes &mdash; xdress 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/cloud.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../_static/cloud.js"></script>
+    <link rel="top" title="xdress 0.1 documentation" href="../index.html" />
+    <link rel="up" title="Previous Versions" href="index.html" />
+    <link rel="prev" title="Previous Versions" href="index.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <div class="relbar-top">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="index.html" title="Previous Versions"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">xdress 0.1 documentation</a> &raquo;</li>
+
+          <li><a href="index.html" accesskey="U">Previous Versions</a> &raquo;</li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="xdress-0-1-release-notes">
+<h1>XDress 0.1 Release Notes<a class="headerlink" href="#xdress-0-1-release-notes" title="Permalink to this headline">¶</a></h1>
+<p>XDress is an automatic wrapper generator for C/C++ written in pure Python. Currently,
+xdress may generate Python bindings (via Cython) for C++ classes &amp; functions
+and in-memory wrappers for C++ standard library containers (sets, vectors, maps).
+In the future, other tools and bindings will be supported.</p>
+<p>The main enabling feature of xdress is a dynamic type system that was designed with
+the purpose of API generation in mind.</p>
+<p>Release highlights:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Dynamic system for specifying types</li>
+<li>Automatically describes C/C++ APIs from source code with no modifications.</li>
+<li>Python extension module generation (via Cython) from C++ API descriptions</li>
+<li>Python views into C++ STL containers.  Vectors are NumPy arrays while maps
+and sets have custom collections.MutableMapping and collections.MutableSet
+subclasses.</li>
+<li>Command line interface to the above tools.</li>
+</ul>
+</div></blockquote>
+<p>Please visit the website for more information: <a class="reference external" href="http://bit.ly/xdress-code">http://bit.ly/xdress-code</a></p>
+<p>Or grab the code from GitHub: <a class="reference external" href="http://github.com/scopatz/xdress">http://github.com/scopatz/xdress</a></p>
+<p>XDress is free &amp; open source (BSD 2-clause license) and requires Python 2.7,
+NumPy 1.5+, PyTables 2.1+, Cython 0.18+, GCC-XML, and lxml.</p>
+<div class="section" id="new-features">
+<h2>New Features<a class="headerlink" href="#new-features" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="type-system">
+<h3>Type System<a class="headerlink" href="#type-system" title="Permalink to this headline">¶</a></h3>
+<p>This module provides a suite of tools for denoting, describing, and converting
+between various data types and the types coming from various systems.  This is
+achieved by providing canonical abstractions of various kinds of types:</p>
+<ul class="simple">
+<li>Base types (int, str, float, non-templated classes)</li>
+<li>Refined types (even or odd ints, strings containing the letter &#8216;a&#8217;)</li>
+<li>Dependent types (templates such arrays, maps, sets, vectors)</li>
+</ul>
+<p>All types are known by their name (a string identifier) and may be aliased with
+other names.  However, the string id of a type is not sufficient to fully describe
+most types.  The system here implements a canonical form for all kinds of types.
+This canonical form is itself hashable, being comprised only of strings, ints,
+and tuples.</p>
+</div>
+<div class="section" id="descriptions">
+<h3>Descriptions<a class="headerlink" href="#descriptions" title="Permalink to this headline">¶</a></h3>
+<p>A key component of API wrapper generation is having a a top-level, abstract
+representation of the software that is being wrapped.  In C++ there are three
+basic constructs which may be wrapped: variables, functions, and classes.
+Here we restrict ourselves to wrapping classes and functions, though variables
+may be added in the future.</p>
+<p>The abstract representation of a C++ class is known as a description (abbr. desc).
+This description is simply a Python dictionary with a specific structure.
+This structure makes heavy use of the type system to declare the types of all needed
+parameters.</p>
+</div>
+</div>
+<div class="section" id="mini-faq">
+<h2>Mini-FAQ<a class="headerlink" href="#mini-faq" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Why not use an existing solution (eg, SWIG)?</p>
+<blockquote>
+<div><p>Their type systems don&#8217;t support run-time, user provided refinement types,
+and thus are unsuited for verification &amp; validation use cases that often
+arise in computational science.</p>
+<p>Furthermore, they tend to not handle C++ dependent types well (i.e. vector&lt;T&gt;
+does not come back as a np.view(..., dtype=T)).</p>
+</div></blockquote>
+</li>
+<li><p class="first">Why GCC-XML and not Clang&#8217;s AST?</p>
+<blockquote>
+<div><p>I tried using Clang&#8217;s AST (and the remnants of a broken visitor class remain
+in the code base).  However, the official Clang AST Python bindings lack
+support for template argument types.  This is a really big deal. Other C++ ASTs
+may be supported in the future &#8211; including Clang&#8217;s.</p>
+</div></blockquote>
+</li>
+<li><p class="first">I run xdress and it creates these files, now what?!</p>
+<blockquote>
+<div><p>It is your job to integrate the files created by xdress into your build system.</p>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="join-in-the-fun">
+<h2>Join in the Fun!<a class="headerlink" href="#join-in-the-fun" title="Permalink to this headline">¶</a></h2>
+<p>If you are interested in using xdress on your project (and need help), contributing
+back to xdress, starting up a development team, or writing your own code generation
+front end tool on top of the type system and autodescriber, please let me know.
+Participation is very welcome!</p>
+</div>
+<div class="section" id="authors">
+<h2>Authors<a class="headerlink" href="#authors" title="Permalink to this headline">¶</a></h2>
+<p>XDress was written by <a class="reference external" href="http://scopatz.com/">Anthony Scopatz</a>, who had many
+type system discussions with John Bachan over coffee at the Div school, and was
+polished up and released under the encouragement of Christopher Jordan-Squire at
+<a class="reference external" href="https://us.pycon.org/2013/">PyCon 2013</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+        <p class="logo"><a href="../index.html">
+          <img class="logo" src="../_static/HooverJoven.jpg" alt="Logo"/>
+        </a></p>
+  <div class="sphinxlocaltoc">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">XDress 0.1 Release Notes</a><ul>
+<li><a class="reference internal" href="#new-features">New Features</a><ul>
+<li><a class="reference internal" href="#type-system">Type System</a></li>
+<li><a class="reference internal" href="#descriptions">Descriptions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mini-faq">Mini-FAQ</a></li>
+<li><a class="reference internal" href="#join-in-the-fun">Join in the Fun!</a></li>
+<li><a class="reference internal" href="#authors">Authors</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Previous Versions</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/previous/0.1_release_notes.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="index.html" title="Previous Versions"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">xdress 0.1 documentation</a> &raquo;</li>
+
+          <li><a href="index.html" >Previous Versions</a> &raquo;</li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, Anthony Scopatz.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>
