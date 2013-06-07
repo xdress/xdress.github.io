@@ -1,0 +1,225 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>XDress &mdash; xdress 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/cloud.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="_static/cloud.js"></script>
+    <link rel="top" title="xdress 0.1 documentation" href="#" />
+    <link rel="next" title="Tutorial" href="tutorial.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <div class="relbar-top">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Tutorial"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+    <li><a href="#">xdress 0.1 documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="xdress">
+<h1>XDress<a class="headerlink" href="#xdress" title="Permalink to this headline">¶</a></h1>
+<p>XDress is an automatic wrapper generator for C/C++ written in pure Python. Currently,
+xdress may generate Python bindings (via Cython) for C++ classes &amp; functions
+and in-memory wrappers for C++ standard library containers (sets, vectors, maps).
+In the future, other tools and bindings will be supported.</p>
+<p>The main enabling feature of xdress is a dynamic type system that was designed with
+the purpose of API generation in mind.</p>
+<p>XDress currently has the following external dependencies:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><a class="reference external" href="http://cython.org/">Cython</a></li>
+<li><a class="reference external" href="http://numpy.scipy.org/">NumPy</a></li>
+<li><a class="reference external" href="https://bitbucket.org/eliben/pycparser">pycparser</a>, optional for C</li>
+<li><a class="reference external" href="http://www.gccxml.org/HTML/Index.html">GCC-XML</a>, optional for C++</li>
+<li><a class="reference external" href="http://lxml.de/">lxml</a>, optional (but nice!)</li>
+</ol>
+</div></blockquote>
+<p>The source code for xdress may be found at the
+<a class="reference external" href="http://github.com/scopatz/xdress">GitHub project site</a>.
+Or you may simply clone the development branch using git:</p>
+<div class="highlight-python"><pre>git clone git://github.com/scopatz/xdress.git</pre>
+</div>
+<div class="section" id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libref/index.html">Library Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="previous/index.html">Previous Versions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other/index.html">Other Documentation Material</a></li>
+</ul>
+</div>
+<div class="section" id="examples-of-use">
+<h3>Examples of Use<a class="headerlink" href="#examples-of-use" title="Permalink to this headline">¶</a></h3>
+<p>To see examples of xdress in action (and sample run control files), here are a
+few places to look:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/scopatz/xdress/tree/master/tests">xdress/tests</a>: This is
+a fully functioning sample project which uses xdress locally (no install needed).</li>
+<li><a class="reference external" href="http://pynesim.org/">PyNE</a>: This uses xdress to generate STL container wrappers.</li>
+<li><a class="reference external" href="http://bright-dev.github.com/">Bright</a>: This uses xdress to automatically
+wrap a suite of interacting C++ class.  This was the motivating use case for the
+xdress project.</li>
+</ul>
+</div>
+<div class="section" id="author">
+<h3>Author<a class="headerlink" href="#author" title="Permalink to this headline">¶</a></h3>
+<p>This tool was written by <a class="reference external" href="http://scopatz.com/">Anthony Scopatz</a>, who had many
+type system discussions with John Bachan over coffee at the Div school, and was
+polished up and released under the encouragement of Christopher Jordan-Squire at
+<a class="reference external" href="https://us.pycon.org/2013/">PyCon 2013</a>.</p>
+</div>
+<div class="section" id="contact-us">
+<h3>Contact Us<a class="headerlink" href="#contact-us" title="Permalink to this headline">¶</a></h3>
+<p>If you have questions or comments, please send them to the mailing list
+<a class="reference external" href="mailto:xdress&#37;&#52;&#48;googlegroups&#46;com">xdress<span>&#64;</span>googlegroups<span>&#46;</span>com</a> or contact the author directly or open an issue on
+GitHub.</p>
+</div>
+<div class="section" id="contributing">
+<h3>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h3>
+<p>We highly encourage contributions to xdress!  If you would like to contribute,
+it is as easy as forking the repository on GitHub, making your changes, and
+issuing a pull request.  If you have any questions about this process don&#8217;t
+hesitate to ask the mailing list (<a class="reference external" href="mailto:xdress&#37;&#52;&#48;googlegroups&#46;com">xdress<span>&#64;</span>googlegroups<span>&#46;</span>com</a>).</p>
+</div>
+<div class="section" id="helpful-links">
+<h3>Helpful Links<a class="headerlink" href="#helpful-links" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="http://bit.ly/xdress-code">Documentation</a></li>
+<li><a class="reference external" href="mailto:xdress&#37;&#52;&#48;googlegroups&#46;com">Mailing list</a></li>
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+        <p class="logo"><a href="#">
+          <img class="logo" src="_static/HooverJoven.jpg" alt="Logo"/>
+        </a></p>
+  <div class="sphinxlocaltoc">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">XDress</a><ul>
+<li><a class="reference internal" href="#contents">Contents</a><ul>
+<li><a class="reference internal" href="#examples-of-use">Examples of Use</a></li>
+<li><a class="reference internal" href="#author">Author</a></li>
+<li><a class="reference internal" href="#contact-us">Contact Us</a></li>
+<li><a class="reference internal" href="#contributing">Contributing</a></li>
+<li><a class="reference internal" href="#helpful-links">Helpful Links</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tutorial.html"
+                        title="next chapter">Tutorial</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Tutorial"
+             >next</a> &nbsp; &nbsp;</li>
+    <li><a href="#">xdress 0.1 documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, Anthony Scopatz.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>
