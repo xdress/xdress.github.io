@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>xdress_extra_types.h &mdash; xdress 0.1 documentation</title>
+    <title>xdress_extra_types.h &mdash; xdress 0.2-dev documentation</title>
     
     <link rel="stylesheet" href="../../_static/cloud.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.1',
+        VERSION:     '0.2-dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.1 documentation" href="../../index.html" />
+    <link rel="top" title="xdress 0.2-dev documentation" href="../../index.html" />
     <link rel="up" title="src" href="index.html" />
     <link rel="next" title="setup.py" href="../setup.py.html" />
     <link rel="prev" title="hoover.h" href="hoover.h.html" /> 
@@ -56,7 +56,7 @@
         <li class="right" >
           <a href="hoover.h.html" title="hoover.h"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.1 documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.2-dev documentation</a> &raquo;</li>
 
           <li><a href="../../tutorial.html" >Tutorial</a> &raquo;</li>
           <li><a href="../index.html" >mypack</a> &raquo;</li>
@@ -74,10 +74,10 @@
   <div class="section" id="xdress-extra-types-h">
 <h1>xdress_extra_types.h<a class="headerlink" href="#xdress-extra-types-h" title="Permalink to this headline">¶</a></h1>
 <p><a class="reference download internal" href="../../_downloads/xdress_extra_types.h"><tt class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">this</span> <span class="pre">file.</span></tt></a></p>
-<div class="highlight-cpp"><div class="highlight"><pre><span class="cp">/// \file extra_types.h</span>
-<span class="cp">/// \author Anthony Scopatz (scopatz\@gmail.com)</span>
-<span class="cp">///</span>
-<span class="cp">/// Provides some extra types that may be generally useful</span>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="c1">/// \file extra_types.h</span>
+<span class="c1">/// \author Anthony Scopatz (scopatz\@gmail.com)</span>
+<span class="c1">///</span>
+<span class="c1">/// Provides some extra types that may be generally useful</span>
 
 <span class="cp">#if !defined(_XDRESS_EXTRA_TYPES_)</span>
 <span class="cp">#define _XDRESS_EXTRA_TYPES_</span>
@@ -89,7 +89,7 @@
   <span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
     <span class="kt">double</span> <span class="n">re</span><span class="p">;</span>  <span class="c1">///&lt; real part</span>
     <span class="kt">double</span> <span class="n">im</span><span class="p">;</span>  <span class="c1">///&lt; imaginary part</span>
-  <span class="p">}</span> <span class="n">complex_t</span><span class="p">;</span>
+  <span class="p">}</span> <span class="kt">complex_t</span><span class="p">;</span>
 
   <span class="c1">/// Chivalrously handles C++ memory issues that Cython does</span>
   <span class="c1">/// not yet have a syntax for.  This is a template class,</span>
@@ -98,24 +98,24 @@
   <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
   <span class="k">class</span> <span class="nc">MemoryKnight</span>
   <span class="p">{</span>
-    <span class="k">public</span><span class="o">:</span>
+    <span class="nl">public:</span>
       <span class="n">MemoryKnight</span><span class="p">(){};</span>   <span class="c1">///&lt; Default constructor</span>
       <span class="o">~</span><span class="n">MemoryKnight</span><span class="p">(){};</span>  <span class="c1">///&lt; Default Destructor</span>
 
       <span class="c1">/// Creates a new instance of type T on the heap using</span>
       <span class="c1">/// its default constructor.</span>
       <span class="c1">/// \return T *</span>
-      <span class="n">T</span> <span class="o">*</span> <span class="n">defnew</span><span class="p">(){</span><span class="k">return</span> <span class="k">new</span> <span class="n">T</span><span class="p">();};</span>
+      <span class="n">T</span> <span class="o">*</span> <span class="nf">defnew</span><span class="p">(){</span><span class="k">return</span> <span class="k">new</span> <span class="n">T</span><span class="p">();};</span>
 
       <span class="c1">/// Creates a new instance of type T, using T&#39;s default </span>
       <span class="c1">/// constructor, at a given location.</span>
       <span class="c1">/// \param void * ptr, location to create T instance</span>
       <span class="c1">/// \return value of ptr recast as T *</span>
-      <span class="n">T</span> <span class="o">*</span> <span class="n">renew</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span> <span class="n">ptr</span><span class="p">){</span><span class="k">return</span> <span class="k">new</span> <span class="p">(</span><span class="n">ptr</span><span class="p">)</span> <span class="n">T</span><span class="p">();};</span>
+      <span class="n">T</span> <span class="o">*</span> <span class="nf">renew</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span> <span class="n">ptr</span><span class="p">){</span><span class="k">return</span> <span class="k">new</span> <span class="p">(</span><span class="n">ptr</span><span class="p">)</span> <span class="n">T</span><span class="p">();};</span>
 
       <span class="c1">/// Deallocates a location in memory using delete. </span>
       <span class="c1">/// \param T * ptr, location to remove</span>
-      <span class="kt">void</span> <span class="n">deall</span><span class="p">(</span><span class="n">T</span> <span class="o">*</span> <span class="n">ptr</span><span class="p">){</span><span class="k">delete</span> <span class="n">ptr</span><span class="p">;};</span>
+      <span class="kt">void</span> <span class="nf">deall</span><span class="p">(</span><span class="n">T</span> <span class="o">*</span> <span class="n">ptr</span><span class="p">){</span><span class="k">delete</span> <span class="n">ptr</span><span class="p">;};</span>
   <span class="p">};</span>
 
 <span class="c1">// End namespace xdress_extra_types</span>
@@ -182,7 +182,7 @@
         <li class="right" >
           <a href="hoover.h.html" title="hoover.h"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.1 documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.2-dev documentation</a> &raquo;</li>
 
           <li><a href="../../tutorial.html" >Tutorial</a> &raquo;</li>
           <li><a href="../index.html" >mypack</a> &raquo;</li>

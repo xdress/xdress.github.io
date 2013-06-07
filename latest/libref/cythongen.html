@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Cython Generation &mdash; xdress 0.1 documentation</title>
+    <title>Cython Generation &mdash; xdress 0.2-dev documentation</title>
     
     <link rel="stylesheet" href="../_static/cloud.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.1',
+        VERSION:     '0.2-dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.1 documentation" href="../index.html" />
+    <link rel="top" title="xdress 0.2-dev documentation" href="../index.html" />
     <link rel="up" title="Library Reference" href="index.html" />
     <link rel="next" title="API Generation CLI" href="main.html" />
     <link rel="prev" title="Automatic Descriptions" href="autodescribe.html" /> 
@@ -56,7 +56,7 @@
         <li class="right" >
           <a href="autodescribe.html" title="Automatic Descriptions"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.1 documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.2-dev documentation</a> &raquo;</li>
 
           <li><a href="index.html" accesskey="U">Library Reference</a> &raquo;</li> 
       </ul>
@@ -74,8 +74,8 @@
 <p>Generates a Cython wrappers for C++ classes from description dictionaries.
 This module relies heavily on the type system to convert between C/C++, Cython, and
 Python types in a seamless way.  While this module does not explicitly rely on the
-auto-describer, it sure helps!  The functions in this module are conceptually 
-easy to understand &#8211; given class descriptions they generate strings of Cython 
+auto-describer, it sure helps!  The functions in this module are conceptually
+easy to understand &#8211; given class descriptions they generate strings of Cython
 code &#8211; their implementations do a lot of heavy lifting.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -90,8 +90,8 @@ code &#8211; their implementations do a lot of heavy lifting.</p>
 <dl class="function">
 <dt id="xdress.cythongen.classcpppxd">
 <tt class="descclassname">xdress.cythongen.</tt><tt class="descname">classcpppxd</tt><big>(</big><em>desc</em>, <em>exception_type='+'</em><big>)</big><a class="headerlink" href="#xdress.cythongen.classcpppxd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates a cpp_*.pxd Cython header snippet for exposing a C/C++ class or 
-struct to other Cython wrappers based off of a dictionary description of the 
+<dd><p>Generates a cpp_*.pxd Cython header snippet for exposing a C/C++ class or
+struct to other Cython wrappers based off of a dictionary description of the
 class or struct.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -103,7 +103,7 @@ class or struct.</p>
 </div></blockquote>
 <p><strong>exception_type</strong> : str, optional</p>
 <blockquote>
-<div><p>Cython exception annotation.  Set to None when exceptions should not 
+<div><p>Cython exception annotation.  Set to None when exceptions should not
 be included.</p>
 </div></blockquote>
 </td>
@@ -125,7 +125,7 @@ be included.</p>
 <dl class="function">
 <dt id="xdress.cythongen.classpxd">
 <tt class="descclassname">xdress.cythongen.</tt><tt class="descname">classpxd</tt><big>(</big><em>desc</em><big>)</big><a class="headerlink" href="#xdress.cythongen.classpxd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates a <tt class="docutils literal"><span class="pre">*pxd</span></tt> Cython header snippet for exposing a C/C++ class to 
+<dd><p>Generates a <tt class="docutils literal"><span class="pre">*pxd</span></tt> Cython header snippet for exposing a C/C++ class to
 other Cython wrappers based off of a dictionary description.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -154,8 +154,8 @@ other Cython wrappers based off of a dictionary description.</p>
 <dl class="function">
 <dt id="xdress.cythongen.classpyx">
 <tt class="descclassname">xdress.cythongen.</tt><tt class="descname">classpyx</tt><big>(</big><em>desc</em>, <em>classes=None</em><big>)</big><a class="headerlink" href="#xdress.cythongen.classpyx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates a <tt class="docutils literal"><span class="pre">*.pyx</span></tt> Cython wrapper implementation for exposing a C/C++ 
-class based off of a dictionary description.  The environment is a 
+<dd><p>Generates a <tt class="docutils literal"><span class="pre">*.pyx</span></tt> Cython wrapper implementation for exposing a C/C++
+class based off of a dictionary description.  The environment is a
 dictionary of all class names known to their descriptions.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -167,7 +167,7 @@ dictionary of all class names known to their descriptions.</p>
 </div></blockquote>
 <p><strong>classes</strong> : dict, optional</p>
 <blockquote>
-<div><p>Dictionary which maps all class names that are required to 
+<div><p>Dictionary which maps all class names that are required to
 their own descriptions.  This is required for resolving class heirarchy
 dependencies.</p>
 </div></blockquote>
@@ -186,7 +186,7 @@ dependencies.</p>
 <dl class="function">
 <dt id="xdress.cythongen.funccpppxd">
 <tt class="descclassname">xdress.cythongen.</tt><tt class="descname">funccpppxd</tt><big>(</big><em>desc</em>, <em>exception_type='+'</em><big>)</big><a class="headerlink" href="#xdress.cythongen.funccpppxd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates a cpp_*.pxd Cython header snippet for exposing a C/C++ function 
+<dd><p>Generates a cpp_*.pxd Cython header snippet for exposing a C/C++ function
 to other Cython wrappers based off of a dictionary description.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -198,7 +198,7 @@ to other Cython wrappers based off of a dictionary description.</p>
 </div></blockquote>
 <p><strong>exception_type</strong> : str, optional</p>
 <blockquote>
-<div><p>Cython exception annotation.  Set to None when exceptions should not 
+<div><p>Cython exception annotation.  Set to None when exceptions should not
 be included.</p>
 </div></blockquote>
 </td>
@@ -220,7 +220,7 @@ be included.</p>
 <dl class="function">
 <dt id="xdress.cythongen.funcpyx">
 <tt class="descclassname">xdress.cythongen.</tt><tt class="descname">funcpyx</tt><big>(</big><em>desc</em><big>)</big><a class="headerlink" href="#xdress.cythongen.funcpyx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates a <tt class="docutils literal"><span class="pre">*.pyx</span></tt> Cython wrapper implementation for exposing a C/C++ 
+<dd><p>Generates a <tt class="docutils literal"><span class="pre">*.pyx</span></tt> Cython wrapper implementation for exposing a C/C++
 function based off of a dictionary description.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -257,7 +257,7 @@ dictionaries.</p>
 </div></blockquote>
 <p><strong>exception_type</strong> : str, optional</p>
 <blockquote>
-<div><p>Cython exception annotation.  Set to None when exceptions should not 
+<div><p>Cython exception annotation.  Set to None when exceptions should not
 be included.</p>
 </div></blockquote>
 </td>
@@ -312,7 +312,7 @@ dictionaries.</p>
 </div></blockquote>
 <p><strong>classes</strong> : dict, optional</p>
 <blockquote>
-<div><p>Dictionary which maps all class names that are required to 
+<div><p>Dictionary which maps all class names that are required to
 their own descriptions.  This is required for resolving class heirarchy
 dependencies. If None, this will be computed here.</p>
 </div></blockquote>
@@ -343,7 +343,7 @@ other Cython wrappers based off of a dictionary description of the module.</p>
 </div></blockquote>
 <p><strong>exception_type</strong> : str, optional</p>
 <blockquote>
-<div><p>Cython exception annotation.  Set to None when exceptions should not 
+<div><p>Cython exception annotation.  Set to None when exceptions should not
 be included.</p>
 </div></blockquote>
 </td>
@@ -361,7 +361,7 @@ be included.</p>
 <dl class="function">
 <dt id="xdress.cythongen.modpxd">
 <tt class="descclassname">xdress.cythongen.</tt><tt class="descname">modpxd</tt><big>(</big><em>mod</em><big>)</big><a class="headerlink" href="#xdress.cythongen.modpxd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates a pxd Cython header file for exposing C/C++ data to 
+<dd><p>Generates a pxd Cython header file for exposing C/C++ data to
 other Cython wrappers based off of a dictionary description.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -386,7 +386,7 @@ other Cython wrappers based off of a dictionary description.</p>
 <dl class="function">
 <dt id="xdress.cythongen.modpyx">
 <tt class="descclassname">xdress.cythongen.</tt><tt class="descname">modpyx</tt><big>(</big><em>mod</em>, <em>classes=None</em><big>)</big><a class="headerlink" href="#xdress.cythongen.modpyx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates a pyx Cython implementation file for exposing C/C++ data to 
+<dd><p>Generates a pyx Cython implementation file for exposing C/C++ data to
 other Cython wrappers based off of a dictionary description.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -398,7 +398,7 @@ other Cython wrappers based off of a dictionary description.</p>
 </div></blockquote>
 <p><strong>classes</strong> : dict, optional</p>
 <blockquote>
-<div><p>Dictionary which maps all class names that are required to 
+<div><p>Dictionary which maps all class names that are required to
 their own descriptions.  This is required for resolving class heirarchy
 dependencies.</p>
 </div></blockquote>
@@ -417,7 +417,7 @@ dependencies.</p>
 <dl class="function">
 <dt id="xdress.cythongen.varcpppxd">
 <tt class="descclassname">xdress.cythongen.</tt><tt class="descname">varcpppxd</tt><big>(</big><em>desc</em>, <em>exception_type='+'</em><big>)</big><a class="headerlink" href="#xdress.cythongen.varcpppxd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates a cpp_*.pxd Cython header snippet for exposing a C/C++ variable 
+<dd><p>Generates a cpp_*.pxd Cython header snippet for exposing a C/C++ variable
 to other Cython wrappers based off of a dictionary description.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -450,7 +450,7 @@ to other Cython wrappers based off of a dictionary description.</p>
 <dl class="function">
 <dt id="xdress.cythongen.varpyx">
 <tt class="descclassname">xdress.cythongen.</tt><tt class="descname">varpyx</tt><big>(</big><em>desc</em><big>)</big><a class="headerlink" href="#xdress.cythongen.varpyx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates a <tt class="docutils literal"><span class="pre">*.pyx</span></tt> Cython wrapper implementation for exposing a C/C++ 
+<dd><p>Generates a <tt class="docutils literal"><span class="pre">*.pyx</span></tt> Cython wrapper implementation for exposing a C/C++
 variable based off of a dictionary description.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -542,7 +542,7 @@ variable based off of a dictionary description.</p>
         <li class="right" >
           <a href="autodescribe.html" title="Automatic Descriptions"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.1 documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.2-dev documentation</a> &raquo;</li>
 
           <li><a href="index.html" >Library Reference</a> &raquo;</li> 
       </ul>
