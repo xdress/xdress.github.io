@@ -11,7 +11,7 @@
     
     <title>Automatic Descriptions &mdash; xdress 0.2-dev documentation</title>
     
-    <link rel="stylesheet" href="../_static/cloud.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
     
@@ -31,8 +31,8 @@
     <script type="text/javascript" src="../_static/cloud.js"></script>
     <link rel="top" title="xdress 0.2-dev documentation" href="../index.html" />
     <link rel="up" title="Library Reference" href="index.html" />
-    <link rel="next" title="Cython Generation" href="cythongen.html" />
-    <link rel="prev" title="Standard Library Container Wrappers" href="stlwrap.html" /> 
+    <link rel="next" title="Automatic API Discovery" href="autoall.html" />
+    <link rel="prev" title="Abstract Syntax Tree Parsers" href="astparsers.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
@@ -51,10 +51,10 @@
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="cythongen.html" title="Cython Generation"
+          <a href="autoall.html" title="Automatic API Discovery"
              accesskey="N">next</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="stlwrap.html" title="Standard Library Container Wrappers"
+          <a href="astparsers.html" title="Abstract Syntax Tree Parsers"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
     <li><a href="../index.html">xdress 0.2-dev documentation</a> &raquo;</li>
 
@@ -71,8 +71,9 @@
             
   <div class="section" id="module-xdress.autodescribe">
 <span id="automatic-descriptions"></span><span id="xdress-autodescribe"></span><h1>Automatic Descriptions<a class="headerlink" href="#module-xdress.autodescribe" title="Permalink to this headline">¶</a></h1>
-<p>This module creates descriptions of C++ classes from source code, by using 
-external parsers (GCC-XML, Clang AST) and the type system.</p>
+<p>This module creates descriptions of C/C++ classes, functions, and variables 
+from source code, by using external parsers (GCC-XML, Clang AST) and the type system.</p>
+<p>This module is available as an xdress plugin by the name <tt class="docutils literal"><span class="pre">xdress.autodescribe</span></tt>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -255,19 +256,6 @@ for the moment.</p>
 <div class="section" id="automatic-descriptions-api">
 <h2>Automatic Descriptions API<a class="headerlink" href="#automatic-descriptions-api" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="xdress.autodescribe.ClangTypeVisitor">
-<em class="property">class </em><tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">ClangTypeVisitor</tt><big>(</big><em>verbose=False</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.ClangTypeVisitor" title="Permalink to this definition">¶</a></dt>
-<dd><p>For a Clang type located at a root node, compute the cooresponding 
-typesystem type.</p>
-<dl class="method">
-<dt id="xdress.autodescribe.ClangTypeVisitor.visit">
-<tt class="descname">visit</tt><big>(</big><em>root</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.ClangTypeVisitor.visit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Takes a root type.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
 <dt id="xdress.autodescribe.GccxmlBaseDescriber">
 <em class="property">class </em><tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">GccxmlBaseDescriber</tt><big>(</big><em>name</em>, <em>root=None</em>, <em>onlyin=None</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base class used to generate descriptions via GCC-XML output.
@@ -283,16 +271,16 @@ constructor.  The default visitor methods are valid for classes.</p>
 </div></blockquote>
 <p><strong>root</strong> : element tree node, optional</p>
 <blockquote>
-<div><p>The root element node of the class or struct to describe.</p>
+<div><p>The root element node.</p>
 </div></blockquote>
 <p><strong>onlyin</strong> :  str, optional</p>
 <blockquote>
 <div><p>Filename the class or struct described must live in.  Prevents 
-finding classes of the same name coming from other libraries.</p>
+finding elements of the same name coming from other libraries.</p>
 </div></blockquote>
 <p><strong>verbose</strong> : bool, optional</p>
 <blockquote class="last">
-<div><p>Flag to display extra information while visiting the class.</p>
+<div><p>Flag to display extra information while visiting.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -338,6 +326,13 @@ finding classes of the same name coming from other libraries.</p>
 <dt id="xdress.autodescribe.GccxmlBaseDescriber.visit_constructor">
 <tt class="descname">visit_constructor</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_constructor" title="Permalink to this definition">¶</a></dt>
 <dd><p>visits a class constructor.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xdress.autodescribe.GccxmlBaseDescriber.visit_cvqualifiedtype">
+<tt class="descname">visit_cvqualifiedtype</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_cvqualifiedtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>visits constant, volatile, and restricted types and maps them to 
+&#8216;const&#8217;, &#8216;volatile&#8217;, and &#8216;restrict&#8217; refinement types.</p>
 </dd></dl>
 
 <dl class="method">
@@ -556,46 +551,184 @@ top-level class node is found and visited.</p>
 
 </dd></dl>
 
+<dl class="class">
+<dt id="xdress.autodescribe.XDressPlugin">
+<em class="property">class </em><tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">XDressPlugin</tt><a class="headerlink" href="#xdress.autodescribe.XDressPlugin" title="Permalink to this definition">¶</a></dt>
+<dd><p>This plugin creates automatic description dictionaries of all souce and 
+target files.</p>
+<dl class="method">
+<dt id="xdress.autodescribe.XDressPlugin.adddesc2env">
+<tt class="descname">adddesc2env</tt><big>(</big><em>desc</em>, <em>env</em>, <em>name</em>, <em>srcname</em>, <em>tarname</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.adddesc2env" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a description to environment</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xdress.autodescribe.XDressPlugin.compute_classes">
+<tt class="descname">compute_classes</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.compute_classes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes class descriptions and loads them into the environment and 
+type system.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xdress.autodescribe.XDressPlugin.compute_desc">
+<tt class="descname">compute_desc</tt><big>(</big><em>name</em>, <em>srcname</em>, <em>tarname</em>, <em>kind</em>, <em>rc</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.compute_desc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a description dictionary for a class or function
+implemented in a source file and bound into a target file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>name</strong> : str</p>
+<blockquote>
+<div><p>Class or function name to describe.</p>
+</div></blockquote>
+<p><strong>srcname</strong> : str</p>
+<blockquote>
+<div><p>File basename of implementation.</p>
+</div></blockquote>
+<p><strong>tarname</strong> : str</p>
+<blockquote>
+<div><p>File basename where the bindings will be generated.</p>
+</div></blockquote>
+<p><strong>kind</strong> : str</p>
+<blockquote>
+<div><p>The kind of type to describe, valid flags are &#8216;class&#8217;, &#8216;func&#8217;, and &#8216;var&#8217;.</p>
+</div></blockquote>
+<p><strong>rc</strong> : xdress.utils.RunControl</p>
+<blockquote>
+<div><p>Run contoler for this xdress execution.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>desc</strong> : dict</p>
+<blockquote class="last">
+<div><p>Description dictionary.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="xdress.autodescribe.XDressPlugin.compute_functions">
+<tt class="descname">compute_functions</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.compute_functions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes function descriptions and loads them into the environment.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xdress.autodescribe.XDressPlugin.compute_variables">
+<tt class="descname">compute_variables</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.compute_variables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes variables descriptions and loads them into the environment.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xdress.autodescribe.XDressPlugin.load_pysrcmod">
+<tt class="descname">load_pysrcmod</tt><big>(</big><em>srcname</em>, <em>rc</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.load_pysrcmod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a module dictionary from a src file into the pysrcenv cache.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xdress.autodescribe.XDressPlugin.load_sidecars">
+<tt class="descname">load_sidecars</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.load_sidecars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads all sidecar files.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xdress.autodescribe.XDressPlugin.setup">
+<tt class="descname">setup</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expands variables, functions, and classes in the rc based on 
+copying src filenames to tar filename.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.autodescribe.ClangTypeVisitor">
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">ClangTypeVisitor</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.ClangTypeVisitor" title="Permalink to this definition">¶</a></dt>
+<dd><p>For a Clang type located at a root node, compute the cooresponding 
+typesystem type.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.autodescribe.clang_canonize">
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_canonize</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.clang_canonize" title="Permalink to this definition">¶</a></dt>
+<dd><div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This has not yet been implemented fully or at all.</p>
+</div>
+</dd></dl>
+
 <dl class="function">
 <dt id="xdress.autodescribe.clang_describe">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_describe</tt><big>(</big><em>filename</em>, <em>name</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.clang_describe" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_describe</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.clang_describe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use clang to describe the class.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This has not yet been implemented fully or at all.</p>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.autodescribe.clang_find_attributes">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_find_attributes</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.clang_find_attributes" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_find_attributes</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.clang_find_attributes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds attributes one level below the Clang node.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This has not yet been implemented fully or at all.</p>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.autodescribe.clang_find_class">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_find_class</tt><big>(</big><em>node</em>, <em>name</em>, <em>namespace=None</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.clang_find_class" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_find_class</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.clang_find_class" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find the node for a given class underneath the current node.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This has not yet been implemented fully or at all.</p>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.autodescribe.clang_find_declarations">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_find_declarations</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.clang_find_declarations" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_find_declarations</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.clang_find_declarations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds declarations one level below the Clang node.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This has not yet been implemented fully or at all.</p>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.autodescribe.clang_is_loc_in_range">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_is_loc_in_range</tt><big>(</big><em>location</em>, <em>source_range</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.clang_is_loc_in_range" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_is_loc_in_range</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.clang_is_loc_in_range" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether a given Clang location is part of a source file range.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This has not yet been implemented fully or at all.</p>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.autodescribe.clang_range_str">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_range_str</tt><big>(</big><em>source_range</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.clang_range_str" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_range_str</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.clang_range_str" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the text present on a source range.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This has not yet been implemented fully or at all.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.autodescribe.clearmemo">
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clearmemo</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.autodescribe.clearmemo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears all function memoizations for autodescribers.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.autodescribe.describe">
 <tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">describe</tt><big>(</big><em>filename</em>, <em>name=None</em>, <em>kind='class'</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>parsers='gccxml'</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.describe" title="Permalink to this definition">¶</a></dt>
-<dd><p>Automatically describes a class in a file.  This is the main entry point.</p>
+<dd><p>Automatically describes an API element in a file.  This is the main entry point.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -718,13 +851,6 @@ API bindings.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="xdress.autodescribe.merge_descriptions">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">merge_descriptions</tt><big>(</big><em>descriptions</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.merge_descriptions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Given a sequence of descriptions, in order of increasing precedence, 
-merge them into a single description dictionary.</p>
-</dd></dl>
-
-<dl class="function">
 <dt id="xdress.autodescribe.pycparser_describe">
 <tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">pycparser_describe</tt><big>(</big><em>filename</em>, <em>name</em>, <em>kind</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.pycparser_describe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use pycparser to describe the fucntion or struct (class).</p>
@@ -813,11 +939,11 @@ API bindings.</p>
 
   </div>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="stlwrap.html"
-                        title="previous chapter">Standard Library Container Wrappers</a></p>
+  <p class="topless"><a href="astparsers.html"
+                        title="previous chapter">Abstract Syntax Tree Parsers</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="cythongen.html"
-                        title="next chapter">Cython Generation</a></p>
+  <p class="topless"><a href="autoall.html"
+                        title="next chapter">Automatic API Discovery</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/libref/autodescribe.txt"
@@ -855,10 +981,10 @@ API bindings.</p>
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="cythongen.html" title="Cython Generation"
+          <a href="autoall.html" title="Automatic API Discovery"
              >next</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="stlwrap.html" title="Standard Library Container Wrappers"
+          <a href="astparsers.html" title="Abstract Syntax Tree Parsers"
              >previous</a> &nbsp; &nbsp;</li>
     <li><a href="../index.html">xdress 0.2-dev documentation</a> &raquo;</li>
 

@@ -11,7 +11,7 @@
     
     <title>API Generation CLI &mdash; xdress 0.2-dev documentation</title>
     
-    <link rel="stylesheet" href="../_static/cloud.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
     
@@ -71,7 +71,7 @@
             
   <div class="section" id="module-xdress.main">
 <span id="api-generation-cli"></span><span id="xdress-main"></span><h1>API Generation CLI<a class="headerlink" href="#module-xdress.main" title="Permalink to this headline">¶</a></h1>
-<p>Top-level automatic API generators entry point.</p>
+<p>Top-level xdress entry point.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -80,8 +80,8 @@
 </tr>
 </tbody>
 </table>
-<div class="section" id="api-generation">
-<h2>API Generation<a class="headerlink" href="#api-generation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="xdress-comand-line-interface">
+<h2>XDress Comand Line Interface<a class="headerlink" href="#xdress-comand-line-interface" title="Permalink to this headline">¶</a></h2>
 <p>This module is where all of the API generation routines reside.
 Until now the type system, automatic description, and cython code generation have
 all be independent of what classes they are wrapping.  
@@ -91,44 +91,48 @@ The main module is normally run via the command line interface as follows:</p>
 </div>
 <p>This has the following usage:</p>
 <div class="highlight-python"><pre>path/to/proj/ $ xdress -h 
-usage: Generates XDress API [-h] [--rc RC] [-v] [--debug] [--make-extratypes]
-                            [--no-make-extratypes] [--make-stlcontainers]
-                            [--no-make-stlcontainers] [--make-cythongen]
-                            [--no-make-cythongen] [--make-cyclus]
-                            [--no-make-cyclus] [--dumpdesc]
+usage: Generates XDress API [-h] [--rc RC] [--plugins PLUGINS [PLUGINS ...]]
+                            [--debug] [-v] [--dumpdesc] [--package PACKAGE]
+                            [--packagedir PACKAGEDIR] [--sourcedir SOURCEDIR]
+                            [--builddir BUILDDIR] [--extra-types EXTRA_TYPES]
+                            [--make-extra-types] [--no-make-extra-types]
+                            [--stlcontainers-module STLCONTAINERS_MODULE]
+                            [--make-stlcontainers] [--no-make-stlcontainers]
                             [-I INCLUDES [INCLUDES ...]]
                             [-D DEFINES [DEFINES ...]]
-                            [-U UNDEFINES [UNDEFINES ...]]
-                            [--builddir BUILDDIR]
+                            [-U UNDEFINES [UNDEFINES ...]] [-p PARSERS]
 
 optional arguments:
   -h, --help            show this help message and exit
   --rc RC               path to run control file
-  -v, --verbose         print more output
+  --plugins PLUGINS [PLUGINS ...]
+                        plugins to include
   --debug               build in debugging mode
-  --make-extratypes     make extra types wrapper
-  --no-make-extratypes  don't make extra types wrapper
-  --make-stlcontainers  make STL container wrappers
-  --no-make-stlcontainers
-                        don't make STL container wrappers
-  --make-cythongen      make cython bindings
-  --no-make-cythongen   don't make cython bindings
-  --make-cyclus         make cyclus bindings
-  --no-make-cyclus      don't make cyclus bindings
+  -v, --verbose         print more output
   --dumpdesc            print description cache
+  --package PACKAGE     package name
+  --packagedir PACKAGEDIR
+                        path to package directory
+  --sourcedir SOURCEDIR
+                        path to source directory
+  --builddir BUILDDIR   path to build directory
+  --extra-types EXTRA_TYPES
+                        extra types name
+  --make-extra-types    make extra types wrapper
+  --no-make-extra-types
+                        don't make extra types wrapper
+  --stlcontainers-module STLCONTAINERS_MODULE
+                        stlcontainers module name
+  --make-stlcontainers  make C++ STL container wrappers
+  --no-make-stlcontainers
+                        don't make C++ STL container wrappers
   -I INCLUDES [INCLUDES ...], --includes INCLUDES [INCLUDES ...]
                         additional include dirs
   -D DEFINES [DEFINES ...], --defines DEFINES [DEFINES ...]
                         set additional macro definitions
   -U UNDEFINES [UNDEFINES ...], --undefines UNDEFINES [UNDEFINES ...]
                         unset additional macro definitions
-  --builddir BUILDDIR   path to build directory</pre>
-</div>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">Known Limitation: Currently only files header files ending in .h and 
-implementation files ending in .cpp are seen by xdress.  These could easily
-be abstracted to more extensions.  Pull requests always welcome :).</p>
+  -p PARSERS            parser(s) name, list, or dict</pre>
 </div>
 </div>
 <div class="section" id="sidecar-description-files">
@@ -215,120 +219,10 @@ used to declare additional attr and method APIs.</p>
 </div>
 <div class="section" id="main-api">
 <h2>Main API<a class="headerlink" href="#main-api" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="xdress.main.DescriptionCache">
-<em class="property">class </em><tt class="descclassname">xdress.main.</tt><tt class="descname">DescriptionCache</tt><big>(</big><em>cachefile='build/desc.cache'</em><big>)</big><a class="headerlink" href="#xdress.main.DescriptionCache" title="Permalink to this definition">¶</a></dt>
-<dd><p>A quick persistent cache for descriptions from files.  
-The keys are (classname, filename) tuples.  The values are 
-(hashes-of-the-file, description-dictionary) tuples.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>cachefile</strong> : str, optional</p>
-<blockquote class="last">
-<div><p>Path to description cachefile.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="xdress.main.DescriptionCache.dump">
-<tt class="descname">dump</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.main.DescriptionCache.dump" title="Permalink to this definition">¶</a></dt>
-<dd><p>Writes the cache out to the filesystem.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="xdress.main.DescriptionCache.isvalid">
-<tt class="descname">isvalid</tt><big>(</big><em>name</em>, <em>filename</em>, <em>kind</em><big>)</big><a class="headerlink" href="#xdress.main.DescriptionCache.isvalid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Boolean on whether the cach value for a (name, filename, kind)
-tuple matches the state of the file on the system.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="xdress.main.compute_desc">
-<tt class="descclassname">xdress.main.</tt><tt class="descname">compute_desc</tt><big>(</big><em>name</em>, <em>srcname</em>, <em>tarname</em>, <em>kind</em>, <em>rc</em><big>)</big><a class="headerlink" href="#xdress.main.compute_desc" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a description dictionary for a class or function
-implemented in a source file and bound into a target file.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>name</strong> : str</p>
-<blockquote>
-<div><p>Class or function name to describe.</p>
-</div></blockquote>
-<p><strong>srcname</strong> : str</p>
-<blockquote>
-<div><p>File basename of implementation.</p>
-</div></blockquote>
-<p><strong>tarname</strong> : str</p>
-<blockquote>
-<div><p>File basename where the bindings will be generated.</p>
-</div></blockquote>
-<p><strong>kind</strong> : str</p>
-<blockquote>
-<div><p>The kind of type to describe, valid flags are &#8216;class&#8217;, &#8216;func&#8217;, and &#8216;var&#8217;.</p>
-</div></blockquote>
-<p><strong>verbose</strong> : bool, optional</p>
-<blockquote>
-<div><p>Flag for printing extra information during description process.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>desc</strong> : dict</p>
-<blockquote class="last">
-<div><p>Description dictionary.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="xdress.main.dumpdesc">
-<tt class="descclassname">xdress.main.</tt><tt class="descname">dumpdesc</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.main.dumpdesc" title="Permalink to this definition">¶</a></dt>
-<dd><p>Prints the current contents of the description cache using rc.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="xdress.main.genbindings">
-<tt class="descclassname">xdress.main.</tt><tt class="descname">genbindings</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.main.genbindings" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates bidnings using the command line setting specified in rc.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="xdress.main.load_pysrcmod">
-<tt class="descclassname">xdress.main.</tt><tt class="descname">load_pysrcmod</tt><big>(</big><em>srcname</em>, <em>rc</em><big>)</big><a class="headerlink" href="#xdress.main.load_pysrcmod" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads a module dictionary from a src file into the pysrcenv cache.</p>
-</dd></dl>
-
 <dl class="function">
 <dt id="xdress.main.main">
 <tt class="descclassname">xdress.main.</tt><tt class="descname">main</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.main.main" title="Permalink to this definition">¶</a></dt>
 <dd><p>Entry point for xdress API generation.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="xdress.main.main_body">
-<tt class="descclassname">xdress.main.</tt><tt class="descname">main_body</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.main.main_body" title="Permalink to this definition">¶</a></dt>
-<dd><p>Body for xdress API generation.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="xdress.main.main_setup">
-<tt class="descclassname">xdress.main.</tt><tt class="descname">main_setup</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.main.main_setup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Setup xdress API generation.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="xdress.main.setuprc">
-<tt class="descclassname">xdress.main.</tt><tt class="descname">setuprc</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.main.setuprc" title="Permalink to this definition">¶</a></dt>
-<dd><p>Makes and validates a run control object and the environment it specifies.</p>
 </dd></dl>
 
 </div>
@@ -347,7 +241,7 @@ implemented in a source file and bound into a target file.</p>
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">API Generation CLI</a><ul>
-<li><a class="reference internal" href="#api-generation">API Generation</a></li>
+<li><a class="reference internal" href="#xdress-comand-line-interface">XDress Comand Line Interface</a></li>
 <li><a class="reference internal" href="#sidecar-description-files">Sidecar Description Files</a><ul>
 <li><a class="reference internal" href="#sidecar-example">Sidecar Example</a></li>
 </ul>
