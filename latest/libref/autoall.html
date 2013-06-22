@@ -75,7 +75,24 @@
 and return thier name and kind.  These include classes, structs, functions, 
 and certain variable types.  It is not used to actually describe these elements.
 That is the job of the autodescriber.</p>
-<p>This module is available as an xdress plugin by the name <tt class="docutils literal"><span class="pre">xdress.autoall</span></tt>.</p>
+<p>This module is available as an xdress plugin by the name <tt class="docutils literal"><span class="pre">xdress.autoall</span></tt>.
+Including this plugin enables the <tt class="docutils literal"><span class="pre">classes</span></tt>, <tt class="docutils literal"><span class="pre">functions</span></tt>, and <tt class="docutils literal"><span class="pre">variables</span></tt>  
+run control parameters to have an asterix (&#8216;*&#8217;) in the name positon (index 0).
+For example, rather tha writing:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">classes</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s">&#39;People&#39;</span><span class="p">,</span> <span class="s">&#39;people&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;JoanOfArc&#39;</span><span class="p">,</span> <span class="s">&#39;people&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;JEdgaHoover&#39;</span><span class="p">,</span> <span class="s">&#39;people&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Leslie&#39;</span><span class="p">,</span> <span class="s">&#39;people&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;HuaMulan&#39;</span><span class="p">,</span> <span class="s">&#39;people&#39;</span><span class="p">),</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+<p>we can instead simply write:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">classes</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;*&#39;</span><span class="p">,</span> <span class="s">&#39;people&#39;</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>Isn&#8217;t this grand?!</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -86,6 +103,39 @@ That is the job of the autodescriber.</p>
 </table>
 <div class="section" id="automatic-finder-api">
 <h2>Automatic Finder API<a class="headerlink" href="#automatic-finder-api" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="xdress.autoall.AutoNameCache">
+<em class="property">class </em><tt class="descclassname">xdress.autoall.</tt><tt class="descname">AutoNameCache</tt><big>(</big><em>cachefile='build/autoname.cache'</em><big>)</big><a class="headerlink" href="#xdress.autoall.AutoNameCache" title="Permalink to this definition">¶</a></dt>
+<dd><p>A quick persistent cache for name lists automatically found in files.  
+The keys are (classname, filename, kind) tuples.  The values are 
+(hashes-of-the-file, finder-results) tuples.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>cachefile</strong> : str, optional</p>
+<blockquote class="last">
+<div><p>Path to description cachefile.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="xdress.autoall.AutoNameCache.dump">
+<tt class="descname">dump</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.autoall.AutoNameCache.dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the cache out to the filesystem.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xdress.autoall.AutoNameCache.isvalid">
+<tt class="descname">isvalid</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#xdress.autoall.AutoNameCache.isvalid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean on whether the cach value for a filename matches the state 
+of the file on the system.</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="class">
 <dt id="xdress.autoall.GccxmlFinder">
 <em class="property">class </em><tt class="descclassname">xdress.autoall.</tt><tt class="descname">GccxmlFinder</tt><big>(</big><em>root=None</em>, <em>onlyin=None</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xdress.autoall.GccxmlFinder" title="Permalink to this definition">¶</a></dt>

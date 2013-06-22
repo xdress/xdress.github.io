@@ -444,7 +444,16 @@ one might run across in a production level environment.</p>
 <span class="c"># In the first case, the base source filename will be used as</span>
 <span class="c"># the base package name as well. In the last case, a None value</span>
 <span class="c"># will register this class for the purpose of generating other</span>
-<span class="c"># APIs, but will not create the corresponding bindings.</span>
+<span class="c"># APIs, but will not create the corresponding bindings.  Additionally,</span>
+<span class="c"># if the &quot;xdress.autoall&quot; plugin is enabled, you may also use an</span>
+<span class="c"># asterix (or star) to tell xdress to search the source file for</span>
+<span class="c"># all classes, functions, and/or variables:</span>
+<span class="c">#</span>
+<span class="c">#   (&#39;*&#39;, base source filename)</span>
+<span class="c">#   (&#39;*&#39;, base source filename, base package filename)</span>
+<span class="c">#   (&#39;*&#39;, base source filename, None)</span>
+<span class="c">#</span>
+<span class="c"># This is useful for wrapping larger existing libraries.</span>
 <span class="n">classes</span> <span class="o">=</span> <span class="p">[</span>
     <span class="p">(</span><span class="s">&#39;FCComp&#39;</span><span class="p">,</span> <span class="s">&#39;fccomp&#39;</span><span class="p">),</span>
     <span class="p">(</span><span class="s">&#39;EnrichmentParameters&#39;</span><span class="p">,</span> <span class="s">&#39;enrichment_parameters&#39;</span><span class="p">),</span>
@@ -455,7 +464,7 @@ one might run across in a production level environment.</p>
 
 <span class="c"># List of functions to wrap</span>
 <span class="n">functions</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="s">&#39;myfunc&#39;</span><span class="p">,</span> <span class="s">&#39;reprocess&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;*&#39;</span><span class="p">,</span> <span class="s">&#39;reprocess&#39;</span><span class="p">),</span>
     <span class="p">(</span><span class="s">&#39;fillUraniumEnrichmentDefaults&#39;</span><span class="p">,</span> <span class="s">&#39;enrichment_parameters&#39;</span><span class="p">),</span>
     <span class="p">]</span>
 </pre></div>
