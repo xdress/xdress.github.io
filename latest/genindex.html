@@ -11,7 +11,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Index &mdash; xdress 0.2-dev documentation</title>
+    <title>Index &mdash; xdress 0.2 documentation</title>
     
     <link rel="stylesheet" href="_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -20,7 +20,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.2-dev',
+        VERSION:     '0.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -31,8 +31,22 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.2-dev documentation" href="index.html" /> 
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="top" title="xdress 0.2 documentation" href="index.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
+var ga_enabled = !$.cookie('disable-ga');
+if(ga_enabled){
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41934829-1']);
+  _gaq.push(['_setCookiePath', '/']);
+  _gaq.push(['_setDetectFlash', false]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+}
+</script>
   </head>
   <body>
     <div class="relbar-top">
@@ -49,7 +63,7 @@
         <li class="right" >
           <a href="np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">xdress 0.2-dev documentation</a> &raquo;</li>
+    <li><a href="index.html">xdress 0.2 documentation</a> &raquo;</li>
  
       </ul>
     </div>
@@ -282,6 +296,10 @@
 
       
   <dt><a href="libref/plugins.html#xdress.plugins.Plugin.defaultrc">defaultrc (xdress.plugins.Plugin attribute)</a>
+  </dt>
+
+      
+  <dt><a href="libref/autodescribe.html#xdress.autodescribe.XDressPlugin.defaultrc">defaultrc() (xdress.autodescribe.XDressPlugin method)</a>
   </dt>
 
       
@@ -719,9 +737,19 @@
 
       </dl></dd>
       
-  <dt><a href="libref/plugins.html#xdress.plugins.Plugin.requires">requires (xdress.plugins.Plugin attribute)</a>
+  <dt><a href="libref/astparsers.html#xdress.astparsers.ParserPlugin.requires">requires (xdress.astparsers.ParserPlugin attribute)</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="libref/cythongen.html#xdress.cythongen.XDressPlugin.requires">(xdress.cythongen.XDressPlugin attribute)</a>
+  </dt>
+
+        
+  <dt><a href="libref/plugins.html#xdress.plugins.Plugin.requires">(xdress.plugins.Plugin attribute)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="libref/utils.html#xdress.utils.RunControl">RunControl (class in xdress.utils)</a>
   </dt>
@@ -1049,7 +1077,7 @@
         <li class="right" >
           <a href="np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">xdress 0.2-dev documentation</a> &raquo;</li>
+    <li><a href="index.html">xdress 0.2 documentation</a> &raquo;</li>
  
       </ul>
     </div>
@@ -1058,7 +1086,16 @@
     <div class="footer">
         &copy; Copyright 2013, Anthony Scopatz.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
-    </div>
+    </div><script type="text/javascript">
+    if(ga_enabled){
+        document.write("<div class=\"footer\">This page uses <a href=\"http://analytics.google.com\">Google Analytics</a> to collect statistics. ");
+        document.write("Click <button title=\"set cookie to disable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', 'true', {expires: 3650, path: '/'}); window.location.reload(); return false; \">here</button> to disable analytics for this site.");
+        document.write("</div>");
+    }else{
+        document.write("<div class=\"footer\">Google Analytics has been disabled. ");
+        document.write("Click <button title=\"set cookie to re-enable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', null, {path: '/'}); window.location.reload(); return false; \">here</button> to re-enable analytics for this site.");
+    };
+</script>
     <!-- cloud_sptheme 1.4 -->
   </body>
 </html>

@@ -9,30 +9,29 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>mypack &mdash; xdress 0.2 documentation</title>
+    <title>Frequently Asked Questions &mdash; xdress 0.2 documentation</title>
     
-    <link rel="stylesheet" href="../../_static/numpy_friendly.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/numpy_friendly.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
+        URL_ROOT:    '',
         VERSION:     '0.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.cookie.js"></script>
-    <script type="text/javascript" src="../../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.2 documentation" href="../../index.html" />
-    <link rel="up" title="mypack" href="../index.html" />
-    <link rel="next" title="cpp_hoover.pxd" href="cpp_hoover.pxd.html" />
-    <link rel="prev" title="mypack" href="../index.html" /> 
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="_static/cloud.js"></script>
+    <link rel="top" title="xdress 0.2 documentation" href="index.html" />
+    <link rel="next" title="Authors" href="authors.html" />
+    <link rel="prev" title="SciPy 2013 Tutorial Abstract" href="other/scipy2013/tutorial_abstract.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
 if(ga_enabled){
@@ -56,24 +55,22 @@ if(ga_enabled){
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
+          <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
+          <a href="np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="cpp_hoover.pxd.html" title="cpp_hoover.pxd"
+          <a href="authors.html" title="Authors"
              accesskey="N">next</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="../index.html" title="mypack"
+          <a href="other/scipy2013/tutorial_abstract.html" title="SciPy 2013 Tutorial Abstract"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.2 documentation</a> &raquo;</li>
-
-          <li><a href="../../tutorial.html" >Tutorial</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">mypack</a> &raquo;</li> 
+    <li><a href="index.html">xdress 0.2 documentation</a> &raquo;</li>
+ 
       </ul>
     </div>
     </div>
@@ -84,26 +81,32 @@ if(ga_enabled){
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="mypack">
-<h1>mypack<a class="headerlink" href="#mypack" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="cpp_hoover.pxd.html">cpp_hoover.pxd</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cpp_hoover_b.pxd.html">cpp_hoover_b.pxd</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hoover.pxd.html">hoover.pxd</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hoover.pyx.html">hoover.pyx</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hoover_b.pxd.html">hoover_b.pxd</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hoover_b.pyx.html">hoover_b.pyx</a></li>
-<li class="toctree-l1"><a class="reference internal" href="stlcontainers.pxd.html">stlcontainers.pxd</a></li>
-<li class="toctree-l1"><a class="reference internal" href="stlcontainers.pyx.html">stlcontainers.pyx</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tests/index.html">tests</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tests/test_stlcontainers.py.html">test_stlcontainers.py</a></li>
-</ul>
+  <div class="section" id="frequently-asked-questions">
+<h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this headline">¶</a></h1>
+<ol class="arabic">
+<li><p class="first">Why not use an existing solution (eg, SWIG)?</p>
+<blockquote>
+<div><p>Their type systems don&#8217;t support run-time, user provided refinement types,
+and thus are unsuited for verification &amp; validation use cases that often
+arise in computational science.</p>
+<p>Furthermore, they tend to not handle C++ dependent types well (i.e. vector&lt;T&gt;
+does not come back as a np.view(..., dtype=T)).</p>
+</div></blockquote>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="xdress_extra_types.pxd.html">xdress_extra_types.pxd</a></li>
-<li class="toctree-l1"><a class="reference internal" href="xdress_extra_types.pyx.html">xdress_extra_types.pyx</a></li>
-</ul>
-</div>
+<li><p class="first">Why GCC-XML and not Clang&#8217;s AST?</p>
+<blockquote>
+<div><p>I tried using Clang&#8217;s AST (and the remnants of a broken visitor class remain
+in the code base).  However, the official Clang AST Python bindings lack
+support for template argument types.  This is a really big deal. Other C++ ASTs
+may be supported in the future &#8211; including Clang&#8217;s.</p>
+</div></blockquote>
+</li>
+<li><p class="first">I run xdress and it creates these files, now what?!</p>
+<blockquote>
+<div><p>It is your job to integrate the files created by xdress into your build system.</p>
+</div></blockquote>
+</li>
+</ol>
 </div>
 
 
@@ -112,23 +115,23 @@ if(ga_enabled){
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-        <p class="logo"><a href="../../index.html">
-          <img class="logo" src="../../_static/HooverJoven.jpg" alt="Logo"/>
+        <p class="logo"><a href="index.html">
+          <img class="logo" src="_static/HooverJoven.jpg" alt="Logo"/>
         </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../index.html"
-                        title="previous chapter">mypack</a></p>
+  <p class="topless"><a href="other/scipy2013/tutorial_abstract.html"
+                        title="previous chapter">SciPy 2013 Tutorial Abstract</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="cpp_hoover.pxd.html"
-                        title="next chapter">cpp_hoover.pxd</a></p>
+  <p class="topless"><a href="authors.html"
+                        title="next chapter">Authors</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../../_sources/mypack/mypack/index.txt"
+    <li><a href="_sources/faq.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="../../search.html" method="get">
+    <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -149,24 +152,22 @@ if(ga_enabled){
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
+          <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
+          <a href="np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="cpp_hoover.pxd.html" title="cpp_hoover.pxd"
+          <a href="authors.html" title="Authors"
              >next</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="../index.html" title="mypack"
+          <a href="other/scipy2013/tutorial_abstract.html" title="SciPy 2013 Tutorial Abstract"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.2 documentation</a> &raquo;</li>
-
-          <li><a href="../../tutorial.html" >Tutorial</a> &raquo;</li>
-          <li><a href="../index.html" >mypack</a> &raquo;</li> 
+    <li><a href="index.html">xdress 0.2 documentation</a> &raquo;</li>
+ 
       </ul>
     </div>
     </div>
