@@ -9,16 +9,16 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Utilities &mdash; xdress 0.1 documentation</title>
+    <title>Utilities &mdash; xdress 0.2 documentation</title>
     
-    <link rel="stylesheet" href="../_static/cloud.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.1',
+        VERSION:     '0.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,11 +29,25 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.1 documentation" href="../index.html" />
+    <link rel="top" title="xdress 0.2 documentation" href="../index.html" />
     <link rel="up" title="Library Reference" href="index.html" />
-    <link rel="next" title="Previous Versions" href="../previous/index.html" />
+    <link rel="next" title="Plugins" href="plugins.html" />
     <link rel="prev" title="API Generation CLI" href="main.html" /> 
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
+var ga_enabled = !$.cookie('disable-ga');
+if(ga_enabled){
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41934829-1']);
+  _gaq.push(['_setCookiePath', '/']);
+  _gaq.push(['_setDetectFlash', false]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+}
+</script>
   </head>
   <body>
     <div class="relbar-top">
@@ -51,12 +65,12 @@
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="../previous/index.html" title="Previous Versions"
+          <a href="plugins.html" title="Plugins"
              accesskey="N">next</a> &nbsp; &nbsp;</li>
         <li class="right" >
           <a href="main.html" title="API Generation CLI"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.1 documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.2 documentation</a> &raquo;</li>
 
           <li><a href="index.html" accesskey="U">Library Reference</a> &raquo;</li> 
       </ul>
@@ -72,6 +86,78 @@
   <div class="section" id="module-xdress.utils">
 <span id="utilities"></span><span id="xdress-utils"></span><h1>Utilities<a class="headerlink" href="#module-xdress.utils" title="Permalink to this headline">¶</a></h1>
 <p>Helper functions for bright API generation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">Anthony Scopatz &lt;<a class="reference external" href="mailto:scopatz&#37;&#52;&#48;gmail&#46;com">scopatz<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="utilities-api">
+<h2>Utilities API<a class="headerlink" href="#utilities-api" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="xdress.utils.DescriptionCache">
+<em class="property">class </em><tt class="descclassname">xdress.utils.</tt><tt class="descname">DescriptionCache</tt><big>(</big><em>cachefile='build/desc.cache'</em><big>)</big><a class="headerlink" href="#xdress.utils.DescriptionCache" title="Permalink to this definition">¶</a></dt>
+<dd><p>A quick persistent cache for descriptions from files.  
+The keys are (classname, filename, kind) tuples.  The values are 
+(hashes-of-the-file, description-dictionary) tuples.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>cachefile</strong> : str, optional</p>
+<blockquote class="last">
+<div><p>Path to description cachefile.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="xdress.utils.DescriptionCache.dump">
+<tt class="descname">dump</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.utils.DescriptionCache.dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the cache out to the filesystem.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xdress.utils.DescriptionCache.isvalid">
+<tt class="descname">isvalid</tt><big>(</big><em>name</em>, <em>filename</em>, <em>kind</em><big>)</big><a class="headerlink" href="#xdress.utils.DescriptionCache.isvalid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean on whether the cach value for a (name, filename, kind)
+tuple matches the state of the file on the system.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="xdress.utils.RunControl">
+<em class="property">class </em><tt class="descclassname">xdress.utils.</tt><tt class="descname">RunControl</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.utils.RunControl" title="Permalink to this definition">¶</a></dt>
+<dd><p>A composable configuration class for xdress. Unlike argparse.Namespace, 
+this keeps the object dictionary (__dict__) separate from the run control 
+attributes dictionary (_dict).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>kwargs</strong> : optional</p>
+<blockquote class="last">
+<div><p>Items to place into run control.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="xdress.utils.indentstr">
+<em class="property">class </em><tt class="descclassname">xdress.utils.</tt><tt class="descname">indentstr</tt><a class="headerlink" href="#xdress.utils.indentstr" title="Permalink to this definition">¶</a></dt>
+<dd><p>A special string subclass that can be used to indent the whol string 
+inside of format strings by accessing an <tt class="docutils literal"><span class="pre">indentN</span></tt> attr.  For example,
+<tt class="docutils literal"><span class="pre">s.indent8</span></tt> will return a copy of the string s where every line starts 
+with 8 spaces.</p>
+</dd></dl>
+
 <dl class="function">
 <dt id="xdress.utils.ensuredirs">
 <tt class="descclassname">xdress.utils.</tt><tt class="descname">ensuredirs</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#xdress.utils.ensuredirs" title="Permalink to this definition">¶</a></dt>
@@ -79,10 +165,29 @@
 </dd></dl>
 
 <dl class="function">
+<dt id="xdress.utils.exec_file">
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">exec_file</tt><big>(</big><em>filename</em>, <em>glb=None</em>, <em>loc=None</em><big>)</big><a class="headerlink" href="#xdress.utils.exec_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function equivalent to the Python 2.x execfile statement.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="xdress.utils.expand_default_args">
 <tt class="descclassname">xdress.utils.</tt><tt class="descname">expand_default_args</tt><big>(</big><em>methods</em><big>)</big><a class="headerlink" href="#xdress.utils.expand_default_args" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function takes a collection of method tuples and expands all of 
 the default arguments, returning a set of all methods possible.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.utils.find_source">
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">find_source</tt><big>(</big><em>basename</em>, <em>sourcedir='.'</em><big>)</big><a class="headerlink" href="#xdress.utils.find_source" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds a source filename, header filename, language name, and language
+source extension given a basename and source directory.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.utils.guess_language">
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">guess_language</tt><big>(</big><em>filename</em>, <em>default='c++'</em><big>)</big><a class="headerlink" href="#xdress.utils.guess_language" title="Permalink to this definition">¶</a></dt>
+<dd><p>Try to guess a files&#8217; language from its extention, defaults to C++.</p>
 </dd></dl>
 
 <dl class="function">
@@ -104,8 +209,21 @@ the default arguments, returning a set of all methods possible.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="xdress.utils.isvardesc">
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">isvardesc</tt><big>(</big><em>desc</em><big>)</big><a class="headerlink" href="#xdress.utils.isvardesc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests if a description is a variable-type description.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.utils.merge_descriptions">
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">merge_descriptions</tt><big>(</big><em>descriptions</em><big>)</big><a class="headerlink" href="#xdress.utils.merge_descriptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a sequence of descriptions, in order of increasing precedence, 
+merge them into a single description dictionary.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="xdress.utils.newcopyover">
-<tt class="descclassname">xdress.utils.</tt><tt class="descname">newcopyover</tt><big>(</big><em>f1</em>, <em>f2</em><big>)</big><a class="headerlink" href="#xdress.utils.newcopyover" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">newcopyover</tt><big>(</big><em>f1</em>, <em>f2</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xdress.utils.newcopyover" title="Permalink to this definition">¶</a></dt>
 <dd><p>Useful for not forcing re-compiles and thus playing nicely with the 
 build system.  This is acomplished by not writing the file if the existsing
 contents are exactly the same as what would be written out.</p>
@@ -118,8 +236,12 @@ contents are exactly the same as what would be written out.</p>
 <div><p>Path to file to copy from</p>
 </div></blockquote>
 <p><strong>f2</strong> : str</p>
-<blockquote class="last">
+<blockquote>
 <div><p>Path to file to copy over</p>
+</div></blockquote>
+<p><strong>vebose</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>prints extra message</p>
 </div></blockquote>
 </td>
 </tr>
@@ -129,7 +251,7 @@ contents are exactly the same as what would be written out.</p>
 
 <dl class="function">
 <dt id="xdress.utils.newoverwrite">
-<tt class="descclassname">xdress.utils.</tt><tt class="descname">newoverwrite</tt><big>(</big><em>s</em>, <em>filename</em><big>)</big><a class="headerlink" href="#xdress.utils.newoverwrite" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">newoverwrite</tt><big>(</big><em>s</em>, <em>filename</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xdress.utils.newoverwrite" title="Permalink to this definition">¶</a></dt>
 <dd><p>Useful for not forcing re-compiles and thus playing nicely with the 
 build system.  This is acomplished by not writing the file if the existsing
 contents are exactly the same as what would be written out.</p>
@@ -142,8 +264,12 @@ contents are exactly the same as what would be written out.</p>
 <div><p>string contents of file to possible</p>
 </div></blockquote>
 <p><strong>filename</strong> : str</p>
-<blockquote class="last">
+<blockquote>
 <div><p>Path to file.</p>
+</div></blockquote>
+<p><strong>vebose</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>prints extra message</p>
 </div></blockquote>
 </td>
 </tr>
@@ -151,6 +277,59 @@ contents are exactly the same as what would be written out.</p>
 </table>
 </dd></dl>
 
+<dl class="function">
+<dt id="xdress.utils.writenewonly">
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">writenewonly</tt><big>(</big><em>s</em>, <em>filename</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xdress.utils.writenewonly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Only writes the contents of the string to a file if the file does not exist.
+Useful for not tocuhing files.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>s</strong> : str</p>
+<blockquote>
+<div><p>string contents of file to possible</p>
+</div></blockquote>
+<p><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Path to file.</p>
+</div></blockquote>
+<p><strong>vebose</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>prints extra message</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="data">
+<dt id="xdress.utils.DEFAULT_PLUGINS">
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">DEFAULT_PLUGINS</tt><em class="property"> = ('xdress.stlwrap', 'xdress.autoall', 'xdress.cythongen')</em><a class="headerlink" href="#xdress.utils.DEFAULT_PLUGINS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default list of plugin module names.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="xdress.utils.DEFAULT_RC_FILE">
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">DEFAULT_RC_FILE</tt><em class="property"> = 'xdressrc.py'</em><a class="headerlink" href="#xdress.utils.DEFAULT_RC_FILE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default run control file name.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="xdress.utils.NotSpecified">
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">NotSpecified</tt><em class="property"> = NotSpecified</em><a class="headerlink" href="#xdress.utils.NotSpecified" title="Permalink to this definition">¶</a></dt>
+<dd><p>A helper class singleton for run control meaning that a &#8216;real&#8217; value
+has not been given.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="xdress.utils.nyansep">
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">nyansep</tt><em class="property"> = '~\\_/~\\_/~\\_/~\\_/~\\_/~\\_/~\\_/~\\_/~\\_/~\\_/~\\_/~\\_/~\\_/~\\_/~\\_/~\\_/~\\_/~=[,,_,,]:3'</em><a class="headerlink" href="#xdress.utils.nyansep" title="Permalink to this definition">¶</a></dt>
+<dd><p>WAT?!</p>
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -162,12 +341,22 @@ contents are exactly the same as what would be written out.</p>
         <p class="logo"><a href="../index.html">
           <img class="logo" src="../_static/HooverJoven.jpg" alt="Logo"/>
         </a></p>
+  <div class="sphinxlocaltoc">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Utilities</a><ul>
+<li><a class="reference internal" href="#utilities-api">Utilities API</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
   <h4>Previous topic</h4>
   <p class="topless"><a href="main.html"
                         title="previous chapter">API Generation CLI</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../previous/index.html"
-                        title="next chapter">Previous Versions</a></p>
+  <p class="topless"><a href="plugins.html"
+                        title="next chapter">Plugins</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/libref/utils.txt"
@@ -205,12 +394,12 @@ contents are exactly the same as what would be written out.</p>
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="../previous/index.html" title="Previous Versions"
+          <a href="plugins.html" title="Plugins"
              >next</a> &nbsp; &nbsp;</li>
         <li class="right" >
           <a href="main.html" title="API Generation CLI"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.1 documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.2 documentation</a> &raquo;</li>
 
           <li><a href="index.html" >Library Reference</a> &raquo;</li> 
       </ul>
@@ -220,7 +409,16 @@ contents are exactly the same as what would be written out.</p>
     <div class="footer">
         &copy; Copyright 2013, Anthony Scopatz.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
-    </div>
+    </div><script type="text/javascript">
+    if(ga_enabled){
+        document.write("<div class=\"footer\">This page uses <a href=\"http://analytics.google.com\">Google Analytics</a> to collect statistics. ");
+        document.write("Click <button title=\"set cookie to disable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', 'true', {expires: 3650, path: '/'}); window.location.reload(); return false; \">here</button> to disable analytics for this site.");
+        document.write("</div>");
+    }else{
+        document.write("<div class=\"footer\">Google Analytics has been disabled. ");
+        document.write("Click <button title=\"set cookie to re-enable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', null, {path: '/'}); window.location.reload(); return false; \">here</button> to re-enable analytics for this site.");
+    };
+</script>
     <!-- cloud_sptheme 1.4 -->
   </body>
 </html>
