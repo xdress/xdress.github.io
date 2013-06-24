@@ -1,0 +1,359 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Abstract Syntax Tree Parsers &mdash; xdress 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../_static/cloud.js"></script>
+    <link rel="top" title="xdress 0.2 documentation" href="../index.html" />
+    <link rel="up" title="Library Reference" href="index.html" />
+    <link rel="next" title="Automatic Descriptions" href="autodescribe.html" />
+    <link rel="prev" title="Standard Library Container Wrappers" href="stlwrap.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
+var ga_enabled = !$.cookie('disable-ga');
+if(ga_enabled){
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41934829-1']);
+  _gaq.push(['_setCookiePath', '/']);
+  _gaq.push(['_setDetectFlash', false]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+}
+</script>
+  </head>
+  <body>
+    <div class="relbar-top">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="autodescribe.html" title="Automatic Descriptions"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="stlwrap.html" title="Standard Library Container Wrappers"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">xdress 0.2 documentation</a> &raquo;</li>
+
+          <li><a href="index.html" accesskey="U">Library Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-xdress.astparsers">
+<span id="abstract-syntax-tree-parsers"></span><span id="xdress-astparsers"></span><h1>Abstract Syntax Tree Parsers<a class="headerlink" href="#module-xdress.astparsers" title="Permalink to this headline">¶</a></h1>
+<p>This module creates abstract syntax trees using external tools 
+(GCC-XML, pycparser) of C/C++ code.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">Anthony Scopatz &lt;<a class="reference external" href="mailto:scopatz&#37;&#52;&#48;gmail&#46;com">scopatz<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="ast-parsers-api">
+<h2>AST Parsers API<a class="headerlink" href="#ast-parsers-api" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="xdress.astparsers.ParserPlugin">
+<em class="property">class </em><tt class="descclassname">xdress.astparsers.</tt><tt class="descname">ParserPlugin</tt><a class="headerlink" href="#xdress.astparsers.ParserPlugin" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a base plugin for tools that wish to wrap parsing.
+It should not be used directly.</p>
+<p>The __init__() method may take no arguments or keyword arguments.</p>
+<dl class="method">
+<dt id="xdress.astparsers.ParserPlugin.report_debug">
+<tt class="descname">report_debug</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.astparsers.ParserPlugin.report_debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remember to call super() on subclasses!</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xdress.astparsers.ParserPlugin.setup">
+<tt class="descname">setup</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.astparsers.ParserPlugin.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remember to call super() on subclasses!</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xdress.astparsers.ParserPlugin.requires">
+<tt class="descname">requires</tt><em class="property"> = ('xdress.base',)</em><a class="headerlink" href="#xdress.astparsers.ParserPlugin.requires" title="Permalink to this definition">¶</a></dt>
+<dd><p>This plugin requires base</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.astparsers.clearmemo">
+<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">clearmemo</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.astparsers.clearmemo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears all function memoizations for autodescribers.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.astparsers.dumpast">
+<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">dumpast</tt><big>(</big><em>filename</em>, <em>parsers</em>, <em>sourcedir</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="headerlink" href="#xdress.astparsers.dumpast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints an abstract syntax tree to stdout.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.astparsers.gccxml_parse">
+<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">gccxml_parse</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.astparsers.gccxml_parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use GCC-XML to parse a file. This function is automatically memoized.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>The path to the file.</p>
+</div></blockquote>
+<p><strong>includes: list of str, optional</strong> :</p>
+<blockquote>
+<div><p>The list of extra include directories to search for header files.</p>
+</div></blockquote>
+<p><strong>defines: list of str, optional</strong> :</p>
+<blockquote>
+<div><p>The list of extra macro definitions to apply.</p>
+</div></blockquote>
+<p><strong>undefines: list of str, optional</strong> :</p>
+<blockquote>
+<div><p>The list of extra macro undefinitions to apply.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : bool, optional</p>
+<blockquote>
+<div><p>Flag to diplay extra information while describing the class.</p>
+</div></blockquote>
+<p><strong>debug</strong> : bool, optional</p>
+<blockquote>
+<div><p>Flag to enable/disable debug mode.</p>
+</div></blockquote>
+<p><strong>builddir</strong> : str, optional</p>
+<blockquote>
+<div><p>Location of &#8211; often temporary &#8211; build files.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>root</strong> : XML etree</p>
+<blockquote class="last">
+<div><p>An in memory tree representing the parsed file.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.astparsers.pick_parser">
+<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">pick_parser</tt><big>(</big><em>filename</em>, <em>parsers</em><big>)</big><a class="headerlink" href="#xdress.astparsers.pick_parser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines the parse to use for a file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>The path to the file.</p>
+</div></blockquote>
+<p><strong>parsers</strong> : str, list, or dict, optional</p>
+<blockquote>
+<div><p>The parser / AST to use to use for the file.  Currently &#8216;clang&#8217;, &#8216;gccxml&#8217;, 
+and &#8216;pycparser&#8217; are supported, though others may be implemented in the 
+future.  If this is a string, then this parser is used.  If this is a list, 
+this specifies the parser order to use based on availability.  If this is
+a dictionary, it specifies the order to use parser based on language, i.e.
+<tt class="docutils literal"><span class="pre">{'c'</span> <span class="pre">['pycparser',</span> <span class="pre">'gccxml'],</span> <span class="pre">'c++':</span> <span class="pre">['gccxml',</span> <span class="pre">'pycparser']}</span></tt>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>parser</strong> : str</p>
+<blockquote class="last">
+<div><p>The name of the parser to use.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.astparsers.pycparser_parse">
+<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">pycparser_parse</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.astparsers.pycparser_parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use pycparser to parse a file.  This functions is automatically memoized.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>The path to the file.</p>
+</div></blockquote>
+<p><strong>includes: list of str, optional</strong> :</p>
+<blockquote>
+<div><p>The list of extra include directories to search for header files.</p>
+</div></blockquote>
+<p><strong>defines: list of str, optional</strong> :</p>
+<blockquote>
+<div><p>The list of extra macro definitions to apply.</p>
+</div></blockquote>
+<p><strong>undefines: list of str, optional</strong> :</p>
+<blockquote>
+<div><p>The list of extra macro undefinitions to apply.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : bool, optional</p>
+<blockquote>
+<div><p>Flag to diplay extra information while describing the class.</p>
+</div></blockquote>
+<p><strong>debug</strong> : bool, optional</p>
+<blockquote>
+<div><p>Flag to enable/disable debug mode.</p>
+</div></blockquote>
+<p><strong>builddir</strong> : str, optional</p>
+<blockquote>
+<div><p>Location of &#8211; often temporary &#8211; build files.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>root</strong> : AST</p>
+<blockquote class="last">
+<div><p>A pycparser abstract syntax tree.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+        <p class="logo"><a href="../index.html">
+          <img class="logo" src="../_static/HooverJoven.jpg" alt="Logo"/>
+        </a></p>
+  <div class="sphinxlocaltoc">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Abstract Syntax Tree Parsers</a><ul>
+<li><a class="reference internal" href="#ast-parsers-api">AST Parsers API</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="stlwrap.html"
+                        title="previous chapter">Standard Library Container Wrappers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="autodescribe.html"
+                        title="next chapter">Automatic Descriptions</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/libref/astparsers.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="autodescribe.html" title="Automatic Descriptions"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="stlwrap.html" title="Standard Library Container Wrappers"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">xdress 0.2 documentation</a> &raquo;</li>
+
+          <li><a href="index.html" >Library Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, Anthony Scopatz.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div><script type="text/javascript">
+    if(ga_enabled){
+        document.write("<div class=\"footer\">This page uses <a href=\"http://analytics.google.com\">Google Analytics</a> to collect statistics. ");
+        document.write("Click <button title=\"set cookie to disable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', 'true', {expires: 3650, path: '/'}); window.location.reload(); return false; \">here</button> to disable analytics for this site.");
+        document.write("</div>");
+    }else{
+        document.write("<div class=\"footer\">Google Analytics has been disabled. ");
+        document.write("Click <button title=\"set cookie to re-enable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', null, {path: '/'}); window.location.reload(); return false; \">here</button> to re-enable analytics for this site.");
+    };
+</script>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

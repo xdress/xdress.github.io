@@ -1,0 +1,577 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Automatic API Discovery &mdash; xdress 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../_static/cloud.js"></script>
+    <link rel="top" title="xdress 0.2 documentation" href="../index.html" />
+    <link rel="up" title="Library Reference" href="index.html" />
+    <link rel="next" title="Cython Generation" href="cythongen.html" />
+    <link rel="prev" title="Automatic Descriptions" href="autodescribe.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
+var ga_enabled = !$.cookie('disable-ga');
+if(ga_enabled){
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41934829-1']);
+  _gaq.push(['_setCookiePath', '/']);
+  _gaq.push(['_setDetectFlash', false]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+}
+</script>
+  </head>
+  <body>
+    <div class="relbar-top">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="cythongen.html" title="Cython Generation"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="autodescribe.html" title="Automatic Descriptions"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">xdress 0.2 documentation</a> &raquo;</li>
+
+          <li><a href="index.html" accesskey="U">Library Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-xdress.autoall">
+<span id="automatic-api-discovery"></span><span id="xdress-autoall"></span><h1>Automatic API Discovery<a class="headerlink" href="#module-xdress.autoall" title="Permalink to this headline">¶</a></h1>
+<p>This module is used to scrape the all of the APIs from a given source file
+and return thier name and kind.  These include classes, structs, functions, 
+and certain variable types.  It is not used to actually describe these elements.
+That is the job of the autodescriber.</p>
+<p>This module is available as an xdress plugin by the name <tt class="docutils literal"><span class="pre">xdress.autoall</span></tt>.</p>
+<p>Including this plugin enables the <tt class="docutils literal"><span class="pre">classes</span></tt>, <tt class="docutils literal"><span class="pre">functions</span></tt>, and <tt class="docutils literal"><span class="pre">variables</span></tt>  
+run control parameters to have an asterix (&#8216;*&#8217;) in the name positon (index 0).
+For example, rather tha writing:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">classes</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s">&#39;People&#39;</span><span class="p">,</span> <span class="s">&#39;people&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;JoanOfArc&#39;</span><span class="p">,</span> <span class="s">&#39;people&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;JEdgaHoover&#39;</span><span class="p">,</span> <span class="s">&#39;people&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Leslie&#39;</span><span class="p">,</span> <span class="s">&#39;people&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;HuaMulan&#39;</span><span class="p">,</span> <span class="s">&#39;people&#39;</span><span class="p">),</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+<p>we can instead simply write:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">classes</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;*&#39;</span><span class="p">,</span> <span class="s">&#39;people&#39;</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>Isn&#8217;t this grand?!</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">Anthony Scopatz &lt;<a class="reference external" href="mailto:scopatz&#37;&#52;&#48;gmail&#46;com">scopatz<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="automatic-finder-api">
+<h2>Automatic Finder API<a class="headerlink" href="#automatic-finder-api" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="xdress.autoall.AutoNameCache">
+<em class="property">class </em><tt class="descclassname">xdress.autoall.</tt><tt class="descname">AutoNameCache</tt><big>(</big><em>cachefile='build/autoname.cache'</em><big>)</big><a class="headerlink" href="#xdress.autoall.AutoNameCache" title="Permalink to this definition">¶</a></dt>
+<dd><p>A quick persistent cache for name lists automatically found in files.  
+The keys are (classname, filename, kind) tuples.  The values are 
+(hashes-of-the-file, finder-results) tuples.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>cachefile</strong> : str, optional</p>
+<blockquote class="last">
+<div><p>Path to description cachefile.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="xdress.autoall.AutoNameCache.dump">
+<tt class="descname">dump</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.autoall.AutoNameCache.dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the cache out to the filesystem.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xdress.autoall.AutoNameCache.isvalid">
+<tt class="descname">isvalid</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#xdress.autoall.AutoNameCache.isvalid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean on whether the cach value for a filename matches the state 
+of the file on the system.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="xdress.autoall.GccxmlFinder">
+<em class="property">class </em><tt class="descclassname">xdress.autoall.</tt><tt class="descname">GccxmlFinder</tt><big>(</big><em>root=None</em>, <em>onlyin=None</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xdress.autoall.GccxmlFinder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class used for discovering APIs using an etree representation of 
+the GCC-XML AST.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>root</strong> : element tree node, optional</p>
+<blockquote>
+<div><p>The root element node of the AST.</p>
+</div></blockquote>
+<p><strong>onlyin</strong> :  str, optional</p>
+<blockquote>
+<div><p>Filename to search, prevents finding APIs coming from other libraries.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>Flag to display extra information while visiting the file.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="xdress.autoall.GccxmlFinder.visit">
+<tt class="descname">visit</tt><big>(</big><em>node=None</em><big>)</big><a class="headerlink" href="#xdress.autoall.GccxmlFinder.visit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visits the node and all sub-nodes, filling the API names
+as it goes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>node</strong> : element tree node, optional</p>
+<blockquote class="last">
+<div><p>The element tree node to start from.  If this is None, then the 
+top-level node is found and visited.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="xdress.autoall.GccxmlFinder.visit_kinds">
+<tt class="descname">visit_kinds</tt><big>(</big><em>node</em>, <em>kinds</em><big>)</big><a class="headerlink" href="#xdress.autoall.GccxmlFinder.visit_kinds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visits the node and all sub-nodes, finding instances of the kinds 
+and recording the names as it goes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>node</strong> : element tree node</p>
+<blockquote>
+<div><p>The element tree node to start from.</p>
+</div></blockquote>
+<p><strong>kinds</strong> : str or sequence of str</p>
+<blockquote>
+<div><p>The API elements to find.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>names</strong> : list of str</p>
+<blockquote class="last">
+<div><p>Names of the API elements in this file that match the kinds provided.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="xdress.autoall.PycparserFinder">
+<em class="property">class </em><tt class="descclassname">xdress.autoall.</tt><tt class="descname">PycparserFinder</tt><big>(</big><em>root=None</em>, <em>onlyin=None</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xdress.autoall.PycparserFinder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class used for discovering APIs using the pycparser AST.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>root</strong> : element tree node, optional</p>
+<blockquote>
+<div><p>The root element node of the AST.</p>
+</div></blockquote>
+<p><strong>onlyin</strong> :  str, optional</p>
+<blockquote>
+<div><p>Filename to search, prevents finding APIs coming from other libraries.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>Flag to display extra information while visiting the file.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="xdress.autoall.PycparserFinder.visit">
+<tt class="descname">visit</tt><big>(</big><em>node=None</em><big>)</big><a class="headerlink" href="#xdress.autoall.PycparserFinder.visit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visits the node and all sub-nodes, filling the API names
+as it goes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>node</strong> : element tree node, optional</p>
+<blockquote class="last">
+<div><p>The element tree node to start from.  If this is None, then the 
+top-level node is found and visited.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="xdress.autoall.XDressPlugin">
+<em class="property">class </em><tt class="descclassname">xdress.autoall.</tt><tt class="descname">XDressPlugin</tt><a class="headerlink" href="#xdress.autoall.XDressPlugin" title="Permalink to this definition">¶</a></dt>
+<dd><p>This plugin resolves the &#8216;*&#8217; syntax in wrapper types by parsing the 
+source files prio to describing them.</p>
+<p>The __init__() method may take no arguments or keyword arguments.</p>
+<dl class="method">
+<dt id="xdress.autoall.XDressPlugin.setup">
+<tt class="descname">setup</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.autoall.XDressPlugin.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expands variables, functions, and classes in the rc based on 
+copying src filenames to tar filename and the special &#8216;*&#8217; all syntax.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.autoall.clang_findall">
+<tt class="descclassname">xdress.autoall.</tt><tt class="descname">clang_findall</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.autoall.clang_findall" title="Permalink to this definition">¶</a></dt>
+<dd><div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This has not yet been implemented fully or at all.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.autoall.findall">
+<tt class="descclassname">xdress.autoall.</tt><tt class="descname">findall</tt><big>(</big><em>filename</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>parsers='gccxml'</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="headerlink" href="#xdress.autoall.findall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Automatically finds all API elements in a file.  This is the main entry point.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>The path to the file.</p>
+</div></blockquote>
+<p><strong>includes: list of str, optional</strong> :</p>
+<blockquote>
+<div><p>The list of extra include directories to search for header files.</p>
+</div></blockquote>
+<p><strong>defines: list of str, optional</strong> :</p>
+<blockquote>
+<div><p>The list of extra macro definitions to apply.</p>
+</div></blockquote>
+<p><strong>undefines: list of str, optional</strong> :</p>
+<blockquote>
+<div><p>The list of extra macro undefinitions to apply.</p>
+</div></blockquote>
+<p><strong>parsers</strong> : str, list, or dict, optional</p>
+<blockquote>
+<div><p>The parser / AST to use to use for the file.  Currently &#8216;clang&#8217;, &#8216;gccxml&#8217;, 
+and &#8216;pycparser&#8217; are supported, though others may be implemented in the 
+future.  If this is a string, then this parser is used.  If this is a list, 
+this specifies the parser order to use based on availability.  If this is
+a dictionary, it specifies the order to use parser based on language, i.e.
+<tt class="docutils literal"><span class="pre">{'c'</span> <span class="pre">['pycparser',</span> <span class="pre">'gccxml'],</span> <span class="pre">'c++':</span> <span class="pre">['gccxml',</span> <span class="pre">'pycparser']}</span></tt>.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : bool, optional</p>
+<blockquote>
+<div><p>Flag to diplay extra information while describing the class.</p>
+</div></blockquote>
+<p><strong>debug</strong> : bool, optional</p>
+<blockquote>
+<div><p>Flag to enable/disable debug mode.</p>
+</div></blockquote>
+<p><strong>builddir</strong> : str, optional</p>
+<blockquote>
+<div><p>Location of &#8211; often temporary &#8211; build files.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>variables</strong> : list of strings</p>
+<blockquote>
+<div><p>A list of variable names to wrap from the file.</p>
+</div></blockquote>
+<p><strong>functions</strong> : list of strings</p>
+<blockquote>
+<div><p>A list of function names to wrap from the file.</p>
+</div></blockquote>
+<p><strong>classes</strong> : list of strings</p>
+<blockquote class="last">
+<div><p>A list of class names to wrap from the file.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.autoall.gccxml_findall">
+<tt class="descclassname">xdress.autoall.</tt><tt class="descname">gccxml_findall</tt><big>(</big><em>filename</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="headerlink" href="#xdress.autoall.gccxml_findall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Automatically finds all API elements in a file via GCC-XML.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>The path to the file</p>
+</div></blockquote>
+<p><strong>includes</strong> : list of str, optional</p>
+<blockquote>
+<div><p>The list of extra include directories to search for header files.</p>
+</div></blockquote>
+<p><strong>defines</strong> : list of str, optional</p>
+<blockquote>
+<div><p>The list of extra macro definitions to apply.</p>
+</div></blockquote>
+<p><strong>undefines</strong> : list of str, optional</p>
+<blockquote>
+<div><p>The list of extra macro undefinitions to apply.</p>
+</div></blockquote>
+<p><strong>parsers</strong> : str, list, or dict, optional</p>
+<blockquote>
+<div><p>The parser / AST to use to use for the file.  Currently &#8216;clang&#8217;, &#8216;gccxml&#8217;, 
+and &#8216;pycparser&#8217; are supported, though others may be implemented in the 
+future.  If this is a string, then this parser is used.  If this is a list, 
+this specifies the parser order to use based on availability.  If this is
+a dictionary, it specifies the order to use parser based on language, i.e.
+<tt class="docutils literal"><span class="pre">{'c'</span> <span class="pre">['pycparser',</span> <span class="pre">'gccxml'],</span> <span class="pre">'c++':</span> <span class="pre">['gccxml',</span> <span class="pre">'pycparser']}</span></tt>.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : bool, optional</p>
+<blockquote>
+<div><p>Flag to diplay extra information while describing the class.</p>
+</div></blockquote>
+<p><strong>debug</strong> : bool, optional</p>
+<blockquote>
+<div><p>Flag to enable/disable debug mode.</p>
+</div></blockquote>
+<p><strong>builddir</strong> : str, optional</p>
+<blockquote>
+<div><p>Location of &#8211; often temporary &#8211; build files.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>variables</strong> : list of strings</p>
+<blockquote>
+<div><p>A list of variable names to wrap from the file.</p>
+</div></blockquote>
+<p><strong>functions</strong> : list of strings</p>
+<blockquote>
+<div><p>A list of function names to wrap from the file.</p>
+</div></blockquote>
+<p><strong>classes</strong> : list of strings</p>
+<blockquote class="last">
+<div><p>A list of class names to wrap from the file.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.autoall.pycparser_findall">
+<tt class="descclassname">xdress.autoall.</tt><tt class="descname">pycparser_findall</tt><big>(</big><em>filename</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="headerlink" href="#xdress.autoall.pycparser_findall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Automatically finds all API elements in a file via GCC-XML.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>The path to the file</p>
+</div></blockquote>
+<p><strong>includes</strong> : list of str, optional</p>
+<blockquote>
+<div><p>The list of extra include directories to search for header files.</p>
+</div></blockquote>
+<p><strong>defines</strong> : list of str, optional</p>
+<blockquote>
+<div><p>The list of extra macro definitions to apply.</p>
+</div></blockquote>
+<p><strong>undefines</strong> : list of str, optional</p>
+<blockquote>
+<div><p>The list of extra macro undefinitions to apply.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : bool, optional</p>
+<blockquote>
+<div><p>Flag to diplay extra information while describing the class.</p>
+</div></blockquote>
+<p><strong>debug</strong> : bool, optional</p>
+<blockquote>
+<div><p>Flag to enable/disable debug mode.</p>
+</div></blockquote>
+<p><strong>builddir</strong> : str, optional</p>
+<blockquote>
+<div><p>Location of &#8211; often temporary &#8211; build files.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>variables</strong> : list of strings</p>
+<blockquote>
+<div><p>A list of variable names to wrap from the file.</p>
+</div></blockquote>
+<p><strong>functions</strong> : list of strings</p>
+<blockquote>
+<div><p>A list of function names to wrap from the file.</p>
+</div></blockquote>
+<p><strong>classes</strong> : list of strings</p>
+<blockquote class="last">
+<div><p>A list of class names to wrap from the file.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+        <p class="logo"><a href="../index.html">
+          <img class="logo" src="../_static/HooverJoven.jpg" alt="Logo"/>
+        </a></p>
+  <div class="sphinxlocaltoc">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Automatic API Discovery</a><ul>
+<li><a class="reference internal" href="#automatic-finder-api">Automatic Finder API</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="autodescribe.html"
+                        title="previous chapter">Automatic Descriptions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="cythongen.html"
+                        title="next chapter">Cython Generation</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/libref/autoall.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="cythongen.html" title="Cython Generation"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="autodescribe.html" title="Automatic Descriptions"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">xdress 0.2 documentation</a> &raquo;</li>
+
+          <li><a href="index.html" >Library Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, Anthony Scopatz.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div><script type="text/javascript">
+    if(ga_enabled){
+        document.write("<div class=\"footer\">This page uses <a href=\"http://analytics.google.com\">Google Analytics</a> to collect statistics. ");
+        document.write("Click <button title=\"set cookie to disable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', 'true', {expires: 3650, path: '/'}); window.location.reload(); return false; \">here</button> to disable analytics for this site.");
+        document.write("</div>");
+    }else{
+        document.write("<div class=\"footer\">Google Analytics has been disabled. ");
+        document.write("Click <button title=\"set cookie to re-enable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', null, {path: '/'}); window.location.reload(); return false; \">here</button> to re-enable analytics for this site.");
+    };
+</script>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

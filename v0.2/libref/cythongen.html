@@ -1,0 +1,623 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Cython Generation &mdash; xdress 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../_static/cloud.js"></script>
+    <link rel="top" title="xdress 0.2 documentation" href="../index.html" />
+    <link rel="up" title="Library Reference" href="index.html" />
+    <link rel="next" title="API Generation CLI" href="main.html" />
+    <link rel="prev" title="Automatic API Discovery" href="autoall.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
+var ga_enabled = !$.cookie('disable-ga');
+if(ga_enabled){
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41934829-1']);
+  _gaq.push(['_setCookiePath', '/']);
+  _gaq.push(['_setDetectFlash', false]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+}
+</script>
+  </head>
+  <body>
+    <div class="relbar-top">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="main.html" title="API Generation CLI"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="autoall.html" title="Automatic API Discovery"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">xdress 0.2 documentation</a> &raquo;</li>
+
+          <li><a href="index.html" accesskey="U">Library Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-xdress.cythongen">
+<span id="cython-generation"></span><span id="xdress-cythongen"></span><h1>Cython Generation<a class="headerlink" href="#module-xdress.cythongen" title="Permalink to this headline">¶</a></h1>
+<p>Generates a Cython wrappers from description dictionaries.
+This module relies heavily on the type system to convert between C/C++, Cython, and
+Python types in a seamless way.  While this module does not explicitly rely on the
+auto-describer, it sure helps!  The functions in this module are conceptually
+easy to understand &#8211; given class descriptions they generate strings of Cython
+code &#8211; their implementations do a lot of heavy lifting.</p>
+<p>This module is available as an xdress plugin by the name <tt class="docutils literal"><span class="pre">xdress.cythongen</span></tt>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">Anthony Scopatz &lt;<a class="reference external" href="mailto:scopatz&#37;&#52;&#48;gmail&#46;com">scopatz<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="cython-generation-api">
+<h2>Cython Generation API<a class="headerlink" href="#cython-generation-api" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="xdress.cythongen.XDressPlugin">
+<em class="property">class </em><tt class="descclassname">xdress.cythongen.</tt><tt class="descname">XDressPlugin</tt><a class="headerlink" href="#xdress.cythongen.XDressPlugin" title="Permalink to this definition">¶</a></dt>
+<dd><p>The main cython generator plugin.</p>
+<p>The __init__() method may take no arguments or keyword arguments.</p>
+<dl class="attribute">
+<dt id="xdress.cythongen.XDressPlugin.requires">
+<tt class="descname">requires</tt><em class="property"> = ('xdress.autodescribe',)</em><a class="headerlink" href="#xdress.cythongen.XDressPlugin.requires" title="Permalink to this definition">¶</a></dt>
+<dd><p>This plugin requires autodescribe.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.cythongen.classcpppxd">
+<tt class="descclassname">xdress.cythongen.</tt><tt class="descname">classcpppxd</tt><big>(</big><em>desc</em>, <em>exceptions=True</em><big>)</big><a class="headerlink" href="#xdress.cythongen.classcpppxd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a cpp_*.pxd Cython header snippet for exposing a C/C++ class or
+struct to other Cython wrappers based off of a dictionary description of the
+class or struct.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>desc</strong> : dict</p>
+<blockquote>
+<div><p>Class description dictonary.</p>
+</div></blockquote>
+<p><strong>exceptions</strong> : bool or str, optional</p>
+<blockquote>
+<div><p>Cython exception annotation.  Set to True to automatically detect exception
+types, False for when exceptions should not be included, and a str (such as
+&#8216;+&#8217; or &#8216;-1&#8217;) to apply to everywhere.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>cimport_tups</strong> : set of tuples</p>
+<blockquote>
+<div><p>Set of Cython cimport tuples for cpp_*.pxd header file.</p>
+</div></blockquote>
+<p><strong>cpppxd</strong> : str</p>
+<blockquote class="last">
+<div><p>Cython cpp_*.pxd header file as in-memory string.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.cythongen.classpxd">
+<tt class="descclassname">xdress.cythongen.</tt><tt class="descname">classpxd</tt><big>(</big><em>desc</em>, <em>classes=()</em><big>)</big><a class="headerlink" href="#xdress.cythongen.classpxd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a <tt class="docutils literal"><span class="pre">*pxd</span></tt> Cython header snippet for exposing a C/C++ class to
+other Cython wrappers based off of a dictionary description.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>desc</strong> : dict</p>
+<blockquote>
+<div><p>Class description dictonary.</p>
+</div></blockquote>
+<p><strong>classes</strong> : sequence, optional</p>
+<blockquote>
+<div><p>Listing of all class names that are handled by cythongen.  This may be 
+the same dictionary as in modpyx().</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>cimport_tups</strong> : set of tuples</p>
+<blockquote>
+<div><p>Set of Cython cimport tuples for .pxd header file.</p>
+</div></blockquote>
+<p><strong>pxd</strong> : str</p>
+<blockquote class="last">
+<div><p>Cython <tt class="docutils literal"><span class="pre">*.pxd</span></tt> header snippet for class.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.cythongen.classpyx">
+<tt class="descclassname">xdress.cythongen.</tt><tt class="descname">classpyx</tt><big>(</big><em>desc</em>, <em>classes=None</em><big>)</big><a class="headerlink" href="#xdress.cythongen.classpyx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a <tt class="docutils literal"><span class="pre">*.pyx</span></tt> Cython wrapper implementation for exposing a C/C++
+class based off of a dictionary description.  The environment is a
+dictionary of all class names known to their descriptions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>desc</strong> : dict</p>
+<blockquote>
+<div><p>Class description dictonary.</p>
+</div></blockquote>
+<p><strong>classes</strong> : dict, optional</p>
+<blockquote>
+<div><p>Dictionary which maps all class names that are required to
+their own descriptions.  This is required for resolving class heirarchy
+dependencies.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>pyx</strong> : str</p>
+<blockquote class="last">
+<div><p>Cython <tt class="docutils literal"><span class="pre">*.pyx</span></tt> implementation file as in-memory string.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.cythongen.cpppxd_sorted_names">
+<tt class="descclassname">xdress.cythongen.</tt><tt class="descname">cpppxd_sorted_names</tt><big>(</big><em>mod</em><big>)</big><a class="headerlink" href="#xdress.cythongen.cpppxd_sorted_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sorts the variable names in a cpp_*.pxd module so that C/C++ 
+declarations happen in the proper order.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.cythongen.funccpppxd">
+<tt class="descclassname">xdress.cythongen.</tt><tt class="descname">funccpppxd</tt><big>(</big><em>desc</em>, <em>exceptions=True</em><big>)</big><a class="headerlink" href="#xdress.cythongen.funccpppxd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a cpp_*.pxd Cython header snippet for exposing a C/C++ function
+to other Cython wrappers based off of a dictionary description.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>desc</strong> : dict</p>
+<blockquote>
+<div><p>Function description dictonary.</p>
+</div></blockquote>
+<p><strong>exceptions</strong> : bool or str, optional</p>
+<blockquote>
+<div><p>Cython exception annotation.  Set to True to automatically detect exception
+types, False for when exceptions should not be included, and a str (such as
+&#8216;+&#8217; or &#8216;-1&#8217;) to apply to everywhere.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>cimport_tups</strong> : set of tuples</p>
+<blockquote>
+<div><p>Set of Cython cimport tuples for cpp_*.pxd header file.</p>
+</div></blockquote>
+<p><strong>cpppxd</strong> : str</p>
+<blockquote class="last">
+<div><p>Cython cpp_*.pxd header file as in-memory string.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.cythongen.funcpyx">
+<tt class="descclassname">xdress.cythongen.</tt><tt class="descname">funcpyx</tt><big>(</big><em>desc</em><big>)</big><a class="headerlink" href="#xdress.cythongen.funcpyx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a <tt class="docutils literal"><span class="pre">*.pyx</span></tt> Cython wrapper implementation for exposing a C/C++
+function based off of a dictionary description.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>desc</strong> : dict</p>
+<blockquote>
+<div><p>function description dictonary.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>pyx</strong> : str</p>
+<blockquote class="last">
+<div><p>Cython <tt class="docutils literal"><span class="pre">*.pyx</span></tt> implementation as in-memory string.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.cythongen.gencpppxd">
+<tt class="descclassname">xdress.cythongen.</tt><tt class="descname">gencpppxd</tt><big>(</big><em>env</em>, <em>exceptions=True</em><big>)</big><a class="headerlink" href="#xdress.cythongen.gencpppxd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates all cpp_*.pxd Cython header files for an environment of modules.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>env</strong> : dict</p>
+<blockquote>
+<div><p>Environment dictonary mapping target module names to module description
+dictionaries.</p>
+</div></blockquote>
+<p><strong>exceptions</strong> : bool or str, optional</p>
+<blockquote>
+<div><p>Cython exception annotation.  Set to True to automatically detect exception
+types, False for when exceptions should not be included, and a str (such as
+&#8216;+&#8217; or &#8216;-1&#8217;) to apply to everywhere.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>cpppxds</strong> : dict</p>
+<blockquote class="last">
+<div><p>Maps environment target names to Cython cpp_*.pxd header files strings.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.cythongen.genpxd">
+<tt class="descclassname">xdress.cythongen.</tt><tt class="descname">genpxd</tt><big>(</big><em>env</em>, <em>classes=()</em><big>)</big><a class="headerlink" href="#xdress.cythongen.genpxd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates all pxd Cython header files for an environment of modules.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>env</strong> : dict</p>
+<blockquote>
+<div><p>Environment dictonary mapping target module names to module description
+dictionaries.</p>
+</div></blockquote>
+<p><strong>classes</strong> : sequence, optional</p>
+<blockquote>
+<div><p>Listing of all class names that are handled by cythongen.  This may be 
+the same dictionary as in genpyx()</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>pxds</strong> : str</p>
+<blockquote class="last">
+<div><p>Maps environment target names to Cython pxd header files strings.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.cythongen.genpyx">
+<tt class="descclassname">xdress.cythongen.</tt><tt class="descname">genpyx</tt><big>(</big><em>env</em>, <em>classes=None</em><big>)</big><a class="headerlink" href="#xdress.cythongen.genpyx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates all pyx Cython implementation files for an environment of modules.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>env</strong> : dict</p>
+<blockquote>
+<div><p>Environment dictonary mapping target module names to module description
+dictionaries.</p>
+</div></blockquote>
+<p><strong>classes</strong> : dict, optional</p>
+<blockquote>
+<div><p>Dictionary which maps all class names that are required to
+their own descriptions.  This is required for resolving class heirarchy
+dependencies. If None, this will be computed here.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>pyxs</strong> : str</p>
+<blockquote class="last">
+<div><p>Maps environment target names to Cython pxd header files strings.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.cythongen.modcpppxd">
+<tt class="descclassname">xdress.cythongen.</tt><tt class="descname">modcpppxd</tt><big>(</big><em>mod</em>, <em>exceptions=True</em><big>)</big><a class="headerlink" href="#xdress.cythongen.modcpppxd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a cpp_*.pxd Cython header file for exposing a C/C++ module to
+other Cython wrappers based off of a dictionary description of the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>mod</strong> : dict</p>
+<blockquote>
+<div><p>Module description dictonary.</p>
+</div></blockquote>
+<p><strong>exceptions</strong> : bool or str, optional</p>
+<blockquote>
+<div><p>Cython exception annotation.  Set to True to automatically detect exception
+types, False for when exceptions should not be included, and a str (such as
+&#8216;+&#8217; or &#8216;-1&#8217;) to apply to everywhere.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>cpppxd</strong> : str</p>
+<blockquote class="last">
+<div><p>Cython cpp_*.pxd header file as in-memory string.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.cythongen.modpxd">
+<tt class="descclassname">xdress.cythongen.</tt><tt class="descname">modpxd</tt><big>(</big><em>mod</em>, <em>classes=()</em><big>)</big><a class="headerlink" href="#xdress.cythongen.modpxd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a pxd Cython header file for exposing C/C++ data to
+other Cython wrappers based off of a dictionary description.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>mod</strong> : dict</p>
+<blockquote>
+<div><p>Module description dictonary.</p>
+</div></blockquote>
+<p><strong>classes</strong> : sequence, optional</p>
+<blockquote>
+<div><p>Listing of all class names that are handled by cythongen.  This may be 
+the same dictionary as in modpyx().</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>pxd</strong> : str</p>
+<blockquote class="last">
+<div><p>Cython .pxd header file as in-memory string.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.cythongen.modpyx">
+<tt class="descclassname">xdress.cythongen.</tt><tt class="descname">modpyx</tt><big>(</big><em>mod</em>, <em>classes=None</em><big>)</big><a class="headerlink" href="#xdress.cythongen.modpyx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a pyx Cython implementation file for exposing C/C++ data to
+other Cython wrappers based off of a dictionary description.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>mod</strong> : dict</p>
+<blockquote>
+<div><p>Module description dictonary.</p>
+</div></blockquote>
+<p><strong>classes</strong> : dict, optional</p>
+<blockquote>
+<div><p>Dictionary which maps all class names that are required to
+their own descriptions.  This is required for resolving class heirarchy
+dependencies.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>pyx</strong> : str</p>
+<blockquote class="last">
+<div><p>Cython pyx header file as in-memory string.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.cythongen.varcpppxd">
+<tt class="descclassname">xdress.cythongen.</tt><tt class="descname">varcpppxd</tt><big>(</big><em>desc</em>, <em>exceptions=True</em><big>)</big><a class="headerlink" href="#xdress.cythongen.varcpppxd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a cpp_*.pxd Cython header snippet for exposing a C/C++ variable
+to other Cython wrappers based off of a dictionary description.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>desc</strong> : dict</p>
+<blockquote>
+<div><p>Function description dictonary.</p>
+</div></blockquote>
+<p><strong>exceptions</strong> : bool or str, optional</p>
+<blockquote>
+<div><p>Cython exception annotation.  Set to True to automatically detect exception
+types, False for when exceptions should not be included, and a str (such as
+&#8216;+&#8217; or &#8216;-1&#8217;) to apply to everywhere.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>cimport_tups</strong> : set of tuples</p>
+<blockquote>
+<div><p>Set of Cython cimport tuples for cpp_*.pxd header file.</p>
+</div></blockquote>
+<p><strong>cpppxd</strong> : str</p>
+<blockquote class="last">
+<div><p>Cython cpp_*.pxd header file as in-memory string.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.cythongen.varpyx">
+<tt class="descclassname">xdress.cythongen.</tt><tt class="descname">varpyx</tt><big>(</big><em>desc</em><big>)</big><a class="headerlink" href="#xdress.cythongen.varpyx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a <tt class="docutils literal"><span class="pre">*.pyx</span></tt> Cython wrapper implementation for exposing a C/C++
+variable based off of a dictionary description.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>desc</strong> : dict</p>
+<blockquote>
+<div><p>Variable description dictonary.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>pyx</strong> : str</p>
+<blockquote class="last">
+<div><p>Cython <tt class="docutils literal"><span class="pre">*.pyx</span></tt> implementation as in-memory string.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+        <p class="logo"><a href="../index.html">
+          <img class="logo" src="../_static/HooverJoven.jpg" alt="Logo"/>
+        </a></p>
+  <div class="sphinxlocaltoc">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Cython Generation</a><ul>
+<li><a class="reference internal" href="#cython-generation-api">Cython Generation API</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="autoall.html"
+                        title="previous chapter">Automatic API Discovery</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="main.html"
+                        title="next chapter">API Generation CLI</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/libref/cythongen.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="main.html" title="API Generation CLI"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="autoall.html" title="Automatic API Discovery"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">xdress 0.2 documentation</a> &raquo;</li>
+
+          <li><a href="index.html" >Library Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, Anthony Scopatz.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div><script type="text/javascript">
+    if(ga_enabled){
+        document.write("<div class=\"footer\">This page uses <a href=\"http://analytics.google.com\">Google Analytics</a> to collect statistics. ");
+        document.write("Click <button title=\"set cookie to disable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', 'true', {expires: 3650, path: '/'}); window.location.reload(); return false; \">here</button> to disable analytics for this site.");
+        document.write("</div>");
+    }else{
+        document.write("<div class=\"footer\">Google Analytics has been disabled. ");
+        document.write("Click <button title=\"set cookie to re-enable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', null, {path: '/'}); window.location.reload(); return false; \">here</button> to re-enable analytics for this site.");
+    };
+</script>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

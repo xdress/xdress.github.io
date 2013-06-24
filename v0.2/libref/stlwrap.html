@@ -1,0 +1,278 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Standard Library Container Wrappers &mdash; xdress 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../_static/cloud.js"></script>
+    <link rel="top" title="xdress 0.2 documentation" href="../index.html" />
+    <link rel="up" title="Library Reference" href="index.html" />
+    <link rel="next" title="Abstract Syntax Tree Parsers" href="astparsers.html" />
+    <link rel="prev" title="Type System" href="typesystem.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
+var ga_enabled = !$.cookie('disable-ga');
+if(ga_enabled){
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41934829-1']);
+  _gaq.push(['_setCookiePath', '/']);
+  _gaq.push(['_setDetectFlash', false]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+}
+</script>
+  </head>
+  <body>
+    <div class="relbar-top">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="astparsers.html" title="Abstract Syntax Tree Parsers"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="typesystem.html" title="Type System"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">xdress 0.2 documentation</a> &raquo;</li>
+
+          <li><a href="index.html" accesskey="U">Library Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-xdress.stlwrap">
+<span id="standard-library-container-wrappers"></span><span id="xdress-stlwap"></span><h1>Standard Library Container Wrappers<a class="headerlink" href="#module-xdress.stlwrap" title="Permalink to this headline">¶</a></h1>
+<p>Generates cython wrapper classes and converter functions for standard library
+containters to the associated python types.</p>
+<p>This module is available as an xdress plugin by the name <tt class="docutils literal"><span class="pre">xdress.stlwrap</span></tt>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">Anthony Scopatz &lt;<a class="reference external" href="mailto:scopatz&#37;&#52;&#48;gmail&#46;com">scopatz<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="c-stl-warpper-api">
+<h2>C++ STL Warpper API<a class="headerlink" href="#c-stl-warpper-api" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="xdress.stlwrap.XDressPlugin">
+<em class="property">class </em><tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">XDressPlugin</tt><a class="headerlink" href="#xdress.stlwrap.XDressPlugin" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class provides extra type functionality for xdress.</p>
+<p>The __init__() method may take no arguments or keyword arguments.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.stlwrap.genfiles">
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genfiles</tt><big>(</big><em>template</em>, <em>fname='temp'</em>, <em>pxdname=None</em>, <em>testname=None</em>, <em>pyxheader=None</em>, <em>pxdheader=None</em>, <em>testheader=None</em>, <em>package='..'</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genfiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates all cython source files needed to create the wrapper.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.stlwrap.genpxd">
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpxd</tt><big>(</big><em>template</em>, <em>header=None</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpxd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a string of a pxd file representing the given template.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.stlwrap.genpxd_map">
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpxd_map</tt><big>(</big><em>t</em>, <em>u</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpxd_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the pxd snippet for a set of type t.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.stlwrap.genpxd_set">
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpxd_set</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpxd_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the pxd snippet for a set of type t.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.stlwrap.genpxd_vector">
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpxd_vector</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpxd_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the pxd snippet for a vector of type t.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.stlwrap.genpyx">
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpyx</tt><big>(</big><em>template</em>, <em>header=None</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpyx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a string of a pyx file representing the given template.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.stlwrap.genpyx_map">
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpyx_map</tt><big>(</big><em>t</em>, <em>u</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpyx_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the pyx snippet for a map of type &lt;t, u&gt;.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.stlwrap.genpyx_set">
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpyx_set</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpyx_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the pyx snippet for a set of type t.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.stlwrap.genpyx_vector">
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpyx_vector</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpyx_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the pyx snippet for a vector of type t.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.stlwrap.gentest">
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">gentest</tt><big>(</big><em>template</em>, <em>header=None</em>, <em>package='..'</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.gentest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a string of a test file representing the given template.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.stlwrap.gentest_map">
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">gentest_map</tt><big>(</big><em>t</em>, <em>u</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.gentest_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the test snippet for a map of type t.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.stlwrap.gentest_set">
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">gentest_set</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.gentest_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the test snippet for a set of type t.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.stlwrap.gentest_vector">
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">gentest_vector</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.gentest_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the test snippet for a set of type t.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+        <p class="logo"><a href="../index.html">
+          <img class="logo" src="../_static/HooverJoven.jpg" alt="Logo"/>
+        </a></p>
+  <div class="sphinxlocaltoc">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Standard Library Container Wrappers</a><ul>
+<li><a class="reference internal" href="#c-stl-warpper-api">C++ STL Warpper API</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="typesystem.html"
+                        title="previous chapter">Type System</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="astparsers.html"
+                        title="next chapter">Abstract Syntax Tree Parsers</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/libref/stlwrap.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="astparsers.html" title="Abstract Syntax Tree Parsers"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="typesystem.html" title="Type System"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">xdress 0.2 documentation</a> &raquo;</li>
+
+          <li><a href="index.html" >Library Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, Anthony Scopatz.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div><script type="text/javascript">
+    if(ga_enabled){
+        document.write("<div class=\"footer\">This page uses <a href=\"http://analytics.google.com\">Google Analytics</a> to collect statistics. ");
+        document.write("Click <button title=\"set cookie to disable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', 'true', {expires: 3650, path: '/'}); window.location.reload(); return false; \">here</button> to disable analytics for this site.");
+        document.write("</div>");
+    }else{
+        document.write("<div class=\"footer\">Google Analytics has been disabled. ");
+        document.write("Click <button title=\"set cookie to re-enable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', null, {path: '/'}); window.location.reload(); return false; \">here</button> to re-enable analytics for this site.");
+    };
+</script>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>
