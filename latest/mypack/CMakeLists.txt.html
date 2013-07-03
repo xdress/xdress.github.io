@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Base Plugin &mdash; xdress 0.3-dev documentation</title>
+    <title>CMakeLists.txt &mdash; xdress 0.3-dev documentation</title>
     
     <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -30,9 +30,9 @@
     <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../_static/cloud.js"></script>
     <link rel="top" title="xdress 0.3-dev documentation" href="../index.html" />
-    <link rel="up" title="Library Reference" href="index.html" />
-    <link rel="next" title="Extra Types Plugin" href="extratypes.html" />
-    <link rel="prev" title="Plugins" href="plugins.html" /> 
+    <link rel="up" title="mypack" href="index.html" />
+    <link rel="next" title="mypack" href="mypack/index.html" />
+    <link rel="prev" title="mypack" href="index.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
 if(ga_enabled){
@@ -65,14 +65,15 @@ if(ga_enabled){
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="extratypes.html" title="Extra Types Plugin"
+          <a href="mypack/index.html" title="mypack"
              accesskey="N">next</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="plugins.html" title="Plugins"
+          <a href="index.html" title="mypack"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
     <li><a href="../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
 
-          <li><a href="index.html" accesskey="U">Library Reference</a> &raquo;</li> 
+          <li><a href="../tutorial.html" >Tutorial</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">mypack</a> &raquo;</li> 
       </ul>
     </div>
     </div>
@@ -83,27 +84,37 @@ if(ga_enabled){
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-xdress.base">
-<span id="base-plugin"></span><span id="xdress-base"></span><h1>Base Plugin<a class="headerlink" href="#module-xdress.base" title="Permalink to this headline">¶</a></h1>
-<p>The base plugin for XDress.</p>
-<p>This module is available as an xdress plugin by the name <tt class="docutils literal"><span class="pre">xdress.base</span></tt>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">Anthony Scopatz &lt;<a class="reference external" href="mailto:scopatz&#37;&#52;&#48;gmail&#46;com">scopatz<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;</td>
-</tr>
-</tbody>
-</table>
-<div class="section" id="base-plugin-api">
-<h2>Base Plugin API<a class="headerlink" href="#base-plugin-api" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="xdress.base.XDressPlugin">
-<em class="property">class </em><tt class="descclassname">xdress.base.</tt><tt class="descname">XDressPlugin</tt><a class="headerlink" href="#xdress.base.XDressPlugin" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class provides base functionality for xdress itself.</p>
-<p>The __init__() method may take no arguments or keyword arguments.</p>
-</dd></dl>
+  <div class="section" id="cmakelists-txt">
+<h1>CMakeLists.txt<a class="headerlink" href="#cmakelists-txt" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference download internal" href="../_downloads/CMakeLists.txt"><tt class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">this</span> <span class="pre">file.</span></tt></a></p>
+<div class="highlight-cmake"><div class="highlight"><pre><span class="nb">cmake_minimum_required</span><span class="p">(</span> <span class="s">VERSION</span> <span class="s">2.8</span> <span class="p">)</span>
 
+<span class="nb">project</span><span class="p">(</span> <span class="s">mypack</span> <span class="p">)</span>
+
+<span class="c"># The files in the cmake directory must also be included in your project</span>
+<span class="c"># until they are merged into upstream CMake.</span>
+<span class="nb">set</span><span class="p">(</span> <span class="s">CMAKE_MODULE_PATH</span> <span class="o">${</span><span class="nv">CMAKE_MODULE_PATH</span><span class="o">}</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_LIST_DIR</span><span class="o">}</span><span class="s">/cmake</span> <span class="p">)</span>
+
+<span class="nb">include</span><span class="p">(</span> <span class="s">UseCython</span> <span class="p">)</span>
+
+<span class="c"># With CMake, a clean separation can be made between the source tree and the</span>
+<span class="c"># build tree.  When all source is compiled, as with pure C/C++, the source is</span>
+<span class="c"># no-longer needed in the build tree.  However, with pure *.py source, the</span>
+<span class="c"># source is processed directly.  To handle this, we reproduce the availability</span>
+<span class="c"># of the source files in the build tree.</span>
+<span class="nb">add_custom_target</span><span class="p">(</span> <span class="s">ReplicatePythonSourceTree</span> <span class="s">ALL</span> <span class="o">${</span><span class="nv">CMAKE_COMMAND</span><span class="o">}</span> <span class="s">-P</span>
+  <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/cmake/ReplicatePythonSourceTree.cmake</span>
+  <span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span>
+  <span class="s">WORKING_DIRECTORY</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span> <span class="p">)</span>
+
+<span class="nb">include_directories</span><span class="p">(</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/src</span> <span class="p">)</span>
+
+<span class="nb">enable_testing</span><span class="p">()</span>
+<span class="nb">find_file</span><span class="p">(</span> <span class="s">NOSETESTS_EXECUTABLE</span> <span class="s">nosetests</span> <span class="p">)</span>
+<span class="nb">add_test</span><span class="p">(</span> <span class="s">nosetests</span> <span class="s2">&quot;${NOSETESTS_EXECUTABLE}&quot;</span> <span class="s">-v</span> <span class="s">--with-xunit</span> <span class="p">)</span>
+
+<span class="nb">add_subdirectory</span><span class="p">(</span> <span class="s">mypack</span> <span class="p">)</span>
+</pre></div>
 </div>
 </div>
 
@@ -116,25 +127,15 @@ if(ga_enabled){
         <p class="logo"><a href="../index.html">
           <img class="logo" src="../_static/HooverJoven.jpg" alt="Logo"/>
         </a></p>
-  <div class="sphinxlocaltoc">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Base Plugin</a><ul>
-<li><a class="reference internal" href="#base-plugin-api">Base Plugin API</a></li>
-</ul>
-</li>
-</ul>
-
-  </div>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="plugins.html"
-                        title="previous chapter">Plugins</a></p>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">mypack</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="extratypes.html"
-                        title="next chapter">Extra Types Plugin</a></p>
+  <p class="topless"><a href="mypack/index.html"
+                        title="next chapter">mypack</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../_sources/libref/base.txt"
+    <li><a href="../_sources/mypack/CMakeLists.txt.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -169,14 +170,15 @@ if(ga_enabled){
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="extratypes.html" title="Extra Types Plugin"
+          <a href="mypack/index.html" title="mypack"
              >next</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="plugins.html" title="Plugins"
+          <a href="index.html" title="mypack"
              >previous</a> &nbsp; &nbsp;</li>
     <li><a href="../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
 
-          <li><a href="index.html" >Library Reference</a> &raquo;</li> 
+          <li><a href="../tutorial.html" >Tutorial</a> &raquo;</li>
+          <li><a href="index.html" >mypack</a> &raquo;</li> 
       </ul>
     </div>
     </div>

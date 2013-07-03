@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Utilities &mdash; xdress 0.2 documentation</title>
+    <title>Utilities &mdash; xdress 0.3-dev documentation</title>
     
     <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.2',
+        VERSION:     '0.3-dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.2 documentation" href="../index.html" />
+    <link rel="top" title="xdress 0.3-dev documentation" href="../index.html" />
     <link rel="up" title="Library Reference" href="index.html" />
     <link rel="next" title="Plugins" href="plugins.html" />
     <link rel="prev" title="API Generation CLI" href="main.html" /> 
@@ -70,7 +70,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="main.html" title="API Generation CLI"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.2 documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
 
           <li><a href="index.html" accesskey="U">Library Reference</a> &raquo;</li> 
       </ul>
@@ -99,8 +99,8 @@ if(ga_enabled){
 <dl class="class">
 <dt id="xdress.utils.DescriptionCache">
 <em class="property">class </em><tt class="descclassname">xdress.utils.</tt><tt class="descname">DescriptionCache</tt><big>(</big><em>cachefile='build/desc.cache'</em><big>)</big><a class="headerlink" href="#xdress.utils.DescriptionCache" title="Permalink to this definition">¶</a></dt>
-<dd><p>A quick persistent cache for descriptions from files.  
-The keys are (classname, filename, kind) tuples.  The values are 
+<dd><p>A quick persistent cache for descriptions from files.
+The keys are (classname, filename, kind) tuples.  The values are
 (hashes-of-the-file, description-dictionary) tuples.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -132,8 +132,8 @@ tuple matches the state of the file on the system.</p>
 <dl class="class">
 <dt id="xdress.utils.RunControl">
 <em class="property">class </em><tt class="descclassname">xdress.utils.</tt><tt class="descname">RunControl</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.utils.RunControl" title="Permalink to this definition">¶</a></dt>
-<dd><p>A composable configuration class for xdress. Unlike argparse.Namespace, 
-this keeps the object dictionary (__dict__) separate from the run control 
+<dd><p>A composable configuration class for xdress. Unlike argparse.Namespace,
+this keeps the object dictionary (__dict__) separate from the run control
 attributes dictionary (_dict).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -152,9 +152,9 @@ attributes dictionary (_dict).</p>
 <dl class="class">
 <dt id="xdress.utils.indentstr">
 <em class="property">class </em><tt class="descclassname">xdress.utils.</tt><tt class="descname">indentstr</tt><a class="headerlink" href="#xdress.utils.indentstr" title="Permalink to this definition">¶</a></dt>
-<dd><p>A special string subclass that can be used to indent the whol string 
+<dd><p>A special string subclass that can be used to indent the whol string
 inside of format strings by accessing an <tt class="docutils literal"><span class="pre">indentN</span></tt> attr.  For example,
-<tt class="docutils literal"><span class="pre">s.indent8</span></tt> will return a copy of the string s where every line starts 
+<tt class="docutils literal"><span class="pre">s.indent8</span></tt> will return a copy of the string s where every line starts
 with 8 spaces.</p>
 </dd></dl>
 
@@ -173,7 +173,7 @@ with 8 spaces.</p>
 <dl class="function">
 <dt id="xdress.utils.expand_default_args">
 <tt class="descclassname">xdress.utils.</tt><tt class="descname">expand_default_args</tt><big>(</big><em>methods</em><big>)</big><a class="headerlink" href="#xdress.utils.expand_default_args" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function takes a collection of method tuples and expands all of 
+<dd><p>This function takes a collection of method tuples and expands all of
 the default arguments, returning a set of all methods possible.</p>
 </dd></dl>
 
@@ -182,6 +182,12 @@ the default arguments, returning a set of all methods possible.</p>
 <tt class="descclassname">xdress.utils.</tt><tt class="descname">find_source</tt><big>(</big><em>basename</em>, <em>sourcedir='.'</em><big>)</big><a class="headerlink" href="#xdress.utils.find_source" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds a source filename, header filename, language name, and language
 source extension given a basename and source directory.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.utils.flatten">
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">flatten</tt><big>(</big><em>iterable</em><big>)</big><a class="headerlink" href="#xdress.utils.flatten" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generator which returns flattened version of nested sequences.</p>
 </dd></dl>
 
 <dl class="function">
@@ -217,14 +223,14 @@ source extension given a basename and source directory.</p>
 <dl class="function">
 <dt id="xdress.utils.merge_descriptions">
 <tt class="descclassname">xdress.utils.</tt><tt class="descname">merge_descriptions</tt><big>(</big><em>descriptions</em><big>)</big><a class="headerlink" href="#xdress.utils.merge_descriptions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Given a sequence of descriptions, in order of increasing precedence, 
+<dd><p>Given a sequence of descriptions, in order of increasing precedence,
 merge them into a single description dictionary.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.utils.newcopyover">
 <tt class="descclassname">xdress.utils.</tt><tt class="descname">newcopyover</tt><big>(</big><em>f1</em>, <em>f2</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xdress.utils.newcopyover" title="Permalink to this definition">¶</a></dt>
-<dd><p>Useful for not forcing re-compiles and thus playing nicely with the 
+<dd><p>Useful for not forcing re-compiles and thus playing nicely with the
 build system.  This is acomplished by not writing the file if the existsing
 contents are exactly the same as what would be written out.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -252,7 +258,7 @@ contents are exactly the same as what would be written out.</p>
 <dl class="function">
 <dt id="xdress.utils.newoverwrite">
 <tt class="descclassname">xdress.utils.</tt><tt class="descname">newoverwrite</tt><big>(</big><em>s</em>, <em>filename</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xdress.utils.newoverwrite" title="Permalink to this definition">¶</a></dt>
-<dd><p>Useful for not forcing re-compiles and thus playing nicely with the 
+<dd><p>Useful for not forcing re-compiles and thus playing nicely with the
 build system.  This is acomplished by not writing the file if the existsing
 contents are exactly the same as what would be written out.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -399,7 +405,7 @@ has not been given.</p>
         <li class="right" >
           <a href="main.html" title="API Generation CLI"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.2 documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
 
           <li><a href="index.html" >Library Reference</a> &raquo;</li> 
       </ul>
