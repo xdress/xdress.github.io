@@ -178,6 +178,39 @@ the default arguments, returning a set of all methods possible.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="xdress.utils.find_filenames">
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">find_filenames</tt><big>(</big><em>srcname</em>, <em>tarname=None</em>, <em>sourcedir='src'</em><big>)</big><a class="headerlink" href="#xdress.utils.find_filenames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a description dictionary for a class or function
+implemented in a source file and bound into a target file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>srcname</strong> : str</p>
+<blockquote>
+<div><p>File basename of implementation.</p>
+</div></blockquote>
+<p><strong>tarname</strong> : str, optional</p>
+<blockquote>
+<div><p>File basename where the bindings will be generated.</p>
+</div></blockquote>
+<p><strong>srcdir</strong> : str, optional</p>
+<blockquote>
+<div><p>Source directory.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>desc</strong> : dict</p>
+<blockquote class="last">
+<div><p>Description dictionary containing only filenames.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="xdress.utils.find_source">
 <tt class="descclassname">xdress.utils.</tt><tt class="descname">find_source</tt><big>(</big><em>basename</em>, <em>sourcedir='.'</em><big>)</big><a class="headerlink" href="#xdress.utils.find_source" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds a source filename, header filename, language name, and language
@@ -281,6 +314,20 @@ contents are exactly the same as what would be written out.</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.utils.parse_template">
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">parse_template</tt><big>(</big><em>s</em>, <em>open_brace='&lt;'</em>, <em>close_brace='&gt;'</em>, <em>separator='</em>, <em>'</em><big>)</big><a class="headerlink" href="#xdress.utils.parse_template" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a string &#8211; which may represent a template specialization &#8211; 
+and returns the corresponding type.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.utils.split_template_args">
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">split_template_args</tt><big>(</big><em>s</em>, <em>open_brace='&lt;'</em>, <em>close_brace='&gt;'</em>, <em>separator='</em>, <em>'</em><big>)</big><a class="headerlink" href="#xdress.utils.split_template_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a string with template specialization and returns a list 
+of the argument values.</p>
 </dd></dl>
 
 <dl class="function">

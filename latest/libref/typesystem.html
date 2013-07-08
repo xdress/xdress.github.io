@@ -370,8 +370,7 @@ following:</p>
 <dl class="method">
 <dt id="xdress.typesystem.TypeMatcher.flatmatches">
 <tt class="descname">flatmatches</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeMatcher.flatmatches" title="Permalink to this definition">¶</a></dt>
-<dd><p>Flattens t and then sees if any part of it matches
-TypeMatcher.pattern</p>
+<dd><p>Flattens t and then sees if any part of it matches self.pattern.</p>
 </dd></dl>
 
 <dl class="method">
@@ -389,6 +388,12 @@ TypeMatcher.pattern</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="xdress.typesystem.basename">
+<tt class="descclassname">xdress.typesystem.</tt><tt class="descname">basename</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.typesystem.basename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves basename from a type, e.g. &#8216;map&#8217; in (&#8216;map&#8217;, &#8216;int&#8217;, &#8216;float&#8217;).</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="xdress.typesystem.canon">
 <tt class="descclassname">xdress.typesystem.</tt><tt class="descname">canon</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.typesystem.canon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Turns the type into its canonical form. See module docs for more information.</p>
@@ -398,6 +403,12 @@ TypeMatcher.pattern</p>
 <dt id="xdress.typesystem.clearmemo">
 <tt class="descclassname">xdress.typesystem.</tt><tt class="descname">clearmemo</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.typesystem.clearmemo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clears all function memoizations in this module.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.typesystem.cpp_type">
+<tt class="descclassname">xdress.typesystem.</tt><tt class="descname">cpp_type</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.typesystem.cpp_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a type t, returns the corresponding C++ type declaration.</p>
 </dd></dl>
 
 <dl class="function">
@@ -522,6 +533,12 @@ system.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="xdress.typesystem.gccxml_type">
+<tt class="descclassname">xdress.typesystem.</tt><tt class="descname">gccxml_type</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.typesystem.gccxml_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a type t, returns the corresponding GCC-XML type name.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="xdress.typesystem.humanname">
 <tt class="descclassname">xdress.typesystem.</tt><tt class="descname">humanname</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.typesystem.humanname" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes human names for types.</p>
@@ -559,9 +576,9 @@ system.</p>
 
 <dl class="function">
 <dt id="xdress.typesystem.register_class">
-<tt class="descclassname">xdress.typesystem.</tt><tt class="descname">register_class</tt><big>(</big><em>name=None</em>, <em>template_args=None</em>, <em>cython_c_type=None</em>, <em>cython_cimport=None</em>, <em>cython_cy_type=None</em>, <em>cython_py_type=None</em>, <em>cython_template_class_name=None</em>, <em>cython_cyimport=None</em>, <em>cython_pyimport=None</em>, <em>cython_c2py=None</em>, <em>cython_py2c=None</em><big>)</big><a class="headerlink" href="#xdress.typesystem.register_class" title="Permalink to this definition">¶</a></dt>
-<dd><p>Classes are user specified types.  This function will add a class to
-the type system so that it may be used normally with the rest of the
+<tt class="descclassname">xdress.typesystem.</tt><tt class="descname">register_class</tt><big>(</big><em>name=None</em>, <em>template_args=None</em>, <em>cython_c_type=None</em>, <em>cython_cimport=None</em>, <em>cython_cy_type=None</em>, <em>cython_py_type=None</em>, <em>cython_template_class_name=None</em>, <em>cython_cyimport=None</em>, <em>cython_pyimport=None</em>, <em>cython_c2py=None</em>, <em>cython_py2c=None</em>, <em>cpp_type=None</em><big>)</big><a class="headerlink" href="#xdress.typesystem.register_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classes are user specified types.  This function will add a class to 
+the type system so that it may be used normally with the rest of the 
 type system.</p>
 </dd></dl>
 
@@ -607,7 +624,7 @@ with a new value and replacing the original value before exiting.</p>
 
 <dl class="data">
 <dt id="xdress.typesystem.base_types">
-<tt class="descclassname">xdress.typesystem.</tt><tt class="descname">base_types</tt><em class="property"> = set(['uint64', 'int32', 'int16', 'file', 'float64', 'uchar', 'void', 'uint128', 'complex128', 'char', 'uint16', 'int64', 'str', 'int128', 'float128', 'bool', 'type', 'uint32', 'float32'])</em><a class="headerlink" href="#xdress.typesystem.base_types" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.typesystem.</tt><tt class="descname">base_types</tt><em class="property"> = set(['uint64', 'int32', 'exception', 'int16', 'file', 'float64', 'uchar', 'void', 'uint128', 'complex128', 'char', 'uint16', 'int64', 'str', 'int128', 'float128', 'bool', 'type', 'uint32', 'float32'])</em><a class="headerlink" href="#xdress.typesystem.base_types" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base types in the type system.</p>
 </dd></dl>
 
@@ -628,7 +645,7 @@ this dict maps their names to meta-type names in order.</p>
 
 <dl class="data">
 <dt id="xdress.typesystem.type_aliases">
-<tt class="descclassname">xdress.typesystem.</tt><tt class="descname">type_aliases</tt><em class="property"> = &lt;xdress.typesystem._LazyConfigDict object at 0x4567710&gt;</em><a class="headerlink" href="#xdress.typesystem.type_aliases" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.typesystem.</tt><tt class="descname">type_aliases</tt><em class="property"> = &lt;xdress.typesystem._LazyConfigDict object at 0x3f6fa90&gt;</em><a class="headerlink" href="#xdress.typesystem.type_aliases" title="Permalink to this definition">¶</a></dt>
 <dd><p>Aliases that may be used to substitute one type name for another.</p>
 </dd></dl>
 

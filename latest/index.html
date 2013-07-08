@@ -112,6 +112,11 @@ $ easy_install xdress</pre>
 You may simply clone the development branch using git:</p>
 <div class="highlight-python"><pre>git clone git://github.com/scopatz/xdress.git</pre>
 </div>
+<p>Also, if you wish to have the optional BASH completion, please add the
+following lines to your <tt class="docutils literal"><span class="pre">~/.bashrc</span></tt> file:</p>
+<div class="highlight-python"><pre># Enable completion for xdress
+eval "$(register-python-argcomplete xdress)"</pre>
+</div>
 </div>
 <div class="section" id="dependencies">
 <h3>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h3>
@@ -122,6 +127,7 @@ You may simply clone the development branch using git:</p>
 <li><a class="reference external" href="https://bitbucket.org/eliben/pycparser">pycparser</a>, optional for C</li>
 <li><a class="reference external" href="http://www.gccxml.org/HTML/Index.html">GCC-XML</a>, optional for C++</li>
 <li><a class="reference external" href="http://lxml.de/">lxml</a>, optional (but nice!)</li>
+<li><a class="reference external" href="https://argcomplete.readthedocs.org/en/latest/">argcomplete</a>, optional for BASH completion</li>
 </ol>
 </div></blockquote>
 <p><em>Compile Time:</em></p>
