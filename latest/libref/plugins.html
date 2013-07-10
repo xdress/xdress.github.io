@@ -329,6 +329,22 @@ parameters and the values are the associated default values.</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="xdress.plugins.Plugin.rcupdaters">
+<tt class="descname">rcupdaters</tt><em class="property"> = {}</em><a class="headerlink" href="#xdress.plugins.Plugin.rcupdaters" title="Permalink to this definition">¶</a></dt>
+<dd><p>This may be a dict, another mapping, a function which returns a mapping.
+The keys are the string names of the run control parameters.  The values
+are callables which indicate how to update or merge two rc parameters with
+this key. The callable should take two instances and return a copy that
+represents the merger, e.g. <tt class="docutils literal"><span class="pre">lambda</span> <span class="pre">old,</span> <span class="pre">new:</span> <span class="pre">old</span> <span class="pre">+</span> <span class="pre">new</span></tt>.  One useful example
+is for paths.  Normally you want new paths to prepend old ones:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">rcupdates</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;includes&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">new</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">old</span><span class="p">)}</span>
+</pre></div>
+</div>
+<p>If a callable is not supplied for an rc parameter then the the default
+behaviour is to simply override the old value with the new one.</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="xdress.plugins.Plugin.requires">
 <tt class="descname">requires</tt><em class="property"> = ()</em><a class="headerlink" href="#xdress.plugins.Plugin.requires" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is a sequence of strings, or a function which returns such, that
@@ -344,7 +360,7 @@ lists the module names of other plugins that this plugin requires.</p>
 <p>The execution and control of plugins should happen in the following order:</p>
 <ol class="arabic simple">
 <li><tt class="docutils literal"><span class="pre">build_cli()</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">merge_defaultrcs()</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">merge_rcs()</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">setup()</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">execute()</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">teardown()</span></tt></li>
@@ -389,10 +405,11 @@ lists the module names of other plugins that this plugin requires.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="xdress.plugins.Plugins.merge_defaultrcs">
-<tt class="descname">merge_defaultrcs</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.plugins.Plugins.merge_defaultrcs" title="Permalink to this definition">¶</a></dt>
+<dt id="xdress.plugins.Plugins.merge_rcs">
+<tt class="descname">merge_rcs</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.plugins.Plugins.merge_rcs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds all of the default run controllers and returns a new and 
-full default RunControl() instance.</p>
+full default RunControl() instance.  This has also merged all of 
+the rc updaters in the process.</p>
 </dd></dl>
 
 <dl class="method">
