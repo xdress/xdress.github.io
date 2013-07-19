@@ -107,79 +107,73 @@ containters to the associated python types.</p>
 
 <dl class="function">
 <dt id="xdress.stlwrap.genfiles">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genfiles</tt><big>(</big><em>template</em>, <em>fname='temp'</em>, <em>pxdname=None</em>, <em>testname=None</em>, <em>pyxheader=None</em>, <em>pxdheader=None</em>, <em>testheader=None</em>, <em>package='..'</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genfiles" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genfiles</tt><big>(</big><em>template</em>, <em>fname='temp'</em>, <em>pxdname=None</em>, <em>testname=None</em>, <em>pyxheader=None</em>, <em>pxdheader=None</em>, <em>testheader=None</em>, <em>package='..'</em>, <em>ts=None</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genfiles" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates all cython source files needed to create the wrapper.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.stlwrap.genpxd">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpxd</tt><big>(</big><em>template</em>, <em>header=None</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpxd" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpxd</tt><big>(</big><em>template</em>, <em>header=None</em>, <em>ts=None</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpxd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a string of a pxd file representing the given template.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.stlwrap.genpxd_map">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpxd_map</tt><big>(</big><em>t</em>, <em>u</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpxd_map" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpxd_map</tt><big>(</big><em>t</em>, <em>u</em>, <em>ts</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpxd_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the pxd snippet for a set of type t.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.stlwrap.genpxd_set">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpxd_set</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpxd_set" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpxd_set</tt><big>(</big><em>t</em>, <em>ts</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpxd_set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the pxd snippet for a set of type t.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.stlwrap.genpxd_vector">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpxd_vector</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpxd_vector" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpxd_vector</tt><big>(</big><em>t</em>, <em>ts</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpxd_vector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the pxd snippet for a vector of type t.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="xdress.stlwrap.genpyx">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpyx</tt><big>(</big><em>template</em>, <em>header=None</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpyx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a string of a pyx file representing the given template.</p>
-</dd></dl>
-
-<dl class="function">
 <dt id="xdress.stlwrap.genpyx_map">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpyx_map</tt><big>(</big><em>t</em>, <em>u</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpyx_map" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpyx_map</tt><big>(</big><em>t</em>, <em>u</em>, <em>ts</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpyx_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the pyx snippet for a map of type &lt;t, u&gt;.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.stlwrap.genpyx_set">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpyx_set</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpyx_set" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpyx_set</tt><big>(</big><em>t</em>, <em>ts</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpyx_set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the pyx snippet for a set of type t.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.stlwrap.genpyx_vector">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpyx_vector</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpyx_vector" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpyx_vector</tt><big>(</big><em>t</em>, <em>ts</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpyx_vector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the pyx snippet for a vector of type t.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.stlwrap.gentest">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">gentest</tt><big>(</big><em>template</em>, <em>header=None</em>, <em>package='..'</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.gentest" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">gentest</tt><big>(</big><em>template</em>, <em>header=None</em>, <em>package='..'</em>, <em>ts=None</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.gentest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a string of a test file representing the given template.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.stlwrap.gentest_map">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">gentest_map</tt><big>(</big><em>t</em>, <em>u</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.gentest_map" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">gentest_map</tt><big>(</big><em>t</em>, <em>u</em>, <em>ts</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.gentest_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the test snippet for a map of type t.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.stlwrap.gentest_set">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">gentest_set</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.gentest_set" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">gentest_set</tt><big>(</big><em>t</em>, <em>ts</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.gentest_set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the test snippet for a set of type t.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.stlwrap.gentest_vector">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">gentest_vector</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.gentest_vector" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">gentest_vector</tt><big>(</big><em>t</em>, <em>ts</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.gentest_vector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the test snippet for a set of type t.</p>
 </dd></dl>
 

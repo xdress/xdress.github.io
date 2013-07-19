@@ -236,6 +236,12 @@ source extension given a basename and source directory.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="xdress.utils.infer_format">
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">infer_format</tt><big>(</big><em>filename</em>, <em>format</em><big>)</big><a class="headerlink" href="#xdress.utils.infer_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tries to figure out a file format.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="xdress.utils.isclassdesc">
 <tt class="descclassname">xdress.utils.</tt><tt class="descname">isclassdesc</tt><big>(</big><em>desc</em><big>)</big><a class="headerlink" href="#xdress.utils.isclassdesc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests if a description is a class-type description.</p>
@@ -248,9 +254,23 @@ source extension given a basename and source directory.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="xdress.utils.ishashable">
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">ishashable</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#xdress.utils.ishashable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests if a value is hashable.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="xdress.utils.isvardesc">
 <tt class="descclassname">xdress.utils.</tt><tt class="descname">isvardesc</tt><big>(</big><em>desc</em><big>)</big><a class="headerlink" href="#xdress.utils.isvardesc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests if a description is a variable-type description.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.utils.memoize">
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">memoize</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#xdress.utils.memoize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generic memoziation decorator based off of code from 
+<a class="reference external" href="http://wiki.python.org/moin/PythonDecoratorLibrary">http://wiki.python.org/moin/PythonDecoratorLibrary</a> .  
+This is not suitabe for method caching.</p>
 </dd></dl>
 
 <dl class="function">
@@ -331,6 +351,12 @@ of the argument values.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="xdress.utils.warn_forbidden_name">
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">warn_forbidden_name</tt><big>(</big><em>forname</em>, <em>inname=None</em>, <em>rename=None</em><big>)</big><a class="headerlink" href="#xdress.utils.warn_forbidden_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Warns the user that a forbidden name has been found.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="xdress.utils.writenewonly">
 <tt class="descclassname">xdress.utils.</tt><tt class="descname">writenewonly</tt><big>(</big><em>s</em>, <em>filename</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xdress.utils.writenewonly" title="Permalink to this definition">¶</a></dt>
 <dd><p>Only writes the contents of the string to a file if the file does not exist.
@@ -380,6 +406,15 @@ has not been given.</p>
 <dt id="xdress.utils.nyansep">
 <tt class="descclassname">xdress.utils.</tt><tt class="descname">nyansep</tt><em class="property"> = '~\\_/~\\_/~\\_/~\\_/~\\_/~\\_/~\\_/~\\_/~\\_/~\\_/~\\_/~\\_/~\\_/~\\_/~\\_/~\\_/~\\_/~=[,,_,,]:3'</em><a class="headerlink" href="#xdress.utils.nyansep" title="Permalink to this definition">¶</a></dt>
 <dd><p>WAT?!</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xdress.utils.memoize_method">
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">memoize_method</tt><a class="headerlink" href="#xdress.utils.memoize_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator suitable for memoizing methods, rather than functions
+and classes.  This is based off of code that may be found at 
+<a class="reference external" href="http://code.activestate.com/recipes/577452-a-memoize-decorator-for-instance-methods/">http://code.activestate.com/recipes/577452-a-memoize-decorator-for-instance-methods/</a>
+This code was originally released under the MIT license.</p>
 </dd></dl>
 
 </div>
