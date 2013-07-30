@@ -339,7 +339,7 @@ and integers only &#8211; making the output of this function hashable.</p>
 <h2>Type System API<a class="headerlink" href="#type-system-api" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="xdress.typesystem.TypeMatcher">
-<em class="property">class </em><tt class="descclassname">xdress.typesystem.</tt><tt class="descname">TypeMatcher</tt><big>(</big><em>pattern</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeMatcher" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">xdress.typesystem.</tt><tt class="descname">TypeMatcher</tt><big>(</big><em>pattern</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeMatcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeMatcher" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class that is used for checking whether a type matches a given pattern.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -369,19 +369,19 @@ following:</p>
 </table>
 <dl class="method">
 <dt id="xdress.typesystem.TypeMatcher.flatmatches">
-<tt class="descname">flatmatches</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeMatcher.flatmatches" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">flatmatches</tt><big>(</big><em>t</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeMatcher.flatmatches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeMatcher.flatmatches" title="Permalink to this definition">¶</a></dt>
 <dd><p>Flattens t and then sees if any part of it matches self.pattern.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.typesystem.TypeMatcher.matches">
-<tt class="descname">matches</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeMatcher.matches" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">matches</tt><big>(</big><em>t</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeMatcher.matches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeMatcher.matches" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests that a type matches the pattern, returns True or False.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.typesystem.TypeMatcher.pattern">
-<tt class="descname">pattern</tt><a class="headerlink" href="#xdress.typesystem.TypeMatcher.pattern" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">pattern</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeMatcher.pattern"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeMatcher.pattern" title="Permalink to this definition">¶</a></dt>
 <dd><p>The pattern to match.</p>
 </dd></dl>
 
@@ -389,7 +389,7 @@ following:</p>
 
 <dl class="class">
 <dt id="xdress.typesystem.TypeSystem">
-<em class="property">class </em><tt class="descclassname">xdress.typesystem.</tt><tt class="descname">TypeSystem</tt><big>(</big><em>base_types=None</em>, <em>template_types=None</em>, <em>refined_types=None</em>, <em>humannames=None</em>, <em>extra_types='xdress_extra_types'</em>, <em>stlcontainers='stlcontainers'</em>, <em>type_aliases=None</em>, <em>cpp_types=None</em>, <em>numpy_types=None</em>, <em>from_pytypes=None</em>, <em>cython_ctypes=None</em>, <em>cython_cytypes=None</em>, <em>cython_pytypes=None</em>, <em>cython_cimports=None</em>, <em>cython_cyimports=None</em>, <em>cython_pyimports=None</em>, <em>cython_functionnames=None</em>, <em>cython_classnames=None</em>, <em>cython_c2py_conv=None</em>, <em>cython_py2c_conv=None</em>, <em>typestring=None</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">xdress.typesystem.</tt><tt class="descname">TypeSystem</tt><big>(</big><em>base_types=None</em>, <em>template_types=None</em>, <em>refined_types=None</em>, <em>humannames=None</em>, <em>extra_types='xdress_extra_types'</em>, <em>stlcontainers='stlcontainers'</em>, <em>type_aliases=None</em>, <em>cpp_types=None</em>, <em>numpy_types=None</em>, <em>from_pytypes=None</em>, <em>cython_ctypes=None</em>, <em>cython_cytypes=None</em>, <em>cython_pytypes=None</em>, <em>cython_cimports=None</em>, <em>cython_cyimports=None</em>, <em>cython_pyimports=None</em>, <em>cython_functionnames=None</em>, <em>cython_classnames=None</em>, <em>cython_c2py_conv=None</em>, <em>cython_py2c_conv=None</em>, <em>typestring=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class representing a type system.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -498,50 +498,59 @@ Valuse are tuples with the form of <tt class="docutils literal"><span class="pre
 </table>
 <dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.basename">
-<em class="property">static </em><tt class="descname">basename</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.basename" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">basename</tt><big>(</big><em>t</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.basename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.basename" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieves basename from a type, e.g. &#8216;map&#8217; in (&#8216;map&#8217;, &#8216;int&#8217;, &#8216;float&#8217;).</p>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.canon">
-<em class="property">static </em><tt class="descname">canon</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.canon" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">canon</tt><big>(</big><em>t</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.canon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.canon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Turns the type into its canonical form. See module docs for more information.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.typesystem.TypeSystem.clearmemo">
-<tt class="descname">clearmemo</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.clearmemo" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">clearmemo</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.clearmemo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.clearmemo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clears all method memoizations on this type system instance.</p>
 </dd></dl>
 
 <dl class="staticmethod">
+<dt id="xdress.typesystem.TypeSystem.cpp_funcname">
+<em class="property">static </em><tt class="descname">cpp_funcname</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.cpp_funcname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.cpp_funcname" title="Permalink to this definition">¶</a></dt>
+<dd><p>This returns a name for a function based on its name, rather than
+its type.  The name may be either a string or a tuple of the form 
+(&#8216;name&#8217;, template_arg_type1, template_arg_type2, ...).  This is not ment
+to replace cpp_type(), but complement it.</p>
+</dd></dl>
+
+<dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.cpp_type">
-<em class="property">static </em><tt class="descname">cpp_type</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.cpp_type" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">cpp_type</tt><big>(</big><em>t</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.cpp_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.cpp_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a type t, returns the corresponding C++ type declaration.</p>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.cython_c2py">
-<em class="property">static </em><tt class="descname">cython_c2py</tt><big>(</big><em>name</em>, <em>t</em>, <em>view=True</em>, <em>cached=True</em>, <em>inst_name=None</em>, <em>proxy_name=None</em>, <em>cache_name=None</em>, <em>cache_prefix='self'</em>, <em>existing_name=None</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_c2py" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">cython_c2py</tt><big>(</big><em>name</em>, <em>t</em>, <em>view=True</em>, <em>cached=True</em>, <em>inst_name=None</em>, <em>proxy_name=None</em>, <em>cache_name=None</em>, <em>cache_prefix='self'</em>, <em>existing_name=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.cython_c2py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_c2py" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a varibale name and type, returns cython code (declaration, body,
 and return statements) to convert the variable from C/C++ to Python.</p>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.cython_c2py_getitem">
-<em class="property">static </em><tt class="descname">cython_c2py_getitem</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_c2py_getitem" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">cython_c2py_getitem</tt><big>(</big><em>t</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.cython_c2py_getitem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_c2py_getitem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Helps find the approriate c2py value for a given concrete type key.</p>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.cython_cimport_lines">
-<em class="property">static </em><tt class="descname">cython_cimport_lines</tt><big>(</big><em>x</em>, <em>inc=frozenset(['c'</em>, <em>'cy'])</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_cimport_lines" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">cython_cimport_lines</tt><big>(</big><em>x</em>, <em>inc=frozenset(['c'</em>, <em>'cy'])</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.cython_cimport_lines"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_cimport_lines" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the cimport lines associated with a type or a set of seen tuples.</p>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.cython_cimport_tuples">
-<em class="property">static </em><tt class="descname">cython_cimport_tuples</tt><big>(</big><em>t</em>, <em>seen=None</em>, <em>inc=frozenset(['c'</em>, <em>'cy'])</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_cimport_tuples" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">cython_cimport_tuples</tt><big>(</big><em>t</em>, <em>seen=None</em>, <em>inc=frozenset(['c'</em>, <em>'cy'])</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.cython_cimport_tuples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_cimport_tuples" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a type t, and possibly previously seen cimport tuples (set),
 return the set of all seen cimport tuples.  These tuple have four possible
 interpretations based on the length and values:</p>
@@ -557,37 +566,46 @@ interpretations based on the length and values:</p>
 
 <dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.cython_classname">
-<em class="property">static </em><tt class="descname">cython_classname</tt><big>(</big><em>t</em>, <em>cycyt=None</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_classname" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">cython_classname</tt><big>(</big><em>t</em>, <em>cycyt=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.cython_classname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_classname" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes classnames for cython types.</p>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.cython_ctype">
-<em class="property">static </em><tt class="descname">cython_ctype</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_ctype" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">cython_ctype</tt><big>(</big><em>t</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.cython_ctype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_ctype" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a type t, returns the corresponding Cython C/C++ type declaration.</p>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.cython_cytype">
-<em class="property">static </em><tt class="descname">cython_cytype</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_cytype" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">cython_cytype</tt><big>(</big><em>t</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.cython_cytype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_cytype" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a type t, returns the corresponding Cython type.</p>
 </dd></dl>
 
 <dl class="staticmethod">
+<dt id="xdress.typesystem.TypeSystem.cython_funcname">
+<em class="property">static </em><tt class="descname">cython_funcname</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.cython_funcname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_funcname" title="Permalink to this definition">¶</a></dt>
+<dd><p>This returns a name for a function based on its name, rather than
+its type.  The name may be either a string or a tuple of the form 
+(&#8216;name&#8217;, template_arg_type1, template_arg_type2, ...).  This is not ment
+to replace cython_functionname(), but complement it.</p>
+</dd></dl>
+
+<dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.cython_functionname">
-<em class="property">static </em><tt class="descname">cython_functionname</tt><big>(</big><em>t</em>, <em>cycyt=None</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_functionname" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">cython_functionname</tt><big>(</big><em>t</em>, <em>cycyt=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.cython_functionname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_functionname" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes variable or function names for cython types.</p>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.cython_import_lines">
-<em class="property">static </em><tt class="descname">cython_import_lines</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_import_lines" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">cython_import_lines</tt><big>(</big><em>x</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.cython_import_lines"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_import_lines" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the import lines associated with a type or a set of seen tuples.</p>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.cython_import_tuples">
-<em class="property">static </em><tt class="descname">cython_import_tuples</tt><big>(</big><em>t</em>, <em>seen=None</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_import_tuples" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">cython_import_tuples</tt><big>(</big><em>t</em>, <em>seen=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.cython_import_tuples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_import_tuples" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a type t, and possibly previously seen import tuples (set),
 return the set of all seen import tuples.  These tuple have four possible
 interpretations based on the length and values:</p>
@@ -604,7 +622,7 @@ interpretations based on the length and values:</p>
 
 <dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.cython_nptype">
-<em class="property">static </em><tt class="descname">cython_nptype</tt><big>(</big><em>t</em>, <em>depth=0</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_nptype" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">cython_nptype</tt><big>(</big><em>t</em>, <em>depth=0</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.cython_nptype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_nptype" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a type t, returns the corresponding numpy type.  If depth is
 greater than 0 then this returns of a list of numpy types for all internal
 template types, ie the float in (&#8216;vector&#8217;, &#8216;float&#8217;, 0).</p>
@@ -612,14 +630,14 @@ template types, ie the float in (&#8216;vector&#8217;, &#8216;float&#8217;, 0).<
 
 <dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.cython_py2c">
-<em class="property">static </em><tt class="descname">cython_py2c</tt><big>(</big><em>name</em>, <em>t</em>, <em>inst_name=None</em>, <em>proxy_name=None</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_py2c" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">cython_py2c</tt><big>(</big><em>name</em>, <em>t</em>, <em>inst_name=None</em>, <em>proxy_name=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.cython_py2c"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_py2c" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a varibale name and type, returns cython code (declaration, body,
 and return statement) to convert the variable from Python to C/C++.</p>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.cython_pytype">
-<em class="property">static </em><tt class="descname">cython_pytype</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_pytype" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">cython_pytype</tt><big>(</big><em>t</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.cython_pytype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_pytype" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a type t, returns the corresponding Python type.</p>
 </dd></dl>
 
@@ -631,33 +649,33 @@ and return statement) to convert the variable from Python to C/C++.</p>
 
 <dl class="method">
 <dt id="xdress.typesystem.TypeSystem.delmemo">
-<tt class="descname">delmemo</tt><big>(</big><em>meth</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.delmemo" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">delmemo</tt><big>(</big><em>meth</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.delmemo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.delmemo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deletes a single key from a method on this type system instance.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.typesystem.TypeSystem.deregister_class">
-<tt class="descname">deregister_class</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.deregister_class" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">deregister_class</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.deregister_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.deregister_class" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function will remove a previously registered class from 
 the type system.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.typesystem.TypeSystem.deregister_refinement">
-<tt class="descname">deregister_refinement</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.deregister_refinement" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">deregister_refinement</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.deregister_refinement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.deregister_refinement" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function will remove a previously registered refinement from 
 the type system.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.typesystem.TypeSystem.deregister_specialization">
-<tt class="descname">deregister_specialization</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.deregister_specialization" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">deregister_specialization</tt><big>(</big><em>t</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.deregister_specialization"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.deregister_specialization" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function will remove previously registered template specialization.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.typesystem.TypeSystem.dump">
-<tt class="descname">dump</tt><big>(</big><em>filename</em>, <em>format=None</em>, <em>mode='wb'</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.dump" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">dump</tt><big>(</big><em>filename</em>, <em>format=None</em>, <em>mode='wb'</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.dump" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves a type system out to disk.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -672,8 +690,8 @@ the type system.</p>
 <div><p>The file format to save the type system as.  If this is not provided, 
 it is infered from the filenme.  Options are:</p>
 <ul class="simple">
-<li>pickle (&#8216;<a href="#id1"><span class="problematic" id="id2">*</span></a>.pkl&#8217;)</li>
-<li>gzipped pickle (&#8216;<a href="#id3"><span class="problematic" id="id4">*</span></a>.pkl.gz&#8217;)</li>
+<li>pickle (&#8216;.pkl&#8217;)</li>
+<li>gzipped pickle (&#8216;.pkl.gz&#8217;)</li>
 </ul>
 </div></blockquote>
 <p><strong>mode</strong> : str, optional</p>
@@ -688,43 +706,43 @@ it is infered from the filenme.  Options are:</p>
 
 <dl class="classmethod">
 <dt id="xdress.typesystem.TypeSystem.empty">
-<em class="property">classmethod </em><tt class="descname">empty</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.empty" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">empty</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.empty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.empty" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is a class method which returns an empty type system.</p>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.gccxml_type">
-<em class="property">static </em><tt class="descname">gccxml_type</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.gccxml_type" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">gccxml_type</tt><big>(</big><em>t</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.gccxml_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.gccxml_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a type t, returns the corresponding GCC-XML type name.</p>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.humanname">
-<em class="property">static </em><tt class="descname">humanname</tt><big>(</big><em>t</em>, <em>hnt=None</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.humanname" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">humanname</tt><big>(</big><em>t</em>, <em>hnt=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.humanname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.humanname" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes human names for types.</p>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.isdependent">
-<em class="property">static </em><tt class="descname">isdependent</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.isdependent" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">isdependent</tt><big>(</big><em>t</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.isdependent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.isdependent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether t is a dependent type or not.</p>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.isrefinement">
-<em class="property">static </em><tt class="descname">isrefinement</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.isrefinement" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">isrefinement</tt><big>(</big><em>t</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.isrefinement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.isrefinement" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether t is a refined type.</p>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.istemplate">
-<em class="property">static </em><tt class="descname">istemplate</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.istemplate" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">istemplate</tt><big>(</big><em>t</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.istemplate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.istemplate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether t is a template type or not.</p>
 </dd></dl>
 
 <dl class="classmethod">
 <dt id="xdress.typesystem.TypeSystem.load">
-<em class="property">classmethod </em><tt class="descname">load</tt><big>(</big><em>filename</em>, <em>format=None</em>, <em>mode='rb'</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.load" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">load</tt><big>(</big><em>filename</em>, <em>format=None</em>, <em>mode='rb'</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads a type system from disk into a new type system instance.
 This is a class method.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -740,8 +758,8 @@ This is a class method.</p>
 <div><p>The file format to save the type system as.  If this is not provided, 
 it is infered from the filenme.  Options are:</p>
 <ul class="simple">
-<li>pickle (&#8216;<a href="#id5"><span class="problematic" id="id6">*</span></a>.pkl&#8217;)</li>
-<li>gzipped pickle (&#8216;<a href="#id7"><span class="problematic" id="id8">*</span></a>.pkl.gz&#8217;)</li>
+<li>pickle (&#8216;.pkl&#8217;)</li>
+<li>gzipped pickle (&#8216;.pkl.gz&#8217;)</li>
 </ul>
 </div></blockquote>
 <p><strong>mode</strong> : str, optional</p>
@@ -756,13 +774,13 @@ it is infered from the filenme.  Options are:</p>
 
 <dl class="method">
 <dt id="xdress.typesystem.TypeSystem.local_classes">
-<tt class="descname">local_classes</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.local_classes" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">local_classes</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.local_classes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.local_classes" title="Permalink to this definition">¶</a></dt>
 <dd><p>A context manager for making sure the given classes are local.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.typesystem.TypeSystem.register_class">
-<tt class="descname">register_class</tt><big>(</big><em>name=None</em>, <em>template_args=None</em>, <em>cython_c_type=None</em>, <em>cython_cimport=None</em>, <em>cython_cy_type=None</em>, <em>cython_py_type=None</em>, <em>cython_template_class_name=None</em>, <em>cython_template_function_name=None</em>, <em>cython_cyimport=None</em>, <em>cython_pyimport=None</em>, <em>cython_c2py=None</em>, <em>cython_py2c=None</em>, <em>cpp_type=None</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.register_class" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">register_class</tt><big>(</big><em>name=None</em>, <em>template_args=None</em>, <em>cython_c_type=None</em>, <em>cython_cimport=None</em>, <em>cython_cy_type=None</em>, <em>cython_py_type=None</em>, <em>cython_template_class_name=None</em>, <em>cython_template_function_name=None</em>, <em>cython_cyimport=None</em>, <em>cython_pyimport=None</em>, <em>cython_c2py=None</em>, <em>cython_py2c=None</em>, <em>cpp_type=None</em>, <em>human_name=None</em>, <em>from_pytype=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.register_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.register_class" title="Permalink to this definition">¶</a></dt>
 <dd><p>Classes are user specified types.  This function will add a class to 
 the type system so that it may be used normally with the rest of the 
 type system.</p>
@@ -770,7 +788,7 @@ type system.</p>
 
 <dl class="method">
 <dt id="xdress.typesystem.TypeSystem.register_classname">
-<tt class="descname">register_classname</tt><big>(</big><em>classname</em>, <em>package</em>, <em>pxd_base</em>, <em>cpppxd_base</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.register_classname" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">register_classname</tt><big>(</big><em>classname</em>, <em>package</em>, <em>pxd_base</em>, <em>cpppxd_base</em>, <em>cpp_classname=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.register_classname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.register_classname" title="Permalink to this definition">¶</a></dt>
 <dd><p>Registers a class with the type system from only its name, 
 and relevant header file information.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -787,8 +805,12 @@ and relevant header file information.</p>
 <div><p>Base name of the pxd file to cimport.</p>
 </div></blockquote>
 <p><strong>cpppxd_base</strong> : str</p>
-<blockquote class="last">
+<blockquote>
 <div><p>Base name of the cpppxd file to cimport.</p>
+</div></blockquote>
+<p><strong>cpp_classname</strong> : str or tuple, optional</p>
+<blockquote class="last">
+<div><p>Name of class in C++, equiv. to apiname.srcname. Defaults to classname.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -798,41 +820,41 @@ and relevant header file information.</p>
 
 <dl class="method">
 <dt id="xdress.typesystem.TypeSystem.register_numpy_dtype">
-<tt class="descname">register_numpy_dtype</tt><big>(</big><em>t</em>, <em>cython_cimport=None</em>, <em>cython_cyimport=None</em>, <em>cython_pyimport=None</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.register_numpy_dtype" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">register_numpy_dtype</tt><big>(</big><em>t</em>, <em>cython_cimport=None</em>, <em>cython_cyimport=None</em>, <em>cython_pyimport=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.register_numpy_dtype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.register_numpy_dtype" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function will add a type to the system as numpy dtype that lives in
 the stlcontainers module.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.typesystem.TypeSystem.register_refinement">
-<tt class="descname">register_refinement</tt><big>(</big><em>name</em>, <em>refinementof</em>, <em>cython_cimport=None</em>, <em>cython_cyimport=None</em>, <em>cython_pyimport=None</em>, <em>cython_c2py=None</em>, <em>cython_py2c=None</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.register_refinement" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">register_refinement</tt><big>(</big><em>name</em>, <em>refinementof</em>, <em>cython_cimport=None</em>, <em>cython_cyimport=None</em>, <em>cython_pyimport=None</em>, <em>cython_c2py=None</em>, <em>cython_py2c=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.register_refinement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.register_refinement" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function will add a refinement to the type system so that it 
 may be used normally with the rest of the type system.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.typesystem.TypeSystem.register_specialization">
-<tt class="descname">register_specialization</tt><big>(</big><em>t</em>, <em>cython_c_type=None</em>, <em>cython_cy_type=None</em>, <em>cython_py_type=None</em>, <em>cython_cimport=None</em>, <em>cython_cyimport=None</em>, <em>cython_pyimport=None</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.register_specialization" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">register_specialization</tt><big>(</big><em>t</em>, <em>cython_c_type=None</em>, <em>cython_cy_type=None</em>, <em>cython_py_type=None</em>, <em>cython_cimport=None</em>, <em>cython_cyimport=None</em>, <em>cython_pyimport=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.register_specialization"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.register_specialization" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function will add a template specialization so that it may be used
 normally with the rest of the type system.</p>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.strip_predicates">
-<em class="property">static </em><tt class="descname">strip_predicates</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.strip_predicates" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">strip_predicates</tt><big>(</big><em>t</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.strip_predicates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.strip_predicates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes all outer predicates from a type.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.typesystem.TypeSystem.swap_stlcontainers">
-<tt class="descname">swap_stlcontainers</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.swap_stlcontainers" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">swap_stlcontainers</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.swap_stlcontainers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.swap_stlcontainers" title="Permalink to this definition">¶</a></dt>
 <dd><p>A context manager for temporarily swapping out the stlcontainer value
 with a new value and replacing the original value before exiting.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.typesystem.TypeSystem.update">
-<tt class="descname">update</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.typesystem.TypeSystem.update" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">update</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Updates the type system in-place. Only updates the data attributes 
 named in &#8216;datafields&#8217;.  This may be called with any of the following 
 signatures:</p>
@@ -848,7 +870,7 @@ constructor.  See this documentation for more detail.</p>
 
 <dl class="class">
 <dt id="xdress.typesystem.typestr">
-<em class="property">class </em><tt class="descclassname">xdress.typesystem.</tt><tt class="descname">typestr</tt><big>(</big><em>t</em>, <em>ts</em><big>)</big><a class="headerlink" href="#xdress.typesystem.typestr" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">xdress.typesystem.</tt><tt class="descname">typestr</tt><big>(</big><em>t</em>, <em>ts</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is class whose attributes are properties that expose various 
 string representations of a type.  This is useful for the Python string
 formatting mini-language where attributes of an object may be accessed.
@@ -874,146 +896,146 @@ For example:</p>
 </table>
 <dl class="attribute">
 <dt id="xdress.typesystem.typestr.cython_ctype">
-<tt class="descname">cython_ctype</tt><a class="headerlink" href="#xdress.typesystem.typestr.cython_ctype" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cython_ctype</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr.cython_ctype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr.cython_ctype" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Cython C/C++ representation of the type.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.typesystem.typestr.cython_ctype_nopred">
-<tt class="descname">cython_ctype_nopred</tt><a class="headerlink" href="#xdress.typesystem.typestr.cython_ctype_nopred" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cython_ctype_nopred</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr.cython_ctype_nopred"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr.cython_ctype_nopred" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Cython C/C++ representation of the type without predicates.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.typesystem.typestr.cython_cytype">
-<tt class="descname">cython_cytype</tt><a class="headerlink" href="#xdress.typesystem.typestr.cython_cytype" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cython_cytype</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr.cython_cytype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr.cython_cytype" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Cython Cython representation of the type.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.typesystem.typestr.cython_cytype_nopred">
-<tt class="descname">cython_cytype_nopred</tt><a class="headerlink" href="#xdress.typesystem.typestr.cython_cytype_nopred" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cython_cytype_nopred</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr.cython_cytype_nopred"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr.cython_cytype_nopred" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Cython Cython representation of the type without predicates.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.typesystem.typestr.cython_npctype">
-<tt class="descname">cython_npctype</tt><a class="headerlink" href="#xdress.typesystem.typestr.cython_npctype" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cython_npctype</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr.cython_npctype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr.cython_npctype" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Cython C/C++ representation of NumPy type.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.typesystem.typestr.cython_npctype_nopred">
-<tt class="descname">cython_npctype_nopred</tt><a class="headerlink" href="#xdress.typesystem.typestr.cython_npctype_nopred" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cython_npctype_nopred</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr.cython_npctype_nopred"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr.cython_npctype_nopred" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Cython C/C++ representation of the NumPy type without predicates.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.typesystem.typestr.cython_npctypes">
-<tt class="descname">cython_npctypes</tt><a class="headerlink" href="#xdress.typesystem.typestr.cython_npctypes" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cython_npctypes</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr.cython_npctypes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr.cython_npctypes" title="Permalink to this definition">¶</a></dt>
 <dd><p>The expanded Cython C/C++ representation of the NumPy types.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.typesystem.typestr.cython_npctypes_nopred">
-<tt class="descname">cython_npctypes_nopred</tt><a class="headerlink" href="#xdress.typesystem.typestr.cython_npctypes_nopred" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cython_npctypes_nopred</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr.cython_npctypes_nopred"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr.cython_npctypes_nopred" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Cython C/C++ representation of the NumPy types without predicates.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.typesystem.typestr.cython_npcytype">
-<tt class="descname">cython_npcytype</tt><a class="headerlink" href="#xdress.typesystem.typestr.cython_npcytype" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cython_npcytype</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr.cython_npcytype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr.cython_npcytype" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Cython Cython representation of NumPy type.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.typesystem.typestr.cython_npcytype_nopred">
-<tt class="descname">cython_npcytype_nopred</tt><a class="headerlink" href="#xdress.typesystem.typestr.cython_npcytype_nopred" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cython_npcytype_nopred</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr.cython_npcytype_nopred"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr.cython_npcytype_nopred" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Cython Cython representation of the NumPy type without predicates.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.typesystem.typestr.cython_npcytypes">
-<tt class="descname">cython_npcytypes</tt><a class="headerlink" href="#xdress.typesystem.typestr.cython_npcytypes" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cython_npcytypes</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr.cython_npcytypes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr.cython_npcytypes" title="Permalink to this definition">¶</a></dt>
 <dd><p>The expanded Cython Cython representation of the NumPy types.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.typesystem.typestr.cython_npcytypes_nopred">
-<tt class="descname">cython_npcytypes_nopred</tt><a class="headerlink" href="#xdress.typesystem.typestr.cython_npcytypes_nopred" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cython_npcytypes_nopred</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr.cython_npcytypes_nopred"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr.cython_npcytypes_nopred" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Cython Cython representation of the NumPy types without predicates.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.typesystem.typestr.cython_nppytype">
-<tt class="descname">cython_nppytype</tt><a class="headerlink" href="#xdress.typesystem.typestr.cython_nppytype" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cython_nppytype</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr.cython_nppytype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr.cython_nppytype" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Cython Python representation of NumPy type.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.typesystem.typestr.cython_nppytype_nopred">
-<tt class="descname">cython_nppytype_nopred</tt><a class="headerlink" href="#xdress.typesystem.typestr.cython_nppytype_nopred" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cython_nppytype_nopred</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr.cython_nppytype_nopred"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr.cython_nppytype_nopred" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Cython Python representation of the NumPy type without predicates.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.typesystem.typestr.cython_nppytypes">
-<tt class="descname">cython_nppytypes</tt><a class="headerlink" href="#xdress.typesystem.typestr.cython_nppytypes" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cython_nppytypes</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr.cython_nppytypes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr.cython_nppytypes" title="Permalink to this definition">¶</a></dt>
 <dd><p>The expanded Cython Cython representation of the NumPy types.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.typesystem.typestr.cython_nppytypes_nopred">
-<tt class="descname">cython_nppytypes_nopred</tt><a class="headerlink" href="#xdress.typesystem.typestr.cython_nppytypes_nopred" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cython_nppytypes_nopred</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr.cython_nppytypes_nopred"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr.cython_nppytypes_nopred" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Cython Python representation of the NumPy types without predicates.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.typesystem.typestr.cython_nptype">
-<tt class="descname">cython_nptype</tt><a class="headerlink" href="#xdress.typesystem.typestr.cython_nptype" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cython_nptype</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr.cython_nptype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr.cython_nptype" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Cython NumPy representation of the type.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.typesystem.typestr.cython_nptype_nopred">
-<tt class="descname">cython_nptype_nopred</tt><a class="headerlink" href="#xdress.typesystem.typestr.cython_nptype_nopred" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cython_nptype_nopred</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr.cython_nptype_nopred"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr.cython_nptype_nopred" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Cython NumPy representation of the type without predicates.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.typesystem.typestr.cython_nptypes">
-<tt class="descname">cython_nptypes</tt><a class="headerlink" href="#xdress.typesystem.typestr.cython_nptypes" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cython_nptypes</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr.cython_nptypes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr.cython_nptypes" title="Permalink to this definition">¶</a></dt>
 <dd><p>The expanded Cython NumPy representation of the type.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.typesystem.typestr.cython_nptypes_nopred">
-<tt class="descname">cython_nptypes_nopred</tt><a class="headerlink" href="#xdress.typesystem.typestr.cython_nptypes_nopred" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cython_nptypes_nopred</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr.cython_nptypes_nopred"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr.cython_nptypes_nopred" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Cython NumPy representation of the types without predicates.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.typesystem.typestr.cython_pytype">
-<tt class="descname">cython_pytype</tt><a class="headerlink" href="#xdress.typesystem.typestr.cython_pytype" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cython_pytype</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr.cython_pytype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr.cython_pytype" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Cython Python representation of the type.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.typesystem.typestr.cython_pytype_nopred">
-<tt class="descname">cython_pytype_nopred</tt><a class="headerlink" href="#xdress.typesystem.typestr.cython_pytype_nopred" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cython_pytype_nopred</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr.cython_pytype_nopred"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr.cython_pytype_nopred" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Cython Python representation of the type without predicates.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.typesystem.typestr.type">
-<tt class="descname">type</tt><a class="headerlink" href="#xdress.typesystem.typestr.type" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">type</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr.type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr.type" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is a repr string of the raw type (self.t), mostly useful for 
 comments.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.typesystem.typestr.type_nopred">
-<tt class="descname">type_nopred</tt><a class="headerlink" href="#xdress.typesystem.typestr.type_nopred" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">type_nopred</tt><a class="reference internal" href="../_modules/xdress/typesystem.html#typestr.type_nopred"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.typestr.type_nopred" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is a repr string of the raw type (self.t) without predicates.</p>
 </dd></dl>
 
@@ -1021,13 +1043,13 @@ comments.</p>
 
 <dl class="function">
 <dt id="xdress.typesystem.matches">
-<tt class="descclassname">xdress.typesystem.</tt><tt class="descname">matches</tt><big>(</big><em>pattern</em>, <em>t</em><big>)</big><a class="headerlink" href="#xdress.typesystem.matches" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.typesystem.</tt><tt class="descname">matches</tt><big>(</big><em>pattern</em>, <em>t</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#matches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.matches" title="Permalink to this definition">¶</a></dt>
 <dd><p>Indicates whether a type t matches a pattern. See TypeMatcher for more details.</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="xdress.typesystem.MatchAny">
-<tt class="descclassname">xdress.typesystem.</tt><tt class="descname">MatchAny</tt><em class="property"> = MatchAny</em><a class="headerlink" href="#xdress.typesystem.MatchAny" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.typesystem.</tt><tt class="descname">MatchAny</tt><em class="property"> = MatchAny</em><a class="reference internal" href="../_modules/xdress/typesystem.html#MatchAny"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.MatchAny" title="Permalink to this definition">¶</a></dt>
 <dd><p>A singleton helper class for matching any portion of a type.</p>
 </dd></dl>
 

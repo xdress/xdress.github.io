@@ -225,12 +225,12 @@ requested.  This message is a string.</td>
 <h2>Plugins API<a class="headerlink" href="#plugins-api" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="xdress.plugins.Plugin">
-<em class="property">class </em><tt class="descclassname">xdress.plugins.</tt><tt class="descname">Plugin</tt><a class="headerlink" href="#xdress.plugins.Plugin" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">xdress.plugins.</tt><tt class="descname">Plugin</tt><a class="reference internal" href="../_modules/xdress/plugins.html#Plugin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugin" title="Permalink to this definition">¶</a></dt>
 <dd><p>A base plugin for other xdress pluigins to inherit.</p>
 <p>The __init__() method may take no arguments or keyword arguments.</p>
 <dl class="method">
 <dt id="xdress.plugins.Plugin.execute">
-<tt class="descname">execute</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.plugins.Plugin.execute" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">execute</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#Plugin.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugin.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs the actual work of the plugin, which may require a run controller.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -244,7 +244,7 @@ requested.  This message is a string.</td>
 
 <dl class="method">
 <dt id="xdress.plugins.Plugin.report_debug">
-<tt class="descname">report_debug</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.plugins.Plugin.report_debug" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">report_debug</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#Plugin.report_debug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugin.report_debug" title="Permalink to this definition">¶</a></dt>
 <dd><p>A message to report in the event that execute() fails and additional
 debugging information is requested.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -267,7 +267,7 @@ skipped in the debug output.</p>
 
 <dl class="method">
 <dt id="xdress.plugins.Plugin.setup">
-<tt class="descname">setup</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.plugins.Plugin.setup" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">setup</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#Plugin.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugin.setup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs all setup tasks needed for this plugin.  This may include 
 validation and munging of the run control object as well as creating 
 the portions of the OS environment.</p>
@@ -283,7 +283,7 @@ the portions of the OS environment.</p>
 
 <dl class="method">
 <dt id="xdress.plugins.Plugin.teardown">
-<tt class="descname">teardown</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.plugins.Plugin.teardown" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">teardown</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#Plugin.teardown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugin.teardown" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs any cleanup tasks needed by the plugin.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -297,7 +297,7 @@ the portions of the OS environment.</p>
 
 <dl class="method">
 <dt id="xdress.plugins.Plugin.update_argparser">
-<tt class="descname">update_argparser</tt><big>(</big><em>parser</em><big>)</big><a class="headerlink" href="#xdress.plugins.Plugin.update_argparser" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">update_argparser</tt><big>(</big><em>parser</em><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#Plugin.update_argparser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugin.update_argparser" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method takes an argparse.ArgumentParser() instance and modifies 
 it in-place.  This allows for run control parameters to be modified from 
 as command line arguments.</p>
@@ -337,7 +337,7 @@ are callables which indicate how to update or merge two rc parameters with
 this key. The callable should take two instances and return a copy that
 represents the merger, e.g. <tt class="docutils literal"><span class="pre">lambda</span> <span class="pre">old,</span> <span class="pre">new:</span> <span class="pre">old</span> <span class="pre">+</span> <span class="pre">new</span></tt>.  One useful example
 is for paths.  Normally you want new paths to prepend old ones:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">rcupdates</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;includes&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">new</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">old</span><span class="p">)}</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">rcupdaters</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;includes&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">new</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">old</span><span class="p">)}</span>
 </pre></div>
 </div>
 <p>If a callable is not supplied for an rc parameter then the the default
@@ -355,7 +355,7 @@ lists the module names of other plugins that this plugin requires.</p>
 
 <dl class="class">
 <dt id="xdress.plugins.Plugins">
-<em class="property">class </em><tt class="descclassname">xdress.plugins.</tt><tt class="descname">Plugins</tt><big>(</big><em>modnames</em><big>)</big><a class="headerlink" href="#xdress.plugins.Plugins" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">xdress.plugins.</tt><tt class="descname">Plugins</tt><big>(</big><em>modnames</em><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#Plugins"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugins" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is a class for managing the instantiation and execution of plugins.</p>
 <p>The execution and control of plugins should happen in the following order:</p>
 <ol class="arabic simple">
@@ -380,7 +380,7 @@ lists the module names of other plugins that this plugin requires.</p>
 </table>
 <dl class="method">
 <dt id="xdress.plugins.Plugins.build_cli">
-<tt class="descname">build_cli</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.plugins.Plugins.build_cli" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">build_cli</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#Plugins.build_cli"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugins.build_cli" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds and returns a command line interface based on the plugins.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -394,19 +394,19 @@ lists the module names of other plugins that this plugin requires.</p>
 
 <dl class="method">
 <dt id="xdress.plugins.Plugins.execute">
-<tt class="descname">execute</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.plugins.Plugins.execute" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">execute</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#Plugins.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugins.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Preforms all plugin executions.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.plugins.Plugins.exit">
-<tt class="descname">exit</tt><big>(</big><em>err=0</em><big>)</big><a class="headerlink" href="#xdress.plugins.Plugins.exit" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">exit</tt><big>(</big><em>err=0</em><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#Plugins.exit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugins.exit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exits the process, possibly printing debug info.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.plugins.Plugins.merge_rcs">
-<tt class="descname">merge_rcs</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.plugins.Plugins.merge_rcs" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">merge_rcs</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#Plugins.merge_rcs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugins.merge_rcs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds all of the default run controllers and returns a new and 
 full default RunControl() instance.  This has also merged all of 
 the rc updaters in the process.</p>
@@ -414,13 +414,13 @@ the rc updaters in the process.</p>
 
 <dl class="method">
 <dt id="xdress.plugins.Plugins.setup">
-<tt class="descname">setup</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.plugins.Plugins.setup" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">setup</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#Plugins.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugins.setup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Preforms all plugin setup tasks.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.plugins.Plugins.teardown">
-<tt class="descname">teardown</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.plugins.Plugins.teardown" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">teardown</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#Plugins.teardown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugins.teardown" title="Permalink to this definition">¶</a></dt>
 <dd><p>Preforms all plugin teardown tasks.</p>
 </dd></dl>
 

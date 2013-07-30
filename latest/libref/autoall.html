@@ -119,7 +119,7 @@ For example, rather tha writing:</p>
 <h2>Automatic Finder API<a class="headerlink" href="#automatic-finder-api" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="xdress.autoall.AutoNameCache">
-<em class="property">class </em><tt class="descclassname">xdress.autoall.</tt><tt class="descname">AutoNameCache</tt><big>(</big><em>cachefile='build/autoname.cache'</em><big>)</big><a class="headerlink" href="#xdress.autoall.AutoNameCache" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">xdress.autoall.</tt><tt class="descname">AutoNameCache</tt><big>(</big><em>cachefile='build/autoname.cache'</em><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#AutoNameCache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.AutoNameCache" title="Permalink to this definition">¶</a></dt>
 <dd><p>A quick persistent cache for name lists automatically found in files.  
 The keys are (classname, filename, kind) tuples.  The values are 
 (hashes-of-the-file, finder-results) tuples.</p>
@@ -137,13 +137,13 @@ The keys are (classname, filename, kind) tuples.  The values are
 </table>
 <dl class="method">
 <dt id="xdress.autoall.AutoNameCache.dump">
-<tt class="descname">dump</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.autoall.AutoNameCache.dump" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">dump</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#AutoNameCache.dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.AutoNameCache.dump" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes the cache out to the filesystem.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.autoall.AutoNameCache.isvalid">
-<tt class="descname">isvalid</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#xdress.autoall.AutoNameCache.isvalid" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">isvalid</tt><big>(</big><em>filename</em><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#AutoNameCache.isvalid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.AutoNameCache.isvalid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Boolean on whether the cach value for a filename matches the state 
 of the file on the system.</p>
 </dd></dl>
@@ -152,7 +152,7 @@ of the file on the system.</p>
 
 <dl class="class">
 <dt id="xdress.autoall.GccxmlFinder">
-<em class="property">class </em><tt class="descclassname">xdress.autoall.</tt><tt class="descname">GccxmlFinder</tt><big>(</big><em>root=None</em>, <em>onlyin=None</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xdress.autoall.GccxmlFinder" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">xdress.autoall.</tt><tt class="descname">GccxmlFinder</tt><big>(</big><em>root=None</em>, <em>onlyin=None</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#GccxmlFinder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.GccxmlFinder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class used for discovering APIs using an etree representation of 
 the GCC-XML AST.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -177,7 +177,7 @@ the GCC-XML AST.</p>
 </table>
 <dl class="method">
 <dt id="xdress.autoall.GccxmlFinder.visit">
-<tt class="descname">visit</tt><big>(</big><em>node=None</em><big>)</big><a class="headerlink" href="#xdress.autoall.GccxmlFinder.visit" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">visit</tt><big>(</big><em>node=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#GccxmlFinder.visit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.GccxmlFinder.visit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Visits the node and all sub-nodes, filling the API names
 as it goes.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -197,7 +197,7 @@ top-level node is found and visited.</p>
 
 <dl class="method">
 <dt id="xdress.autoall.GccxmlFinder.visit_kinds">
-<tt class="descname">visit_kinds</tt><big>(</big><em>node</em>, <em>kinds</em><big>)</big><a class="headerlink" href="#xdress.autoall.GccxmlFinder.visit_kinds" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">visit_kinds</tt><big>(</big><em>node</em>, <em>kinds</em><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#GccxmlFinder.visit_kinds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.GccxmlFinder.visit_kinds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Visits the node and all sub-nodes, finding instances of the kinds 
 and recording the names as it goes.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -228,7 +228,7 @@ and recording the names as it goes.</p>
 
 <dl class="class">
 <dt id="xdress.autoall.PycparserFinder">
-<em class="property">class </em><tt class="descclassname">xdress.autoall.</tt><tt class="descname">PycparserFinder</tt><big>(</big><em>root=None</em>, <em>onlyin=None</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xdress.autoall.PycparserFinder" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">xdress.autoall.</tt><tt class="descname">PycparserFinder</tt><big>(</big><em>root=None</em>, <em>onlyin=None</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#PycparserFinder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.PycparserFinder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class used for discovering APIs using the pycparser AST.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -252,7 +252,7 @@ and recording the names as it goes.</p>
 </table>
 <dl class="method">
 <dt id="xdress.autoall.PycparserFinder.visit">
-<tt class="descname">visit</tt><big>(</big><em>node=None</em><big>)</big><a class="headerlink" href="#xdress.autoall.PycparserFinder.visit" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">visit</tt><big>(</big><em>node=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#PycparserFinder.visit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.PycparserFinder.visit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Visits the node and all sub-nodes, filling the API names
 as it goes.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -274,26 +274,26 @@ top-level node is found and visited.</p>
 
 <dl class="class">
 <dt id="xdress.autoall.XDressPlugin">
-<em class="property">class </em><tt class="descclassname">xdress.autoall.</tt><tt class="descname">XDressPlugin</tt><a class="headerlink" href="#xdress.autoall.XDressPlugin" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">xdress.autoall.</tt><tt class="descname">XDressPlugin</tt><a class="reference internal" href="../_modules/xdress/autoall.html#XDressPlugin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.XDressPlugin" title="Permalink to this definition">¶</a></dt>
 <dd><p>This plugin resolves the &#8216;*&#8217; syntax in wrapper types by parsing the 
 source files prio to describing them.</p>
 <p>The __init__() method may take no arguments or keyword arguments.</p>
 <dl class="method">
 <dt id="xdress.autoall.XDressPlugin.setup">
-<tt class="descname">setup</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.autoall.XDressPlugin.setup" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">setup</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#XDressPlugin.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.XDressPlugin.setup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Expands variables, functions, and classes in the rc based on 
 copying src filenames to tar filename and the special &#8216;*&#8217; all syntax.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.autoall.XDressPlugin.setup_basic">
-<tt class="descname">setup_basic</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.autoall.XDressPlugin.setup_basic" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">setup_basic</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#XDressPlugin.setup_basic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.XDressPlugin.setup_basic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Does the easy part of setting up an autodecsibe environment</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.autoall.XDressPlugin.setup_heavy">
-<tt class="descname">setup_heavy</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.autoall.XDressPlugin.setup_heavy" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">setup_heavy</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#XDressPlugin.setup_heavy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.XDressPlugin.setup_heavy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Does the hard work of actually searching the source files.</p>
 </dd></dl>
 
@@ -301,7 +301,7 @@ copying src filenames to tar filename and the special &#8216;*&#8217; all syntax
 
 <dl class="function">
 <dt id="xdress.autoall.clang_findall">
-<tt class="descclassname">xdress.autoall.</tt><tt class="descname">clang_findall</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.autoall.clang_findall" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autoall.</tt><tt class="descname">clang_findall</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#clang_findall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.clang_findall" title="Permalink to this definition">¶</a></dt>
 <dd><div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">This has not yet been implemented fully or at all.</p>
@@ -310,7 +310,7 @@ copying src filenames to tar filename and the special &#8216;*&#8217; all syntax
 
 <dl class="function">
 <dt id="xdress.autoall.findall">
-<tt class="descclassname">xdress.autoall.</tt><tt class="descname">findall</tt><big>(</big><em>filename</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>parsers='gccxml'</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="headerlink" href="#xdress.autoall.findall" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autoall.</tt><tt class="descname">findall</tt><big>(</big><em>filename</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>parsers='gccxml'</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#findall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.findall" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automatically finds all API elements in a file.  This is the main entry point.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -375,7 +375,7 @@ a dictionary, it specifies the order to use parser based on language, i.e.
 
 <dl class="function">
 <dt id="xdress.autoall.gccxml_findall">
-<tt class="descclassname">xdress.autoall.</tt><tt class="descname">gccxml_findall</tt><big>(</big><em>filename</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="headerlink" href="#xdress.autoall.gccxml_findall" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autoall.</tt><tt class="descname">gccxml_findall</tt><big>(</big><em>filename</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#gccxml_findall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.gccxml_findall" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automatically finds all API elements in a file via GCC-XML.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -440,7 +440,7 @@ a dictionary, it specifies the order to use parser based on language, i.e.
 
 <dl class="function">
 <dt id="xdress.autoall.pycparser_findall">
-<tt class="descclassname">xdress.autoall.</tt><tt class="descname">pycparser_findall</tt><big>(</big><em>filename</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="headerlink" href="#xdress.autoall.pycparser_findall" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autoall.</tt><tt class="descname">pycparser_findall</tt><big>(</big><em>filename</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#pycparser_findall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.pycparser_findall" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automatically finds all API elements in a file via GCC-XML.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

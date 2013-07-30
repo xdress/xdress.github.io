@@ -31,7 +31,7 @@
     <script type="text/javascript" src="../_static/cloud.js"></script>
     <link rel="top" title="xdress 0.3-dev documentation" href="../index.html" />
     <link rel="up" title="Library Reference" href="index.html" />
-    <link rel="next" title="Previous Versions" href="../previous/index.html" />
+    <link rel="next" title="PEP-8 Names" href="pep8names.html" />
     <link rel="prev" title="Description Filter" href="descfilter.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
@@ -65,7 +65,7 @@ if(ga_enabled){
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="../previous/index.html" title="Previous Versions"
+          <a href="pep8names.html" title="PEP-8 Names"
              accesskey="N">next</a> &nbsp; &nbsp;</li>
         <li class="right" >
           <a href="descfilter.html" title="Description Filter"
@@ -172,20 +172,20 @@ before cythongen has a chance to produce wrapper code.</p>
 <h2>dOygen API<a class="headerlink" href="#doygen-api" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="xdress.doxygen.XDressPlugin">
-<em class="property">class </em><tt class="descclassname">xdress.doxygen.</tt><tt class="descname">XDressPlugin</tt><a class="headerlink" href="#xdress.doxygen.XDressPlugin" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">xdress.doxygen.</tt><tt class="descname">XDressPlugin</tt><a class="reference internal" href="../_modules/xdress/doxygen.html#XDressPlugin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.doxygen.XDressPlugin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add python docstrings (in numpydoc format) from dOxygen markup in
 the source to the generated cython wrapper.</p>
 <p>The __init__() method may take no arguments or keyword arguments.</p>
 <dl class="method">
 <dt id="xdress.doxygen.XDressPlugin.execute">
-<tt class="descname">execute</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.doxygen.XDressPlugin.execute" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">execute</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/doxygen.html#XDressPlugin.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.doxygen.XDressPlugin.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs doxygen to produce the xml, then parses it and adds
 docstrings to the desc dictionary.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.doxygen.XDressPlugin.setup">
-<tt class="descname">setup</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.doxygen.XDressPlugin.setup" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">setup</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/doxygen.html#XDressPlugin.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.doxygen.XDressPlugin.setup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Need setup method to get project, output_dir, and src_dir from
 rc and put them in the default_doxygen_config before running
 doxygen</p>
@@ -195,7 +195,7 @@ doxygen</p>
 
 <dl class="function">
 <dt id="xdress.doxygen.class_docstr">
-<tt class="descclassname">xdress.doxygen.</tt><tt class="descname">class_docstr</tt><big>(</big><em>class_dict</em>, <em>desc_funcs=False</em><big>)</big><a class="headerlink" href="#xdress.doxygen.class_docstr" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.doxygen.</tt><tt class="descname">class_docstr</tt><big>(</big><em>class_dict</em>, <em>desc_funcs=False</em><big>)</big><a class="reference internal" href="../_modules/xdress/doxygen.html#class_docstr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.doxygen.class_docstr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate the main docstring for a class given a dictionary of the
 parsed dOxygen xml.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -227,7 +227,7 @@ class.</p>
 
 <dl class="function">
 <dt id="xdress.doxygen.fix_xml_links">
-<tt class="descclassname">xdress.doxygen.</tt><tt class="descname">fix_xml_links</tt><big>(</big><em>file_name</em><big>)</big><a class="headerlink" href="#xdress.doxygen.fix_xml_links" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.doxygen.</tt><tt class="descname">fix_xml_links</tt><big>(</big><em>file_name</em><big>)</big><a class="reference internal" href="../_modules/xdress/doxygen.html#fix_xml_links"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.doxygen.fix_xml_links" title="Permalink to this definition">¶</a></dt>
 <dd><p>For some reason I can&#8217;t get doxygen to remove hyperlinks to members
 defined in the same file. This messes up the parsing. To overcome this
 I will just use a little regex magic to do it myself.</p>
@@ -235,7 +235,7 @@ I will just use a little regex magic to do it myself.</p>
 
 <dl class="function">
 <dt id="xdress.doxygen.func_docstr">
-<tt class="descclassname">xdress.doxygen.</tt><tt class="descname">func_docstr</tt><big>(</big><em>func_dict</em>, <em>is_method=False</em><big>)</big><a class="headerlink" href="#xdress.doxygen.func_docstr" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.doxygen.</tt><tt class="descname">func_docstr</tt><big>(</big><em>func_dict</em>, <em>is_method=False</em><big>)</big><a class="reference internal" href="../_modules/xdress/doxygen.html#func_docstr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.doxygen.func_docstr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate the docstring for a function given a dictionary of the
 parsed dOxygen xml.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -270,7 +270,7 @@ function.</p>
 
 <dl class="function">
 <dt id="xdress.doxygen.parse_class">
-<tt class="descclassname">xdress.doxygen.</tt><tt class="descname">parse_class</tt><big>(</big><em>class_dict</em><big>)</big><a class="headerlink" href="#xdress.doxygen.parse_class" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.doxygen.</tt><tt class="descname">parse_class</tt><big>(</big><em>class_dict</em><big>)</big><a class="reference internal" href="../_modules/xdress/doxygen.html#parse_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.doxygen.parse_class" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parses a single class and returns a dictionary of dictionaries
 containing all the data for that class.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -357,7 +357,7 @@ contains the function signature for the arguments.</p>
 
 <dl class="function">
 <dt id="xdress.doxygen.parse_function">
-<tt class="descclassname">xdress.doxygen.</tt><tt class="descname">parse_function</tt><big>(</big><em>func_dict</em><big>)</big><a class="headerlink" href="#xdress.doxygen.parse_function" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.doxygen.</tt><tt class="descname">parse_function</tt><big>(</big><em>func_dict</em><big>)</big><a class="reference internal" href="../_modules/xdress/doxygen.html#parse_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.doxygen.parse_function" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes a dictionary defining where the xml for the function is, does
 some function specific parsing and returns a new dictionary with
 the parsed xml.</p>
@@ -365,7 +365,7 @@ the parsed xml.</p>
 
 <dl class="function">
 <dt id="xdress.doxygen.parse_index_xml">
-<tt class="descclassname">xdress.doxygen.</tt><tt class="descname">parse_index_xml</tt><big>(</big><em>index_path</em><big>)</big><a class="headerlink" href="#xdress.doxygen.parse_index_xml" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.doxygen.</tt><tt class="descname">parse_index_xml</tt><big>(</big><em>index_path</em><big>)</big><a class="reference internal" href="../_modules/xdress/doxygen.html#parse_index_xml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.doxygen.parse_index_xml" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parses index.xml to get list of dictionaries for class and function
 names. Each dictionary will have as keys the object (function
 or class) names and the values will be dictionaries with (at least)
@@ -425,8 +425,8 @@ run control instance.</p>
   <p class="topless"><a href="descfilter.html"
                         title="previous chapter">Description Filter</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../previous/index.html"
-                        title="next chapter">Previous Versions</a></p>
+  <p class="topless"><a href="pep8names.html"
+                        title="next chapter">PEP-8 Names</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/libref/doxygen.txt"
@@ -464,7 +464,7 @@ run control instance.</p>
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="../previous/index.html" title="Previous Versions"
+          <a href="pep8names.html" title="PEP-8 Names"
              >next</a> &nbsp; &nbsp;</li>
         <li class="right" >
           <a href="descfilter.html" title="Description Filter"

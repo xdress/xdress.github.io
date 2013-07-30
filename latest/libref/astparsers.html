@@ -100,19 +100,19 @@ if(ga_enabled){
 <h2>AST Parsers API<a class="headerlink" href="#ast-parsers-api" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="xdress.astparsers.ParserPlugin">
-<em class="property">class </em><tt class="descclassname">xdress.astparsers.</tt><tt class="descname">ParserPlugin</tt><a class="headerlink" href="#xdress.astparsers.ParserPlugin" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">xdress.astparsers.</tt><tt class="descname">ParserPlugin</tt><a class="reference internal" href="../_modules/xdress/astparsers.html#ParserPlugin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.astparsers.ParserPlugin" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is a base plugin for tools that wish to wrap parsing.
 It should not be used directly.</p>
 <p>The __init__() method may take no arguments or keyword arguments.</p>
 <dl class="method">
 <dt id="xdress.astparsers.ParserPlugin.report_debug">
-<tt class="descname">report_debug</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.astparsers.ParserPlugin.report_debug" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">report_debug</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/astparsers.html#ParserPlugin.report_debug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.astparsers.ParserPlugin.report_debug" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remember to call super() on subclasses!</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.astparsers.ParserPlugin.setup">
-<tt class="descname">setup</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.astparsers.ParserPlugin.setup" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">setup</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/astparsers.html#ParserPlugin.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.astparsers.ParserPlugin.setup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remember to call super() on subclasses!</p>
 </dd></dl>
 
@@ -126,19 +126,19 @@ It should not be used directly.</p>
 
 <dl class="function">
 <dt id="xdress.astparsers.clearmemo">
-<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">clearmemo</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.astparsers.clearmemo" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">clearmemo</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xdress/astparsers.html#clearmemo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.astparsers.clearmemo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clears all function memoizations for autodescribers.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.astparsers.dumpast">
-<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">dumpast</tt><big>(</big><em>filename</em>, <em>parsers</em>, <em>sourcedir</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="headerlink" href="#xdress.astparsers.dumpast" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">dumpast</tt><big>(</big><em>filename</em>, <em>parsers</em>, <em>sourcedir</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="reference internal" href="../_modules/xdress/astparsers.html#dumpast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.astparsers.dumpast" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prints an abstract syntax tree to stdout.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.astparsers.gccxml_parse">
-<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">gccxml_parse</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.astparsers.gccxml_parse" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">gccxml_parse</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/astparsers.html#gccxml_parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.astparsers.gccxml_parse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use GCC-XML to parse a file. This function is automatically memoized.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -186,7 +186,7 @@ It should not be used directly.</p>
 
 <dl class="function">
 <dt id="xdress.astparsers.pick_parser">
-<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">pick_parser</tt><big>(</big><em>filename</em>, <em>parsers</em><big>)</big><a class="headerlink" href="#xdress.astparsers.pick_parser" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">pick_parser</tt><big>(</big><em>filename</em>, <em>parsers</em><big>)</big><a class="reference internal" href="../_modules/xdress/astparsers.html#pick_parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.astparsers.pick_parser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the parse to use for a file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -219,7 +219,7 @@ a dictionary, it specifies the order to use parser based on language, i.e.
 
 <dl class="function">
 <dt id="xdress.astparsers.pycparser_parse">
-<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">pycparser_parse</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.astparsers.pycparser_parse" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">pycparser_parse</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/astparsers.html#pycparser_parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.astparsers.pycparser_parse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use pycparser to parse a file.  This functions is automatically memoized.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

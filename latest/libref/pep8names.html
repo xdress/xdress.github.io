@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Previous Versions &mdash; xdress 0.3-dev documentation</title>
+    <title>PEP-8 Names &mdash; xdress 0.3-dev documentation</title>
     
     <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -30,8 +30,9 @@
     <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../_static/cloud.js"></script>
     <link rel="top" title="xdress 0.3-dev documentation" href="../index.html" />
-    <link rel="next" title="XDress 0.3 Release Notes" href="0.3_release_notes.html" />
-    <link rel="prev" title="Extra Types Plugin" href="../libref/extratypes.html" /> 
+    <link rel="up" title="Library Reference" href="index.html" />
+    <link rel="next" title="Utilities" href="utils.html" />
+    <link rel="prev" title="dOxygen Docstrings" href="doxygen.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
 if(ga_enabled){
@@ -64,13 +65,14 @@ if(ga_enabled){
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="0.3_release_notes.html" title="XDress 0.3 Release Notes"
+          <a href="utils.html" title="Utilities"
              accesskey="N">next</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="../libref/extratypes.html" title="Extra Types Plugin"
+          <a href="doxygen.html" title="dOxygen Docstrings"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
     <li><a href="../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
- 
+
+          <li><a href="index.html" accesskey="U">Library Reference</a> &raquo;</li> 
       </ul>
     </div>
     </div>
@@ -81,53 +83,56 @@ if(ga_enabled){
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="previous-versions">
-<span id="id1"></span><h1>Previous Versions<a class="headerlink" href="#previous-versions" title="Permalink to this headline">¶</a></h1>
-<p>The following are notes for and links to previously released versions of xdress:</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="0.3_release_notes.html">XDress 0.3 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="0.2_release_notes.html">XDress 0.2 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="0.1_release_notes.html">XDress 0.1 Release Notes</a></li>
-</ul>
-</div>
-<table border="1" class="docutils">
-<colgroup>
-<col width="12%" />
-<col width="17%" />
-<col width="24%" />
-<col width="24%" />
-<col width="24%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Version</th>
-<th class="head">Date</th>
-<th class="head">Documentation</th>
-<th class="head">Zip</th>
-<th class="head">Tar</th>
-</tr>
-</thead>
+  <div class="section" id="module-xdress.pep8names">
+<span id="pep-8-names"></span><span id="xdress-pep8names"></span><h1>PEP-8 Names<a class="headerlink" href="#module-xdress.pep8names" title="Permalink to this headline">¶</a></h1>
+<p>Plugin for xdress which converts target names to PEP8 compatible versions.</p>
+<p>This module is available as an xdress plugin by the name <tt class="docutils literal"><span class="pre">xdress.pep8names</span></tt>.
+It should probably come after <tt class="docutils literal"><span class="pre">xdress.autoall</span></tt> and after <tt class="docutils literal"><span class="pre">xdress.autodescribe</span></tt>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
 <tbody valign="top">
-<tr class="row-even"><td>0.3</td>
-<td>2013-08-XX</td>
-<td><a class="reference external" href="http://xdress.org/v0.3/">docs 0.3</a></td>
-<td><a class="reference external" href="https://github.com/xdress/xdress/zipball/0.2">zip 0.3</a></td>
-<td><a class="reference external" href="https://github.com/xdress/xdress/tarball/0.2">tar 0.3</a></td>
-</tr>
-<tr class="row-odd"><td>0.2</td>
-<td>2013-06-24</td>
-<td><a class="reference external" href="http://xdress.org/v0.2/">docs 0.2</a></td>
-<td><a class="reference external" href="https://github.com/xdress/xdress/zipball/0.2">zip 0.2</a></td>
-<td><a class="reference external" href="https://github.com/xdress/xdress/tarball/0.2">tar 0.2</a></td>
-</tr>
-<tr class="row-even"><td>0.1</td>
-<td>2013-04-02</td>
-<td><a class="reference external" href="http://xdress.org/v0.1/">docs 0.1</a></td>
-<td><a class="reference external" href="https://github.com/xdress/xdress/zipball/0.1">zip 0.1</a></td>
-<td><a class="reference external" href="https://github.com/xdress/xdress/tarball/0.1">tar 0.1</a></td>
+<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">Anthony Scopatz &lt;<a class="reference external" href="mailto:scopatz&#37;&#52;&#48;gmail&#46;com">scopatz<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;</td>
 </tr>
 </tbody>
 </table>
+<div class="section" id="pep-8-names-plugin-api">
+<h2>PEP-8 Names Plugin API<a class="headerlink" href="#pep-8-names-plugin-api" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="xdress.pep8names.XDressPlugin">
+<em class="property">class </em><tt class="descclassname">xdress.pep8names.</tt><tt class="descname">XDressPlugin</tt><a class="reference internal" href="../_modules/xdress/pep8names.html#XDressPlugin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.pep8names.XDressPlugin" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class provides PEP-8 naming functionality for xdress.</p>
+<p>The __init__() method may take no arguments or keyword arguments.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.pep8names.ensure_pep8name">
+<tt class="descclassname">xdress.pep8names.</tt><tt class="descname">ensure_pep8name</tt><big>(</big><em>name</em>, <em>kind</em><big>)</big><a class="reference internal" href="../_modules/xdress/pep8names.html#ensure_pep8name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.pep8names.ensure_pep8name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensures that an apiname is valid for its kind: &#8216;var&#8217;, &#8216;func&#8217;, or &#8216;class&#8217;.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.pep8names.pep8class">
+<tt class="descclassname">xdress.pep8names.</tt><tt class="descname">pep8class</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/xdress/pep8names.html#pep8class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.pep8names.pep8class" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a name, which may not be PEP-8 compliant for classes
+to a name that is compliant.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.pep8names.pep8func">
+<tt class="descclassname">xdress.pep8names.</tt><tt class="descname">pep8func</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/xdress/pep8names.html#pep8func"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.pep8names.pep8func" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a name, which may not be PEP-8 compliant for functions, 
+methods, or variables, to a name that is compliant.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.pep8names.pep8var">
+<tt class="descclassname">xdress.pep8names.</tt><tt class="descname">pep8var</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#xdress.pep8names.pep8var" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a name, which may not be PEP-8 compliant for functions, 
+methods, or variables, to a name that is compliant.</p>
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -139,15 +144,25 @@ if(ga_enabled){
         <p class="logo"><a href="../index.html">
           <img class="logo" src="../_static/HooverJoven.jpg" alt="Logo"/>
         </a></p>
+  <div class="sphinxlocaltoc">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">PEP-8 Names</a><ul>
+<li><a class="reference internal" href="#pep-8-names-plugin-api">PEP-8 Names Plugin API</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../libref/extratypes.html"
-                        title="previous chapter">Extra Types Plugin</a></p>
+  <p class="topless"><a href="doxygen.html"
+                        title="previous chapter">dOxygen Docstrings</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="0.3_release_notes.html"
-                        title="next chapter">XDress 0.3 Release Notes</a></p>
+  <p class="topless"><a href="utils.html"
+                        title="next chapter">Utilities</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../_sources/previous/index.txt"
+    <li><a href="../_sources/libref/pep8names.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -182,13 +197,14 @@ if(ga_enabled){
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="0.3_release_notes.html" title="XDress 0.3 Release Notes"
+          <a href="utils.html" title="Utilities"
              >next</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="../libref/extratypes.html" title="Extra Types Plugin"
+          <a href="doxygen.html" title="dOxygen Docstrings"
              >previous</a> &nbsp; &nbsp;</li>
     <li><a href="../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
- 
+
+          <li><a href="index.html" >Library Reference</a> &raquo;</li> 
       </ul>
     </div>
     </div>

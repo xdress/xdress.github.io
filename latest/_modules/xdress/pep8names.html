@@ -1,0 +1,259 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>xdress.pep8names &mdash; xdress 0.3-dev documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/numpy_friendly.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../../_static/cloud.js"></script>
+    <link rel="top" title="xdress 0.3-dev documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
+var ga_enabled = !$.cookie('disable-ga');
+if(ga_enabled){
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41934829-1']);
+  _gaq.push(['_setCookiePath', '/']);
+  _gaq.push(['_setDetectFlash', false]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+}
+</script>
+  </head>
+  <body>
+    <div class="relbar-top">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
+
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for xdress.pep8names</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;Plugin for xdress which converts target names to PEP8 compatible versions.</span>
+
+<span class="sd">This module is available as an xdress plugin by the name ``xdress.pep8names``.</span>
+<span class="sd">It should probably come after ``xdress.autoall`` and after ``xdress.autodescribe``.</span>
+
+<span class="sd">:author: Anthony Scopatz &lt;scopatz@gmail.com&gt;</span>
+
+<span class="sd">PEP-8 Names Plugin API</span>
+<span class="sd">======================</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">RunControl</span><span class="p">,</span> <span class="n">NotSpecified</span><span class="p">,</span> <span class="n">apiname</span><span class="p">,</span> <span class="n">ensure_apiname</span>
+<span class="kn">from</span> <span class="nn">.plugins</span> <span class="kn">import</span> <span class="n">Plugin</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+    <span class="nb">basestring</span> <span class="o">=</span> <span class="nb">str</span>
+
+<span class="n">upperfirst</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span> <span class="k">if</span> <span class="mi">0</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">else</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+<span class="n">HAS_UPPER_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&#39;([A-Z])&#39;</span><span class="p">)</span>
+<span class="n">HAS_UNDERSCORE_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&#39;(_)&#39;</span><span class="p">)</span>
+<span class="n">UPPER_DIGIT_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&#39;([A-Z0-9]+)&#39;</span><span class="p">)</span>
+<span class="n">WORD_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&#39;(\w+)&#39;</span><span class="p">)</span>
+<span class="n">UNDERSCORE_WORD_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&#39;(_\w+)&#39;</span><span class="p">)</span>
+<span class="n">UNDERSCORE_DIGIT_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&#39;(_\d+)&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_upperrepl</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+    <span class="n">g1low</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">g1start</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">g1start</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">g1low</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="n">g1low</span>
+
+<span class="k">def</span> <span class="nf">_underscorerepl</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+    <span class="n">g1</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">g1start</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">g1start</span><span class="p">:</span>
+        <span class="n">g1s</span> <span class="o">=</span> <span class="n">g1</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)</span>
+        <span class="n">g1snew</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">seennonempty</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">g1s</span><span class="p">:</span>
+            <span class="n">slen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">slen</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">seennonempty</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;_&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">seennonempty</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">g1snew</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">g1snew</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">upperfirst</span><span class="p">,</span> <span class="n">g1snew</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">upperfirst</span><span class="p">(</span><span class="n">g1</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">_usdgrepl</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+    <span class="n">g1</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">g1</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="pep8func"><a class="viewcode-back" href="../../libref/pep8names.html#xdress.pep8names.pep8func">[docs]</a><span class="k">def</span> <span class="nf">pep8func</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Converts a name, which may not be PEP-8 compliant for functions, </span>
+<span class="sd">    methods, or variables, to a name that is compliant.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">HAS_UPPER_RE</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">UPPER_DIGIT_RE</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">_upperrepl</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">UNDERSCORE_DIGIT_RE</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">UNDERSCORE_DIGIT_RE</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">_usdgrepl</span><span class="p">,</span> <span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="k">return</span> <span class="n">name</span>
+</div>
+<span class="n">pep8var</span> <span class="o">=</span> <span class="n">pep8func</span>
+
+<div class="viewcode-block" id="pep8class"><a class="viewcode-back" href="../../libref/pep8names.html#xdress.pep8names.pep8class">[docs]</a><span class="k">def</span> <span class="nf">pep8class</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Converts a name, which may not be PEP-8 compliant for classes</span>
+<span class="sd">    to a name that is compliant.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">upperfirst</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">HAS_UNDERSCORE_RE</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="n">UNDERSCORE_WORD_RE</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">_underscorerepl</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">new</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">):</span>
+            <span class="n">new</span> <span class="o">=</span> <span class="n">new</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">new</span>
+    <span class="k">return</span> <span class="n">name</span>
+</div>
+<div class="viewcode-block" id="ensure_pep8name"><a class="viewcode-back" href="../../libref/pep8names.html#xdress.pep8names.ensure_pep8name">[docs]</a><span class="k">def</span> <span class="nf">ensure_pep8name</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">kind</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Ensures that an apiname is valid for its kind: &#39;var&#39;, &#39;func&#39;, or &#39;class&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">ensure_apiname</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">tarname</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">tarname</span>
+    <span class="n">old</span> <span class="o">=</span> <span class="n">tarname</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tarname</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">)</span> <span class="k">else</span> <span class="n">tarname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s">&#39;class&#39;</span><span class="p">:</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="n">pep8class</span><span class="p">(</span><span class="n">old</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="s">&#39;func&#39;</span><span class="p">:</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="n">pep8func</span><span class="p">(</span><span class="n">old</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="s">&#39;var&#39;</span><span class="p">:</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="n">pep8var</span><span class="p">(</span><span class="n">old</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;kind {0!r} not recognized&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kind</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">old</span> <span class="o">!=</span> <span class="n">new</span><span class="p">:</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="n">new</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tarname</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">)</span> <span class="k">else</span> <span class="p">(</span><span class="n">new</span><span class="p">,)</span> <span class="o">+</span> <span class="n">tarname</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span><span class="n">tarname</span><span class="o">=</span><span class="n">new</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">name</span>
+</div>
+<div class="viewcode-block" id="XDressPlugin"><a class="viewcode-back" href="../../libref/pep8names.html#xdress.pep8names.XDressPlugin">[docs]</a><span class="k">class</span> <span class="nc">XDressPlugin</span><span class="p">(</span><span class="n">Plugin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This class provides PEP-8 naming functionality for xdress.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">variables</span><span class="p">):</span>
+            <span class="n">rc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ensure_pep8name</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="s">&#39;var&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fnc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">functions</span><span class="p">):</span>
+            <span class="n">rc</span><span class="o">.</span><span class="n">functions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ensure_pep8name</span><span class="p">(</span><span class="n">fnc</span><span class="p">,</span> <span class="s">&#39;func&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">cls</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">classes</span><span class="p">):</span>
+            <span class="n">rc</span><span class="o">.</span><span class="n">classes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ensure_pep8name</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="s">&#39;class&#39;</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+        <p class="logo"><a href="../../index.html">
+          <img class="logo" src="../../_static/HooverJoven.jpg" alt="Logo"/>
+        </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
+
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, Anthony Scopatz.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div><script type="text/javascript">
+    if(ga_enabled){
+        document.write("<div class=\"footer\">This page uses <a href=\"http://analytics.google.com\">Google Analytics</a> to collect statistics. ");
+        document.write("Click <button title=\"set cookie to disable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', 'true', {expires: 3650, path: '/'}); window.location.reload(); return false; \">here</button> to disable analytics for this site.");
+        document.write("</div>");
+    }else{
+        document.write("<div class=\"footer\">Google Analytics has been disabled. ");
+        document.write("Click <button title=\"set cookie to re-enable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', null, {path: '/'}); window.location.reload(); return false; \">here</button> to re-enable analytics for this site.");
+    };
+</script>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>
