@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>xdress.stlwrap &mdash; xdress 0.3-dev documentation</title>
+    <title>xdress.stlwrap &mdash; xdress 0.3-rc1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.3-dev',
+        VERSION:     '0.3-rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.3-dev documentation" href="../../index.html" />
+    <link rel="top" title="xdress 0.3-rc1 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
@@ -62,7 +62,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.3-rc1 documentation</a> &raquo;</li>
 
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
@@ -1228,9 +1228,17 @@ if(ga_enabled){
         <span class="n">make_stlcontainers</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="p">)</span>
 
+    <span class="n">rcdocs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&quot;stlcontainers&quot;</span><span class="p">:</span> <span class="s">&quot;List of C++ standard library containers to wrap.&quot;</span><span class="p">,</span>
+        <span class="s">&quot;stlcontainers_module&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s">&quot;Module name for C++ standard library &quot;</span>
+                                 <span class="s">&quot;container wrappers.&quot;</span><span class="p">),</span>
+        <span class="s">&quot;make_stlcontainers&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s">&quot;Flag for enabling / disabling creating the &quot;</span>
+                               <span class="s">&quot;C++ standard library container wrappers.&quot;</span><span class="p">),</span>
+        <span class="p">}</span>
+
     <span class="k">def</span> <span class="nf">update_argparser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
         <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--stlcontainers-module&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span> 
-                        <span class="n">dest</span><span class="o">=</span><span class="s">&#39;stlcontainers_module&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;stlcontainers module name&quot;</span><span class="p">)</span>
+                <span class="n">dest</span><span class="o">=</span><span class="s">&#39;stlcontainers_module&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rcdocs</span><span class="p">[</span><span class="s">&quot;stlcontainers_module&quot;</span><span class="p">])</span>
         <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--make-stlcontainers&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
                     <span class="n">dest</span><span class="o">=</span><span class="s">&#39;make_stlcontainers&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;make C++ STL container wrappers&quot;</span><span class="p">)</span>
         <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--no-make-stlcontainers&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_false&#39;</span><span class="p">,</span>
@@ -1310,7 +1318,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.3-rc1 documentation</a> &raquo;</li>
 
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>

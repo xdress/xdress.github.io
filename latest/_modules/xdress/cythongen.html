@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>xdress.cythongen &mdash; xdress 0.3-dev documentation</title>
+    <title>xdress.cythongen &mdash; xdress 0.3-rc1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.3-dev',
+        VERSION:     '0.3-rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.3-dev documentation" href="../../index.html" />
+    <link rel="top" title="xdress 0.3-rc1 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
@@ -62,7 +62,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.3-rc1 documentation</a> &raquo;</li>
 
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
@@ -83,8 +83,8 @@ if(ga_enabled){
 <span class="sd">easy to understand -- given class descriptions they generate strings of Cython</span>
 <span class="sd">code -- their implementations do a lot of heavy lifting.</span>
 
-<span class="sd">This module is available as an xdress plugin by the name ``xdress.cythongen``.</span>
-
+<span class="sd">This module is available as an xdress plugin by the name ``xdress.cythongen``. </span>
+<span class="sd">Note that while the module does not rely on the autodescriber the plugin does.</span>
 
 <span class="sd">:author: Anthony Scopatz &lt;scopatz@gmail.com&gt;</span>
 
@@ -435,8 +435,11 @@ if(ga_enabled){
     <span class="k">else</span><span class="p">:</span>
         <span class="n">d</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">cython_classname</span><span class="p">(</span><span class="n">name</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">d</span><span class="p">[</span><span class="s">&#39;alias&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="n">_format_alias</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="n">ts</span><span class="p">)</span>
-    <span class="n">construct_kinds</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;struct&#39;</span><span class="p">:</span> <span class="s">&#39;struct&#39;</span><span class="p">,</span> <span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;cppclass&#39;</span><span class="p">}</span>
-    <span class="n">d</span><span class="p">[</span><span class="s">&#39;construct_kind&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">construct_kinds</span><span class="p">[</span><span class="n">desc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;construct&#39;</span><span class="p">,</span> <span class="s">&#39;class&#39;</span><span class="p">)]</span>
+    <span class="c">#construct_kinds = {&#39;struct&#39;: &#39;struct&#39;, &#39;class&#39;: &#39;cppclass&#39;}</span>
+    <span class="c">#d[&#39;construct_kind&#39;] = construct_kinds[desc.get(&#39;construct&#39;, &#39;class&#39;)]</span>
+    <span class="n">lang</span> <span class="o">=</span> <span class="n">guess_language</span><span class="p">(</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;source_filename&#39;</span><span class="p">])</span>
+    <span class="n">construct_kinds</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;c&#39;</span><span class="p">:</span> <span class="s">&#39;struct&#39;</span><span class="p">,</span> <span class="s">&#39;c++&#39;</span><span class="p">:</span> <span class="s">&#39;cppclass&#39;</span><span class="p">}</span>
+    <span class="n">d</span><span class="p">[</span><span class="s">&#39;construct_kind&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">construct_kinds</span><span class="p">[</span><span class="n">lang</span><span class="p">]</span>
     <span class="n">inc</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="s">&#39;c&#39;</span><span class="p">])</span>
 
     <span class="n">cimport_tups</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
@@ -1057,10 +1060,11 @@ if(ga_enabled){
     <span class="k">if</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;construct&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;class&#39;</span><span class="p">:</span>
         <span class="n">fcall</span> <span class="o">=</span> <span class="s">&#39;self._inst = new {0}()&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;construct&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;struct&#39;</span><span class="p">:</span>
-        <span class="n">fcall</span> <span class="o">=</span> <span class="s">&#39;self._inst = malloc(sizeof({0}))&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span>
+        <span class="n">fcall</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;self._inst = malloc(sizeof({0}))</span><span class="se">\n</span><span class="s">&#39;</span>
+                 <span class="s">&#39;(&lt;{0} *&gt; self._inst)[0] = {0}()&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;construct must be either &quot;class&quot; or &quot;struct&quot;.&#39;</span><span class="p">)</span>
-    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">indent</span><span class="p">(</span><span class="n">fcall</span><span class="p">))</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">indent</span><span class="p">(</span><span class="n">fcall</span><span class="p">,</span> <span class="n">join</span><span class="o">=</span><span class="bp">False</span><span class="p">))</span>
     <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">:</span>
         <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">indent</span><span class="p">(</span><span class="s">&quot;if {0} is not None:&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">a</span><span class="p">)))</span>
         <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">indent</span><span class="p">(</span><span class="s">&quot;self.{0} = {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="mi">8</span><span class="p">))</span>
@@ -1068,7 +1072,7 @@ if(ga_enabled){
     <span class="k">return</span> <span class="n">lines</span>
 
 <span class="k">def</span> <span class="nf">_gen_constructor</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">name_mangled</span><span class="p">,</span> <span class="n">classname</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                     <span class="n">srcpxd_filename</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">inst_name</span><span class="o">=</span><span class="s">&quot;self._inst&quot;</span><span class="p">):</span>
+                     <span class="n">srcpxd_filename</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">inst_name</span><span class="o">=</span><span class="s">&quot;self._inst&quot;</span><span class="p">,</span> <span class="n">construct</span><span class="o">=</span><span class="s">&quot;class&quot;</span><span class="p">):</span>
     <span class="n">argfill</span> <span class="o">=</span> <span class="s">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;self&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span> <span class="k">if</span> <span class="mi">2</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)]</span> <span class="o">+</span> \
                         <span class="p">[</span><span class="s">&quot;{0}={1}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span> <span class="k">if</span> <span class="mi">3</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)])</span>
     <span class="n">lines</span>  <span class="o">=</span> <span class="p">[</span><span class="s">&#39;def {0}({1}):&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name_mangled</span><span class="p">,</span> <span class="n">argfill</span><span class="p">)]</span>
@@ -1086,7 +1090,13 @@ if(ga_enabled){
     <span class="n">argvals</span> <span class="o">=</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">argrtns</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span><span class="p">])</span>
     <span class="n">classname</span> <span class="o">=</span> <span class="n">classname</span> <span class="k">if</span> <span class="n">srcpxd_filename</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> \
                     <span class="s">&quot;{0}.{1}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">srcpxd_filename</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">classname</span><span class="p">)</span>
-    <span class="n">fcall</span> <span class="o">=</span> <span class="s">&#39;self._inst = new {0}({1})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">classname</span><span class="p">,</span> <span class="n">argvals</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">construct</span> <span class="o">==</span> <span class="s">&#39;class&#39;</span><span class="p">:</span>
+        <span class="n">fcall</span> <span class="o">=</span> <span class="s">&#39;self._inst = new {0}({1})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">classname</span><span class="p">,</span> <span class="n">argvals</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">construct</span> <span class="o">==</span> <span class="s">&#39;struct&#39;</span><span class="p">:</span>
+        <span class="n">fcall</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;self._inst = malloc(sizeof({0}))</span><span class="se">\n</span><span class="s">&#39;</span>
+                 <span class="s">&#39;(&lt;{0} *&gt; self._inst)[0] = {0}({1})&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">classname</span><span class="p">,</span> <span class="n">argvals</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;construct must be either &quot;class&quot; or &quot;struct&quot;.&#39;</span><span class="p">)</span>
     <span class="n">func_call</span> <span class="o">=</span> <span class="n">indent</span><span class="p">(</span><span class="n">fcall</span><span class="p">,</span> <span class="n">join</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
     <span class="n">lines</span> <span class="o">+=</span> <span class="n">decls</span>
     <span class="n">lines</span> <span class="o">+=</span> <span class="n">argbodies</span>
@@ -1342,10 +1352,12 @@ if(ga_enabled){
                 <span class="n">mangled_mnames</span><span class="p">[</span><span class="n">mkey</span><span class="p">]</span> <span class="o">=</span> <span class="n">mname_mangled</span>
             <span class="n">mdoc</span> <span class="o">=</span> <span class="n">desc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;docstrings&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;methods&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">mname</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
             <span class="n">mdoc</span> <span class="o">=</span> <span class="n">_doc_add_sig</span><span class="p">(</span><span class="n">mdoc</span><span class="p">,</span> <span class="n">mcyname</span><span class="p">,</span> <span class="n">margs</span><span class="p">)</span>
-            <span class="n">clines</span> <span class="o">+=</span> <span class="n">_gen_constructor</span><span class="p">(</span><span class="n">mcyname</span><span class="p">,</span> <span class="n">mname_mangled</span><span class="p">,</span>
-                                       <span class="n">desc</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">],</span> <span class="n">margs</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="n">mdoc</span><span class="p">,</span>
-                                       <span class="n">srcpxd_filename</span><span class="o">=</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;srcpxd_filename&#39;</span><span class="p">],</span>
-                                       <span class="n">inst_name</span><span class="o">=</span><span class="n">minst_name</span><span class="p">)</span>
+            <span class="n">construct</span> <span class="o">=</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;construct&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">construct</span> <span class="o">==</span> <span class="s">&#39;struct&#39;</span><span class="p">:</span>
+                <span class="n">cimport_tups</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="s">&#39;libc.stdlib&#39;</span><span class="p">,</span> <span class="s">&#39;malloc&#39;</span><span class="p">))</span>
+            <span class="n">clines</span> <span class="o">+=</span> <span class="n">_gen_constructor</span><span class="p">(</span><span class="n">mcyname</span><span class="p">,</span> <span class="n">mname_mangled</span><span class="p">,</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">],</span> <span class="n">margs</span><span class="p">,</span> 
+                        <span class="n">ts</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="n">mdoc</span><span class="p">,</span> <span class="n">srcpxd_filename</span><span class="o">=</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;srcpxd_filename&#39;</span><span class="p">],</span>
+                        <span class="n">inst_name</span><span class="o">=</span><span class="n">minst_name</span><span class="p">,</span> <span class="n">construct</span><span class="o">=</span><span class="n">construct</span><span class="p">)</span>
             <span class="k">if</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">methcounts</span><span class="p">[</span><span class="n">mname</span><span class="p">]</span> <span class="ow">and</span> <span class="n">currcounts</span><span class="p">[</span><span class="n">mname</span><span class="p">]</span> <span class="o">==</span> <span class="n">methcounts</span><span class="p">[</span><span class="n">mname</span><span class="p">]:</span>
                 <span class="c"># write dispatcher</span>
                 <span class="n">nm</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">mangled_mnames</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> \
@@ -1525,9 +1537,13 @@ if(ga_enabled){
 
     <span class="n">defaultrc</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;max_callbacks&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">}</span>
 
+    <span class="n">rcdocs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&quot;max_callbacks&quot;</span><span class="p">:</span> <span class="s">&quot;The maximum number of callbacks for function pointers&quot;</span><span class="p">,</span> 
+        <span class="p">}</span>
+
     <span class="k">def</span> <span class="nf">update_argparser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
         <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--max-callbacks&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;max_callbacks&quot;</span><span class="p">,</span>
-                    <span class="n">help</span><span class="o">=</span><span class="s">&quot;the maximum number of callbacks for function pointers&quot;</span><span class="p">)</span>
+                    <span class="n">help</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rcdocs</span><span class="p">[</span><span class="s">&quot;max_callbacks&quot;</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">rc</span><span class="o">.</span><span class="n">max_callbacks</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -1606,6 +1622,8 @@ if(ga_enabled){
         <span class="k">return</span> <span class="s">&quot;except &quot;</span> <span class="o">+</span> <span class="n">exceptions</span>
     <span class="n">lang</span> <span class="o">=</span> <span class="n">guess_language</span><span class="p">(</span><span class="n">srcfile</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">lang</span> <span class="o">==</span> <span class="s">&#39;c&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">rtntype</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&quot;except -1&quot;</span>  <span class="c"># helpful when we accidentally mis-guessed C for C++</span>
         <span class="n">rtntype</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">canon</span><span class="p">(</span><span class="n">rtntype</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">rtntype</span> <span class="ow">in</span> <span class="n">_exc_c_base</span><span class="p">:</span>
             <span class="k">return</span> <span class="s">&quot;except -1&quot;</span>
@@ -1697,7 +1715,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.3-rc1 documentation</a> &raquo;</li>
 
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>

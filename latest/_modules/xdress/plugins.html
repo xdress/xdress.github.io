@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>xdress.plugins &mdash; xdress 0.3-dev documentation</title>
+    <title>xdress.plugins &mdash; xdress 0.3-rc1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.3-dev',
+        VERSION:     '0.3-rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.3-dev documentation" href="../../index.html" />
+    <link rel="top" title="xdress 0.3-rc1 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
@@ -62,7 +62,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.3-rc1 documentation</a> &raquo;</li>
 
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
@@ -131,6 +131,20 @@ if(ga_enabled){
 <span class="sd">    ``RunControl`` class for more details.  Generally it is not advised for two</span>
 <span class="sd">    plugins to share run control parameter names unless you *really* know what </span>
 <span class="sd">    you are doing.</span>
+<span class="sd">:rcupdaters: This may be a dict, another mapping, a function which returns a mapping.</span>
+<span class="sd">    The keys are the string names of the run control parameters.  The values</span>
+<span class="sd">    are callables which indicate how to update or merge two rc parameters with </span>
+<span class="sd">    this key. The callable should take two instances and return a copy that </span>
+<span class="sd">    represents the merger, e.g. ``lambda old, new: old + new``.  One useful example </span>
+<span class="sd">    is for paths.  Normally you want new paths to prepend old ones::</span>
+
+<span class="sd">        rcupdaters = {&#39;includes&#39;: lambda old, new: list(new) + list(old)}</span>
+
+<span class="sd">    If a callable is not supplied for an rc parameter then the the default </span>
+<span class="sd">    behaviour is to simply override the old value with the new one.</span>
+<span class="sd">:rcdocs: This may be a dict, another mapping, a function which returns a mapping.</span>
+<span class="sd">    The keys are the string names of the run control parameters.  The values</span>
+<span class="sd">    are docstrings for the rc parameters.</span>
 <span class="sd">:update_argparser(parser):  This is method that takes an argparse.ArgumentParser() </span>
 <span class="sd">    instance and modifies it in-place.  This allows for run control parameters to be </span>
 <span class="sd">    exposed as command line arguments and options.  Default arguments in </span>
@@ -174,6 +188,11 @@ if(ga_enabled){
 <span class="sd">            &#39;answer&#39;: &#39;Joan of Arc&#39;,</span>
 <span class="sd">            }</span>
 
+<span class="sd">        rcupdaters = {&#39;choices&#39;: lambda old, new: list(new) + list(old)}        </span>
+
+<span class="sd">        rcdocs = {&#39;choices&#39;: &quot;Possible answers.&quot;,</span>
+<span class="sd">                  &#39;answer&#39;: &quot;The correct answer&quot;}</span>
+
 <span class="sd">        def update_argparser(self, parser):</span>
 <span class="sd">            # Note, no &#39;default=&#39; keyword arguments are given</span>
 <span class="sd">            parser.add_argument(&#39;-c&#39;, &#39;--choices&#39;, action=&#39;store&#39;, dest=&#39;choices&#39;,</span>
@@ -205,6 +224,7 @@ if(ga_enabled){
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">importlib</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">textwrap</span>
 
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">RunControl</span><span class="p">,</span> <span class="n">NotSpecified</span><span class="p">,</span> <span class="n">nyansep</span>
 
@@ -238,6 +258,12 @@ if(ga_enabled){
 
 <span class="sd">    If a callable is not supplied for an rc parameter then the the default </span>
 <span class="sd">    behaviour is to simply override the old value with the new one.  </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">rcdocs</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="sd">&quot;&quot;&quot;This may be a dict, another mapping, a function which returns a mapping.</span>
+<span class="sd">    The keys are the string names of the run control parameters.  The values</span>
+<span class="sd">    are docstrings for the rc parameters.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -325,28 +351,33 @@ if(ga_enabled){
 <span class="sd">       </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">modnames</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">modnames</span><span class="p">,</span> <span class="n">loaddeps</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        modnames : list of str</span>
 <span class="sd">            The module names where the plugins live.  Plugins must have the name</span>
 <span class="sd">            &#39;XDressPlugin&#39; in the these modules.</span>
+<span class="sd">        loaddeps: bool, optional</span>
+<span class="sd">            Flag for automatically loading dependencies, should only be False in </span>
+<span class="sd">            a limited set of circumstances.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">plugins</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">modnames</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_load</span><span class="p">(</span><span class="n">modnames</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_load</span><span class="p">(</span><span class="n">modnames</span><span class="p">,</span> <span class="n">loaddeps</span><span class="o">=</span><span class="n">loaddeps</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parser</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rc</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rcdocs</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="k">def</span> <span class="nf">_load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">modnames</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">modnames</span><span class="p">,</span> <span class="n">loaddeps</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">modname</span> <span class="ow">in</span> <span class="n">modnames</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">modname</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modnames</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="n">mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">modname</span><span class="p">)</span>
             <span class="n">plugin</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">XDressPlugin</span><span class="p">()</span>
             <span class="n">req</span> <span class="o">=</span> <span class="n">plugin</span><span class="o">.</span><span class="n">requires</span><span class="p">()</span> <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">plugin</span><span class="o">.</span><span class="n">requires</span><span class="p">)</span> <span class="k">else</span> <span class="n">plugin</span><span class="o">.</span><span class="n">requires</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_load</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+            <span class="n">req</span> <span class="o">=</span> <span class="n">req</span> <span class="k">if</span> <span class="n">loaddeps</span> <span class="k">else</span> <span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_load</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">loaddeps</span><span class="o">=</span><span class="n">loaddeps</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">modnames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">modname</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plugin</span><span class="p">)</span>
 
@@ -369,6 +400,7 @@ if(ga_enabled){
 <span class="sd">        full default RunControl() instance.  This has also merged all of </span>
 <span class="sd">        the rc updaters in the process.&quot;&quot;&quot;</span>
         <span class="n">rc</span> <span class="o">=</span> <span class="n">RunControl</span><span class="p">()</span>
+        <span class="n">rcdocs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rcdocs</span>
         <span class="k">for</span> <span class="n">plugin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plugins</span><span class="p">:</span>
             <span class="n">drc</span> <span class="o">=</span> <span class="n">plugin</span><span class="o">.</span><span class="n">defaultrc</span>
             <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">drc</span><span class="p">):</span>
@@ -378,6 +410,10 @@ if(ga_enabled){
             <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">uprc</span><span class="p">):</span>
                 <span class="n">uprc</span> <span class="o">=</span> <span class="n">uprc</span><span class="p">()</span>
             <span class="n">rc</span><span class="o">.</span><span class="n">_updaters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">uprc</span><span class="p">)</span>
+            <span class="n">docs</span> <span class="o">=</span> <span class="n">plugin</span><span class="o">.</span><span class="n">rcdocs</span>
+            <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">docs</span><span class="p">):</span>
+                <span class="n">docs</span> <span class="o">=</span> <span class="n">docs</span><span class="p">()</span>
+            <span class="n">rcdocs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">docs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rc</span> <span class="o">=</span> <span class="n">rc</span>
         <span class="k">return</span> <span class="n">rc</span>
 </div>
@@ -427,7 +463,32 @@ if(ga_enabled){
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
             <span class="k">raise</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span></div></div>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+</div></div>
+<div class="viewcode-block" id="summarize_rcdocs"><a class="viewcode-back" href="../../libref/plugins.html#xdress.plugins.summarize_rcdocs">[docs]</a><span class="k">def</span> <span class="nf">summarize_rcdocs</span><span class="p">(</span><span class="n">modnames</span><span class="p">,</span> <span class="n">headersep</span><span class="o">=</span><span class="s">&quot;=&quot;</span><span class="p">,</span> <span class="n">maxdflt</span><span class="o">=</span><span class="mi">2000</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;For a list of plugin module names, return a rST string that </span>
+<span class="sd">    summarizes the docstrings for all run control parameters.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nods</span> <span class="o">=</span> <span class="s">&quot;No docstring provided.&quot;</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="s">&quot;:{0!s}: {1!s}, *default:* {2}.&quot;</span>
+    <span class="n">docstrs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">tw</span> <span class="o">=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">TextWrapper</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">subsequent_indent</span><span class="o">=</span><span class="s">&quot; &quot;</span><span class="o">*</span><span class="mi">4</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">modname</span> <span class="ow">in</span> <span class="n">modnames</span><span class="p">:</span>
+        <span class="n">moddoc</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">modname</span><span class="p">)</span>
+        <span class="n">moddoc</span> <span class="o">+=</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">+</span> <span class="n">headersep</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">moddoc</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">plugins</span> <span class="o">=</span> <span class="n">Plugins</span><span class="p">([</span><span class="n">modname</span><span class="p">],</span> <span class="n">loaddeps</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>  <span class="c"># get a lone plugin</span>
+        <span class="n">plugins</span><span class="o">.</span><span class="n">merge_rcs</span><span class="p">()</span>
+        <span class="n">rc</span> <span class="o">=</span> <span class="n">plugins</span><span class="o">.</span><span class="n">rc</span>
+        <span class="n">rcdocs</span> <span class="o">=</span> <span class="n">plugins</span><span class="o">.</span><span class="n">rcdocs</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">dflt</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+            <span class="n">rdflt</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">dflt</span><span class="p">)</span>
+            <span class="n">rdflt</span> <span class="o">=</span> <span class="n">rdflt</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rdflt</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">maxdflt</span> <span class="k">else</span> <span class="s">&quot;{0}.{1} instance&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">dflt</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__module__</span><span class="p">,</span> <span class="n">dflt</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
+            <span class="n">rcdoc</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">rcdocs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">nods</span><span class="p">),</span> <span class="n">rdflt</span><span class="p">)</span>
+            <span class="n">moddoc</span> <span class="o">+=</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tw</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span><span class="n">rcdoc</span><span class="p">))</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">docstrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">moddoc</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s">&quot;</span><span class="se">\n\n\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">docstrs</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
@@ -469,7 +530,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.3-rc1 documentation</a> &raquo;</li>
 
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>

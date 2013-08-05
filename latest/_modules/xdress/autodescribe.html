@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>xdress.autodescribe &mdash; xdress 0.3-dev documentation</title>
+    <title>xdress.autodescribe &mdash; xdress 0.3-rc1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.3-dev',
+        VERSION:     '0.3-rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.3-dev documentation" href="../../index.html" />
+    <link rel="top" title="xdress 0.3-rc1 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
@@ -62,7 +62,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.3-rc1 documentation</a> &raquo;</li>
 
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
@@ -531,7 +531,7 @@ if(ga_enabled){
         <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">FORBIDDEN_NAMES</span><span class="p">:</span>
             <span class="n">warn_forbidden_name</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
             <span class="k">return</span>
-        <span class="n">demangled</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;demangled&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">demangled</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;demangled&#39;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
         <span class="n">demangled</span> <span class="o">=</span> <span class="n">demangled</span> <span class="k">if</span> <span class="n">name</span> <span class="o">+</span> <span class="s">&#39;&lt;&#39;</span> <span class="ow">in</span> <span class="n">demangled</span> \
                                  <span class="ow">and</span> <span class="s">&#39;&gt;&#39;</span> <span class="ow">in</span> <span class="n">demangled</span> <span class="k">else</span> <span class="bp">None</span>
         <span class="k">if</span> <span class="n">demangled</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -840,7 +840,8 @@ if(ga_enabled){
                 <span class="n">ois</span> <span class="o">=</span> <span class="s">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&quot;{0!r} ({1!r})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filemap</span><span class="p">[</span><span class="n">v</span><span class="p">],</span> <span class="n">v</span><span class="p">)</span> \
                                                  <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onlyin</span><span class="p">)])</span>
                 <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filemap</span><span class="p">[</span><span class="n">fid</span><span class="p">],</span> <span class="n">fid</span><span class="p">,</span> <span class="n">ois</span><span class="p">)</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>            
+            <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;construct&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">tag</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">visit_class</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
         <span class="n">members</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;members&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
         <span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot;.//*[@id=&#39;{0}&#39;]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">m</span><span class="p">))</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">members</span><span class="p">]</span>
@@ -1925,6 +1926,13 @@ if(ga_enabled){
         <span class="n">rc</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">return</span> <span class="n">rc</span>
 </div>
+<div class="viewcode-block" id="XDressPlugin.rcdocs"><a class="viewcode-back" href="../../libref/autodescribe.html#xdress.autodescribe.XDressPlugin.rcdocs">[docs]</a>    <span class="k">def</span> <span class="nf">rcdocs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;This plugin adds the env dictionary to the rc.&quot;&quot;&quot;</span>
+        <span class="n">docs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">docs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">super</span><span class="p">(</span><span class="n">XDressPlugin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">rcdocs</span><span class="p">)</span>
+        <span class="n">docs</span><span class="p">[</span><span class="s">&#39;env&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;The target environment computed by the autodescriber.&quot;</span>
+        <span class="k">return</span> <span class="n">docs</span>
+</div>
 <div class="viewcode-block" id="XDressPlugin.setup"><a class="viewcode-back" href="../../libref/autodescribe.html#xdress.autodescribe.XDressPlugin.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Expands variables, functions, and classes in the rc based on</span>
 <span class="sd">        copying src filenames to tar filename.&quot;&quot;&quot;</span>
@@ -2157,7 +2165,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.3-rc1 documentation</a> &raquo;</li>
 
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>

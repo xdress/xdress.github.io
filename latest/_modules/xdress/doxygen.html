@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>xdress.doxygen &mdash; xdress 0.3-dev documentation</title>
+    <title>xdress.doxygen &mdash; xdress 0.3-rc1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.3-dev',
+        VERSION:     '0.3-rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.3-dev documentation" href="../../index.html" />
+    <link rel="top" title="xdress 0.3-rc1 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
@@ -62,7 +62,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.3-rc1 documentation</a> &raquo;</li>
 
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
@@ -104,9 +104,9 @@ if(ga_enabled){
 <span class="sd">The usage of this plugin is very straightforward and comes in two steps:</span>
 
 <span class="sd">1. Add ``xdress.doxygen`` to the list of plugins in your xdressrc.py</span>
-<span class="sd">2. Define one or both of the (optional) rc variables given below. If</span>
-<span class="sd">   These are not defined in xdressrc, the plugin will provide some sane</span>
-<span class="sd">   initial values.</span>
+<span class="sd">2. Define zero, or more of the (optional) rc variables given below.</span>
+<span class="sd">   If These are not defined in xdressrc, the plugin will provide some</span>
+<span class="sd">   sane initial values.</span>
 
 <span class="sd">   a. ``doxygen_config``: A python dictionary mapping doxygen keys to</span>
 <span class="sd">      their desired values. See</span>
@@ -119,6 +119,10 @@ if(ga_enabled){
 <span class="sd">      variable. The path is assumed to be relative to the directory</span>
 <span class="sd">      where ``xdress`` is run. The default value for this variable is</span>
 <span class="sd">      ``&#39;doxyfile&#39;``.</span>
+<span class="sd">   c. ``dox_template_ids``: This is list of strings that contain the</span>
+<span class="sd">      template identifiers used in the C++ source. This is necessary</span>
+<span class="sd">      for docstrings to be inserted for templated functions or classes.</span>
+<span class="sd">      The default value is ``[&#39;T&#39;, &#39;S&#39;]``.</span>
 
 <span class="sd">.. note::</span>
 
@@ -161,9 +165,12 @@ if(ga_enabled){
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
 <span class="kn">from</span> <span class="nn">textwrap</span> <span class="kn">import</span> <span class="n">TextWrapper</span>
 <span class="kn">from</span> <span class="nn">.plugins</span> <span class="kn">import</span> <span class="n">Plugin</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">newoverwrite</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">newoverwrite</span><span class="p">,</span> <span class="n">parse_template</span>
+<span class="kn">from</span> <span class="nn">.typesystem</span> <span class="kn">import</span> <span class="n">TypeMatcher</span><span class="p">,</span> <span class="n">MatchAny</span>
 
 <span class="c"># XML conditional imports</span>
 <span class="k">try</span><span class="p">:</span>
@@ -186,6 +193,12 @@ if(ga_enabled){
                   <span class="kn">import</span> <span class="nn">elementtree.ElementTree</span> <span class="kn">as</span> <span class="nn">etree</span>
                 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
                     <span class="k">pass</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+    <span class="nb">basestring</span> <span class="o">=</span> <span class="nb">str</span>
+
+<span class="n">_LITERAL_INTS</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&#39;^\d+$&#39;</span><span class="p">)</span>
+
 <span class="c">##############################################################################</span>
 <span class="c">##</span>
 <span class="c">## -- Tools used in parsing</span>
@@ -359,6 +372,7 @@ if(ga_enabled){
             <span class="k">if</span> <span class="s">&#39;desc&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">[</span><span class="n">arg</span><span class="p">]:</span>
                 <span class="n">arg_str</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="n">arg</span><span class="p">][</span><span class="s">&#39;desc&#39;</span><span class="p">])</span>
             <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg_str</span><span class="p">)</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
 
     <span class="n">returning</span> <span class="o">=</span> <span class="n">func_dict</span><span class="p">[</span><span class="s">&#39;ret_type&#39;</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">returning</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -764,6 +778,7 @@ if(ga_enabled){
     <span class="n">mem_dict</span><span class="p">[</span><span class="s">&#39;ret_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">f_xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;type&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
 
     <span class="c"># Get argument types and names</span>
+    <span class="c"># args = OrderedDict()</span>
     <span class="n">args</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">f_xml</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s">&#39;param&#39;</span><span class="p">):</span>
         <span class="c"># add tuple of  arg type, arg name to arg_types list</span>
@@ -949,7 +964,6 @@ if(ga_enabled){
             <span class="k">if</span> <span class="n">m_kind</span> <span class="o">==</span> <span class="s">&#39;function&#39;</span><span class="p">:</span>
                 <span class="c"># do special stuff for functions</span>
                 <span class="n">mem_dict</span> <span class="o">=</span> <span class="n">_parse_func</span><span class="p">(</span><span class="n">mem</span><span class="p">)</span>
-
             <span class="k">elif</span> <span class="n">m_kind</span> <span class="o">==</span> <span class="s">&#39;variable&#39;</span><span class="p">:</span>
                 <span class="n">mem_dict</span> <span class="o">=</span> <span class="n">_parse_variable</span><span class="p">(</span><span class="n">mem</span><span class="p">)</span>
 
@@ -1032,9 +1046,16 @@ if(ga_enabled){
     <span class="n">requires</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;xdress.base&#39;</span><span class="p">,</span> <span class="s">&#39;xdress.autodescribe&#39;</span><span class="p">)</span>
 
     <span class="n">defaultrc</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;doxygen_config&quot;</span><span class="p">:</span> <span class="n">default_doxygen_config</span><span class="p">,</span>
-                 <span class="s">&quot;doxyfile_name&quot;</span><span class="p">:</span> <span class="s">&#39;doxyfile&#39;</span><span class="p">}</span>
+                 <span class="s">&quot;doxyfile_name&quot;</span><span class="p">:</span> <span class="s">&#39;doxyfile&#39;</span><span class="p">,</span>
+                 <span class="s">&quot;dox_template_ids&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;T&#39;</span><span class="p">,</span> <span class="s">&#39;S&#39;</span><span class="p">]}</span>
 
     <span class="n">rcupdaters</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;doxygen_config&#39;</span><span class="p">:</span> <span class="n">merge_configs</span><span class="p">}</span>
+
+    <span class="n">rcdocs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&quot;doxygen_config&quot;</span><span class="p">:</span> <span class="s">&quot;A dictionary representation of a dOxygen configuration&quot;</span><span class="p">,</span>
+        <span class="s">&quot;doxyfile_name&quot;</span><span class="p">:</span> <span class="s">&quot;The dOxygen configuration file name&quot;</span><span class="p">,</span>
+        <span class="s">&quot;dox_template_ids&quot;</span><span class="p">:</span> <span class="s">&quot;Template argument names to hint to doxygen.&quot;</span>
+        <span class="p">}</span>
 
 <div class="viewcode-block" id="XDressPlugin.setup"><a class="viewcode-back" href="../../libref/doxygen.html#xdress.doxygen.XDressPlugin.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Need setup method to get project, output_dir, and src_dir from</span>
@@ -1051,6 +1072,8 @@ if(ga_enabled){
 <span class="sd">        docstrings to the desc dictionary.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">print</span><span class="p">(</span><span class="s">&quot;doxygen: Running dOxygen&quot;</span><span class="p">)</span>
+        <span class="n">fail_msg</span> <span class="o">=</span> <span class="s">&quot;doxygen: Couldn&#39;t find {tt} {name} in xml. Skipping it&quot;</span>
+        <span class="n">fail_msg</span> <span class="o">+=</span> <span class="s">&quot; - it will not appear in wrapper docstrings.&quot;</span>
 
         <span class="n">build_dir</span> <span class="o">=</span> <span class="n">rc</span><span class="o">.</span><span class="n">builddir</span>
 
@@ -1065,6 +1088,29 @@ if(ga_enabled){
         <span class="c"># Parse index.xml and obtain list of classes and functions</span>
         <span class="k">print</span><span class="p">(</span><span class="s">&quot;doxygen: Adding dOxygen to docstrings&quot;</span><span class="p">)</span>
         <span class="n">classes</span><span class="p">,</span> <span class="n">funcs</span> <span class="o">=</span> <span class="n">parse_index_xml</span><span class="p">(</span><span class="n">xml_dir</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span> <span class="o">+</span> <span class="s">&#39;index.xml&#39;</span><span class="p">)</span>
+        <span class="n">tm_classes</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">classes</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">parsed_class</span> <span class="o">=</span> <span class="n">parse_template</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parsed_class</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+                <span class="c"># This happens when it isn&#39;t a template type</span>
+                <span class="n">tm_classes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">TypeMatcher</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c"># It should now be a tuple</span>
+                <span class="c"># Replace template identifiers with MatchAny</span>
+                <span class="n">p_list</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">parsed_class</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">rc</span><span class="o">.</span><span class="n">dox_template_ids</span><span class="p">:</span>
+                        <span class="n">p_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MatchAny</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">item</span> <span class="o">==</span> <span class="s">&#39;true&#39;</span><span class="p">:</span>
+                        <span class="n">p_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">item</span> <span class="o">==</span> <span class="s">&#39;false&#39;</span><span class="p">:</span>
+                        <span class="n">p_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">)</span> <span class="ow">and</span> \
+                         <span class="n">_LITERAL_INTS</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                        <span class="n">p_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">p_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+                <span class="n">tm_classes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">TypeMatcher</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">p_list</span><span class="p">))</span>
 
         <span class="c"># Go for the classes!</span>
         <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">rc</span><span class="o">.</span><span class="n">classes</span><span class="p">:</span>
@@ -1072,15 +1118,22 @@ if(ga_enabled){
             <span class="n">kls_mod</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">tarfile</span>
 
             <span class="c"># Parse the class</span>
-            <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">kls</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
                 <span class="n">this_kls</span> <span class="o">=</span> <span class="n">classes</span><span class="p">[</span><span class="n">kls</span><span class="p">]</span>
-            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                <span class="k">print</span><span class="p">(</span><span class="s">&quot;Couldn&#39;t find class </span><span class="si">%s</span><span class="s"> in xml. Skipping it - &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">kls</span><span class="p">))</span>
-                      <span class="o">+</span> <span class="s">&quot;it will not appear in wrapper docstrings.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c"># See if maybe this is a template type...</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">tm_classes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">val</span><span class="o">.</span><span class="n">matches</span><span class="p">(</span><span class="n">kls</span><span class="p">):</span>
+                        <span class="n">this_kls</span> <span class="o">=</span> <span class="n">classes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                        <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">print</span><span class="p">(</span><span class="n">fail_msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tt</span><span class="o">=</span><span class="s">&#39;class&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">kls</span><span class="p">))</span>
                 <span class="k">continue</span>
 
-            <span class="n">prepend_fn</span> <span class="o">=</span> <span class="n">build_dir</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span> <span class="o">+</span> <span class="s">&#39;xml&#39;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span>
-            <span class="n">this_kls</span><span class="p">[</span><span class="s">&#39;file_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prepend_fn</span> <span class="o">+</span> <span class="n">this_kls</span><span class="p">[</span><span class="s">&#39;file_name&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">this_kls</span><span class="p">[</span><span class="s">&#39;file_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">build_dir</span><span class="p">):</span>
+                <span class="n">prepend_fn</span> <span class="o">=</span> <span class="n">build_dir</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span> <span class="o">+</span> <span class="s">&#39;xml&#39;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span>
+                <span class="n">this_kls</span><span class="p">[</span><span class="s">&#39;file_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prepend_fn</span> <span class="o">+</span> <span class="n">this_kls</span><span class="p">[</span><span class="s">&#39;file_name&#39;</span><span class="p">]</span>
+
             <span class="n">parsed</span> <span class="o">=</span> <span class="n">parse_class</span><span class="p">(</span><span class="n">this_kls</span><span class="p">)</span>
 
             <span class="c"># Make docstrings dictionary if needed</span>
@@ -1124,8 +1177,7 @@ if(ga_enabled){
 
                     <span class="n">rc</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">kls_mod</span><span class="p">][</span><span class="n">kls</span><span class="p">][</span><span class="s">&#39;docstrings&#39;</span><span class="p">][</span><span class="s">&#39;methods&#39;</span><span class="p">][</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_ds</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Couldn&#39;t find method </span><span class="si">%s</span><span class="s"> in xml. Skipping it&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">m</span><span class="p">)</span>
-                          <span class="o">+</span> <span class="s">&quot; - it will not appear in wrapper docstrings.&quot;</span><span class="p">)</span>
+                    <span class="k">print</span><span class="p">(</span><span class="n">fail_msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tt</span><span class="o">=</span><span class="s">&#39;method&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">m</span><span class="p">))</span>
                     <span class="k">continue</span>
 
         <span class="c"># And on to the functions.</span>
@@ -1133,14 +1185,22 @@ if(ga_enabled){
             <span class="n">func</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">srcname</span>
             <span class="n">func_mod</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">tarfile</span>
 
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+                <span class="c"># It must be a tuple because it is a template function</span>
+                <span class="c"># import pdb; pdb.set_trace()</span>
+
+                <span class="n">func_name</span> <span class="o">=</span> <span class="n">func</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">func_name</span> <span class="o">=</span> <span class="n">func</span>
+
             <span class="c"># Pull out all parsed names that match the function name</span>
             <span class="c"># This is necessary because overloaded funcs will have</span>
             <span class="c"># multiple entries</span>
-            <span class="n">matches</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">x</span><span class="p">,</span> <span class="n">funcs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="n">matches</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">func_name</span><span class="p">),</span> <span class="n">funcs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
             <span class="k">if</span> <span class="n">matches</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="n">f_ds</span> <span class="o">=</span> <span class="n">func_docstr</span><span class="p">(</span><span class="n">parse_function</span><span class="p">(</span><span class="n">funcs</span><span class="p">[</span><span class="n">f</span><span class="p">]))</span>
+                    <span class="n">f_ds</span> <span class="o">=</span> <span class="n">func_docstr</span><span class="p">(</span><span class="n">parse_function</span><span class="p">(</span><span class="n">funcs</span><span class="p">[</span><span class="n">func_name</span><span class="p">]))</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c"># Overloaded function</span>
                     <span class="n">ds_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">func_docstr</span><span class="p">(</span><span class="n">parse_function</span><span class="p">(</span><span class="n">funcs</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
@@ -1154,6 +1214,7 @@ if(ga_enabled){
                 <span class="n">rc</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">func_mod</span><span class="p">][</span><span class="n">func</span><span class="p">][</span><span class="s">&#39;docstring&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">f_ds</span>
 
             <span class="k">else</span><span class="p">:</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">fail_msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tt</span><span class="o">=</span><span class="s">&#39;function&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">func</span><span class="p">))</span>
                 <span class="k">print</span><span class="p">(</span><span class="s">&quot;Couldn&#39;t find function </span><span class="si">%s</span><span class="s"> in xml. Skipping it&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">func</span><span class="p">)</span>
                       <span class="o">+</span> <span class="s">&quot; - it will not appear in wrapper docstrings.&quot;</span><span class="p">)</span>
                 <span class="k">continue</span>
@@ -1203,7 +1264,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.3-rc1 documentation</a> &raquo;</li>
 
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>

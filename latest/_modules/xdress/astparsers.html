@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>xdress.astparsers &mdash; xdress 0.3-dev documentation</title>
+    <title>xdress.astparsers &mdash; xdress 0.3-rc1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.3-dev',
+        VERSION:     '0.3-rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.3-dev documentation" href="../../index.html" />
+    <link rel="top" title="xdress 0.3-rc1 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
@@ -62,7 +62,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.3-rc1 documentation</a> &raquo;</li>
 
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
@@ -409,7 +409,7 @@ if(ga_enabled){
 <span class="sd">    It should not be used directly.&quot;&quot;&quot;</span>
 
     <span class="n">requires</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;xdress.base&#39;</span><span class="p">,)</span>
-    <span class="sd">&quot;&quot;&quot;This plugin requires base&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;This plugin requires &#39;xdress.base&#39;.&quot;&quot;&quot;</span>
     
     <span class="n">defaultrc</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">RunControl</span><span class="p">(</span>
         <span class="n">includes</span><span class="o">=</span><span class="p">[],</span>
@@ -426,23 +426,38 @@ if(ga_enabled){
 
     <span class="n">rcupdaters</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;includes&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">new</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">old</span><span class="p">)}</span>
 
+    <span class="n">rcdocs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;includes&#39;</span><span class="p">:</span> <span class="s">&quot;Additional include directories&quot;</span><span class="p">,</span> 
+        <span class="s">&#39;defines&#39;</span><span class="p">:</span> <span class="s">&quot;Set additional macro definitions&quot;</span><span class="p">,</span>
+        <span class="s">&#39;undefines&#39;</span><span class="p">:</span> <span class="s">&quot;Unset additional macro definitions&quot;</span><span class="p">,</span>
+        <span class="s">&#39;variables&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&quot;A list of variable names in sequence, mapping, &quot;</span>
+                      <span class="s">&quot;or apiname format&quot;</span><span class="p">),</span>
+        <span class="s">&#39;functions&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&quot;A list of function names in sequence, mapping, &quot;</span>
+                      <span class="s">&quot;or apiname format&quot;</span><span class="p">),</span>
+        <span class="s">&#39;classes&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&quot;A list of class names in sequence, mapping, &quot;</span>
+                    <span class="s">&quot;or apiname format&quot;</span><span class="p">),</span>
+        <span class="s">&#39;parsers&#39;</span><span class="p">:</span> <span class="s">&quot;Parser(s) name, list, or dict&quot;</span><span class="p">,</span>
+        <span class="s">&#39;clear_parser_cache_period&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&quot;Number of parser calls to perform before &quot;</span>
+                                      <span class="s">&quot;clearing the internal cache.  This prevents &quot;</span>
+                                      <span class="s">&quot;nasty memory overflow issues.&quot;</span><span class="p">),</span>
+        <span class="s">&#39;dumpast&#39;</span><span class="p">:</span> <span class="s">&quot;Prints the abstract syntax tree of a file.&quot;</span><span class="p">,</span> 
+        <span class="p">}</span>
+
     <span class="k">def</span> <span class="nf">update_argparser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
+        <span class="n">rcdocs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rcdocs</span><span class="p">()</span> <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rcdocs</span><span class="p">)</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">rcdocs</span>
         <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-I&#39;</span><span class="p">,</span> <span class="s">&#39;--includes&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&#39;includes&#39;</span><span class="p">,</span> 
-                            <span class="n">nargs</span><span class="o">=</span><span class="s">&quot;+&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;additional include dirs&quot;</span><span class="p">)</span>
+                            <span class="n">nargs</span><span class="o">=</span><span class="s">&quot;+&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">rcdocs</span><span class="p">[</span><span class="s">&quot;includes&quot;</span><span class="p">])</span>
         <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-D&#39;</span><span class="p">,</span> <span class="s">&#39;--defines&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&#39;defines&#39;</span><span class="p">,</span> 
-                            <span class="n">nargs</span><span class="o">=</span><span class="s">&quot;+&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;set additional macro definitions&quot;</span><span class="p">)</span>
+                            <span class="n">nargs</span><span class="o">=</span><span class="s">&quot;+&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">rcdocs</span><span class="p">[</span><span class="s">&quot;defines&quot;</span><span class="p">])</span>
         <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-U&#39;</span><span class="p">,</span> <span class="s">&#39;--undefines&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&#39;undefines&#39;</span><span class="p">,</span>
-                            <span class="n">nargs</span><span class="o">=</span><span class="s">&quot;+&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> 
-                            <span class="n">help</span><span class="o">=</span><span class="s">&quot;unset additional macro definitions&quot;</span><span class="p">)</span>
-        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-p&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&#39;parsers&#39;</span><span class="p">,</span>
-                            <span class="n">help</span><span class="o">=</span><span class="s">&quot;parser(s) name, list, or dict&quot;</span><span class="p">)</span>
+                            <span class="n">nargs</span><span class="o">=</span><span class="s">&quot;+&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">rcdocs</span><span class="p">[</span><span class="s">&quot;undefines&quot;</span><span class="p">])</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-p&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&#39;parsers&#39;</span><span class="p">,</span> 
+                            <span class="n">help</span><span class="o">=</span><span class="n">rcdocs</span><span class="p">[</span><span class="s">&quot;parsers&quot;</span><span class="p">])</span>
         <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--clear-parser-cache-period&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span> 
                             <span class="n">dest</span><span class="o">=</span><span class="s">&#39;clear_parser_cache_period&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
-                            <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;Number of parser calls to perform before clearing &quot;</span>
-                                  <span class="s">&quot;the internal cache.&quot;</span><span class="p">))</span>
-        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--dumpast&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span> 
-                            <span class="n">dest</span><span class="o">=</span><span class="s">&#39;dumpast&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s">&quot;FILE&quot;</span><span class="p">,</span>
-                            <span class="n">help</span><span class="o">=</span><span class="s">&quot;prints the abstract syntax tree of a file.&quot;</span><span class="p">)</span>
+                            <span class="n">help</span><span class="o">=</span><span class="n">rcdocs</span><span class="p">[</span><span class="s">&quot;clear_parser_cache_period&quot;</span><span class="p">])</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--dumpast&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&#39;dumpast&#39;</span><span class="p">,</span> 
+                            <span class="n">metavar</span><span class="o">=</span><span class="s">&quot;FILE&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">rcdocs</span><span class="p">[</span><span class="s">&quot;dumpast&quot;</span><span class="p">])</span>
 
 <div class="viewcode-block" id="ParserPlugin.setup"><a class="viewcode-back" href="../../libref/astparsers.html#xdress.astparsers.ParserPlugin.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Remember to call super() on subclasses!&quot;&quot;&quot;</span>
@@ -505,7 +520,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.3-rc1 documentation</a> &raquo;</li>
 
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>

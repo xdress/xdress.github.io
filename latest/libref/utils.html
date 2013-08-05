@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Utilities &mdash; xdress 0.3-dev documentation</title>
+    <title>Utilities &mdash; xdress 0.3-rc1 documentation</title>
     
     <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.3-dev',
+        VERSION:     '0.3-rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.3-dev documentation" href="../index.html" />
+    <link rel="top" title="xdress 0.3-rc1 documentation" href="../index.html" />
     <link rel="up" title="Library Reference" href="index.html" />
     <link rel="next" title="Plugins" href="plugins.html" />
     <link rel="prev" title="PEP-8 Names" href="pep8names.html" /> 
@@ -70,7 +70,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="pep8names.html" title="PEP-8 Names"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.3-rc1 documentation</a> &raquo;</li>
 
           <li><a href="index.html" accesskey="U">Library Reference</a> &raquo;</li> 
       </ul>
@@ -85,7 +85,7 @@ if(ga_enabled){
             
   <div class="section" id="module-xdress.utils">
 <span id="utilities"></span><span id="xdress-utils"></span><h1>Utilities<a class="headerlink" href="#module-xdress.utils" title="Permalink to this headline">¶</a></h1>
-<p>Helper functions for bright API generation.</p>
+<p>Helper functions for xdress.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -191,7 +191,7 @@ with 8 spaces.</p>
 <dt id="xdress.utils.ensure_apiname">
 <tt class="descclassname">xdress.utils.</tt><tt class="descname">ensure_apiname</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/xdress/utils.html#ensure_apiname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.utils.ensure_apiname" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes user input and returns the corresponding apiname named tuple.
-If the name is already an apiname instance with no NotSpecified fields, 
+If the name is already an apiname instance with no NotSpecified fields,
 this does not make a copy.</p>
 </dd></dl>
 
@@ -305,8 +305,8 @@ source extension given a basename and source directory.</p>
 <dl class="function">
 <dt id="xdress.utils.memoize">
 <tt class="descclassname">xdress.utils.</tt><tt class="descname">memoize</tt><big>(</big><em>obj</em><big>)</big><a class="reference internal" href="../_modules/xdress/utils.html#memoize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.utils.memoize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generic memoziation decorator based off of code from 
-<a class="reference external" href="http://wiki.python.org/moin/PythonDecoratorLibrary">http://wiki.python.org/moin/PythonDecoratorLibrary</a> .  
+<dd><p>Generic memoziation decorator based off of code from
+<a class="reference external" href="http://wiki.python.org/moin/PythonDecoratorLibrary">http://wiki.python.org/moin/PythonDecoratorLibrary</a> .
 This is not suitabe for method caching.</p>
 </dd></dl>
 
@@ -376,7 +376,7 @@ contents are exactly the same as what would be written out.</p>
 <dl class="function">
 <dt id="xdress.utils.parse_template">
 <tt class="descclassname">xdress.utils.</tt><tt class="descname">parse_template</tt><big>(</big><em>s</em>, <em>open_brace='&lt;'</em>, <em>close_brace='&gt;'</em>, <em>separator='</em>, <em>'</em><big>)</big><a class="reference internal" href="../_modules/xdress/utils.html#parse_template"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.utils.parse_template" title="Permalink to this definition">¶</a></dt>
-<dd><p>Takes a string &#8211; which may represent a template specialization &#8211; 
+<dd><p>Takes a string &#8211; which may represent a template specialization &#8211;
 and returns the corresponding type.</p>
 </dd></dl>
 
@@ -389,8 +389,8 @@ and returns the corresponding type.</p>
 <dl class="function">
 <dt id="xdress.utils.split_template_args">
 <tt class="descclassname">xdress.utils.</tt><tt class="descname">split_template_args</tt><big>(</big><em>s</em>, <em>open_brace='&lt;'</em>, <em>close_brace='&gt;'</em>, <em>separator='</em>, <em>'</em><big>)</big><a class="reference internal" href="../_modules/xdress/utils.html#split_template_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.utils.split_template_args" title="Permalink to this definition">¶</a></dt>
-<dd><p>Takes a string with template specialization and returns a list 
-of the argument values.</p>
+<dd><p>Takes a string with template specialization and returns a list
+of the argument values as strings.</p>
 </dd></dl>
 
 <dl class="function">
@@ -455,7 +455,7 @@ has not been given.</p>
 <dt id="xdress.utils.memoize_method">
 <tt class="descclassname">xdress.utils.</tt><tt class="descname">memoize_method</tt><a class="reference internal" href="../_modules/xdress/utils.html#memoize_method"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.utils.memoize_method" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator suitable for memoizing methods, rather than functions
-and classes.  This is based off of code that may be found at 
+and classes.  This is based off of code that may be found at
 <a class="reference external" href="http://code.activestate.com/recipes/577452-a-memoize-decorator-for-instance-methods/">http://code.activestate.com/recipes/577452-a-memoize-decorator-for-instance-methods/</a>
 This code was originally released under the MIT license.</p>
 </dd></dl>
@@ -530,7 +530,7 @@ This code was originally released under the MIT license.</p>
         <li class="right" >
           <a href="pep8names.html" title="PEP-8 Names"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.3-rc1 documentation</a> &raquo;</li>
 
           <li><a href="index.html" >Library Reference</a> &raquo;</li> 
       </ul>

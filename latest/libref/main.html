@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API Generation CLI &mdash; xdress 0.3-dev documentation</title>
+    <title>API Generation CLI &mdash; xdress 0.3-rc1 documentation</title>
     
     <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.3-dev',
+        VERSION:     '0.3-rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.3-dev documentation" href="../index.html" />
+    <link rel="top" title="xdress 0.3-rc1 documentation" href="../index.html" />
     <link rel="up" title="Library Reference" href="index.html" />
     <link rel="next" title="Description Filter" href="descfilter.html" />
     <link rel="prev" title="Cython Generation" href="cythongen.html" /> 
@@ -70,7 +70,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="cythongen.html" title="Cython Generation"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.3-rc1 documentation</a> &raquo;</li>
 
           <li><a href="index.html" accesskey="U">Library Reference</a> &raquo;</li> 
       </ul>
@@ -108,45 +108,60 @@ The main module is normally run via the command line interface as follows:</p>
 usage: Generates XDress API [-h] [--rc RC] [--plugins PLUGINS [PLUGINS ...]]
                             [--debug] [-v] [--dumpdesc] [--package PACKAGE]
                             [--packagedir PACKAGEDIR] [--sourcedir SOURCEDIR]
-                            [--builddir BUILDDIR] [--extra-types EXTRA_TYPES]
-                            [--make-extra-types] [--no-make-extra-types]
-                            [--stlcontainers-module STLCONTAINERS_MODULE]
-                            [--make-stlcontainers] [--no-make-stlcontainers]
+                            [--builddir BUILDDIR] [--bash-completion]
+                            [--no-bash-completion]
                             [-I INCLUDES [INCLUDES ...]]
                             [-D DEFINES [DEFINES ...]]
                             [-U UNDEFINES [UNDEFINES ...]] [-p PARSERS]
+                            [--clear-parser-cache-period CLEAR_PARSER_CACHE_PERIOD]
+                            [--dumpast FILE] [--max-callbacks MAX_CALLBACKS]
+                            [--extra-types EXTRA_TYPES] [--make-extra-types]
+                            [--no-make-extra-types]
+                            [--stlcontainers-module STLCONTAINERS_MODULE]
+                            [--make-stlcontainers] [--no-make-stlcontainers]
 
 optional arguments:
   -h, --help            show this help message and exit
-  --rc RC               path to run control file
+  --rc RC               Path to run control file
   --plugins PLUGINS [PLUGINS ...]
-                        plugins to include
-  --debug               build in debugging mode
-  -v, --verbose         print more output
-  --dumpdesc            print description cache
-  --package PACKAGE     package name
+                        Plugins to include
+  --debug               Build in debugging mode
+  -v, --verbose         Print more output.
+  --dumpdesc            Print the description cache
+  --package PACKAGE     The Python package name for the generated wrappers
   --packagedir PACKAGEDIR
-                        path to package directory
+                        Path to package directory, same as 'package' if not
+                        specified
   --sourcedir SOURCEDIR
-                        path to source directory
-  --builddir BUILDDIR   path to build directory
+                        Path to source directory
+  --builddir BUILDDIR   Path to build directory
+  --bash-completion     enable bash completion
+  --no-bash-completion  disable bash completion
+  -I INCLUDES [INCLUDES ...], --includes INCLUDES [INCLUDES ...]
+                        Additional include directories
+  -D DEFINES [DEFINES ...], --defines DEFINES [DEFINES ...]
+                        Set additional macro definitions
+  -U UNDEFINES [UNDEFINES ...], --undefines UNDEFINES [UNDEFINES ...]
+                        Unset additional macro definitions
+  -p PARSERS            Parser(s) name, list, or dict
+  --clear-parser-cache-period CLEAR_PARSER_CACHE_PERIOD
+                        Number of parser calls to perform before clearing the
+                        internal cache. This prevents nasty memory overflow
+                        issues.
+  --dumpast FILE        Prints the abstract syntax tree of a file.
+  --max-callbacks MAX_CALLBACKS
+                        The maximum number of callbacks for function pointers
   --extra-types EXTRA_TYPES
-                        extra types name
+                        Module and header file name for xdress extra types.
   --make-extra-types    make extra types wrapper
   --no-make-extra-types
                         don't make extra types wrapper
   --stlcontainers-module STLCONTAINERS_MODULE
-                        stlcontainers module name
+                        Module name for C++ standard library container
+                        wrappers.
   --make-stlcontainers  make C++ STL container wrappers
   --no-make-stlcontainers
-                        don't make C++ STL container wrappers
-  -I INCLUDES [INCLUDES ...], --includes INCLUDES [INCLUDES ...]
-                        additional include dirs
-  -D DEFINES [DEFINES ...], --defines DEFINES [DEFINES ...]
-                        set additional macro definitions
-  -U UNDEFINES [UNDEFINES ...], --undefines UNDEFINES [UNDEFINES ...]
-                        unset additional macro definitions
-  -p PARSERS            parser(s) name, list, or dict</pre>
+                        don't make C++ STL container wrappers</pre>
 </div>
 </div>
 <div class="section" id="sidecar-description-files">
@@ -166,7 +181,8 @@ following top-level keys:</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">&lt;names&gt;:</th><td class="field-body">str, names of function and classes that are present in this source file.
 The value for each name key is a partial or full description dictionary for 
-this module variable.</td>
+this module variable.  See <tt class="docutils literal"><span class="pre">autodescribe.py</span></tt> for more details on description
+dictionaries.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">docstring:</th><td class="field-body">str, optional, this is a documentation string for the module.</td>
 </tr>
@@ -187,15 +203,19 @@ generated ones.</p>
 <p>Awesome abuses/hacks/side effects are possible since these sidecar files are 
 pure Python code. One major use case is to modify the type system from within a 
 sidecar.  This is useful for adding refinement types or type specializations that
-are pertinent to just that source code.  (The modifications will affect the type 
-system globally, but may not be relevant anywhere except for that source file.)</p>
+are pertinent to just that source code.  This is done by creating a TypeSystem
+instance in the sidecar, naming it <tt class="docutils literal"><span class="pre">ts</span></tt>, and adding any user-modifications.
+The sidecar&#8217;s <tt class="docutils literal"><span class="pre">ts</span></tt> TypeSystem will automatically update the default run control
+TypeSystem (<tt class="docutils literal"><span class="pre">rc.ts</span></tt>).  For this reason, its often useful for the sidecar file&#8217;s
+type system to be empty.</p>
 <div class="section" id="sidecar-example">
 <h3>Sidecar Example<a class="headerlink" href="#sidecar-example" title="Permalink to this headline">¶</a></h3>
 <p>The following example displays the contents of a sample sidecar file which adds 
 a refinement type (implemented elsewhere) to the type system so that it may be
 used to declare additional attr and method APIs.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># Start by adding refinement type hooks for &#39;sepeff_t&#39;, which is a type of map</span>
-<span class="kn">import</span> <span class="nn">xdress.typesystem</span> <span class="kn">as</span> <span class="nn">ts</span>
+<span class="kn">from</span> <span class="nn">xdress.typesystem</span> <span class="kn">import</span> <span class="n">TypeSystem</span>
+<span class="n">ts</span> <span class="o">=</span> <span class="n">TypeSystem</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
 <span class="n">ts</span><span class="o">.</span><span class="n">register_refinement</span><span class="p">(</span><span class="s">&#39;sepeff_t&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;map&#39;</span><span class="p">,</span> <span class="s">&#39;int32&#39;</span><span class="p">,</span> <span class="s">&#39;float64&#39;</span><span class="p">),</span>
     <span class="n">cython_cyimport</span><span class="o">=</span><span class="s">&#39;bright.typeconverters&#39;</span><span class="p">,</span> 
     <span class="n">cython_pyimport</span><span class="o">=</span><span class="s">&#39;bright.typeconverters&#39;</span><span class="p">,</span>
@@ -314,7 +334,7 @@ used to declare additional attr and method APIs.</p>
         <li class="right" >
           <a href="cythongen.html" title="Cython Generation"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.3-rc1 documentation</a> &raquo;</li>
 
           <li><a href="index.html" >Library Reference</a> &raquo;</li> 
       </ul>

@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>xdress.typesystem &mdash; xdress 0.3-dev documentation</title>
+    <title>xdress.typesystem &mdash; xdress 0.3-rc1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.3-dev',
+        VERSION:     '0.3-rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.3-dev documentation" href="../../index.html" />
+    <link rel="top" title="xdress 0.3-rc1 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
@@ -62,7 +62,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.3-rc1 documentation</a> &raquo;</li>
 
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
@@ -316,6 +316,15 @@ if(ga_enabled){
 <span class="sd">        (&#39;function&#39;, (&#39;arguments&#39;, (&#39;list&#39;, (&#39;pair&#39;, &#39;str&#39;, &#39;type&#39;))), (&#39;returns&#39;, &#39;type&#39;)): &#39;void&#39;,</span>
 <span class="sd">        (&#39;function_pointer&#39;, (&#39;arguments&#39;, (&#39;list&#39;, (&#39;pair&#39;, &#39;str&#39;, &#39;type&#39;))), (&#39;returns&#39;, &#39;type&#39;)): (&#39;void&#39;, &#39;*&#39;),</span>
 <span class="sd">        }</span>
+
+<span class="sd">Major Classes Overview</span>
+<span class="sd">----------------------</span>
+<span class="sd">Holistically, the following classes are important to type system:</span>
+
+<span class="sd">* ``TypeSystem``:  This *is* the type system.</span>
+<span class="sd">* ``TypeMatcher``: An imutable type for matching types against a pattern.</span>
+<span class="sd">* ``MatchAny``: A singleton used to denote patterns.</span>
+<span class="sd">* ``typestr``: Various string representations of a type as properties.</span>
 
 <span class="sd">Type System API</span>
 <span class="sd">===============</span>
@@ -1373,6 +1382,8 @@ if(ga_enabled){
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">template_types</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
                 <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">humannames</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">x</span>
             <span class="k">elif</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_types</span><span class="p">:</span>
                 <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">humannames</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
             <span class="k">else</span><span class="p">:</span>
@@ -2368,9 +2379,9 @@ if(ga_enabled){
             <span class="s">&#39;# {var} is a {t.type}</span><span class="se">\n</span><span class="s">&#39;</span>
             <span class="s">&#39;cdef int i{var}</span><span class="se">\n</span><span class="s">&#39;</span>
             <span class="s">&#39;cdef int {var}_size</span><span class="se">\n</span><span class="s">&#39;</span>
-            <span class="s">&#39;cdef {self.cython_npctypes[0]} * {var}_data</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="s">&#39;cdef {t.cython_npctypes[0]} * {var}_data</span><span class="se">\n</span><span class="s">&#39;</span>
             <span class="s">&#39;{var}_size = len({var})</span><span class="se">\n</span><span class="s">&#39;</span>
-            <span class="s">&#39;if isinstance({var}, np.ndarray) and (&lt;np.ndarray&gt; {var}).descr.type_num == {self.cython_nptype}:</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="s">&#39;if isinstance({var}, np.ndarray) and (&lt;np.ndarray&gt; {var}).descr.type_num == {t.cython_nptype}:</span><span class="se">\n</span><span class="s">&#39;</span>
             <span class="s">&#39;    {var}_data = &lt;{t.cython_npctypes[0]} *&gt; np.PyArray_DATA(&lt;np.ndarray&gt; {var})</span><span class="se">\n</span><span class="s">&#39;</span>
             <span class="s">&#39;    {proxy_name} = {t.cython_ctype_nopred}(&lt;size_t&gt; {var}_size)</span><span class="se">\n</span><span class="s">&#39;</span>
             <span class="s">&#39;    for i{var} in range({var}_size):</span><span class="se">\n</span><span class="s">&#39;</span>
@@ -3268,7 +3279,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.3-dev documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.3-rc1 documentation</a> &raquo;</li>
 
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
