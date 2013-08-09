@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>xdress.autodescribe &mdash; xdress 0.3-rc1 documentation</title>
+    <title>xdress.autodescribe &mdash; xdress 0.3 documentation</title>
     
     <link rel="stylesheet" href="../../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.3-rc1',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.3-rc1 documentation" href="../../index.html" />
+    <link rel="top" title="xdress 0.3 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
@@ -62,7 +62,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.3-rc1 documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.3 documentation</a> &raquo;</li>
 
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
@@ -642,16 +642,25 @@ if(ga_enabled){
         <span class="k">return</span> <span class="p">(</span><span class="s">&#39;enum&#39;</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">currenum</span><span class="p">))</span>
 
     <span class="n">_fundemntal_to_base</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">&#39;char&#39;</span><span class="p">:</span> <span class="s">&#39;char&#39;</span><span class="p">,</span>
+        <span class="s">&#39;char&#39;</span><span class="p">:</span> <span class="s">&#39;char&#39;</span><span class="p">,</span> 
+        <span class="s">&#39;unsigned char&#39;</span><span class="p">:</span> <span class="s">&#39;uchar&#39;</span><span class="p">,</span>
         <span class="s">&#39;int16_t&#39;</span><span class="p">:</span> <span class="s">&#39;int16&#39;</span><span class="p">,</span>
-        <span class="s">&#39;int&#39;</span><span class="p">:</span> <span class="s">&#39;int32&#39;</span><span class="p">,</span>
-        <span class="s">&#39;long int&#39;</span><span class="p">:</span> <span class="s">&#39;int64&#39;</span><span class="p">,</span>
+        <span class="s">&#39;short&#39;</span><span class="p">:</span> <span class="s">&#39;int16&#39;</span><span class="p">,</span>
+        <span class="s">&#39;short int&#39;</span><span class="p">:</span> <span class="s">&#39;int16&#39;</span><span class="p">,</span>
+        <span class="s">&#39;short unsigned int&#39;</span><span class="p">:</span> <span class="s">&#39;uint16&#39;</span><span class="p">,</span>
+        <span class="s">&#39;unsigned short&#39;</span><span class="p">:</span> <span class="s">&#39;uint16&#39;</span><span class="p">,</span>
+        <span class="s">&#39;int32_t&#39;</span><span class="p">:</span> <span class="s">&#39;int32&#39;</span><span class="p">,</span>
+        <span class="s">&#39;int&#39;</span><span class="p">:</span> <span class="s">&#39;int32&#39;</span><span class="p">,</span> 
+        <span class="s">&#39;long long&#39;</span><span class="p">:</span> <span class="s">&#39;int64&#39;</span><span class="p">,</span>
+        <span class="s">&#39;long int&#39;</span><span class="p">:</span> <span class="s">&#39;int64&#39;</span><span class="p">,</span> 
         <span class="s">&#39;unsigned int&#39;</span><span class="p">:</span> <span class="s">&#39;uint32&#39;</span><span class="p">,</span>
         <span class="s">&#39;long unsigned int&#39;</span><span class="p">:</span> <span class="s">&#39;uint64&#39;</span><span class="p">,</span>
+        <span class="s">&#39;unsigned long long&#39;</span><span class="p">:</span> <span class="s">&#39;uint64&#39;</span><span class="p">,</span>
+        <span class="s">&#39;short unsigned int&#39;</span><span class="p">:</span> <span class="s">&#39;uint16&#39;</span><span class="p">,</span>
         <span class="s">&#39;float&#39;</span><span class="p">:</span> <span class="s">&#39;float32&#39;</span><span class="p">,</span>
         <span class="s">&#39;double&#39;</span><span class="p">:</span> <span class="s">&#39;float64&#39;</span><span class="p">,</span>
-        <span class="s">&#39;complex&#39;</span><span class="p">:</span> <span class="s">&#39;complex128&#39;</span><span class="p">,</span>
-        <span class="s">&#39;void&#39;</span><span class="p">:</span> <span class="s">&#39;void&#39;</span><span class="p">,</span>
+        <span class="s">&#39;complex&#39;</span><span class="p">:</span> <span class="s">&#39;complex128&#39;</span><span class="p">,</span> 
+        <span class="s">&#39;void&#39;</span><span class="p">:</span> <span class="s">&#39;void&#39;</span><span class="p">,</span> 
         <span class="s">&#39;bool&#39;</span><span class="p">:</span> <span class="s">&#39;bool&#39;</span><span class="p">,</span>
         <span class="p">}</span>
 
@@ -2165,7 +2174,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.3-rc1 documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.3 documentation</a> &raquo;</li>
 
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
