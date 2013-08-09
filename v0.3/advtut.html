@@ -1,0 +1,233 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Advanced Tutorial &mdash; xdress 0.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/numpy_friendly.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="_static/cloud.js"></script>
+    <link rel="top" title="xdress 0.3 documentation" href="index.html" />
+    <link rel="next" title="Library Reference" href="libref/index.html" />
+    <link rel="prev" title="xdressrc.py" href="mypack/xdressrc.py.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
+var ga_enabled = !$.cookie('disable-ga');
+if(ga_enabled){
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41934829-1']);
+  _gaq.push(['_setCookiePath', '/']);
+  _gaq.push(['_setDetectFlash', false]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+}
+</script>
+  </head>
+  <body>
+    <div class="relbar-top">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="libref/index.html" title="Library Reference"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="mypack/xdressrc.py.html" title="xdressrc.py"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">xdress 0.3 documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="advanced-tutorial">
+<span id="id1"></span><h1>Advanced Tutorial<a class="headerlink" href="#advanced-tutorial" title="Permalink to this headline">¶</a></h1>
+<p>The point of xdress is to wrap code.  The purpose of xdress is to generate
+idiomatic wrappers.  This tutorial describes some awesome things that you can
+do with xdress.</p>
+<div class="section" id="numpy-dtypes-of-classes-struct">
+<h2>NumPy dtypes of Classes &amp; Struct<a class="headerlink" href="#numpy-dtypes-of-classes-struct" title="Permalink to this headline">¶</a></h2>
+<p>When using <tt class="docutils literal"><span class="pre">stlwrap</span></tt>, the <tt class="docutils literal"><span class="pre">vector</span></tt> type actually creates custom
+numpy dtypes for the templated type.  This works not only on primitive types,
+other STL containers (map, set, vector), but also on any custom type that the
+type system knows about!  Say we have the following run control file, which is
+used to wrap a C++ class Joan:</p>
+<p><strong>xdressrc.py:</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">package</span> <span class="o">=</span> <span class="s">&quot;france&quot;</span>
+<span class="n">classes</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;Joan&#39;</span><span class="p">,</span> <span class="s">&#39;france.cpp&#39;</span><span class="p">)]</span>
+<span class="n">stlcontainers</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;vector&#39;</span><span class="p">,</span> <span class="s">&#39;Joan&#39;</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>The classes list, with the autodescribe and cythongen plugins, will create
+Python wrappers for he Joan class.  The stlcontainers will then see that the
+vector template is dependent on Joan.  This will create and register a dtype
+called <tt class="docutils literal"><span class="pre">xd_joan</span></tt> that you can use with ndarrays.  You may then get and set
+elements out of this array via the wrapper class that was created with cythongen.
+For exmaple:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">france.stlcontainer</span> <span class="kn">import</span> <span class="n">xd_joan</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">xd_joan</span><span class="p">)</span>
+
+<span class="c"># A scalar array with dtype xd_joan</span>
+<span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c"># A Joan wrapper object with a copy of the 0th element of the array</span>
+<span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Note that the underlying memory is a contiguous block of Joans.  The Python
+wrappers are regenerated on every getitem() call.  Thus this is more truly an
+array of structs, as opposed to a structured array ;).</p>
+</div>
+<div class="section" id="importable-type-systems">
+<h2>Importable Type Systems<a class="headerlink" href="#importable-type-systems" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is only starting to be explored</p>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">TypeSystem</span></tt> class has a mechanism to save and reload via <tt class="docutils literal"><span class="pre">dump()</span></tt> and
+<tt class="docutils literal"><span class="pre">load()</span></tt> methods.  Furthermore, type system variables by the name <tt class="docutils literal"><span class="pre">ts</span></tt> in
+run control and side car files are all merged together with the default type
+system.  This allows the users of xdress in project-beta to use
+the type system developed in project-alpha with out having to re-expose,
+re-register, or re-parse any project-alpha code at all!</p>
+<p>This is an import-esque mechanism for acting on the type systems themselves.
+This should be a huge boon to mutlti-project systems.  You can also choose to
+provide xdress type systems to down stream users and a convenience or favor to
+them. Only pickle and gzip pickle are currently supported, though others may be
+forthcoming.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+        <p class="logo"><a href="index.html">
+          <img class="logo" src="_static/HooverJoven.jpg" alt="Logo"/>
+        </a></p>
+  <div class="sphinxlocaltoc">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Advanced Tutorial</a><ul>
+<li><a class="reference internal" href="#numpy-dtypes-of-classes-struct">NumPy dtypes of Classes &amp; Struct</a></li>
+<li><a class="reference internal" href="#importable-type-systems">Importable Type Systems</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="mypack/xdressrc.py.html"
+                        title="previous chapter">xdressrc.py</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="libref/index.html"
+                        title="next chapter">Library Reference</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/advtut.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="libref/index.html" title="Library Reference"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="mypack/xdressrc.py.html" title="xdressrc.py"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">xdress 0.3 documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, Anthony Scopatz.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div><script type="text/javascript">
+    if(ga_enabled){
+        document.write("<div class=\"footer\">This page uses <a href=\"http://analytics.google.com\">Google Analytics</a> to collect statistics. ");
+        document.write("Click <button title=\"set cookie to disable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', 'true', {expires: 3650, path: '/'}); window.location.reload(); return false; \">here</button> to disable analytics for this site.");
+        document.write("</div>");
+    }else{
+        document.write("<div class=\"footer\">Google Analytics has been disabled. ");
+        document.write("Click <button title=\"set cookie to re-enable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', null, {path: '/'}); window.location.reload(); return false; \">here</button> to re-enable analytics for this site.");
+    };
+</script>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>
