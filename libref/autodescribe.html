@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Automatic Descriptions &mdash; xdress 0.2 documentation</title>
+    <title>Automatic Descriptions &mdash; xdress 0.3 documentation</title>
     
     <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.2',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.2 documentation" href="../index.html" />
+    <link rel="top" title="xdress 0.3 documentation" href="../index.html" />
     <link rel="up" title="Library Reference" href="index.html" />
     <link rel="next" title="Automatic API Discovery" href="autoall.html" />
     <link rel="prev" title="Abstract Syntax Tree Parsers" href="astparsers.html" /> 
@@ -70,7 +70,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="astparsers.html" title="Abstract Syntax Tree Parsers"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.2 documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.3 documentation</a> &raquo;</li>
 
           <li><a href="index.html" accesskey="U">Library Reference</a> &raquo;</li> 
       </ul>
@@ -85,7 +85,7 @@ if(ga_enabled){
             
   <div class="section" id="module-xdress.autodescribe">
 <span id="automatic-descriptions"></span><span id="xdress-autodescribe"></span><h1>Automatic Descriptions<a class="headerlink" href="#module-xdress.autodescribe" title="Permalink to this headline">¶</a></h1>
-<p>This module creates descriptions of C/C++ classes, functions, and variables 
+<p>This module creates descriptions of C/C++ classes, functions, and variables
 from source code, by using external parsers (GCC-XML, Clang AST) and the type system.</p>
 <p>This module is available as an xdress plugin by the name <tt class="docutils literal"><span class="pre">xdress.autodescribe</span></tt>.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -98,16 +98,16 @@ from source code, by using external parsers (GCC-XML, Clang AST) and the type sy
 </table>
 <div class="section" id="descriptions">
 <h2>Descriptions<a class="headerlink" href="#descriptions" title="Permalink to this headline">¶</a></h2>
-<p>A key component of API wrapper generation is having a a top-level, abstract 
+<p>A key component of API wrapper generation is having a a top-level, abstract
 representation of the software that is being wrapped.  In C++ there are three
 basic constructs which may be wrapped: variables, functions, and classes.</p>
-<p>The abstract representation of a C++ class is known as a <strong>description</strong> (abbr. 
+<p>The abstract representation of a C++ class is known as a <strong>description</strong> (abbr.
 <em>desc</em>).  This description is simply a Python dictionary with a specific structure.
 This structure makes heavy use of the type system to declare the types of all needed
 parameters.</p>
 <div class="section" id="variable-description-top-level-keys">
 <h3>Variable Description Top-Level Keys<a class="headerlink" href="#variable-description-top-level-keys" title="Permalink to this headline">¶</a></h3>
-<p>The following are valid top-level keys in a variable description dictionary: 
+<p>The following are valid top-level keys in a variable description dictionary:
 name, namespace, type, docstring, and extra.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -121,10 +121,10 @@ name, namespace, type, docstring, and extra.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">docstring:</th><td class="field-body">str, optional, this is a documentation string for the variable.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">extra:</th><td class="field-body">dict, optional, this stores arbitrary metadata that may be used with 
+<tr class="field-odd field"><th class="field-name">extra:</th><td class="field-body">dict, optional, this stores arbitrary metadata that may be used with
 different backends. It is not added by any auto-describe routine but may be
 inserted later if needed.  One example use case is that the Cython generation
-looks for the pyx, pxd, and cpppxd keys for strings of supplemental Cython 
+looks for the pyx, pxd, and cpppxd keys for strings of supplemental Cython
 code to insert directly into the wrapper.</td>
 </tr>
 </tbody>
@@ -132,31 +132,31 @@ code to insert directly into the wrapper.</td>
 </div>
 <div class="section" id="function-description-top-level-keys">
 <h3>Function Description Top-Level Keys<a class="headerlink" href="#function-description-top-level-keys" title="Permalink to this headline">¶</a></h3>
-<p>The following are valid top-level keys in a function description dictionary: 
+<p>The following are valid top-level keys in a function description dictionary:
 name, namespace, signatures, docstring, and extra.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body">str, the function name</td>
+<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body">str or tuple, the function name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">namespace:</th><td class="field-body">str or None, the namespace or module the function lives in.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">signatures:</th><td class="field-body">dict or dict-like, the keys of this dictionary are function call 
+<tr class="field-odd field"><th class="field-name">signatures:</th><td class="field-body">dict or dict-like, the keys of this dictionary are function call
 signatures and the values are the function return types. The signatures
 themselves are tuples. The first element of these tuples is the function name.
-The remaining elements (if any) are the function arguments.  Arguments are 
-themselves length-2 or -3 tuples whose first elements are the argument names, 
+The remaining elements (if any) are the function arguments.  Arguments are
+themselves length-2 or -3 tuples whose first elements are the argument names,
 the second element is the argument type, and the third element (if present) is
-the default value. Unlike class constuctors and destructors, the return type may 
+the default value. Unlike class constuctors and destructors, the return type may
 not be None (only &#8216;void&#8217; values are allowed).</td>
 </tr>
 <tr class="field-even field"><th class="field-name">docstring:</th><td class="field-body">str, optional, this is a documentation string for the function.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">extra:</th><td class="field-body">dict, optional, this stores arbitrary metadata that may be used with 
+<tr class="field-odd field"><th class="field-name">extra:</th><td class="field-body">dict, optional, this stores arbitrary metadata that may be used with
 different backends. It is not added by any auto-describe routine but may be
 inserted later if needed.  One example use case is that the Cython generation
-looks for the pyx, pxd, and cpppxd keys for strings of supplemental Cython 
+looks for the pyx, pxd, and cpppxd keys for strings of supplemental Cython
 code to insert directly into the wrapper.</td>
 </tr>
 </tbody>
@@ -164,13 +164,13 @@ code to insert directly into the wrapper.</td>
 </div>
 <div class="section" id="class-description-top-level-keys">
 <h3>Class Description Top-Level Keys<a class="headerlink" href="#class-description-top-level-keys" title="Permalink to this headline">¶</a></h3>
-<p>The following are valid top-level keys in a class description dictionary: 
+<p>The following are valid top-level keys in a class description dictionary:
 name, parents, namespace, attrs, methods, docstrings, and extra.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body">str, the class name</td>
+<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body">str or tuple, the class name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">parents:</th><td class="field-body">list of strings or None, the immediate parents of the class
 (not grandparents).</td>
@@ -183,26 +183,26 @@ class mapped to their types, given in the format of the type system.</td>
 <tr class="field-odd field"><th class="field-name">methods:</th><td class="field-body">dict or dict-like, similar to the attrs except that the keys are now
 function signatures and the values are the method return types.  The signatures
 themselves are tuples. The first element of these tuples is the method name.
-The remaining elements (if any) are the function arguments.  Arguments are 
-themselves length-2 or -3 tuples whose first elements are the argument names, 
+The remaining elements (if any) are the function arguments.  Arguments are
+themselves length-2 or -3 tuples whose first elements are the argument names,
 the second element is the argument type, and the third element (if present) is
-the default value.  If the return type is None (as opposed to &#8216;void&#8217;), then 
+the default value.  If the return type is None (as opposed to &#8216;void&#8217;), then
 this method is assumed to be a constructor or destructor.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">construct:</th><td class="field-body">str, optional, this is a flag for how the class is implemented. 
+<tr class="field-even field"><th class="field-name">construct:</th><td class="field-body">str, optional, this is a flag for how the class is implemented.
 Accepted values are &#8216;class&#8217; and &#8216;struct&#8217;.  If this is not present, then &#8216;class&#8217;
 is assumed.  This is most useful from wrapping C structs as Python classes.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">docstrings:</th><td class="field-body">dict, optional, this dictionary is meant for storing documentation 
-strings.  All values are thus either strings or dictionaries of strings.  
+<tr class="field-odd field"><th class="field-name">docstrings:</th><td class="field-body">dict, optional, this dictionary is meant for storing documentation
+strings.  All values are thus either strings or dictionaries of strings.
 Valid keys include: class, attrs, and methods.  The attrs and methods
 keys are dictionaries which may include keys that mirror the top-level keys of
 the same name.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">extra:</th><td class="field-body">dict, optional, this stores arbitrary metadata that may be used with 
+<tr class="field-even field"><th class="field-name">extra:</th><td class="field-body">dict, optional, this stores arbitrary metadata that may be used with
 different backends. It is not added by any auto-describe routine but may be
 inserted later if needed.  One example use case is that the Cython generation
-looks for the pyx, pxd, and cpppxd keys for strings of supplemental Cython 
+looks for the pyx, pxd, and cpppxd keys for strings of supplemental Cython
 code to insert directly into the wrapper.</td>
 </tr>
 </tbody>
@@ -210,7 +210,7 @@ code to insert directly into the wrapper.</td>
 </div>
 <div class="section" id="toaster-example">
 <h3>Toaster Example<a class="headerlink" href="#toaster-example" title="Permalink to this headline">¶</a></h3>
-<p>Suppose we have a C++ class called Toaster that takes bread and makes delicious 
+<p>Suppose we have a C++ class called Toaster that takes bread and makes delicious
 toast.  A valid description dictionary for this class would be as follows:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">class_desc</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Toaster&#39;</span><span class="p">,</span>
@@ -225,8 +225,8 @@ toast.  A valid description dictionary for this class would be as follows:</p>
         <span class="p">(</span><span class="s">&#39;Toaster&#39;</span><span class="p">,):</span> <span class="bp">None</span><span class="p">,</span>
         <span class="p">(</span><span class="s">&#39;Toaster&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;str&#39;</span><span class="p">,</span> <span class="s">&#39;&quot;&quot;&#39;</span><span class="p">)):</span> <span class="bp">None</span><span class="p">,</span>
         <span class="p">(</span><span class="s">&#39;Toaster&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;paramtrack&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;set&#39;</span><span class="p">,</span> <span class="s">&#39;str&#39;</span><span class="p">)),</span> <span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;str&#39;</span><span class="p">,</span> <span class="s">&#39;&quot;&quot;&#39;</span><span class="p">)):</span> <span class="bp">None</span><span class="p">,</span>
-        <span class="p">(</span><span class="s">&#39;~Toaster&#39;</span><span class="p">,):</span> <span class="bp">None</span><span class="p">,</span> 
-        <span class="p">(</span><span class="s">&#39;tostring&#39;</span><span class="p">,):</span> <span class="s">&#39;str&#39;</span><span class="p">,</span> 
+        <span class="p">(</span><span class="s">&#39;~Toaster&#39;</span><span class="p">,):</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="p">(</span><span class="s">&#39;tostring&#39;</span><span class="p">,):</span> <span class="s">&#39;str&#39;</span><span class="p">,</span>
         <span class="p">(</span><span class="s">&#39;calc&#39;</span><span class="p">,):</span> <span class="s">&#39;Material&#39;</span><span class="p">,</span>
         <span class="p">(</span><span class="s">&#39;calc&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;incomp&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;map&#39;</span><span class="p">,</span> <span class="s">&#39;int32&#39;</span><span class="p">,</span> <span class="s">&#39;float64&#39;</span><span class="p">))):</span> <span class="s">&#39;Material&#39;</span><span class="p">,</span>
         <span class="p">(</span><span class="s">&#39;calc&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;mat&#39;</span><span class="p">,</span> <span class="s">&#39;Material&#39;</span><span class="p">)):</span> <span class="s">&#39;Material&#39;</span><span class="p">,</span>
@@ -258,7 +258,7 @@ toast.  A valid description dictionary for this class would be as follows:</p>
 <div class="section" id="automatic-description-generation">
 <h3>Automatic Description Generation<a class="headerlink" href="#automatic-description-generation" title="Permalink to this headline">¶</a></h3>
 <p>The purpose of this module is to create description dictionaries like those
-above by automatically parsing C++ classes.  In theory this parsing step may 
+above by automatically parsing C++ classes.  In theory this parsing step may
 be handled by visiting any syntax tree of C++ code.  Two options were pursued here:
 GCC-XML and the Python bindings to the Clang AST.  Unfortunately, the Clang AST
 bindings lack exposure for template argument types.  These are needed to use any
@@ -271,9 +271,9 @@ for the moment.</p>
 <h2>Automatic Descriptions API<a class="headerlink" href="#automatic-descriptions-api" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="xdress.autodescribe.GccxmlBaseDescriber">
-<em class="property">class </em><tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">GccxmlBaseDescriber</tt><big>(</big><em>name</em>, <em>root=None</em>, <em>onlyin=None</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">GccxmlBaseDescriber</tt><big>(</big><em>name</em>, <em>root=None</em>, <em>onlyin=None</em>, <em>ts=None</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlBaseDescriber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base class used to generate descriptions via GCC-XML output.
-Sub-classes need only implement a visit() method and optionally a 
+Sub-classes need only implement a visit() method and optionally a
 constructor.  The default visitor methods are valid for classes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -289,8 +289,12 @@ constructor.  The default visitor methods are valid for classes.</p>
 </div></blockquote>
 <p><strong>onlyin</strong> :  str, optional</p>
 <blockquote>
-<div><p>Filename the class or struct described must live in.  Prevents 
+<div><p>Filename the class or struct described must live in.  Prevents
 finding elements of the same name coming from other libraries.</p>
+</div></blockquote>
+<p><strong>ts</strong> : TypeSystem, optional</p>
+<blockquote>
+<div><p>A type system instance.</p>
 </div></blockquote>
 <p><strong>verbose</strong> : bool, optional</p>
 <blockquote class="last">
@@ -302,99 +306,106 @@ finding elements of the same name coming from other libraries.</p>
 </table>
 <dl class="method">
 <dt id="xdress.autodescribe.GccxmlBaseDescriber.context">
-<tt class="descname">context</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.context" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">context</tt><big>(</big><em>id</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlBaseDescriber.context"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.context" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resolves the context from its id and information in the element tree.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.autodescribe.GccxmlBaseDescriber.type">
-<tt class="descname">type</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.type" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">type</tt><big>(</big><em>id</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlBaseDescriber.type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resolves the type from its id and information in the root element tree.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.autodescribe.GccxmlBaseDescriber.visit_argument">
-<tt class="descname">visit_argument</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_argument" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">visit_argument</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlBaseDescriber.visit_argument"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_argument" title="Permalink to this definition">¶</a></dt>
 <dd><p>visits a constructor, destructor, or method argument.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.autodescribe.GccxmlBaseDescriber.visit_arraytype">
-<tt class="descname">visit_arraytype</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_arraytype" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">visit_arraytype</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlBaseDescriber.visit_arraytype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_arraytype" title="Permalink to this definition">¶</a></dt>
 <dd><p>visits an array type and maps it to a &#8216;*&#8217; refinement type.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.autodescribe.GccxmlBaseDescriber.visit_base">
-<tt class="descname">visit_base</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_base" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">visit_base</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlBaseDescriber.visit_base"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_base" title="Permalink to this definition">¶</a></dt>
 <dd><p>visits a base class.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.autodescribe.GccxmlBaseDescriber.visit_class">
-<tt class="descname">visit_class</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_class" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">visit_class</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlBaseDescriber.visit_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_class" title="Permalink to this definition">¶</a></dt>
 <dd><p>visits a class or struct.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.autodescribe.GccxmlBaseDescriber.visit_constructor">
-<tt class="descname">visit_constructor</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_constructor" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">visit_constructor</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlBaseDescriber.visit_constructor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_constructor" title="Permalink to this definition">¶</a></dt>
 <dd><p>visits a class constructor.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.autodescribe.GccxmlBaseDescriber.visit_cvqualifiedtype">
-<tt class="descname">visit_cvqualifiedtype</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_cvqualifiedtype" title="Permalink to this definition">¶</a></dt>
-<dd><p>visits constant, volatile, and restricted types and maps them to 
+<tt class="descname">visit_cvqualifiedtype</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlBaseDescriber.visit_cvqualifiedtype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_cvqualifiedtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>visits constant, volatile, and restricted types and maps them to
 &#8216;const&#8217;, &#8216;volatile&#8217;, and &#8216;restrict&#8217; refinement types.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.autodescribe.GccxmlBaseDescriber.visit_destructor">
-<tt class="descname">visit_destructor</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_destructor" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">visit_destructor</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlBaseDescriber.visit_destructor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_destructor" title="Permalink to this definition">¶</a></dt>
 <dd><p>visits a class destructor.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.autodescribe.GccxmlBaseDescriber.visit_field">
-<tt class="descname">visit_field</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_field" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">visit_field</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlBaseDescriber.visit_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_field" title="Permalink to this definition">¶</a></dt>
 <dd><p>visits a member variable.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.autodescribe.GccxmlBaseDescriber.visit_function">
-<tt class="descname">visit_function</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_function" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">visit_function</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlBaseDescriber.visit_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_function" title="Permalink to this definition">¶</a></dt>
 <dd><p>visits a non-member function.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="xdress.autodescribe.GccxmlBaseDescriber.visit_functiontype">
+<tt class="descname">visit_functiontype</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlBaseDescriber.visit_functiontype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_functiontype" title="Permalink to this definition">¶</a></dt>
+<dd><p>visits an function type and returns a &#8216;function&#8217; dependent 
+refinement type.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="xdress.autodescribe.GccxmlBaseDescriber.visit_fundamentaltype">
-<tt class="descname">visit_fundamentaltype</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_fundamentaltype" title="Permalink to this definition">¶</a></dt>
-<dd><p>visits a base C++ type, mapping it to the approriate type in the 
+<tt class="descname">visit_fundamentaltype</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlBaseDescriber.visit_fundamentaltype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_fundamentaltype" title="Permalink to this definition">¶</a></dt>
+<dd><p>visits a base C++ type, mapping it to the approriate type in the
 type system.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.autodescribe.GccxmlBaseDescriber.visit_method">
-<tt class="descname">visit_method</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_method" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">visit_method</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlBaseDescriber.visit_method"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_method" title="Permalink to this definition">¶</a></dt>
 <dd><p>visits a member function.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.autodescribe.GccxmlBaseDescriber.visit_namespace">
-<tt class="descname">visit_namespace</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_namespace" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">visit_namespace</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlBaseDescriber.visit_namespace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_namespace" title="Permalink to this definition">¶</a></dt>
 <dd><p>visits the namespace that a node is defined in.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.autodescribe.GccxmlBaseDescriber.visit_pointertype">
-<tt class="descname">visit_pointertype</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_pointertype" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">visit_pointertype</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlBaseDescriber.visit_pointertype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_pointertype" title="Permalink to this definition">¶</a></dt>
 <dd><p>visits a pointer and maps it to a &#8216;*&#8217; refinement type.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.autodescribe.GccxmlBaseDescriber.visit_referencetype">
-<tt class="descname">visit_referencetype</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_referencetype" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">visit_referencetype</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlBaseDescriber.visit_referencetype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_referencetype" title="Permalink to this definition">¶</a></dt>
 <dd><p>visits a refernece and maps it to a &#8216;&amp;&#8217; refinement type.</p>
 </dd></dl>
 
@@ -406,7 +417,7 @@ type system.</p>
 
 <dl class="method">
 <dt id="xdress.autodescribe.GccxmlBaseDescriber.visit_typedef">
-<tt class="descname">visit_typedef</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_typedef" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">visit_typedef</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlBaseDescriber.visit_typedef"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_typedef" title="Permalink to this definition">¶</a></dt>
 <dd><p>visits a type definition anywhere.</p>
 </dd></dl>
 
@@ -414,7 +425,7 @@ type system.</p>
 
 <dl class="class">
 <dt id="xdress.autodescribe.GccxmlClassDescriber">
-<em class="property">class </em><tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">GccxmlClassDescriber</tt><big>(</big><em>name</em>, <em>root=None</em>, <em>onlyin=None</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlClassDescriber" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">GccxmlClassDescriber</tt><big>(</big><em>name</em>, <em>root=None</em>, <em>onlyin=None</em>, <em>ts=None</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlClassDescriber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlClassDescriber" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class used to generate class descriptions via GCC-XML output.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -430,8 +441,12 @@ type system.</p>
 </div></blockquote>
 <p><strong>onlyin</strong> :  str, optional</p>
 <blockquote>
-<div><p>Filename the class or struct described must live in.  Prevents 
+<div><p>Filename the class or struct described must live in.  Prevents
 finding classes of the same name coming from other libraries.</p>
+</div></blockquote>
+<p><strong>ts</strong> : TypeSystem, optional</p>
+<blockquote>
+<div><p>A type system instance.</p>
 </div></blockquote>
 <p><strong>verbose</strong> : bool, optional</p>
 <blockquote class="last">
@@ -443,7 +458,7 @@ finding classes of the same name coming from other libraries.</p>
 </table>
 <dl class="method">
 <dt id="xdress.autodescribe.GccxmlClassDescriber.visit">
-<tt class="descname">visit</tt><big>(</big><em>node=None</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlClassDescriber.visit" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">visit</tt><big>(</big><em>node=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlClassDescriber.visit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlClassDescriber.visit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Visits the class node and all sub-nodes, generating the description
 dictionary as it goes.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -452,7 +467,7 @@ dictionary as it goes.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>node</strong> : element tree node, optional</p>
 <blockquote class="last">
-<div><p>The element tree node to start from.  If this is None, then the 
+<div><p>The element tree node to start from.  If this is None, then the
 top-level class node is found and visited.</p>
 </div></blockquote>
 </td>
@@ -465,7 +480,7 @@ top-level class node is found and visited.</p>
 
 <dl class="class">
 <dt id="xdress.autodescribe.GccxmlFuncDescriber">
-<em class="property">class </em><tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">GccxmlFuncDescriber</tt><big>(</big><em>name</em>, <em>root=None</em>, <em>onlyin=None</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlFuncDescriber" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">GccxmlFuncDescriber</tt><big>(</big><em>name</em>, <em>root=None</em>, <em>onlyin=None</em>, <em>ts=None</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlFuncDescriber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlFuncDescriber" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class used to generate function descriptions via GCC-XML output.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -481,8 +496,12 @@ top-level class node is found and visited.</p>
 </div></blockquote>
 <p><strong>onlyin</strong> :  str, optional</p>
 <blockquote>
-<div><p>Filename the function described must live in.  Prevents finding 
+<div><p>Filename the function described must live in.  Prevents finding
 functions of the same name coming from other libraries.</p>
+</div></blockquote>
+<p><strong>ts</strong> : TypeSystem, optional</p>
+<blockquote>
+<div><p>A type system instance.</p>
 </div></blockquote>
 <p><strong>verbose</strong> : bool, optional</p>
 <blockquote class="last">
@@ -494,7 +513,7 @@ functions of the same name coming from other libraries.</p>
 </table>
 <dl class="method">
 <dt id="xdress.autodescribe.GccxmlFuncDescriber.visit">
-<tt class="descname">visit</tt><big>(</big><em>node=None</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlFuncDescriber.visit" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">visit</tt><big>(</big><em>node=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlFuncDescriber.visit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlFuncDescriber.visit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Visits the function node and all sub-nodes, generating the description
 dictionary as it goes.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -503,7 +522,7 @@ dictionary as it goes.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>node</strong> : element tree node, optional</p>
 <blockquote class="last">
-<div><p>The element tree node to start from.  If this is None, then the 
+<div><p>The element tree node to start from.  If this is None, then the
 top-level class node is found and visited.</p>
 </div></blockquote>
 </td>
@@ -516,7 +535,7 @@ top-level class node is found and visited.</p>
 
 <dl class="class">
 <dt id="xdress.autodescribe.GccxmlVarDescriber">
-<em class="property">class </em><tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">GccxmlVarDescriber</tt><big>(</big><em>name</em>, <em>root=None</em>, <em>onlyin=None</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlVarDescriber" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">GccxmlVarDescriber</tt><big>(</big><em>name</em>, <em>root=None</em>, <em>onlyin=None</em>, <em>ts=None</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlVarDescriber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlVarDescriber" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class used to generate variable descriptions via GCC-XML output.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -532,8 +551,12 @@ top-level class node is found and visited.</p>
 </div></blockquote>
 <p><strong>onlyin</strong> :  str, optional</p>
 <blockquote>
-<div><p>Filename the function described must live in.  Prevents finding 
+<div><p>Filename the function described must live in.  Prevents finding
 functions of the same name coming from other libraries.</p>
+</div></blockquote>
+<p><strong>ts</strong> : TypeSystem, optional</p>
+<blockquote>
+<div><p>A type system instance.</p>
 </div></blockquote>
 <p><strong>verbose</strong> : bool, optional</p>
 <blockquote class="last">
@@ -545,7 +568,7 @@ functions of the same name coming from other libraries.</p>
 </table>
 <dl class="method">
 <dt id="xdress.autodescribe.GccxmlVarDescriber.visit">
-<tt class="descname">visit</tt><big>(</big><em>node=None</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.GccxmlVarDescriber.visit" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">visit</tt><big>(</big><em>node=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlVarDescriber.visit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlVarDescriber.visit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Visits the variable node and all sub-nodes, generating the description
 dictionary as it goes.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -554,7 +577,7 @@ dictionary as it goes.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>node</strong> : element tree node, optional</p>
 <blockquote class="last">
-<div><p>The element tree node to start from.  If this is None, then the 
+<div><p>The element tree node to start from.  If this is None, then the
 top-level class node is found and visited.</p>
 </div></blockquote>
 </td>
@@ -567,25 +590,24 @@ top-level class node is found and visited.</p>
 
 <dl class="class">
 <dt id="xdress.autodescribe.XDressPlugin">
-<em class="property">class </em><tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">XDressPlugin</tt><a class="headerlink" href="#xdress.autodescribe.XDressPlugin" title="Permalink to this definition">¶</a></dt>
-<dd><p>This plugin creates automatic description dictionaries of all souce and 
+<em class="property">class </em><tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">XDressPlugin</tt><a class="reference internal" href="../_modules/xdress/autodescribe.html#XDressPlugin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.XDressPlugin" title="Permalink to this definition">¶</a></dt>
+<dd><p>This plugin creates automatic description dictionaries of all souce and
 target files.</p>
 <dl class="method">
 <dt id="xdress.autodescribe.XDressPlugin.adddesc2env">
-<tt class="descname">adddesc2env</tt><big>(</big><em>desc</em>, <em>env</em>, <em>name</em>, <em>srcname</em>, <em>tarname</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.adddesc2env" title="Permalink to this definition">¶</a></dt>
-<dd><p>Adds a description to environment</p>
+<tt class="descname">adddesc2env</tt><big>(</big><em>desc</em>, <em>env</em>, <em>name</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#XDressPlugin.adddesc2env"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.adddesc2env" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a description to environment.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.autodescribe.XDressPlugin.compute_classes">
-<tt class="descname">compute_classes</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.compute_classes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes class descriptions and loads them into the environment and 
-type system.</p>
+<tt class="descname">compute_classes</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#XDressPlugin.compute_classes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.compute_classes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes class descriptions and loads them into the environment.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.autodescribe.XDressPlugin.compute_desc">
-<tt class="descname">compute_desc</tt><big>(</big><em>name</em>, <em>srcname</em>, <em>tarname</em>, <em>kind</em>, <em>rc</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.compute_desc" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">compute_desc</tt><big>(</big><em>name</em>, <em>srcname</em>, <em>tarname</em>, <em>kind</em>, <em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#XDressPlugin.compute_desc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.compute_desc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a description dictionary for a class or function
 implemented in a source file and bound into a target file.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -626,38 +648,51 @@ implemented in a source file and bound into a target file.</p>
 
 <dl class="method">
 <dt id="xdress.autodescribe.XDressPlugin.compute_functions">
-<tt class="descname">compute_functions</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.compute_functions" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">compute_functions</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#XDressPlugin.compute_functions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.compute_functions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes function descriptions and loads them into the environment.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.autodescribe.XDressPlugin.compute_variables">
-<tt class="descname">compute_variables</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.compute_variables" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">compute_variables</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#XDressPlugin.compute_variables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.compute_variables" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes variables descriptions and loads them into the environment.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.autodescribe.XDressPlugin.defaultrc">
-<tt class="descname">defaultrc</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.defaultrc" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">defaultrc</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#XDressPlugin.defaultrc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.defaultrc" title="Permalink to this definition">¶</a></dt>
 <dd><p>This plugin adds the env dictionary to the rc.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.autodescribe.XDressPlugin.load_pysrcmod">
-<tt class="descname">load_pysrcmod</tt><big>(</big><em>srcname</em>, <em>rc</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.load_pysrcmod" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">load_pysrcmod</tt><big>(</big><em>srcname</em>, <em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#XDressPlugin.load_pysrcmod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.load_pysrcmod" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads a module dictionary from a src file intox the pysrcenv cache.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.autodescribe.XDressPlugin.load_sidecars">
-<tt class="descname">load_sidecars</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.load_sidecars" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">load_sidecars</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#XDressPlugin.load_sidecars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.load_sidecars" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads all sidecar files.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="xdress.autodescribe.XDressPlugin.rcdocs">
+<tt class="descname">rcdocs</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#XDressPlugin.rcdocs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.rcdocs" title="Permalink to this definition">¶</a></dt>
+<dd><p>This plugin adds the env dictionary to the rc.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xdress.autodescribe.XDressPlugin.register_classes">
+<tt class="descname">register_classes</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#XDressPlugin.register_classes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.register_classes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Registers classes with the type system.  This can and should be done
+trying to describe the class.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="xdress.autodescribe.XDressPlugin.setup">
-<tt class="descname">setup</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.setup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Expands variables, functions, and classes in the rc based on 
+<tt class="descname">setup</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#XDressPlugin.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expands variables, functions, and classes in the rc based on
 copying src filenames to tar filename.</p>
 </dd></dl>
 
@@ -665,14 +700,14 @@ copying src filenames to tar filename.</p>
 
 <dl class="function">
 <dt id="xdress.autodescribe.ClangTypeVisitor">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">ClangTypeVisitor</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.ClangTypeVisitor" title="Permalink to this definition">¶</a></dt>
-<dd><p>For a Clang type located at a root node, compute the cooresponding 
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">ClangTypeVisitor</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#ClangTypeVisitor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.ClangTypeVisitor" title="Permalink to this definition">¶</a></dt>
+<dd><p>For a Clang type located at a root node, compute the cooresponding
 typesystem type.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.autodescribe.clang_canonize">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_canonize</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.clang_canonize" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_canonize</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_canonize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_canonize" title="Permalink to this definition">¶</a></dt>
 <dd><div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">This has not yet been implemented fully or at all.</p>
@@ -681,7 +716,7 @@ typesystem type.</p>
 
 <dl class="function">
 <dt id="xdress.autodescribe.clang_describe">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_describe</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.clang_describe" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_describe</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_describe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_describe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use clang to describe the class.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -691,7 +726,7 @@ typesystem type.</p>
 
 <dl class="function">
 <dt id="xdress.autodescribe.clang_find_attributes">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_find_attributes</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.clang_find_attributes" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_find_attributes</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_find_attributes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_find_attributes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds attributes one level below the Clang node.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -701,7 +736,7 @@ typesystem type.</p>
 
 <dl class="function">
 <dt id="xdress.autodescribe.clang_find_class">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_find_class</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.clang_find_class" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_find_class</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_find_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_find_class" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find the node for a given class underneath the current node.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -711,7 +746,7 @@ typesystem type.</p>
 
 <dl class="function">
 <dt id="xdress.autodescribe.clang_find_declarations">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_find_declarations</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.clang_find_declarations" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_find_declarations</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_find_declarations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_find_declarations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds declarations one level below the Clang node.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -721,7 +756,7 @@ typesystem type.</p>
 
 <dl class="function">
 <dt id="xdress.autodescribe.clang_is_loc_in_range">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_is_loc_in_range</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.clang_is_loc_in_range" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_is_loc_in_range</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_is_loc_in_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_is_loc_in_range" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether a given Clang location is part of a source file range.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -731,7 +766,7 @@ typesystem type.</p>
 
 <dl class="function">
 <dt id="xdress.autodescribe.clang_range_str">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_range_str</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.clang_range_str" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_range_str</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_range_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_range_str" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the text present on a source range.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -741,13 +776,13 @@ typesystem type.</p>
 
 <dl class="function">
 <dt id="xdress.autodescribe.clearmemo">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clearmemo</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.autodescribe.clearmemo" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clearmemo</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clearmemo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clearmemo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clears all function memoizations for autodescribers.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.autodescribe.describe">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">describe</tt><big>(</big><em>filename</em>, <em>name=None</em>, <em>kind='class'</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>parsers='gccxml'</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.describe" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">describe</tt><big>(</big><em>filename</em>, <em>name=None</em>, <em>kind='class'</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>parsers='gccxml'</em>, <em>ts=None</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#describe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.describe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automatically describes an API element in a file.  This is the main entry point.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -759,7 +794,7 @@ typesystem type.</p>
 </div></blockquote>
 <p><strong>name</strong> : str or None, optional</p>
 <blockquote>
-<div><p>The name, a &#8216;None&#8217; value will attempt to infer this from the 
+<div><p>The name, a &#8216;None&#8217; value will attempt to infer this from the
 filename.</p>
 </div></blockquote>
 <p><strong>kind</strong> : str, optional</p>
@@ -780,12 +815,16 @@ filename.</p>
 </div></blockquote>
 <p><strong>parsers</strong> : str, list, or dict, optional</p>
 <blockquote>
-<div><p>The parser / AST to use to use for the file.  Currently &#8216;clang&#8217;, &#8216;gccxml&#8217;, 
-and &#8216;pycparser&#8217; are supported, though others may be implemented in the 
-future.  If this is a string, then this parser is used.  If this is a list, 
+<div><p>The parser / AST to use to use for the file.  Currently &#8216;clang&#8217;, &#8216;gccxml&#8217;,
+and &#8216;pycparser&#8217; are supported, though others may be implemented in the
+future.  If this is a string, then this parser is used.  If this is a list,
 this specifies the parser order to use based on availability.  If this is
 a dictionary, it specifies the order to use parser based on language, i.e.
 <tt class="docutils literal"><span class="pre">{'c'</span> <span class="pre">['pycparser',</span> <span class="pre">'gccxml'],</span> <span class="pre">'c++':</span> <span class="pre">['gccxml',</span> <span class="pre">'pycparser']}</span></tt>.</p>
+</div></blockquote>
+<p><strong>ts</strong> : TypeSystem, optional</p>
+<blockquote>
+<div><p>A type system instance.</p>
 </div></blockquote>
 <p><strong>verbose</strong> : bool, optional</p>
 <blockquote>
@@ -814,7 +853,7 @@ API bindings.</p>
 
 <dl class="function">
 <dt id="xdress.autodescribe.gccxml_describe">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">gccxml_describe</tt><big>(</big><em>filename</em>, <em>name</em>, <em>kind</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.gccxml_describe" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">gccxml_describe</tt><big>(</big><em>filename</em>, <em>name</em>, <em>kind</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>ts=None</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#gccxml_describe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.gccxml_describe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use GCC-XML to describe the class.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -826,7 +865,7 @@ API bindings.</p>
 </div></blockquote>
 <p><strong>name</strong> : str or None, optional</p>
 <blockquote>
-<div><p>The name, a &#8216;None&#8217; value will attempt to infer this from the 
+<div><p>The name, a &#8216;None&#8217; value will attempt to infer this from the
 filename.</p>
 </div></blockquote>
 <p><strong>kind</strong> : str</p>
@@ -844,6 +883,10 @@ filename.</p>
 <p><strong>undefines: list of str, optional</strong> :</p>
 <blockquote>
 <div><p>The list of extra macro undefinitions to apply.</p>
+</div></blockquote>
+<p><strong>ts</strong> : TypeSystem, optional</p>
+<blockquote>
+<div><p>A type system instance.</p>
 </div></blockquote>
 <p><strong>verbose</strong> : bool, optional</p>
 <blockquote>
@@ -872,7 +915,7 @@ API bindings.</p>
 
 <dl class="function">
 <dt id="xdress.autodescribe.pycparser_describe">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">pycparser_describe</tt><big>(</big><em>filename</em>, <em>name</em>, <em>kind</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="headerlink" href="#xdress.autodescribe.pycparser_describe" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">pycparser_describe</tt><big>(</big><em>filename</em>, <em>name</em>, <em>kind</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>ts=None</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#pycparser_describe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.pycparser_describe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use pycparser to describe the fucntion or struct (class).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -884,7 +927,7 @@ API bindings.</p>
 </div></blockquote>
 <p><strong>name</strong> : str or None, optional</p>
 <blockquote>
-<div><p>The name, a &#8216;None&#8217; value will attempt to infer this from the 
+<div><p>The name, a &#8216;None&#8217; value will attempt to infer this from the
 filename.</p>
 </div></blockquote>
 <p><strong>kind</strong> : str</p>
@@ -902,6 +945,10 @@ filename.</p>
 <p><strong>undefines: list of str, optional</strong> :</p>
 <blockquote>
 <div><p>The list of extra macro undefinitions to apply.</p>
+</div></blockquote>
+<p><strong>ts</strong> : TypeSystem, optional</p>
+<blockquote>
+<div><p>A type system instance.</p>
 </div></blockquote>
 <p><strong>verbose</strong> : bool, optional</p>
 <blockquote>
@@ -1006,7 +1053,7 @@ API bindings.</p>
         <li class="right" >
           <a href="astparsers.html" title="Abstract Syntax Tree Parsers"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.2 documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.3 documentation</a> &raquo;</li>
 
           <li><a href="index.html" >Library Reference</a> &raquo;</li> 
       </ul>

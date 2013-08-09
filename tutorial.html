@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Tutorial &mdash; xdress 0.2 documentation</title>
+    <title>Tutorial &mdash; xdress 0.3 documentation</title>
     
     <link rel="stylesheet" href="_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.2',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.2 documentation" href="index.html" />
+    <link rel="top" title="xdress 0.3 documentation" href="index.html" />
     <link rel="next" title="mypack" href="mypack/index.html" />
     <link rel="prev" title="XDress" href="index.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
@@ -69,7 +69,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="index.html" title="XDress"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">xdress 0.2 documentation</a> &raquo;</li>
+    <li><a href="index.html">xdress 0.3 documentation</a> &raquo;</li>
  
       </ul>
     </div>
@@ -172,9 +172,9 @@ __init__.py
 src:
 </pre></div>
 </div>
-<p>We would then run xdress with the &#8220;no-cython&#8221; option to only execute stlwrap.
-This then generates the following files:</p>
-<div class="highlight-bash"><div class="highlight"><pre>scopatz@ares ~/mypack <span class="nv">$ </span>xdress --no-cython
+<p>We would then run xdress to execute stlwrap.  This then generates the following
+files:</p>
+<div class="highlight-bash"><div class="highlight"><pre>scopatz@ares ~/mypack <span class="nv">$ </span>xdress
 generating C++ standard library wrappers &amp; converters
 scopatz@ares ~/mypack <span class="nv">$ </span>ls *
 xdressrc.py
@@ -343,6 +343,66 @@ will work:</p>
 <span class="p">)</span>
 </pre></div>
 </div>
+<p>Or, the following <tt class="docutils literal"><span class="pre">CMakeLists.txt</span></tt> files will work to build the modules with
+<a class="reference external" href="http://cmake.org">CMake</a>.</p>
+<p><strong>CMakeLists.txt</strong>:</p>
+<div class="highlight-cmake"><div class="highlight"><pre><span class="nb">cmake_minimum_required</span><span class="p">(</span> <span class="s">VERSION</span> <span class="s">2.8</span> <span class="p">)</span>
+
+<span class="nb">project</span><span class="p">(</span> <span class="s">mypack</span> <span class="p">)</span>
+
+<span class="c"># The files in the cmake directory must also be included in your project</span>
+<span class="c"># until they are merged into upstream CMake.</span>
+<span class="nb">set</span><span class="p">(</span> <span class="s">CMAKE_MODULE_PATH</span> <span class="o">${</span><span class="nv">CMAKE_MODULE_PATH</span><span class="o">}</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_LIST_DIR</span><span class="o">}</span><span class="s">/cmake</span> <span class="p">)</span>
+
+<span class="nb">include</span><span class="p">(</span> <span class="s">UseCython</span> <span class="p">)</span>
+
+<span class="c"># With CMake, a clean separation can be made between the source tree and the</span>
+<span class="c"># build tree.  When all source is compiled, as with pure C/C++, the source is</span>
+<span class="c"># no-longer needed in the build tree.  However, with pure *.py source, the</span>
+<span class="c"># source is processed directly.  To handle this, we reproduce the availability</span>
+<span class="c"># of the source files in the build tree.</span>
+<span class="nb">add_custom_target</span><span class="p">(</span> <span class="s">ReplicatePythonSourceTree</span> <span class="s">ALL</span> <span class="o">${</span><span class="nv">CMAKE_COMMAND</span><span class="o">}</span> <span class="s">-P</span>
+  <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/cmake/ReplicatePythonSourceTree.cmake</span>
+  <span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span>
+  <span class="s">WORKING_DIRECTORY</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span> <span class="p">)</span>
+
+<span class="nb">include_directories</span><span class="p">(</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/src</span> <span class="p">)</span>
+
+<span class="nb">enable_testing</span><span class="p">()</span>
+<span class="nb">find_file</span><span class="p">(</span> <span class="s">NOSETESTS_EXECUTABLE</span> <span class="s">nosetests</span> <span class="p">)</span>
+<span class="nb">add_test</span><span class="p">(</span> <span class="s">nosetests</span> <span class="s2">&quot;${NOSETESTS_EXECUTABLE}&quot;</span> <span class="s">-v</span> <span class="s">--with-xunit</span> <span class="p">)</span>
+
+<span class="nb">add_subdirectory</span><span class="p">(</span> <span class="s">mypack</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>mypack/CMakeLists.txt</strong>:</p>
+<div class="highlight-cmake"><div class="highlight"><pre><span class="nb">if</span><span class="p">(</span> <span class="s">NOT</span> <span class="s">NUMPY_INCLUDE_DIR</span> <span class="p">)</span>
+  <span class="nb">find_package</span><span class="p">(</span> <span class="s">PythonInterp</span> <span class="p">)</span>
+  <span class="nb">execute_process</span><span class="p">(</span>
+    <span class="s">COMMAND</span> <span class="o">${</span><span class="nv">PYTHON_EXECUTABLE</span><span class="o">}</span> <span class="s">-c</span> <span class="s2">&quot;import numpy; print(numpy.get_include())&quot;</span>
+    <span class="s">OUTPUT_VARIABLE</span> <span class="s">_numpy_include</span>
+    <span class="s">OUTPUT_STRIP_TRAILING_WHITESPACE</span>
+    <span class="p">)</span>
+  <span class="nb">find_path</span><span class="p">(</span> <span class="s">NUMPY_INCLUDE_DIR</span> <span class="s">numpy/arrayobject.h</span>
+    <span class="s">HINTS</span> <span class="o">${</span><span class="nv">_numpy_include</span><span class="o">}</span> <span class="p">)</span>
+<span class="nb">endif</span><span class="p">()</span>
+<span class="nb">include_directories</span><span class="p">(</span> <span class="o">${</span><span class="nv">NUMPY_INCLUDE_DIR</span><span class="o">}</span>  <span class="p">)</span>
+
+<span class="nb">set</span><span class="p">(</span> <span class="s">cxx_pyx_files</span>
+  <span class="s">hoover_b.pyx</span>
+  <span class="s">hoover.pyx</span>
+  <span class="s">stlcontainers.pyx</span>
+  <span class="s">xdress_extra_types.pyx</span>
+  <span class="p">)</span>
+<span class="nb">set_source_files_properties</span><span class="p">(</span> <span class="o">${</span><span class="nv">cxx_pyx_files</span><span class="o">}</span>
+  <span class="s">PROPERTIES</span> <span class="s">CYTHON_IS_CXX</span> <span class="s">TRUE</span> <span class="p">)</span>
+
+<span class="nb">cython_add_module</span><span class="p">(</span> <span class="s">xdress_extra_types</span> <span class="s">xdress_extra_types.pyx</span> <span class="p">)</span>
+<span class="nb">cython_add_module</span><span class="p">(</span> <span class="s">stlcontainers</span> <span class="s">stlcontainers.pyx</span> <span class="p">)</span>
+<span class="nb">cython_add_module</span><span class="p">(</span> <span class="s">hoover</span> <span class="s">hoover.pyx</span> <span class="s">../src/hoover.cpp</span> <span class="p">)</span>
+<span class="nb">cython_add_module</span><span class="p">(</span> <span class="s">hoover_b</span> <span class="s">hoover_b.pyx</span> <span class="s">../src/hoover.cpp</span> <span class="p">)</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="code-listings">
 <h2>Code Listings<a class="headerlink" href="#code-listings" title="Permalink to this headline">¶</a></h2>
@@ -352,7 +412,9 @@ in the xdress repo</a></p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="mypack/index.html">mypack</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mypack/CMakeLists.txt.html">CMakeLists.txt</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mypack/mypack/index.html">mypack</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mypack/mypack/CMakeLists.txt.html">CMakeLists.txt</a></li>
 <li class="toctree-l3"><a class="reference internal" href="mypack/mypack/cpp_hoover.pxd.html">cpp_hoover.pxd</a></li>
 <li class="toctree-l3"><a class="reference internal" href="mypack/mypack/cpp_hoover_b.pxd.html">cpp_hoover_b.pxd</a></li>
 <li class="toctree-l3"><a class="reference internal" href="mypack/mypack/hoover.pxd.html">hoover.pxd</a></li>
@@ -559,7 +621,7 @@ one might run across in a production level environment.</p>
         <li class="right" >
           <a href="index.html" title="XDress"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">xdress 0.2 documentation</a> &raquo;</li>
+    <li><a href="index.html">xdress 0.3 documentation</a> &raquo;</li>
  
       </ul>
     </div>

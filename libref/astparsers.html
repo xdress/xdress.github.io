@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Abstract Syntax Tree Parsers &mdash; xdress 0.2 documentation</title>
+    <title>Abstract Syntax Tree Parsers &mdash; xdress 0.3 documentation</title>
     
     <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.2',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.2 documentation" href="../index.html" />
+    <link rel="top" title="xdress 0.3 documentation" href="../index.html" />
     <link rel="up" title="Library Reference" href="index.html" />
     <link rel="next" title="Automatic Descriptions" href="autodescribe.html" />
     <link rel="prev" title="Standard Library Container Wrappers" href="stlwrap.html" /> 
@@ -70,7 +70,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="stlwrap.html" title="Standard Library Container Wrappers"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.2 documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.3 documentation</a> &raquo;</li>
 
           <li><a href="index.html" accesskey="U">Library Reference</a> &raquo;</li> 
       </ul>
@@ -83,9 +83,10 @@ if(ga_enabled){
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-xdress.astparsers">
-<span id="abstract-syntax-tree-parsers"></span><span id="xdress-astparsers"></span><h1>Abstract Syntax Tree Parsers<a class="headerlink" href="#module-xdress.astparsers" title="Permalink to this headline">¶</a></h1>
-<p>This module creates abstract syntax trees using external tools 
+  <div class="section" id="abstract-syntax-tree-parsers">
+<span id="xdress-astparsers"></span><h1>Abstract Syntax Tree Parsers<a class="headerlink" href="#abstract-syntax-tree-parsers" title="Permalink to this headline">¶</a></h1>
+<img alt="../_images/astall.jpg" class="align-center" src="../_images/astall.jpg" />
+<span class="target" id="module-xdress.astparsers"></span><p>This module creates abstract syntax trees using external tools 
 (GCC-XML, pycparser) of C/C++ code.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -99,45 +100,45 @@ if(ga_enabled){
 <h2>AST Parsers API<a class="headerlink" href="#ast-parsers-api" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="xdress.astparsers.ParserPlugin">
-<em class="property">class </em><tt class="descclassname">xdress.astparsers.</tt><tt class="descname">ParserPlugin</tt><a class="headerlink" href="#xdress.astparsers.ParserPlugin" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">xdress.astparsers.</tt><tt class="descname">ParserPlugin</tt><a class="reference internal" href="../_modules/xdress/astparsers.html#ParserPlugin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.astparsers.ParserPlugin" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is a base plugin for tools that wish to wrap parsing.
 It should not be used directly.</p>
 <p>The __init__() method may take no arguments or keyword arguments.</p>
 <dl class="method">
 <dt id="xdress.astparsers.ParserPlugin.report_debug">
-<tt class="descname">report_debug</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.astparsers.ParserPlugin.report_debug" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">report_debug</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/astparsers.html#ParserPlugin.report_debug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.astparsers.ParserPlugin.report_debug" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remember to call super() on subclasses!</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.astparsers.ParserPlugin.setup">
-<tt class="descname">setup</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.astparsers.ParserPlugin.setup" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">setup</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/astparsers.html#ParserPlugin.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.astparsers.ParserPlugin.setup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remember to call super() on subclasses!</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="xdress.astparsers.ParserPlugin.requires">
 <tt class="descname">requires</tt><em class="property"> = ('xdress.base',)</em><a class="headerlink" href="#xdress.astparsers.ParserPlugin.requires" title="Permalink to this definition">¶</a></dt>
-<dd><p>This plugin requires base</p>
+<dd><p>This plugin requires &#8216;xdress.base&#8217;.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.astparsers.clearmemo">
-<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">clearmemo</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.astparsers.clearmemo" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">clearmemo</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xdress/astparsers.html#clearmemo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.astparsers.clearmemo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clears all function memoizations for autodescribers.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.astparsers.dumpast">
-<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">dumpast</tt><big>(</big><em>filename</em>, <em>parsers</em>, <em>sourcedir</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="headerlink" href="#xdress.astparsers.dumpast" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">dumpast</tt><big>(</big><em>filename</em>, <em>parsers</em>, <em>sourcedir</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="reference internal" href="../_modules/xdress/astparsers.html#dumpast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.astparsers.dumpast" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prints an abstract syntax tree to stdout.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.astparsers.gccxml_parse">
-<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">gccxml_parse</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.astparsers.gccxml_parse" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">gccxml_parse</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/astparsers.html#gccxml_parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.astparsers.gccxml_parse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use GCC-XML to parse a file. This function is automatically memoized.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -185,7 +186,7 @@ It should not be used directly.</p>
 
 <dl class="function">
 <dt id="xdress.astparsers.pick_parser">
-<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">pick_parser</tt><big>(</big><em>filename</em>, <em>parsers</em><big>)</big><a class="headerlink" href="#xdress.astparsers.pick_parser" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">pick_parser</tt><big>(</big><em>filename</em>, <em>parsers</em><big>)</big><a class="reference internal" href="../_modules/xdress/astparsers.html#pick_parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.astparsers.pick_parser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the parse to use for a file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -218,7 +219,7 @@ a dictionary, it specifies the order to use parser based on language, i.e.
 
 <dl class="function">
 <dt id="xdress.astparsers.pycparser_parse">
-<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">pycparser_parse</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#xdress.astparsers.pycparser_parse" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">pycparser_parse</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/astparsers.html#pycparser_parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.astparsers.pycparser_parse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use pycparser to parse a file.  This functions is automatically memoized.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -334,7 +335,7 @@ a dictionary, it specifies the order to use parser based on language, i.e.
         <li class="right" >
           <a href="stlwrap.html" title="Standard Library Container Wrappers"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.2 documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.3 documentation</a> &raquo;</li>
 
           <li><a href="index.html" >Library Reference</a> &raquo;</li> 
       </ul>

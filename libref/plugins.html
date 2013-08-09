@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Plugins &mdash; xdress 0.2 documentation</title>
+    <title>Plugins &mdash; xdress 0.3 documentation</title>
     
     <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.2',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.2 documentation" href="../index.html" />
+    <link rel="top" title="xdress 0.3 documentation" href="../index.html" />
     <link rel="up" title="Library Reference" href="index.html" />
     <link rel="next" title="Base Plugin" href="base.html" />
     <link rel="prev" title="Utilities" href="utils.html" /> 
@@ -70,7 +70,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="utils.html" title="Utilities"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.2 documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.3 documentation</a> &raquo;</li>
 
           <li><a href="index.html" accesskey="U">Library Reference</a> &raquo;</li> 
       </ul>
@@ -130,12 +130,13 @@ you want.  Again, inheriting from <tt class="docutils literal"><span class="pre"
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">requires:</th><td class="field-body">This is a list of module names or a function that returns such a list.
+<tr class="field-odd field"><th class="field-name">requires:</th><td class="field-body"><p class="first">This is a list of module names or a function that returns such a list.
 The names in this list will be loaded and executed in order prior to this plugin.
 If multiple plugins require the same upstream plugin, the upstream on will only
-be run once.</td>
+be run once.</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">defaultrc:</th><td class="field-body">This is a dictionary or run control instance that maps run control 
+<tr class="field-even field"><th class="field-name">defaultrc:</th><td class="field-body"><p class="first">This is a dictionary or run control instance that maps run control 
 parameters to their default values if they are otherwise not specified.  To 
 make a parameter have to be given by the user, set the value to the singleton
 <tt class="docutils literal"><span class="pre">xdress.utils.NotSpecified</span></tt>.  Parameters with the same name in different 
@@ -144,38 +145,62 @@ assigned.  The exception to this is if a later plugin&#8217;s parameter value is
 <tt class="docutils literal"><span class="pre">NotSpecified</span></tt> then the previous plugin value will be retained.  See the
 <tt class="docutils literal"><span class="pre">RunControl</span></tt> class for more details.  Generally it is not advised for two
 plugins to share run control parameter names unless you <em>really</em> know what 
-you are doing.</td>
+you are doing.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rcupdaters:</th><td class="field-body"><p class="first">This may be a dict, another mapping, a function which returns a mapping.
+The keys are the string names of the run control parameters.  The values
+are callables which indicate how to update or merge two rc parameters with 
+this key. The callable should take two instances and return a copy that 
+represents the merger, e.g. <tt class="docutils literal"><span class="pre">lambda</span> <span class="pre">old,</span> <span class="pre">new:</span> <span class="pre">old</span> <span class="pre">+</span> <span class="pre">new</span></tt>.  One useful example 
+is for paths.  Normally you want new paths to prepend old ones:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">rcupdaters</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;includes&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">new</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">old</span><span class="p">)}</span>
+</pre></div>
+</div>
+<p>If a callable is not supplied for an rc parameter then the the default 
+behaviour is to simply override the old value with the new one.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rcdocs:</th><td class="field-body"><p class="first">This may be a dict, another mapping, a function which returns a mapping.
+The keys are the string names of the run control parameters.  The values
+are docstrings for the rc parameters.</p>
+</td>
 </tr>
 <tr class="field-odd field"><th class="field-name" colspan="2">update_argparser(parser):</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">This is method that takes an argparse.ArgumentParser() 
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first">This is method that takes an argparse.ArgumentParser() 
 instance and modifies it in-place.  This allows for run control parameters to be 
 exposed as command line arguments and options.  Default arguments in 
 <tt class="docutils literal"><span class="pre">parser.add_argument()</span></tt> values should not be given, or should only be set to 
 <tt class="docutils literal"><span class="pre">Not</span> <span class="pre">Specified</span></tt>.  This is to prevent collisions with the run controller.  
 Default values should instead be given in the plugin&#8217;s <tt class="docutils literal"><span class="pre">defaultrc</span></tt>.  Thus 
 argument names or the <tt class="docutils literal"><span class="pre">dest</span></tt> keyword argument should match the keys in 
-<tt class="docutils literal"><span class="pre">defaultrc</span></tt>.</td>
+<tt class="docutils literal"><span class="pre">defaultrc</span></tt>.</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">setup(rc):</th><td class="field-body">Performs all setup tasks needed for this plugin.  This may include 
+<tr class="field-even field"><th class="field-name">setup(rc):</th><td class="field-body"><p class="first">Performs all setup tasks needed for this plugin.  This may include 
 validation and munging of the run control object (rc) as well as creating 
 directories and files in the OS environment.  If needed, the rc should be 
 modified in-place so that changes propagate to other plugins and further calls
-on this plugin. This should return None.</td>
+on this plugin. This should return None.</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">execute(rc):</th><td class="field-body">Performs the heavy lifting of the plugin, which may require a run 
+<tr class="field-odd field"><th class="field-name">execute(rc):</th><td class="field-body"><p class="first">Performs the heavy lifting of the plugin, which may require a run 
 controller.If needed, the rc should be modified in-place so that changes 
 propagate to other plugins and further calls on this plugin. This should 
-return None.</td>
+return None.</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">teardown(rc):</th><td class="field-body">Performs any cleanup tasks needed by the plugin, including removing
+<tr class="field-even field"><th class="field-name">teardown(rc):</th><td class="field-body"><p class="first">Performs any cleanup tasks needed by the plugin, including removing
 temporary files.  If needed, the rc should be modified in-place so that changes 
 propagate to other plugins and further calls on this plugin. This should 
-return None.</td>
+return None.</p>
+</td>
 </tr>
 <tr class="field-odd field"><th class="field-name" colspan="2">report_debug(rc):</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">Generates and returns a message to report in the <tt class="docutils literal"><span class="pre">debug.txt</span></tt>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first last">Generates and returns a message to report in the <tt class="docutils literal"><span class="pre">debug.txt</span></tt>
 file in the event that execute() fails and additional debugging information is 
-requested.  This message is a string.</td>
+requested.  This message is a string.</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -195,6 +220,11 @@ requested.  This message is a string.</td>
         <span class="s">&#39;choices&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;J. Edgar Hoover&#39;</span><span class="p">,</span> <span class="s">&#39;Hua Mulan&#39;</span><span class="p">,</span> <span class="s">&#39;Leslie&#39;</span><span class="p">],</span>
         <span class="s">&#39;answer&#39;</span><span class="p">:</span> <span class="s">&#39;Joan of Arc&#39;</span><span class="p">,</span>
         <span class="p">}</span>
+
+    <span class="n">rcupdaters</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;choices&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">new</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">old</span><span class="p">)}</span>        
+
+    <span class="n">rcdocs</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;choices&#39;</span><span class="p">:</span> <span class="s">&quot;Possible answers.&quot;</span><span class="p">,</span>
+              <span class="s">&#39;answer&#39;</span><span class="p">:</span> <span class="s">&quot;The correct answer&quot;</span><span class="p">}</span>
 
     <span class="k">def</span> <span class="nf">update_argparser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
         <span class="c"># Note, no &#39;default=&#39; keyword arguments are given</span>
@@ -225,12 +255,12 @@ requested.  This message is a string.</td>
 <h2>Plugins API<a class="headerlink" href="#plugins-api" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="xdress.plugins.Plugin">
-<em class="property">class </em><tt class="descclassname">xdress.plugins.</tt><tt class="descname">Plugin</tt><a class="headerlink" href="#xdress.plugins.Plugin" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">xdress.plugins.</tt><tt class="descname">Plugin</tt><a class="reference internal" href="../_modules/xdress/plugins.html#Plugin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugin" title="Permalink to this definition">¶</a></dt>
 <dd><p>A base plugin for other xdress pluigins to inherit.</p>
 <p>The __init__() method may take no arguments or keyword arguments.</p>
 <dl class="method">
 <dt id="xdress.plugins.Plugin.execute">
-<tt class="descname">execute</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.plugins.Plugin.execute" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">execute</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#Plugin.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugin.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs the actual work of the plugin, which may require a run controller.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -244,7 +274,7 @@ requested.  This message is a string.</td>
 
 <dl class="method">
 <dt id="xdress.plugins.Plugin.report_debug">
-<tt class="descname">report_debug</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.plugins.Plugin.report_debug" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">report_debug</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#Plugin.report_debug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugin.report_debug" title="Permalink to this definition">¶</a></dt>
 <dd><p>A message to report in the event that execute() fails and additional
 debugging information is requested.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -267,7 +297,7 @@ skipped in the debug output.</p>
 
 <dl class="method">
 <dt id="xdress.plugins.Plugin.setup">
-<tt class="descname">setup</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.plugins.Plugin.setup" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">setup</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#Plugin.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugin.setup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs all setup tasks needed for this plugin.  This may include 
 validation and munging of the run control object as well as creating 
 the portions of the OS environment.</p>
@@ -283,7 +313,7 @@ the portions of the OS environment.</p>
 
 <dl class="method">
 <dt id="xdress.plugins.Plugin.teardown">
-<tt class="descname">teardown</tt><big>(</big><em>rc</em><big>)</big><a class="headerlink" href="#xdress.plugins.Plugin.teardown" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">teardown</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#Plugin.teardown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugin.teardown" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs any cleanup tasks needed by the plugin.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -297,7 +327,7 @@ the portions of the OS environment.</p>
 
 <dl class="method">
 <dt id="xdress.plugins.Plugin.update_argparser">
-<tt class="descname">update_argparser</tt><big>(</big><em>parser</em><big>)</big><a class="headerlink" href="#xdress.plugins.Plugin.update_argparser" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">update_argparser</tt><big>(</big><em>parser</em><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#Plugin.update_argparser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugin.update_argparser" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method takes an argparse.ArgumentParser() instance and modifies 
 it in-place.  This allows for run control parameters to be modified from 
 as command line arguments.</p>
@@ -329,6 +359,30 @@ parameters and the values are the associated default values.</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="xdress.plugins.Plugin.rcdocs">
+<tt class="descname">rcdocs</tt><em class="property"> = {}</em><a class="headerlink" href="#xdress.plugins.Plugin.rcdocs" title="Permalink to this definition">¶</a></dt>
+<dd><p>This may be a dict, another mapping, a function which returns a mapping.
+The keys are the string names of the run control parameters.  The values
+are docstrings for the rc parameters.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xdress.plugins.Plugin.rcupdaters">
+<tt class="descname">rcupdaters</tt><em class="property"> = {}</em><a class="headerlink" href="#xdress.plugins.Plugin.rcupdaters" title="Permalink to this definition">¶</a></dt>
+<dd><p>This may be a dict, another mapping, a function which returns a mapping.
+The keys are the string names of the run control parameters.  The values
+are callables which indicate how to update or merge two rc parameters with
+this key. The callable should take two instances and return a copy that
+represents the merger, e.g. <tt class="docutils literal"><span class="pre">lambda</span> <span class="pre">old,</span> <span class="pre">new:</span> <span class="pre">old</span> <span class="pre">+</span> <span class="pre">new</span></tt>.  One useful example
+is for paths.  Normally you want new paths to prepend old ones:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">rcupdaters</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;includes&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">new</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">old</span><span class="p">)}</span>
+</pre></div>
+</div>
+<p>If a callable is not supplied for an rc parameter then the the default
+behaviour is to simply override the old value with the new one.</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="xdress.plugins.Plugin.requires">
 <tt class="descname">requires</tt><em class="property"> = ()</em><a class="headerlink" href="#xdress.plugins.Plugin.requires" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is a sequence of strings, or a function which returns such, that
@@ -339,12 +393,12 @@ lists the module names of other plugins that this plugin requires.</p>
 
 <dl class="class">
 <dt id="xdress.plugins.Plugins">
-<em class="property">class </em><tt class="descclassname">xdress.plugins.</tt><tt class="descname">Plugins</tt><big>(</big><em>modnames</em><big>)</big><a class="headerlink" href="#xdress.plugins.Plugins" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">xdress.plugins.</tt><tt class="descname">Plugins</tt><big>(</big><em>modnames</em>, <em>loaddeps=True</em><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#Plugins"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugins" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is a class for managing the instantiation and execution of plugins.</p>
 <p>The execution and control of plugins should happen in the following order:</p>
 <ol class="arabic simple">
 <li><tt class="docutils literal"><span class="pre">build_cli()</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">merge_defaultrcs()</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">merge_rcs()</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">setup()</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">execute()</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">teardown()</span></tt></li>
@@ -354,9 +408,14 @@ lists the module names of other plugins that this plugin requires.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>modnames</strong> : list of str</p>
-<blockquote class="last">
+<blockquote>
 <div><p>The module names where the plugins live.  Plugins must have the name
 &#8216;XDressPlugin&#8217; in the these modules.</p>
+</div></blockquote>
+<p><strong>loaddeps: bool, optional</strong> :</p>
+<blockquote class="last">
+<div><p>Flag for automatically loading dependencies, should only be False in 
+a limited set of circumstances.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -364,7 +423,7 @@ lists the module names of other plugins that this plugin requires.</p>
 </table>
 <dl class="method">
 <dt id="xdress.plugins.Plugins.build_cli">
-<tt class="descname">build_cli</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.plugins.Plugins.build_cli" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">build_cli</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#Plugins.build_cli"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugins.build_cli" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds and returns a command line interface based on the plugins.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -378,29 +437,43 @@ lists the module names of other plugins that this plugin requires.</p>
 
 <dl class="method">
 <dt id="xdress.plugins.Plugins.execute">
-<tt class="descname">execute</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.plugins.Plugins.execute" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">execute</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#Plugins.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugins.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Preforms all plugin executions.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="xdress.plugins.Plugins.merge_defaultrcs">
-<tt class="descname">merge_defaultrcs</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.plugins.Plugins.merge_defaultrcs" title="Permalink to this definition">¶</a></dt>
+<dt id="xdress.plugins.Plugins.exit">
+<tt class="descname">exit</tt><big>(</big><em>err=0</em><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#Plugins.exit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugins.exit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exits the process, possibly printing debug info.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xdress.plugins.Plugins.merge_rcs">
+<tt class="descname">merge_rcs</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#Plugins.merge_rcs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugins.merge_rcs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds all of the default run controllers and returns a new and 
-full default RunControl() instance.</p>
+full default RunControl() instance.  This has also merged all of 
+the rc updaters in the process.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.plugins.Plugins.setup">
-<tt class="descname">setup</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.plugins.Plugins.setup" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">setup</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#Plugins.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugins.setup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Preforms all plugin setup tasks.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xdress.plugins.Plugins.teardown">
-<tt class="descname">teardown</tt><big>(</big><big>)</big><a class="headerlink" href="#xdress.plugins.Plugins.teardown" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">teardown</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#Plugins.teardown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.Plugins.teardown" title="Permalink to this definition">¶</a></dt>
 <dd><p>Preforms all plugin teardown tasks.</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.plugins.summarize_rcdocs">
+<tt class="descclassname">xdress.plugins.</tt><tt class="descname">summarize_rcdocs</tt><big>(</big><em>modnames</em>, <em>headersep='='</em>, <em>maxdflt=2000</em><big>)</big><a class="reference internal" href="../_modules/xdress/plugins.html#summarize_rcdocs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.plugins.summarize_rcdocs" title="Permalink to this definition">¶</a></dt>
+<dd><p>For a list of plugin module names, return a rST string that 
+summarizes the docstrings for all run control parameters.</p>
 </dd></dl>
 
 </div>
@@ -478,7 +551,7 @@ full default RunControl() instance.</p>
         <li class="right" >
           <a href="utils.html" title="Utilities"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.2 documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.3 documentation</a> &raquo;</li>
 
           <li><a href="index.html" >Library Reference</a> &raquo;</li> 
       </ul>

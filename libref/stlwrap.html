@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Standard Library Container Wrappers &mdash; xdress 0.2 documentation</title>
+    <title>Standard Library Container Wrappers &mdash; xdress 0.3 documentation</title>
     
     <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.2',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.2 documentation" href="../index.html" />
+    <link rel="top" title="xdress 0.3 documentation" href="../index.html" />
     <link rel="up" title="Library Reference" href="index.html" />
     <link rel="next" title="Abstract Syntax Tree Parsers" href="astparsers.html" />
     <link rel="prev" title="Type System" href="typesystem.html" /> 
@@ -70,7 +70,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="typesystem.html" title="Type System"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.2 documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.3 documentation</a> &raquo;</li>
 
           <li><a href="index.html" accesskey="U">Library Reference</a> &raquo;</li> 
       </ul>
@@ -100,86 +100,80 @@ containters to the associated python types.</p>
 <h2>C++ STL Warpper API<a class="headerlink" href="#c-stl-warpper-api" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="xdress.stlwrap.XDressPlugin">
-<em class="property">class </em><tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">XDressPlugin</tt><a class="headerlink" href="#xdress.stlwrap.XDressPlugin" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">XDressPlugin</tt><a class="reference internal" href="../_modules/xdress/stlwrap.html#XDressPlugin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.stlwrap.XDressPlugin" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class provides extra type functionality for xdress.</p>
 <p>The __init__() method may take no arguments or keyword arguments.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.stlwrap.genfiles">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genfiles</tt><big>(</big><em>template</em>, <em>fname='temp'</em>, <em>pxdname=None</em>, <em>testname=None</em>, <em>pyxheader=None</em>, <em>pxdheader=None</em>, <em>testheader=None</em>, <em>package='..'</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genfiles" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genfiles</tt><big>(</big><em>template</em>, <em>fname='temp'</em>, <em>pxdname=None</em>, <em>testname=None</em>, <em>pyxheader=None</em>, <em>pxdheader=None</em>, <em>testheader=None</em>, <em>package='..'</em>, <em>ts=None</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="../_modules/xdress/stlwrap.html#genfiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.stlwrap.genfiles" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates all cython source files needed to create the wrapper.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.stlwrap.genpxd">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpxd</tt><big>(</big><em>template</em>, <em>header=None</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpxd" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpxd</tt><big>(</big><em>template</em>, <em>header=None</em>, <em>ts=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/stlwrap.html#genpxd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.stlwrap.genpxd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a string of a pxd file representing the given template.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.stlwrap.genpxd_map">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpxd_map</tt><big>(</big><em>t</em>, <em>u</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpxd_map" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpxd_map</tt><big>(</big><em>t</em>, <em>u</em>, <em>ts</em><big>)</big><a class="reference internal" href="../_modules/xdress/stlwrap.html#genpxd_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.stlwrap.genpxd_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the pxd snippet for a set of type t.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.stlwrap.genpxd_set">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpxd_set</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpxd_set" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpxd_set</tt><big>(</big><em>t</em>, <em>ts</em><big>)</big><a class="reference internal" href="../_modules/xdress/stlwrap.html#genpxd_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.stlwrap.genpxd_set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the pxd snippet for a set of type t.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.stlwrap.genpxd_vector">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpxd_vector</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpxd_vector" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpxd_vector</tt><big>(</big><em>t</em>, <em>ts</em><big>)</big><a class="reference internal" href="../_modules/xdress/stlwrap.html#genpxd_vector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.stlwrap.genpxd_vector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the pxd snippet for a vector of type t.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="xdress.stlwrap.genpyx">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpyx</tt><big>(</big><em>template</em>, <em>header=None</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpyx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a string of a pyx file representing the given template.</p>
-</dd></dl>
-
-<dl class="function">
 <dt id="xdress.stlwrap.genpyx_map">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpyx_map</tt><big>(</big><em>t</em>, <em>u</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpyx_map" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpyx_map</tt><big>(</big><em>t</em>, <em>u</em>, <em>ts</em><big>)</big><a class="reference internal" href="../_modules/xdress/stlwrap.html#genpyx_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.stlwrap.genpyx_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the pyx snippet for a map of type &lt;t, u&gt;.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.stlwrap.genpyx_set">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpyx_set</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpyx_set" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpyx_set</tt><big>(</big><em>t</em>, <em>ts</em><big>)</big><a class="reference internal" href="../_modules/xdress/stlwrap.html#genpyx_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.stlwrap.genpyx_set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the pyx snippet for a set of type t.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.stlwrap.genpyx_vector">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpyx_vector</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.genpyx_vector" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">genpyx_vector</tt><big>(</big><em>t</em>, <em>ts</em><big>)</big><a class="reference internal" href="../_modules/xdress/stlwrap.html#genpyx_vector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.stlwrap.genpyx_vector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the pyx snippet for a vector of type t.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.stlwrap.gentest">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">gentest</tt><big>(</big><em>template</em>, <em>header=None</em>, <em>package='..'</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.gentest" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">gentest</tt><big>(</big><em>template</em>, <em>header=None</em>, <em>package='..'</em>, <em>ts=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/stlwrap.html#gentest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.stlwrap.gentest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a string of a test file representing the given template.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.stlwrap.gentest_map">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">gentest_map</tt><big>(</big><em>t</em>, <em>u</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.gentest_map" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">gentest_map</tt><big>(</big><em>t</em>, <em>u</em>, <em>ts</em><big>)</big><a class="reference internal" href="../_modules/xdress/stlwrap.html#gentest_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.stlwrap.gentest_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the test snippet for a map of type t.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.stlwrap.gentest_set">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">gentest_set</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.gentest_set" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">gentest_set</tt><big>(</big><em>t</em>, <em>ts</em><big>)</big><a class="reference internal" href="../_modules/xdress/stlwrap.html#gentest_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.stlwrap.gentest_set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the test snippet for a set of type t.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.stlwrap.gentest_vector">
-<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">gentest_vector</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#xdress.stlwrap.gentest_vector" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.stlwrap.</tt><tt class="descname">gentest_vector</tt><big>(</big><em>t</em>, <em>ts</em><big>)</big><a class="reference internal" href="../_modules/xdress/stlwrap.html#gentest_vector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.stlwrap.gentest_vector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the test snippet for a set of type t.</p>
 </dd></dl>
 
@@ -253,7 +247,7 @@ containters to the associated python types.</p>
         <li class="right" >
           <a href="typesystem.html" title="Type System"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.2 documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.3 documentation</a> &raquo;</li>
 
           <li><a href="index.html" >Library Reference</a> &raquo;</li> 
       </ul>
