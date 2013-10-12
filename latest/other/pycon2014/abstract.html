@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>SciPy 2013 Abstract &mdash; xdress 0.4-dev documentation</title>
+    <title>PyCon 2014 Abstract &mdash; xdress 0.4-dev documentation</title>
     
     <link rel="stylesheet" href="../../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -30,9 +30,9 @@
     <script type="text/javascript" src="../../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../../_static/cloud.js"></script>
     <link rel="top" title="xdress 0.4-dev documentation" href="../../index.html" />
-    <link rel="up" title="SciPy 2013" href="index.html" />
-    <link rel="next" title="SciPy 2013 Tutorial Abstract" href="tutorial_abstract.html" />
-    <link rel="prev" title="SciPy 2013" href="index.html" /> 
+    <link rel="up" title="PyCon 2014" href="index.html" />
+    <link rel="next" title="Frequently Asked Questions" href="../../faq.html" />
+    <link rel="prev" title="PyCon 2014" href="index.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
 if(ga_enabled){
@@ -65,15 +65,15 @@ if(ga_enabled){
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="tutorial_abstract.html" title="SciPy 2013 Tutorial Abstract"
+          <a href="../../faq.html" title="Frequently Asked Questions"
              accesskey="N">next</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="index.html" title="SciPy 2013"
+          <a href="index.html" title="PyCon 2014"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
     <li><a href="../../index.html">xdress 0.4-dev documentation</a> &raquo;</li>
 
           <li><a href="../index.html" >Other Documentation Material</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">SciPy 2013</a> &raquo;</li> 
+          <li><a href="index.html" accesskey="U">PyCon 2014</a> &raquo;</li> 
       </ul>
     </div>
     </div>
@@ -84,28 +84,42 @@ if(ga_enabled){
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="scipy-2013-abstract">
-<h1>SciPy 2013 Abstract<a class="headerlink" href="#scipy-2013-abstract" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pycon-2014-abstract">
+<h1>PyCon 2014 Abstract<a class="headerlink" href="#pycon-2014-abstract" title="Permalink to this headline">¶</a></h1>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">title:</th><td class="field-body"><p class="first">XDress - Type, But Verify</p>
+<tr class="field-odd field"><th class="field-name">title:</th><td class="field-body"><p class="first">Beautypeful XDress</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">author:</th><td class="field-body"><p class="first">Scopatz, Anthony, The University of Chicago &amp; NumFOCUS, Inc.</p>
+<tr class="field-even field"><th class="field-name">category:</th><td class="field-body"><p class="first">Science</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">bio:</th><td class="field-body"><p class="first">Anthony Scopatz is a Research Scientist at the FLASH Center at the
-University of Chicago as well as being the treasurer for NumFOCUS.
-With interests spanning the domains of science and computation,
-Anthony is probably just your type of guy.</p>
+<tr class="field-odd field"><th class="field-name">duration:</th><td class="field-body"><p class="first">30 min</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">email:</th><td class="field-body"><p class="first"><a class="reference external" href="mailto:scopatz&#37;&#52;&#48;gmail&#46;com">scopatz<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+<tr class="field-even field"><th class="field-name">description:</th><td class="field-body"><p class="first">XDress is an automatic wrapper generator for C/C++ written in
+pure Python. It can generate Python bindings (via Cython) for classes,
+structs, functions, and certain variables types. It can also create
+in-memory wrappers for C++ sets, vectors, and maps. This is because it
+can generate custom NumPy dtypes. This talk will go over the &#8220;zen of xdress&#8221;
+and teach you how to generate your own wrappers.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">talk summary:</th><td class="field-body"><p class="first">XDress is an automatic wrapper generator for C/C++ written
+<tr class="field-odd field"><th class="field-name">audience:</th><td class="field-body"><p class="first">Anyone who has to or wants to expose a C/C++ API to Python.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Python level:</th><td class="field-body"><p class="first">Intermediate</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">objectives:</th><td class="field-body"><p class="first">To teach people basic type theory concepts, that wrapping C/C++
+extension modules does not have to be painful, and that the results can be very
+beautiful.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">detailed abstract:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">XDress is an automatic wrapper generator for C/C++ written
 in pure Python. Currently, xdress may generate Python bindings (via Cython) for
 C++ classes &amp; functions and in-memory wrappers for C++ standard library
 containers (sets, vectors, maps). In the future, other tools and bindings
@@ -125,27 +139,78 @@ or struct.  This allows the user to have numpy array views into C++ vectors.</p>
 automatically generates Cython wrappers for all user-specified classes and
 functions.  This significantly eases the burden of supporting mixed language
 projects.</p>
+<p>Other powerful features include:</p>
+<ul class="simple">
+<li>C++ template class &amp; function support</li>
+<li>Automatic docstring generation via dOxygen</li>
+<li>Wrapped names may be different than source names, allowing automatic
+PEP-8-ification during C/C++ to Python translation</li>
+<li>First class support for C via pycparser</li>
+<li>Python 3 support, by popular demand!</li>
+</ul>
 <p>The above code generators, however, are just the beginning.  The xdress type
 system is flexible and powerful enough to engender a suite of other tools which
 take advantage of less obvious features.  For example, an automatic verification
 &amp; validation utility could take advantage of refinement type predicate functions
 to interdict parameter constraints into the API right under the users nose!</p>
-<p>This talk will focus on xdress&#8217;s type system and its use cases.</p>
+<p>This talk will focus on xdress&#8217;s type system and its use cases.  XDress is
+licensed under 2-clause BSD.</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name" colspan="2">submission references:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first"><a class="reference external" href="http://bit.ly/xdress-code">http://bit.ly/xdress-code</a>, <a class="reference external" href="https://github.com/scopatz/xdress">https://github.com/scopatz/xdress</a></p>
+<tr class="field-odd field"><th class="field-name">outline:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p class="first">Big Idea</p>
+</li>
+<li><p class="first">Motivation</p>
+</li>
+<li><p class="first">What XDress Is and Is Not</p>
+</li>
+<li><dl class="first docutils">
+<dt>Type System</dt>
+<dd><ul class="first last simple">
+<li>Kinds of Types</li>
+<li>Base Types</li>
+<li>Dependent Types</li>
+<li>Refined Types</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">C/C++ API Descriptions</p>
+</li>
+<li><p class="first">C++ Class Example</p>
+</li>
+<li><p class="first">C++ Standard Library Container Wrappers</p>
+</li>
+<li><p class="first">NumPy Dtype Generation</p>
+</li>
+<li><p class="first">Plugins</p>
+</li>
+<li><p class="first">Neat Concepts for Future Work</p>
+</li>
+<li><p class="first">Questions</p>
+</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">additional notes:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first">The main website is <a class="reference external" href="http://xdress.org/">http://xdress.org/</a></p>
+<p>An earlier version of this talk which used an earlier version of xdress
+was presented to SciPy 2013.  See this page for the slides and the video.
+<a class="reference external" href="http://xdress.org/other/scipy2013/index.html">http://xdress.org/other/scipy2013/index.html</a></p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">submission type:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first">Talk Only</p>
+<tr class="field-even field"><th class="field-name" colspan="2">additional requirements:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">none</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">track:</th><td class="field-body"><p class="first">General</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">domain symposia:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first last">None</p>
+<tr class="field-odd field"><th class="field-name" colspan="2">recording release:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first last">yes</p>
 </td>
 </tr>
 </tbody>
@@ -163,13 +228,13 @@ to interdict parameter constraints into the API right under the users nose!</p>
         </a></p>
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
-                        title="previous chapter">SciPy 2013</a></p>
+                        title="previous chapter">PyCon 2014</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="tutorial_abstract.html"
-                        title="next chapter">SciPy 2013 Tutorial Abstract</a></p>
+  <p class="topless"><a href="../../faq.html"
+                        title="next chapter">Frequently Asked Questions</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../../_sources/other/scipy2013/abstract.txt"
+    <li><a href="../../_sources/other/pycon2014/abstract.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -204,15 +269,15 @@ to interdict parameter constraints into the API right under the users nose!</p>
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="tutorial_abstract.html" title="SciPy 2013 Tutorial Abstract"
+          <a href="../../faq.html" title="Frequently Asked Questions"
              >next</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="index.html" title="SciPy 2013"
+          <a href="index.html" title="PyCon 2014"
              >previous</a> &nbsp; &nbsp;</li>
     <li><a href="../../index.html">xdress 0.4-dev documentation</a> &raquo;</li>
 
           <li><a href="../index.html" >Other Documentation Material</a> &raquo;</li>
-          <li><a href="index.html" >SciPy 2013</a> &raquo;</li> 
+          <li><a href="index.html" >PyCon 2014</a> &raquo;</li> 
       </ul>
     </div>
     </div>

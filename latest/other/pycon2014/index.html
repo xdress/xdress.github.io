@@ -9,29 +9,30 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Frequently Asked Questions &mdash; xdress 0.4-dev documentation</title>
+    <title>PyCon 2014 &mdash; xdress 0.4-dev documentation</title>
     
-    <link rel="stylesheet" href="_static/numpy_friendly.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/numpy_friendly.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
+        URL_ROOT:    '../../',
         VERSION:     '0.4-dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/jquery.cookie.js"></script>
-    <script type="text/javascript" src="_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.4-dev documentation" href="index.html" />
-    <link rel="next" title="Authors" href="authors.html" />
-    <link rel="prev" title="PyCon 2014 Abstract" href="other/pycon2014/abstract.html" /> 
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../../_static/cloud.js"></script>
+    <link rel="top" title="xdress 0.4-dev documentation" href="../../index.html" />
+    <link rel="up" title="Other Documentation Material" href="../index.html" />
+    <link rel="next" title="PyCon 2014 Abstract" href="abstract.html" />
+    <link rel="prev" title="SciPy 2013 Tutorial Abstract" href="../scipy2013/tutorial_abstract.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
 if(ga_enabled){
@@ -55,22 +56,23 @@ if(ga_enabled){
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
+          <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
+          <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="np-modindex.html" title="Python Module Index"
+          <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="authors.html" title="Authors"
+          <a href="abstract.html" title="PyCon 2014 Abstract"
              accesskey="N">next</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="other/pycon2014/abstract.html" title="PyCon 2014 Abstract"
+          <a href="../scipy2013/tutorial_abstract.html" title="SciPy 2013 Tutorial Abstract"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">xdress 0.4-dev documentation</a> &raquo;</li>
- 
+    <li><a href="../../index.html">xdress 0.4-dev documentation</a> &raquo;</li>
+
+          <li><a href="../index.html" accesskey="U">Other Documentation Material</a> &raquo;</li> 
       </ul>
     </div>
     </div>
@@ -81,42 +83,15 @@ if(ga_enabled){
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="frequently-asked-questions">
-<h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this headline">¶</a></h1>
-<ol class="arabic">
-<li><p class="first">Why not use an existing solution (eg, SWIG)?</p>
-<blockquote>
-<div><p>Their type systems don&#8217;t support run-time, user provided refinement types,
-and thus are unsuited for verification &amp; validation use cases that often
-arise in computational science.</p>
-<p>Furthermore, they tend to not handle C++ dependent types well (i.e. vector&lt;T&gt;
-does not come back as a np.view(..., dtype=T)).</p>
-</div></blockquote>
-</li>
-<li><p class="first">Why GCC-XML and not Clang&#8217;s AST?</p>
-<blockquote>
-<div><p>I tried using Clang&#8217;s AST (and the remnants of a broken visitor class remain
-in the code base).  However, the official Clang AST Python bindings lack
-support for template argument types.  This is a really big deal. Other C++ ASTs
-may be supported in the future &#8211; including Clang&#8217;s.</p>
-</div></blockquote>
-</li>
-<li><p class="first">Why is xdress skipping my templated methods?</p>
-<blockquote>
-<div><p>If you are using GCC-XML, this parser is not able to find template member
-functions on either templated or normal classes.  Luckily, through the Power of
-XDRESS!, you can still automatically expose this functionality by adding the
-templated function API to a sidecar file.  If you are having problems with this
-process please let us ask for help on the xdress mailing list. You can find more
-information about the GCC-XML deficiency on <a class="reference external" href="http://public.kitware.com/pipermail/gccxml/2008-August/001178.html">this mailing list post.</a></p>
-</div></blockquote>
-</li>
-<li><p class="first">I run xdress and it creates these files, now what?!</p>
-<blockquote>
-<div><p>It is your job to integrate the files created by xdress into your build system.</p>
-</div></blockquote>
-</li>
-</ol>
+  <div class="section" id="pycon-2014">
+<h1>PyCon 2014<a class="headerlink" href="#pycon-2014" title="Permalink to this headline">¶</a></h1>
+<p>Here you may find the relevant information about xdress submitted to the
+PyCon 2014 in Montreal, CAN:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="abstract.html">PyCon 2014 Abstract</a></li>
+</ul>
+</div>
 </div>
 
 
@@ -125,23 +100,23 @@ information about the GCC-XML deficiency on <a class="reference external" href="
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-        <p class="logo"><a href="index.html">
-          <img class="logo" src="_static/HooverJoven.jpg" alt="Logo"/>
+        <p class="logo"><a href="../../index.html">
+          <img class="logo" src="../../_static/HooverJoven.jpg" alt="Logo"/>
         </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="other/pycon2014/abstract.html"
-                        title="previous chapter">PyCon 2014 Abstract</a></p>
+  <p class="topless"><a href="../scipy2013/tutorial_abstract.html"
+                        title="previous chapter">SciPy 2013 Tutorial Abstract</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="authors.html"
-                        title="next chapter">Authors</a></p>
+  <p class="topless"><a href="abstract.html"
+                        title="next chapter">PyCon 2014 Abstract</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="_sources/faq.txt"
+    <li><a href="../../_sources/other/pycon2014/index.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
+    <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -162,22 +137,23 @@ information about the GCC-XML deficiency on <a class="reference external" href="
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
+          <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
+          <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="np-modindex.html" title="Python Module Index"
+          <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="authors.html" title="Authors"
+          <a href="abstract.html" title="PyCon 2014 Abstract"
              >next</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="other/pycon2014/abstract.html" title="PyCon 2014 Abstract"
+          <a href="../scipy2013/tutorial_abstract.html" title="SciPy 2013 Tutorial Abstract"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">xdress 0.4-dev documentation</a> &raquo;</li>
- 
+    <li><a href="../../index.html">xdress 0.4-dev documentation</a> &raquo;</li>
+
+          <li><a href="../index.html" >Other Documentation Material</a> &raquo;</li> 
       </ul>
     </div>
     </div>
