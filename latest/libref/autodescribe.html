@@ -105,6 +105,48 @@ basic constructs which may be wrapped: variables, functions, and classes.</p>
 <em>desc</em>).  This description is simply a Python dictionary with a specific structure.
 This structure makes heavy use of the type system to declare the types of all needed
 parameters.</p>
+<div class="section" id="the-name-key">
+<h3>The Name Key<a class="headerlink" href="#the-name-key" title="Permalink to this headline">¶</a></h3>
+<p>The <em>name</em> key is a dictionary that represents the API name of the element
+being described.  This contains exactly the same keys that the utils.apiname()
+type has fields.  While apiname is used for user input and validation, the values
+here must truly describe the API element.  The following keys &#8211; and only the 
+following keys &#8211; are allowed in the name dictionary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">srcname:</th><td class="field-body">str or tuple, the element&#8217;s API name in the original source code, 
+eg. MyClass.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">srcfiles:</th><td class="field-body">tuple of str, this is a sequence of unique strings which represents 
+the file paths where the API element <em>may</em> be defined. For example, (&#8216;myfile.c&#8217;, 
+&#8216;myfile.h&#8217;).  If the element is defined outside of these files, then the automatic 
+discovery or description may fail. Since these files are parsed they must 
+actually exist on the filesystem.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">tarbase:</th><td class="field-body">str, the base portion of all automatically generated (target) files. 
+This does not include the directory or the file extension.  For example, if you 
+wanted cythongen to create a file name &#8216;mynewfile.pyx&#8217; then the value here would 
+be simply &#8216;mynewfile&#8217;.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">tarname:</th><td class="field-body">str or tuple, the element&#8217;s API name in the automatically generated 
+(target) files, e.g. MyNewClass.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">incfiles:</th><td class="field-body">tuple of str, this is a sequence of all files which must be #include&#8217;d 
+to access the srcname at compile time.  This should be as minimal of a set as 
+possible, preferably only one file.  For example, &#8216;hdf5.h&#8217;.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">sidecars:</th><td class="field-body">tuple of str, this is a sequence of all sidecar files to use for 
+this API element. Like srcfiles, these files must exist for xdress to run. 
+For example, &#8216;myfile.py&#8217;.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">language:</th><td class="field-body">str, flag for the language that the srcfiles are implemented in. Valid 
+options are: &#8216;c&#8217;, &#8216;c++&#8217;, &#8216;f&#8217;, &#8216;fortran&#8217;, &#8216;f77&#8217;, &#8216;f90&#8217;, &#8216;python&#8217;, and &#8216;cython&#8217;.</td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="section" id="variable-description-top-level-keys">
 <h3>Variable Description Top-Level Keys<a class="headerlink" href="#variable-description-top-level-keys" title="Permalink to this headline">¶</a></h3>
 <p>The following are valid top-level keys in a variable description dictionary:
@@ -113,7 +155,7 @@ name, namespace, type, docstring, and extra.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body">str, the variable name</td>
+<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body">dict, the variable name, see above</td>
 </tr>
 <tr class="field-even field"><th class="field-name">namespace:</th><td class="field-body">str or None, the namespace or module the variable lives in.</td>
 </tr>
@@ -138,7 +180,7 @@ name, namespace, signatures, docstring, and extra.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body">str or tuple, the function name</td>
+<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body">dict, the function name, see above</td>
 </tr>
 <tr class="field-even field"><th class="field-name">namespace:</th><td class="field-body">str or None, the namespace or module the function lives in.</td>
 </tr>
@@ -170,7 +212,7 @@ name, parents, namespace, attrs, methods, docstrings, and extra.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body">str or tuple, the class name</td>
+<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body">dict, the class name, see above</td>
 </tr>
 <tr class="field-even field"><th class="field-name">parents:</th><td class="field-body">list of strings or None, the immediate parents of the class
 (not grandparents).</td>
@@ -374,7 +416,7 @@ finding elements of the same name coming from other libraries.</p>
 <dl class="method">
 <dt id="xdress.autodescribe.GccxmlBaseDescriber.visit_functiontype">
 <tt class="descname">visit_functiontype</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlBaseDescriber.visit_functiontype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_functiontype" title="Permalink to this definition">¶</a></dt>
-<dd><p>visits an function type and returns a &#8216;function&#8217; dependent 
+<dd><p>visits an function type and returns a &#8216;function&#8217; dependent
 refinement type.</p>
 </dd></dl>
 
@@ -607,24 +649,16 @@ target files.</p>
 
 <dl class="method">
 <dt id="xdress.autodescribe.XDressPlugin.compute_desc">
-<tt class="descname">compute_desc</tt><big>(</big><em>name</em>, <em>srcname</em>, <em>tarname</em>, <em>kind</em>, <em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#XDressPlugin.compute_desc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.compute_desc" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">compute_desc</tt><big>(</big><em>name</em>, <em>kind</em>, <em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#XDressPlugin.compute_desc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.compute_desc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a description dictionary for a class or function
 implemented in a source file and bound into a target file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>name</strong> : str</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>name</strong> : apiname</p>
 <blockquote>
-<div><p>Class or function name to describe.</p>
-</div></blockquote>
-<p><strong>srcname</strong> : str</p>
-<blockquote>
-<div><p>File basename of implementation.</p>
-</div></blockquote>
-<p><strong>tarname</strong> : str</p>
-<blockquote>
-<div><p>File basename where the bindings will be generated.</p>
+<div><p>API element name to describe.</p>
 </div></blockquote>
 <p><strong>kind</strong> : str</p>
 <blockquote>
@@ -666,8 +700,8 @@ implemented in a source file and bound into a target file.</p>
 
 <dl class="method">
 <dt id="xdress.autodescribe.XDressPlugin.load_pysrcmod">
-<tt class="descname">load_pysrcmod</tt><big>(</big><em>srcname</em>, <em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#XDressPlugin.load_pysrcmod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.load_pysrcmod" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads a module dictionary from a src file intox the pysrcenv cache.</p>
+<tt class="descname">load_pysrcmod</tt><big>(</big><em>sidecar</em>, <em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#XDressPlugin.load_pysrcmod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.load_pysrcmod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a module dictionary from a sidecar file into the pysrcenv cache.</p>
 </dd></dl>
 
 <dl class="method">
@@ -782,15 +816,18 @@ typesystem type.</p>
 
 <dl class="function">
 <dt id="xdress.autodescribe.describe">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">describe</tt><big>(</big><em>filename</em>, <em>name=None</em>, <em>kind='class'</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>parsers='gccxml'</em>, <em>ts=None</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#describe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.describe" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">describe</tt><big>(</big><em>filename</em>, <em>name=None</em>, <em>kind='class'</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>parsers='gccxml'</em>, <em>ts=None</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em>, <em>language='c++'</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#describe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.describe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automatically describes an API element in a file.  This is the main entry point.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str or container of strs</p>
 <blockquote>
-<div><p>The path to the file.</p>
+<div><p>The path to the file or a list of file paths.  If this is a list to many
+files, a temporary file will be created that #includes all of the files
+in this list in order.  This temporary file is the one which will be 
+parsed.</p>
 </div></blockquote>
 <p><strong>name</strong> : str or None, optional</p>
 <blockquote>
@@ -838,6 +875,10 @@ a dictionary, it specifies the order to use parser based on language, i.e.
 <blockquote>
 <div><p>Location of &#8211; often temporary &#8211; build files.</p>
 </div></blockquote>
+<p><strong>language</strong> : str</p>
+<blockquote>
+<div><p>Valid language flag.</p>
+</div></blockquote>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>desc</strong> : dict</p>
@@ -853,7 +894,7 @@ API bindings.</p>
 
 <dl class="function">
 <dt id="xdress.autodescribe.gccxml_describe">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">gccxml_describe</tt><big>(</big><em>filename</em>, <em>name</em>, <em>kind</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>ts=None</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#gccxml_describe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.gccxml_describe" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">gccxml_describe</tt><big>(</big><em>filename</em>, <em>name</em>, <em>kind</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>ts=None</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em>, <em>onlyin=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#gccxml_describe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.gccxml_describe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use GCC-XML to describe the class.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -900,6 +941,10 @@ filename.</p>
 <blockquote>
 <div><p>Location of &#8211; often temporary &#8211; build files.</p>
 </div></blockquote>
+<p><strong>onlyin: set of str</strong> :</p>
+<blockquote>
+<div><p>The paths to the files that the definition is allowed to exist in.</p>
+</div></blockquote>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>desc</strong> : dict</p>
@@ -915,7 +960,7 @@ API bindings.</p>
 
 <dl class="function">
 <dt id="xdress.autodescribe.pycparser_describe">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">pycparser_describe</tt><big>(</big><em>filename</em>, <em>name</em>, <em>kind</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>ts=None</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#pycparser_describe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.pycparser_describe" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">pycparser_describe</tt><big>(</big><em>filename</em>, <em>name</em>, <em>kind</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>ts=None</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em>, <em>onlyin=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#pycparser_describe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.pycparser_describe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use pycparser to describe the fucntion or struct (class).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -962,6 +1007,10 @@ filename.</p>
 <blockquote>
 <div><p>Location of &#8211; often temporary &#8211; build files.</p>
 </div></blockquote>
+<p><strong>onlyin: set of str</strong> :</p>
+<blockquote>
+<div><p>The paths to the files that the definition is allowed to exist in.</p>
+</div></blockquote>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>desc</strong> : dict</p>
@@ -992,6 +1041,7 @@ API bindings.</p>
   <ul>
 <li><a class="reference internal" href="#">Automatic Descriptions</a><ul>
 <li><a class="reference internal" href="#descriptions">Descriptions</a><ul>
+<li><a class="reference internal" href="#the-name-key">The Name Key</a></li>
 <li><a class="reference internal" href="#variable-description-top-level-keys">Variable Description Top-Level Keys</a></li>
 <li><a class="reference internal" href="#function-description-top-level-keys">Function Description Top-Level Keys</a></li>
 <li><a class="reference internal" href="#class-description-top-level-keys">Class Description Top-Level Keys</a></li>

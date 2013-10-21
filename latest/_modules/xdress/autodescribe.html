@@ -94,12 +94,42 @@ if(ga_enabled){
 <span class="sd">This structure makes heavy use of the type system to declare the types of all needed</span>
 <span class="sd">parameters.</span>
 
+<span class="sd">The Name Key</span>
+<span class="sd">------------</span>
+<span class="sd">The *name* key is a dictionary that represents the API name of the element</span>
+<span class="sd">being described.  This contains exactly the same keys that the utils.apiname()</span>
+<span class="sd">type has fields.  While apiname is used for user input and validation, the values</span>
+<span class="sd">here must truly describe the API element.  The following keys -- and only the </span>
+<span class="sd">following keys -- are allowed in the name dictionary.</span>
+
+<span class="sd">:srcname: str or tuple, the element&#39;s API name in the original source code, </span>
+<span class="sd">    eg. MyClass.</span>
+<span class="sd">:srcfiles: tuple of str, this is a sequence of unique strings which represents </span>
+<span class="sd">    the file paths where the API element *may* be defined. For example, (&#39;myfile.c&#39;, </span>
+<span class="sd">    &#39;myfile.h&#39;).  If the element is defined outside of these files, then the automatic </span>
+<span class="sd">    discovery or description may fail. Since these files are parsed they must </span>
+<span class="sd">    actually exist on the filesystem.</span>
+<span class="sd">:tarbase: str, the base portion of all automatically generated (target) files. </span>
+<span class="sd">    This does not include the directory or the file extension.  For example, if you </span>
+<span class="sd">    wanted cythongen to create a file name &#39;mynewfile.pyx&#39; then the value here would </span>
+<span class="sd">    be simply &#39;mynewfile&#39;.</span>
+<span class="sd">:tarname: str or tuple, the element&#39;s API name in the automatically generated </span>
+<span class="sd">    (target) files, e.g. MyNewClass.</span>
+<span class="sd">:incfiles: tuple of str, this is a sequence of all files which must be #include&#39;d </span>
+<span class="sd">    to access the srcname at compile time.  This should be as minimal of a set as </span>
+<span class="sd">    possible, preferably only one file.  For example, &#39;hdf5.h&#39;. </span>
+<span class="sd">:sidecars: tuple of str, this is a sequence of all sidecar files to use for </span>
+<span class="sd">    this API element. Like srcfiles, these files must exist for xdress to run. </span>
+<span class="sd">    For example, &#39;myfile.py&#39;.</span>
+<span class="sd">:language: str, flag for the language that the srcfiles are implemented in. Valid </span>
+<span class="sd">    options are: &#39;c&#39;, &#39;c++&#39;, &#39;f&#39;, &#39;fortran&#39;, &#39;f77&#39;, &#39;f90&#39;, &#39;python&#39;, and &#39;cython&#39;.</span>
+
 <span class="sd">Variable Description Top-Level Keys</span>
 <span class="sd">------------------------------------</span>
 <span class="sd">The following are valid top-level keys in a variable description dictionary:</span>
 <span class="sd">name, namespace, type, docstring, and extra.</span>
 
-<span class="sd">:name: str, the variable name</span>
+<span class="sd">:name: dict, the variable name, see above</span>
 <span class="sd">:namespace: str or None, the namespace or module the variable lives in.</span>
 <span class="sd">:type: str or tuple, the type of the variable</span>
 <span class="sd">:docstring: str, optional, this is a documentation string for the variable.</span>
@@ -114,7 +144,7 @@ if(ga_enabled){
 <span class="sd">The following are valid top-level keys in a function description dictionary:</span>
 <span class="sd">name, namespace, signatures, docstring, and extra.</span>
 
-<span class="sd">:name: str or tuple, the function name</span>
+<span class="sd">:name: dict, the function name, see above</span>
 <span class="sd">:namespace: str or None, the namespace or module the function lives in.</span>
 <span class="sd">:signatures: dict or dict-like, the keys of this dictionary are function call</span>
 <span class="sd">    signatures and the values are the function return types. The signatures</span>
@@ -136,7 +166,7 @@ if(ga_enabled){
 <span class="sd">The following are valid top-level keys in a class description dictionary:</span>
 <span class="sd">name, parents, namespace, attrs, methods, docstrings, and extra.</span>
 
-<span class="sd">:name: str or tuple, the class name</span>
+<span class="sd">:name: dict, the class name, see above</span>
 <span class="sd">:parents: list of strings or None, the immediate parents of the class</span>
 <span class="sd">    (not grandparents).</span>
 <span class="sd">:namespace: str or None, the namespace or module the class lives in.</span>
@@ -255,7 +285,7 @@ if(ga_enabled){
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">utils</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">exec_file</span><span class="p">,</span> <span class="n">RunControl</span><span class="p">,</span> <span class="n">NotSpecified</span><span class="p">,</span> <span class="n">merge_descriptions</span><span class="p">,</span> \
     <span class="n">find_source</span><span class="p">,</span> <span class="n">FORBIDDEN_NAMES</span><span class="p">,</span> <span class="n">find_filenames</span><span class="p">,</span> <span class="n">warn_forbidden_name</span><span class="p">,</span> \
-    <span class="n">apiname</span><span class="p">,</span> <span class="n">ensure_apiname</span>
+    <span class="n">apiname</span><span class="p">,</span> <span class="n">ensure_apiname</span><span class="p">,</span> <span class="n">cppint</span><span class="p">,</span> <span class="n">extra_filenames</span><span class="p">,</span> <span class="n">newoverwrite</span><span class="p">,</span> <span class="n">_lang_exts</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">astparsers</span>
 <span class="kn">from</span> <span class="nn">.typesystem</span> <span class="kn">import</span> <span class="n">TypeSystem</span>
 
@@ -275,9 +305,9 @@ if(ga_enabled){
 <span class="c"># GCC-XML Describers</span>
 <span class="c">#</span>
 </div>
-<div class="viewcode-block" id="gccxml_describe"><a class="viewcode-back" href="../../libref/autodescribe.html#xdress.autodescribe.gccxml_describe">[docs]</a><span class="k">def</span> <span class="nf">gccxml_describe</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">kind</span><span class="p">,</span> <span class="n">includes</span><span class="o">=</span><span class="p">(),</span> <span class="n">defines</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;XDRESS&#39;</span><span class="p">,),</span> 
-                    <span class="n">undefines</span><span class="o">=</span><span class="p">(),</span> <span class="n">ts</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> 
-                    <span class="n">builddir</span><span class="o">=</span><span class="s">&#39;build&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="gccxml_describe"><a class="viewcode-back" href="../../libref/autodescribe.html#xdress.autodescribe.gccxml_describe">[docs]</a><span class="k">def</span> <span class="nf">gccxml_describe</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">kind</span><span class="p">,</span> <span class="n">includes</span><span class="o">=</span><span class="p">(),</span> <span class="n">defines</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;XDRESS&#39;</span><span class="p">,),</span>
+                    <span class="n">undefines</span><span class="o">=</span><span class="p">(),</span> <span class="n">ts</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                    <span class="n">builddir</span><span class="o">=</span><span class="s">&#39;build&#39;</span><span class="p">,</span> <span class="n">onlyin</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Use GCC-XML to describe the class.</span>
 
 <span class="sd">    Parameters</span>
@@ -295,7 +325,7 @@ if(ga_enabled){
 <span class="sd">        The list of extra macro definitions to apply.</span>
 <span class="sd">    undefines: list of str, optional</span>
 <span class="sd">        The list of extra macro undefinitions to apply.</span>
-<span class="sd">    ts : TypeSystem, optional </span>
+<span class="sd">    ts : TypeSystem, optional</span>
 <span class="sd">        A type system instance.</span>
 <span class="sd">    verbose : bool, optional</span>
 <span class="sd">        Flag to diplay extra information while describing the class.</span>
@@ -303,6 +333,8 @@ if(ga_enabled){
 <span class="sd">        Flag to enable/disable debug mode.</span>
 <span class="sd">    builddir : str, optional</span>
 <span class="sd">        Location of -- often temporary -- build files.</span>
+<span class="sd">    onlyin: set of str</span>
+<span class="sd">        The paths to the files that the definition is allowed to exist in.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -310,15 +342,15 @@ if(ga_enabled){
 <span class="sd">        A dictionary describing the class which may be used to generate</span>
 <span class="sd">        API bindings.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;nt&#39;</span><span class="p">:</span>
-        <span class="c"># GCC-XML and/or Cygwin wants posix paths on Windows.</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="n">posixpath</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="o">*</span><span class="n">ntpath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
-    <span class="n">root</span> <span class="o">=</span> <span class="n">astparsers</span><span class="o">.</span><span class="n">gccxml_parse</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">includes</span><span class="o">=</span><span class="n">includes</span><span class="p">,</span> <span class="n">defines</span><span class="o">=</span><span class="n">defines</span><span class="p">,</span>
+    <span class="c"># GCC-XML and/or Cygwin wants posix paths on Windows.</span>
+    <span class="n">posixfilename</span> <span class="o">=</span> <span class="n">posixpath</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="o">*</span><span class="n">ntpath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;nt&#39;</span> \
+                    <span class="k">else</span> <span class="n">filename</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">astparsers</span><span class="o">.</span><span class="n">gccxml_parse</span><span class="p">(</span><span class="n">posixfilename</span><span class="p">,</span> <span class="n">includes</span><span class="o">=</span><span class="n">includes</span><span class="p">,</span> <span class="n">defines</span><span class="o">=</span><span class="n">defines</span><span class="p">,</span>
                                    <span class="n">undefines</span><span class="o">=</span><span class="n">undefines</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">,</span>
                                    <span class="n">builddir</span><span class="o">=</span><span class="n">builddir</span><span class="p">)</span>
     <span class="n">basename</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">onlyin</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">filename</span><span class="p">]</span> <span class="o">+</span>
-                 <span class="p">[</span><span class="n">basename</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="n">h</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">utils</span><span class="o">.</span><span class="n">_hdr_exts</span> <span class="k">if</span> <span class="n">h</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;h&#39;</span><span class="p">)])</span>
+    <span class="k">if</span> <span class="n">onlyin</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">onlyin</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">filename</span><span class="p">])</span>
     <span class="n">describers</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="n">GccxmlClassDescriber</span><span class="p">,</span> <span class="s">&#39;func&#39;</span><span class="p">:</span> <span class="n">GccxmlFuncDescriber</span><span class="p">,</span>
                   <span class="s">&#39;var&#39;</span><span class="p">:</span> <span class="n">GccxmlVarDescriber</span><span class="p">}</span>
     <span class="n">describer</span> <span class="o">=</span> <span class="n">describers</span><span class="p">[</span><span class="n">kind</span><span class="p">](</span><span class="n">name</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">onlyin</span><span class="o">=</span><span class="n">onlyin</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="n">ts</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
@@ -345,7 +377,7 @@ if(ga_enabled){
 <span class="sd">        onlyin :  str, optional</span>
 <span class="sd">            Filename the class or struct described must live in.  Prevents</span>
 <span class="sd">            finding elements of the same name coming from other libraries.</span>
-<span class="sd">        ts : TypeSystem, optional </span>
+<span class="sd">        ts : TypeSystem, optional</span>
 <span class="sd">            A type system instance.</span>
 <span class="sd">        verbose : bool, optional</span>
 <span class="sd">            Flag to display extra information while visiting.</span>
@@ -364,11 +396,14 @@ if(ga_enabled){
         <span class="k">for</span> <span class="n">fnode</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">iterfind</span><span class="p">(</span><span class="s">&quot;File&quot;</span><span class="p">):</span>
             <span class="n">fid</span> <span class="o">=</span> <span class="n">fnode</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span>
             <span class="n">fname</span> <span class="o">=</span> <span class="n">fnode</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+
             <span class="bp">self</span><span class="o">.</span><span class="n">_filemap</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span> <span class="o">=</span> <span class="n">fname</span>
         <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">onlyin</span><span class="p">:</span>
             <span class="n">fnode</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot;File[@name=&#39;{0}&#39;]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fname</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">fnode</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="k">continue</span>
+                <span class="n">fnode</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot;File[@name=&#39;./{0}&#39;]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fname</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">fnode</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="k">continue</span>
             <span class="n">fid</span> <span class="o">=</span> <span class="n">fnode</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">onlyin</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">fid</span><span class="p">)</span>
         <span class="k">if</span> <span class="mi">0</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onlyin</span><span class="p">):</span>
@@ -501,7 +536,7 @@ if(ga_enabled){
         <span class="bp">self</span><span class="o">.</span><span class="n">_pprint</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_currclass</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_describes</span> <span class="o">==</span> <span class="s">&#39;class&#39;</span> <span class="ow">and</span> <span class="p">(</span><span class="n">name</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">ts</span><span class="o">.</span><span class="n">gccxml_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="ow">or</span> 
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_describes</span> <span class="o">==</span> <span class="s">&#39;class&#39;</span> <span class="ow">and</span> <span class="p">(</span><span class="n">name</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">ts</span><span class="o">.</span><span class="n">gccxml_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="ow">or</span>
                                            <span class="n">name</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">):</span>
             <span class="k">if</span> <span class="s">&#39;bases&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="p">:</span>
                 <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s">&quot;The type {0!r} is used as part of an API element but no &quot;</span>
@@ -604,7 +639,7 @@ if(ga_enabled){
             <span class="n">arg</span> <span class="o">=</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_integer_types</span><span class="p">:</span>
-                <span class="n">default</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">default</span><span class="p">)</span>
+                <span class="n">default</span> <span class="o">=</span> <span class="n">cppint</span><span class="p">(</span><span class="n">default</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">default</span> <span class="o">==</span> <span class="s">&#39;true&#39;</span><span class="p">:</span>
                 <span class="n">default</span> <span class="o">=</span> <span class="bp">True</span>
             <span class="k">elif</span> <span class="n">default</span> <span class="o">==</span> <span class="s">&#39;false&#39;</span><span class="p">:</span>
@@ -642,7 +677,7 @@ if(ga_enabled){
         <span class="k">return</span> <span class="p">(</span><span class="s">&#39;enum&#39;</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">currenum</span><span class="p">))</span>
 
     <span class="n">_fundemntal_to_base</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">&#39;char&#39;</span><span class="p">:</span> <span class="s">&#39;char&#39;</span><span class="p">,</span> 
+        <span class="s">&#39;char&#39;</span><span class="p">:</span> <span class="s">&#39;char&#39;</span><span class="p">,</span>
         <span class="s">&#39;unsigned char&#39;</span><span class="p">:</span> <span class="s">&#39;uchar&#39;</span><span class="p">,</span>
         <span class="s">&#39;int16_t&#39;</span><span class="p">:</span> <span class="s">&#39;int16&#39;</span><span class="p">,</span>
         <span class="s">&#39;short&#39;</span><span class="p">:</span> <span class="s">&#39;int16&#39;</span><span class="p">,</span>
@@ -650,17 +685,18 @@ if(ga_enabled){
         <span class="s">&#39;short unsigned int&#39;</span><span class="p">:</span> <span class="s">&#39;uint16&#39;</span><span class="p">,</span>
         <span class="s">&#39;unsigned short&#39;</span><span class="p">:</span> <span class="s">&#39;uint16&#39;</span><span class="p">,</span>
         <span class="s">&#39;int32_t&#39;</span><span class="p">:</span> <span class="s">&#39;int32&#39;</span><span class="p">,</span>
-        <span class="s">&#39;int&#39;</span><span class="p">:</span> <span class="s">&#39;int32&#39;</span><span class="p">,</span> 
+        <span class="s">&#39;int&#39;</span><span class="p">:</span> <span class="s">&#39;int32&#39;</span><span class="p">,</span>
         <span class="s">&#39;long long&#39;</span><span class="p">:</span> <span class="s">&#39;int64&#39;</span><span class="p">,</span>
-        <span class="s">&#39;long int&#39;</span><span class="p">:</span> <span class="s">&#39;int64&#39;</span><span class="p">,</span> 
+        <span class="s">&#39;long int&#39;</span><span class="p">:</span> <span class="s">&#39;int64&#39;</span><span class="p">,</span>
         <span class="s">&#39;unsigned int&#39;</span><span class="p">:</span> <span class="s">&#39;uint32&#39;</span><span class="p">,</span>
+        <span class="s">&#39;long long unsigned int&#39;</span><span class="p">:</span> <span class="s">&#39;uint64&#39;</span><span class="p">,</span>
         <span class="s">&#39;long unsigned int&#39;</span><span class="p">:</span> <span class="s">&#39;uint64&#39;</span><span class="p">,</span>
         <span class="s">&#39;unsigned long long&#39;</span><span class="p">:</span> <span class="s">&#39;uint64&#39;</span><span class="p">,</span>
         <span class="s">&#39;short unsigned int&#39;</span><span class="p">:</span> <span class="s">&#39;uint16&#39;</span><span class="p">,</span>
         <span class="s">&#39;float&#39;</span><span class="p">:</span> <span class="s">&#39;float32&#39;</span><span class="p">,</span>
         <span class="s">&#39;double&#39;</span><span class="p">:</span> <span class="s">&#39;float64&#39;</span><span class="p">,</span>
-        <span class="s">&#39;complex&#39;</span><span class="p">:</span> <span class="s">&#39;complex128&#39;</span><span class="p">,</span> 
-        <span class="s">&#39;void&#39;</span><span class="p">:</span> <span class="s">&#39;void&#39;</span><span class="p">,</span> 
+        <span class="s">&#39;complex&#39;</span><span class="p">:</span> <span class="s">&#39;complex128&#39;</span><span class="p">,</span>
+        <span class="s">&#39;void&#39;</span><span class="p">:</span> <span class="s">&#39;void&#39;</span><span class="p">,</span>
         <span class="s">&#39;bool&#39;</span><span class="p">:</span> <span class="s">&#39;bool&#39;</span><span class="p">,</span>
         <span class="p">}</span>
 
@@ -693,7 +729,7 @@ if(ga_enabled){
         <span class="k">return</span> <span class="n">t</span>
 </div>
 <div class="viewcode-block" id="GccxmlBaseDescriber.visit_functiontype"><a class="viewcode-back" href="../../libref/autodescribe.html#xdress.autodescribe.GccxmlBaseDescriber.visit_functiontype">[docs]</a>    <span class="k">def</span> <span class="nf">visit_functiontype</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;visits an function type and returns a &#39;function&#39; dependent </span>
+        <span class="sd">&quot;&quot;&quot;visits an function type and returns a &#39;function&#39; dependent</span>
 <span class="sd">        refinement type.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pprint</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
         <span class="n">t</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;function&#39;</span><span class="p">]</span>
@@ -786,13 +822,13 @@ if(ga_enabled){
 <span class="sd">        onlyin :  str, optional</span>
 <span class="sd">            Filename the class or struct described must live in.  Prevents</span>
 <span class="sd">            finding classes of the same name coming from other libraries.</span>
-<span class="sd">        ts : TypeSystem, optional </span>
+<span class="sd">        ts : TypeSystem, optional</span>
 <span class="sd">            A type system instance.</span>
 <span class="sd">        verbose : bool, optional</span>
 <span class="sd">            Flag to display extra information while visiting the class.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">GccxmlClassDescriber</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span> <span class="n">onlyin</span><span class="o">=</span><span class="n">onlyin</span><span class="p">,</span> 
+        <span class="nb">super</span><span class="p">(</span><span class="n">GccxmlClassDescriber</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span> <span class="n">onlyin</span><span class="o">=</span><span class="n">onlyin</span><span class="p">,</span>
                                                    <span class="n">ts</span><span class="o">=</span><span class="n">ts</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;attrs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_funckey</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
@@ -821,7 +857,7 @@ if(ga_enabled){
             <span class="k">if</span> <span class="n">node</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
                 <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;Struct[@name=&#39;{0}&#39;]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ts</span><span class="o">.</span><span class="n">gccxml_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
                 <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">node</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">node</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
                 <span class="c"># Must be a template with some wacky argument values</span>
                 <span class="n">basename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">namet</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span>
@@ -848,8 +884,9 @@ if(ga_enabled){
                 <span class="n">fid</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s">&#39;file&#39;</span><span class="p">]</span>
                 <span class="n">ois</span> <span class="o">=</span> <span class="s">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&quot;{0!r} ({1!r})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filemap</span><span class="p">[</span><span class="n">v</span><span class="p">],</span> <span class="n">v</span><span class="p">)</span> \
                                                  <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onlyin</span><span class="p">)])</span>
+                <span class="k">print</span><span class="p">(</span><span class="s">&quot;ONLYIN =&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">onlyin</span><span class="p">)</span>
                 <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filemap</span><span class="p">[</span><span class="n">fid</span><span class="p">],</span> <span class="n">fid</span><span class="p">,</span> <span class="n">ois</span><span class="p">)</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>            
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;construct&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">tag</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">visit_class</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
         <span class="n">members</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;members&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
@@ -879,13 +916,13 @@ if(ga_enabled){
 <span class="sd">        onlyin :  str, optional</span>
 <span class="sd">            Filename the function described must live in.  Prevents finding</span>
 <span class="sd">            functions of the same name coming from other libraries.</span>
-<span class="sd">        ts : TypeSystem, optional </span>
+<span class="sd">        ts : TypeSystem, optional</span>
 <span class="sd">            A type system instance.</span>
 <span class="sd">        verbose : bool, optional</span>
 <span class="sd">            Flag to display extra information while visiting the function.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">GccxmlVarDescriber</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span> <span class="n">onlyin</span><span class="o">=</span><span class="n">onlyin</span><span class="p">,</span> 
+        <span class="nb">super</span><span class="p">(</span><span class="n">GccxmlVarDescriber</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span> <span class="n">onlyin</span><span class="o">=</span><span class="n">onlyin</span><span class="p">,</span>
                                                  <span class="n">ts</span><span class="o">=</span><span class="n">ts</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
 <div class="viewcode-block" id="GccxmlVarDescriber.visit"><a class="viewcode-back" href="../../libref/autodescribe.html#xdress.autodescribe.GccxmlVarDescriber.visit">[docs]</a>    <span class="k">def</span> <span class="nf">visit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -945,13 +982,13 @@ if(ga_enabled){
 <span class="sd">        onlyin :  str, optional</span>
 <span class="sd">            Filename the function described must live in.  Prevents finding</span>
 <span class="sd">            functions of the same name coming from other libraries.</span>
-<span class="sd">        ts : TypeSystem, optional </span>
+<span class="sd">        ts : TypeSystem, optional</span>
 <span class="sd">            A type system instance.</span>
 <span class="sd">        verbose : bool, optional</span>
 <span class="sd">            Flag to display extra information while visiting the function.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">GccxmlFuncDescriber</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span> <span class="n">onlyin</span><span class="o">=</span><span class="n">onlyin</span><span class="p">,</span> 
+        <span class="nb">super</span><span class="p">(</span><span class="n">GccxmlFuncDescriber</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span> <span class="n">onlyin</span><span class="o">=</span><span class="n">onlyin</span><span class="p">,</span>
                                                   <span class="n">ts</span><span class="o">=</span><span class="n">ts</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_funckey</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -972,7 +1009,7 @@ if(ga_enabled){
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
             <span class="n">basename</span> <span class="o">=</span> <span class="n">name</span>
             <span class="n">namet</span> <span class="o">=</span> <span class="p">(</span><span class="n">name</span><span class="p">,)</span>
-        <span class="k">else</span><span class="p">:</span> 
+        <span class="k">else</span><span class="p">:</span>
             <span class="c"># Must be a template function</span>
             <span class="n">basename</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">namet</span> <span class="o">=</span> <span class="p">[</span><span class="n">basename</span><span class="p">]</span>
@@ -1009,13 +1046,13 @@ if(ga_enabled){
 </div></div>
 <span class="nd">@astparsers.not_implemented</span>
 <div class="viewcode-block" id="clang_describe"><a class="viewcode-back" href="../../libref/autodescribe.html#xdress.autodescribe.clang_describe">[docs]</a><span class="k">def</span> <span class="nf">clang_describe</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">includes</span><span class="o">=</span><span class="p">(),</span> <span class="n">defines</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;XDRESS&#39;</span><span class="p">,),</span>
-                   <span class="n">undefines</span><span class="o">=</span><span class="p">(),</span> <span class="n">ts</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> 
-                   <span class="n">builddir</span><span class="o">=</span><span class="s">&#39;build&#39;</span><span class="p">):</span>
+                   <span class="n">undefines</span><span class="o">=</span><span class="p">(),</span> <span class="n">ts</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                   <span class="n">builddir</span><span class="o">=</span><span class="s">&#39;build&#39;</span><span class="p">,</span> <span class="n">onlyin</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="s">&quot;Use clang to describe the class.&quot;</span>
     <span class="n">index</span> <span class="o">=</span> <span class="n">cindex</span><span class="o">.</span><span class="n">Index</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
     <span class="n">tu</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;-cc1&#39;</span><span class="p">,</span> <span class="s">&#39;-I&#39;</span> <span class="o">+</span> <span class="n">pyne</span><span class="o">.</span><span class="n">includes</span><span class="p">,</span> <span class="s">&#39;-D&#39;</span><span class="p">,</span> <span class="s">&#39;XDRESS&#39;</span><span class="p">])</span>
-    <span class="c">#onlyin = set([filename, filename.replace(&#39;.cpp&#39;, &#39;.h&#39;)])</span>
-    <span class="n">onlyin</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.cpp&#39;</span><span class="p">,</span> <span class="s">&#39;.h&#39;</span><span class="p">)])</span>
+    <span class="k">if</span> <span class="n">onlyin</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">onlyin</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">filename</span><span class="p">])</span>
     <span class="n">describer</span> <span class="o">=</span> <span class="n">ClangClassDescriber</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">onlyin</span><span class="o">=</span><span class="n">onlyin</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="n">ts</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
     <span class="n">describer</span><span class="o">.</span><span class="n">visit</span><span class="p">(</span><span class="n">tu</span><span class="o">.</span><span class="n">cursor</span><span class="p">)</span>
     <span class="n">pprint</span><span class="p">(</span><span class="n">describer</span><span class="o">.</span><span class="n">desc</span><span class="p">)</span>
@@ -1417,7 +1454,7 @@ if(ga_enabled){
 <span class="sd">        onlyin :  str, optional</span>
 <span class="sd">            Filename the class or struct described must live in.  Prevents</span>
 <span class="sd">            finding classes of the same name coming from other libraries.</span>
-<span class="sd">        ts : TypeSystem, optional </span>
+<span class="sd">        ts : TypeSystem, optional</span>
 <span class="sd">            A type system instance.</span>
 <span class="sd">        verbose : bool, optional</span>
 <span class="sd">            Flag to display extra information while visiting the class.</span>
@@ -1493,7 +1530,8 @@ if(ga_enabled){
         <span class="bp">self</span><span class="o">.</span><span class="n">_currfunc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_currfuncsig</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_level</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">ftype</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">children</span><span class="p">():</span>
+        <span class="n">children</span> <span class="o">=</span> <span class="p">()</span> <span class="k">if</span> <span class="n">ftype</span><span class="o">.</span><span class="n">args</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">ftype</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">children</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">pycparser</span><span class="o">.</span><span class="n">c_ast</span><span class="o">.</span><span class="n">EllipsisParam</span><span class="p">):</span>
                 <span class="k">continue</span>
             <span class="n">arg</span> <span class="o">=</span> <span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">child</span><span class="p">))</span>
@@ -1578,12 +1616,14 @@ if(ga_enabled){
     <span class="k">def</span> <span class="nf">visit_ArrayDecl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pprint</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">visit</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_currtype</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_currtype</span><span class="p">,</span> <span class="s">&#39;*&#39;</span><span class="p">)</span>
+        <span class="n">predicate</span> <span class="o">=</span> <span class="s">&#39;*&#39;</span> <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">dim</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">dim</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_currtype</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_currtype</span><span class="p">,</span> <span class="n">predicate</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">visit_FuncDecl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pprint</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
         <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">params</span><span class="p">):</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">()</span> <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">args</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">node</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">params</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">pycparser</span><span class="o">.</span><span class="n">c_ast</span><span class="o">.</span><span class="n">EllipsisParam</span><span class="p">):</span>
                 <span class="k">continue</span>
             <span class="n">argname</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">name</span> <span class="ow">or</span> <span class="s">&#39;_{0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
@@ -1660,13 +1700,13 @@ if(ga_enabled){
 <span class="sd">        onlyin :  str, optional</span>
 <span class="sd">            Filename the variable described must live in.  Prevents</span>
 <span class="sd">            finding variables of the same name coming from other libraries.</span>
-<span class="sd">        ts : TypeSystem, optional </span>
+<span class="sd">        ts : TypeSystem, optional</span>
 <span class="sd">            A type system instance.</span>
 <span class="sd">        verbose : bool, optional</span>
 <span class="sd">            Flag to display extra information while visiting the class.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">PycparserVarDescriber</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">onlyin</span><span class="o">=</span><span class="n">onlyin</span><span class="p">,</span> 
+        <span class="nb">super</span><span class="p">(</span><span class="n">PycparserVarDescriber</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">onlyin</span><span class="o">=</span><span class="n">onlyin</span><span class="p">,</span>
                                                     <span class="n">ts</span><span class="o">=</span><span class="n">ts</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">visit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -1709,13 +1749,13 @@ if(ga_enabled){
 <span class="sd">        onlyin :  str, optional</span>
 <span class="sd">            Filename the class or struct described must live in.  Prevents</span>
 <span class="sd">            finding classes of the same name coming from other libraries.</span>
-<span class="sd">        ts : TypeSystem, optional </span>
+<span class="sd">        ts : TypeSystem, optional</span>
 <span class="sd">            A type system instance.</span>
 <span class="sd">        verbose : bool, optional</span>
 <span class="sd">            Flag to display extra information while visiting the class.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">PycparserFuncDescriber</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">onlyin</span><span class="o">=</span><span class="n">onlyin</span><span class="p">,</span> 
+        <span class="nb">super</span><span class="p">(</span><span class="n">PycparserFuncDescriber</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">onlyin</span><span class="o">=</span><span class="n">onlyin</span><span class="p">,</span>
                                                      <span class="n">ts</span><span class="o">=</span><span class="n">ts</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_funckey</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -1757,7 +1797,7 @@ if(ga_enabled){
 <span class="sd">        onlyin :  str, optional</span>
 <span class="sd">            Filename the class or struct described must live in.  Prevents</span>
 <span class="sd">            finding classes of the same name coming from other libraries.</span>
-<span class="sd">        ts : TypeSystem, optional </span>
+<span class="sd">        ts : TypeSystem, optional</span>
 <span class="sd">            A type system instance.</span>
 <span class="sd">        verbose : bool, optional</span>
 <span class="sd">            Flag to display extra information while visiting the class.</span>
@@ -1768,7 +1808,7 @@ if(ga_enabled){
 <span class="sd">        function pointers.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">PycparserClassDescriber</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">onlyin</span><span class="o">=</span><span class="n">onlyin</span><span class="p">,</span> 
+        <span class="nb">super</span><span class="p">(</span><span class="n">PycparserClassDescriber</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">onlyin</span><span class="o">=</span><span class="n">onlyin</span><span class="p">,</span>
                                                       <span class="n">ts</span><span class="o">=</span><span class="n">ts</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;attrs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_funckey</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1809,8 +1849,8 @@ if(ga_enabled){
     <span class="p">}</span>
 
 <div class="viewcode-block" id="pycparser_describe"><a class="viewcode-back" href="../../libref/autodescribe.html#xdress.autodescribe.pycparser_describe">[docs]</a><span class="k">def</span> <span class="nf">pycparser_describe</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">kind</span><span class="p">,</span> <span class="n">includes</span><span class="o">=</span><span class="p">(),</span> <span class="n">defines</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;XDRESS&#39;</span><span class="p">,),</span>
-                       <span class="n">undefines</span><span class="o">=</span><span class="p">(),</span> <span class="n">ts</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> 
-                       <span class="n">builddir</span><span class="o">=</span><span class="s">&#39;build&#39;</span><span class="p">):</span>
+                       <span class="n">undefines</span><span class="o">=</span><span class="p">(),</span> <span class="n">ts</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                       <span class="n">builddir</span><span class="o">=</span><span class="s">&#39;build&#39;</span><span class="p">,</span> <span class="n">onlyin</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Use pycparser to describe the fucntion or struct (class).</span>
 
 <span class="sd">    Parameters</span>
@@ -1828,7 +1868,7 @@ if(ga_enabled){
 <span class="sd">        The list of extra macro definitions to apply.</span>
 <span class="sd">    undefines: list of str, optional</span>
 <span class="sd">        The list of extra macro undefinitions to apply.</span>
-<span class="sd">    ts : TypeSystem, optional </span>
+<span class="sd">    ts : TypeSystem, optional</span>
 <span class="sd">        A type system instance.</span>
 <span class="sd">    verbose : bool, optional</span>
 <span class="sd">        Flag to diplay extra information while describing the class.</span>
@@ -1836,6 +1876,8 @@ if(ga_enabled){
 <span class="sd">        Flag to enable/disable debug mode.</span>
 <span class="sd">    builddir : str, optional</span>
 <span class="sd">        Location of -- often temporary -- build files.</span>
+<span class="sd">    onlyin: set of str</span>
+<span class="sd">        The paths to the files that the definition is allowed to exist in.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -1846,8 +1888,9 @@ if(ga_enabled){
     <span class="n">root</span> <span class="o">=</span> <span class="n">astparsers</span><span class="o">.</span><span class="n">pycparser_parse</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">includes</span><span class="o">=</span><span class="n">includes</span><span class="p">,</span> <span class="n">defines</span><span class="o">=</span><span class="n">defines</span><span class="p">,</span>
                                       <span class="n">undefines</span><span class="o">=</span><span class="n">undefines</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
                                       <span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">,</span> <span class="n">builddir</span><span class="o">=</span><span class="n">builddir</span><span class="p">)</span>
-    <span class="n">onlyin</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">filename</span><span class="p">,</span> <span class="n">filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.c&#39;</span><span class="p">,</span> <span class="s">&#39;.h&#39;</span><span class="p">)])</span>
-    <span class="n">describer</span> <span class="o">=</span> <span class="n">_pycparser_describers</span><span class="p">[</span><span class="n">kind</span><span class="p">](</span><span class="n">name</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">onlyin</span><span class="o">=</span><span class="n">onlyin</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="n">ts</span><span class="p">,</span> 
+    <span class="k">if</span> <span class="n">onlyin</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">onlyin</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">filename</span><span class="p">])</span>
+    <span class="n">describer</span> <span class="o">=</span> <span class="n">_pycparser_describers</span><span class="p">[</span><span class="n">kind</span><span class="p">](</span><span class="n">name</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">onlyin</span><span class="o">=</span><span class="n">onlyin</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="n">ts</span><span class="p">,</span>
                                             <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
     <span class="n">describer</span><span class="o">.</span><span class="n">visit</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">describer</span><span class="o">.</span><span class="n">desc</span>
@@ -1857,6 +1900,19 @@ if(ga_enabled){
 <span class="c">#  General utilities</span>
 <span class="c">#</span>
 </div>
+<span class="k">def</span> <span class="nf">_make_includer</span><span class="p">(</span><span class="n">filenames</span><span class="p">,</span> <span class="n">builddir</span><span class="p">,</span> <span class="n">language</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Creates a source file made up of #include pre-processor statements for </span>
+<span class="sd">    all of the files in filenames.  Returns the path to the newly made file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">newfile</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+    <span class="n">newnames</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
+        <span class="n">newnames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span><span class="p">,</span> <span class="s">&#39;_&#39;</span><span class="p">))</span>
+        <span class="n">newfile</span> <span class="o">+=</span> <span class="s">&#39;#include &quot;{0}&quot;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">newname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">builddir</span><span class="p">,</span> <span class="s">&quot;-&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">newnames</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="n">_lang_exts</span><span class="p">[</span><span class="n">language</span><span class="p">])</span>
+    <span class="n">newoverwrite</span><span class="p">(</span><span class="n">newfile</span><span class="p">,</span> <span class="n">newname</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">newname</span>
+
 <span class="n">_describers</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s">&#39;clang&#39;</span><span class="p">:</span> <span class="n">clang_describe</span><span class="p">,</span>
     <span class="s">&#39;gccxml&#39;</span><span class="p">:</span> <span class="n">gccxml_describe</span><span class="p">,</span>
@@ -1864,14 +1920,17 @@ if(ga_enabled){
     <span class="p">}</span>
 
 <div class="viewcode-block" id="describe"><a class="viewcode-back" href="../../libref/autodescribe.html#xdress.autodescribe.describe">[docs]</a><span class="k">def</span> <span class="nf">describe</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s">&#39;class&#39;</span><span class="p">,</span> <span class="n">includes</span><span class="o">=</span><span class="p">(),</span> <span class="n">defines</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;XDRESS&#39;</span><span class="p">,),</span>
-             <span class="n">undefines</span><span class="o">=</span><span class="p">(),</span> <span class="n">parsers</span><span class="o">=</span><span class="s">&#39;gccxml&#39;</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> 
-             <span class="n">builddir</span><span class="o">=</span><span class="s">&#39;build&#39;</span><span class="p">):</span>
+             <span class="n">undefines</span><span class="o">=</span><span class="p">(),</span> <span class="n">parsers</span><span class="o">=</span><span class="s">&#39;gccxml&#39;</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+             <span class="n">builddir</span><span class="o">=</span><span class="s">&#39;build&#39;</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s">&#39;c++&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Automatically describes an API element in a file.  This is the main entry point.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    filename : str</span>
-<span class="sd">        The path to the file.</span>
+<span class="sd">    filename : str or container of strs</span>
+<span class="sd">        The path to the file or a list of file paths.  If this is a list to many</span>
+<span class="sd">        files, a temporary file will be created that #includes all of the files</span>
+<span class="sd">        in this list in order.  This temporary file is the one which will be </span>
+<span class="sd">        parsed.</span>
 <span class="sd">    name : str or None, optional</span>
 <span class="sd">        The name, a &#39;None&#39; value will attempt to infer this from the</span>
 <span class="sd">        filename.</span>
@@ -1890,7 +1949,7 @@ if(ga_enabled){
 <span class="sd">        this specifies the parser order to use based on availability.  If this is</span>
 <span class="sd">        a dictionary, it specifies the order to use parser based on language, i.e.</span>
 <span class="sd">        ``{&#39;c&#39; [&#39;pycparser&#39;, &#39;gccxml&#39;], &#39;c++&#39;: [&#39;gccxml&#39;, &#39;pycparser&#39;]}``.</span>
-<span class="sd">    ts : TypeSystem, optional </span>
+<span class="sd">    ts : TypeSystem, optional</span>
 <span class="sd">        A type system instance.</span>
 <span class="sd">    verbose : bool, optional</span>
 <span class="sd">        Flag to diplay extra information while describing the class.</span>
@@ -1898,6 +1957,8 @@ if(ga_enabled){
 <span class="sd">        Flag to enable/disable debug mode.</span>
 <span class="sd">    builddir : str, optional</span>
 <span class="sd">        Location of -- often temporary -- build files.</span>
+<span class="sd">    language : str</span>
+<span class="sd">        Valid language flag.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -1905,13 +1966,19 @@ if(ga_enabled){
 <span class="sd">        A dictionary describing the class which may be used to generate</span>
 <span class="sd">        API bindings.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+        <span class="n">onlyin</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">filename</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">onlyin</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> \
+                   <span class="k">else</span> <span class="n">_make_includer</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">builddir</span><span class="p">,</span> <span class="n">language</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">filename</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
-    <span class="n">parser</span> <span class="o">=</span> <span class="n">astparsers</span><span class="o">.</span><span class="n">pick_parser</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">parsers</span><span class="p">)</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">astparsers</span><span class="o">.</span><span class="n">pick_parser</span><span class="p">(</span><span class="n">language</span><span class="p">,</span> <span class="n">parsers</span><span class="p">)</span>
     <span class="n">describer</span> <span class="o">=</span> <span class="n">_describers</span><span class="p">[</span><span class="n">parser</span><span class="p">]</span>
     <span class="n">desc</span> <span class="o">=</span> <span class="n">describer</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">kind</span><span class="p">,</span> <span class="n">includes</span><span class="o">=</span><span class="n">includes</span><span class="p">,</span> <span class="n">defines</span><span class="o">=</span><span class="n">defines</span><span class="p">,</span>
-                     <span class="n">undefines</span><span class="o">=</span><span class="n">undefines</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="n">ts</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">,</span> 
-                     <span class="n">builddir</span><span class="o">=</span><span class="n">builddir</span><span class="p">)</span>
+                     <span class="n">undefines</span><span class="o">=</span><span class="n">undefines</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="n">ts</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">,</span>
+                     <span class="n">builddir</span><span class="o">=</span><span class="n">builddir</span><span class="p">,</span> <span class="n">onlyin</span><span class="o">=</span><span class="n">onlyin</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">desc</span>
 
 
@@ -1978,29 +2045,21 @@ if(ga_enabled){
         <span class="n">ts</span> <span class="o">=</span> <span class="n">rc</span><span class="o">.</span><span class="n">ts</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">cls</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">classes</span><span class="p">):</span>
             <span class="k">print</span><span class="p">(</span><span class="s">&quot;autodescribe: registering {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">srcname</span><span class="p">))</span>
-            <span class="n">fnames</span> <span class="o">=</span> <span class="n">find_filenames</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">srcfile</span><span class="p">,</span> <span class="n">tarname</span><span class="o">=</span><span class="n">cls</span><span class="o">.</span><span class="n">tarfile</span><span class="p">,</span> 
-                                    <span class="n">sourcedir</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">sourcedir</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">cls</span><span class="o">.</span><span class="n">tarfile</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="n">pxd_base</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">srcfile</span>
-                <span class="n">lang_ext</span> <span class="o">=</span> <span class="n">fnames</span><span class="p">[</span><span class="s">&#39;language_extension&#39;</span><span class="p">]</span>
-                <span class="n">cpppxd_base</span> <span class="o">=</span> <span class="s">&#39;{0}_{1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lang_ext</span><span class="p">,</span> <span class="n">cls</span><span class="o">.</span><span class="n">srcfile</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">pxd_base</span> <span class="o">=</span> <span class="n">fnames</span><span class="p">[</span><span class="s">&#39;pxd_filename&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c"># eg, fccomp</span>
-                <span class="n">cpppxd_base</span> <span class="o">=</span> <span class="n">fnames</span><span class="p">[</span><span class="s">&#39;srcpxd_filename&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c"># eg, cpp_fccomp</span>
-            <span class="n">ts</span><span class="o">.</span><span class="n">register_classname</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">srcname</span><span class="p">,</span> <span class="n">rc</span><span class="o">.</span><span class="n">package</span><span class="p">,</span> <span class="n">pxd_base</span><span class="p">,</span> <span class="n">cpppxd_base</span><span class="p">)</span>
+            <span class="n">fnames</span> <span class="o">=</span> <span class="n">extra_filenames</span><span class="p">(</span><span class="n">cls</span><span class="p">)</span>
+            <span class="n">ts</span><span class="o">.</span><span class="n">register_classname</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">srcname</span><span class="p">,</span> <span class="n">rc</span><span class="o">.</span><span class="n">package</span><span class="p">,</span> <span class="n">fnames</span><span class="p">[</span><span class="s">&#39;pxd_base&#39;</span><span class="p">],</span> 
+                                  <span class="n">fnames</span><span class="p">[</span><span class="s">&#39;cpppxd_base&#39;</span><span class="p">])</span>
             <span class="k">if</span> <span class="n">cls</span><span class="o">.</span><span class="n">srcname</span> <span class="o">!=</span> <span class="n">cls</span><span class="o">.</span><span class="n">tarname</span><span class="p">:</span>
-                <span class="n">ts</span><span class="o">.</span><span class="n">register_classname</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">tarname</span><span class="p">,</span> <span class="n">rc</span><span class="o">.</span><span class="n">package</span><span class="p">,</span> <span class="n">pxd_base</span><span class="p">,</span> 
-                                      <span class="n">cpppxd_base</span><span class="p">,</span> <span class="n">cpp_classname</span><span class="o">=</span><span class="n">cls</span><span class="o">.</span><span class="n">srcname</span><span class="p">)</span>
+                <span class="n">ts</span><span class="o">.</span><span class="n">register_classname</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">tarname</span><span class="p">,</span> <span class="n">rc</span><span class="o">.</span><span class="n">package</span><span class="p">,</span> <span class="n">fnames</span><span class="p">[</span><span class="s">&#39;pxd_base&#39;</span><span class="p">],</span>
+                                      <span class="n">fnames</span><span class="p">[</span><span class="s">&#39;cpppxd_base&#39;</span><span class="p">],</span> <span class="n">cpp_classname</span><span class="o">=</span><span class="n">cls</span><span class="o">.</span><span class="n">srcname</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="XDressPlugin.load_pysrcmod"><a class="viewcode-back" href="../../libref/autodescribe.html#xdress.autodescribe.XDressPlugin.load_pysrcmod">[docs]</a>    <span class="k">def</span> <span class="nf">load_pysrcmod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">srcname</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Loads a module dictionary from a src file intox the pysrcenv cache.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">srcname</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pysrcenv</span><span class="p">:</span>
+<div class="viewcode-block" id="XDressPlugin.load_pysrcmod"><a class="viewcode-back" href="../../libref/autodescribe.html#xdress.autodescribe.XDressPlugin.load_pysrcmod">[docs]</a>    <span class="k">def</span> <span class="nf">load_pysrcmod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sidecar</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Loads a module dictionary from a sidecar file into the pysrcenv cache.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">sidecar</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pysrcenv</span><span class="p">:</span>
             <span class="k">return</span>
-        <span class="n">pyfilename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">sourcedir</span><span class="p">,</span> <span class="n">srcname</span> <span class="o">+</span> <span class="s">&#39;.py&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">pyfilename</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">sidecar</span><span class="p">):</span>
             <span class="n">glbs</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()</span>
             <span class="n">locs</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="n">exec_file</span><span class="p">(</span><span class="n">pyfilename</span><span class="p">,</span> <span class="n">glbs</span><span class="p">,</span> <span class="n">locs</span><span class="p">)</span>
+            <span class="n">exec_file</span><span class="p">(</span><span class="n">sidecar</span><span class="p">,</span> <span class="n">glbs</span><span class="p">,</span> <span class="n">locs</span><span class="p">)</span>
             <span class="k">if</span> <span class="s">&#39;mod&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">locs</span><span class="p">:</span>
                 <span class="n">pymod</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="k">elif</span> <span class="nb">callable</span><span class="p">(</span><span class="n">locs</span><span class="p">[</span><span class="s">&#39;mod&#39;</span><span class="p">]):</span>
@@ -2013,28 +2072,28 @@ if(ga_enabled){
                 <span class="n">rc</span><span class="o">.</span><span class="n">ts</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">locs</span><span class="p">[</span><span class="s">&#39;type_system&#39;</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">pymod</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pysrcenv</span><span class="p">[</span><span class="n">srcname</span><span class="p">]</span> <span class="o">=</span> <span class="n">pymod</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pysrcenv</span><span class="p">[</span><span class="n">sidecar</span><span class="p">]</span> <span class="o">=</span> <span class="n">pymod</span>
 </div>
 <div class="viewcode-block" id="XDressPlugin.load_sidecars"><a class="viewcode-back" href="../../libref/autodescribe.html#xdress.autodescribe.XDressPlugin.load_sidecars">[docs]</a>    <span class="k">def</span> <span class="nf">load_sidecars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Loads all sidecar files.&quot;&quot;&quot;</span>
-        <span class="n">srcnames</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">rc</span><span class="o">.</span><span class="n">variables</span><span class="p">])</span>
-        <span class="n">srcnames</span> <span class="o">|=</span> <span class="nb">set</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">rc</span><span class="o">.</span><span class="n">functions</span><span class="p">])</span>
-        <span class="n">srcnames</span> <span class="o">|=</span> <span class="nb">set</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">rc</span><span class="o">.</span><span class="n">classes</span><span class="p">])</span>
-        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">srcnames</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">load_pysrcmod</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">rc</span><span class="p">)</span>
+        <span class="n">sidecars</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">rc</span><span class="o">.</span><span class="n">variables</span><span class="p">:</span>
+            <span class="n">sidecars</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">sidecars</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">rc</span><span class="o">.</span><span class="n">functions</span><span class="p">:</span>
+            <span class="n">sidecars</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">sidecars</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">rc</span><span class="o">.</span><span class="n">classes</span><span class="p">:</span>
+            <span class="n">sidecars</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">sidecars</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">sidecar</span> <span class="ow">in</span> <span class="n">sidecars</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">load_pysrcmod</span><span class="p">(</span><span class="n">sidecar</span><span class="p">,</span> <span class="n">rc</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="XDressPlugin.compute_desc"><a class="viewcode-back" href="../../libref/autodescribe.html#xdress.autodescribe.XDressPlugin.compute_desc">[docs]</a>    <span class="k">def</span> <span class="nf">compute_desc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">srcname</span><span class="p">,</span> <span class="n">tarname</span><span class="p">,</span> <span class="n">kind</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
+<div class="viewcode-block" id="XDressPlugin.compute_desc"><a class="viewcode-back" href="../../libref/autodescribe.html#xdress.autodescribe.XDressPlugin.compute_desc">[docs]</a>    <span class="k">def</span> <span class="nf">compute_desc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">kind</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns a description dictionary for a class or function</span>
 <span class="sd">        implemented in a source file and bound into a target file.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        name : str</span>
-<span class="sd">            Class or function name to describe.</span>
-<span class="sd">        srcname : str</span>
-<span class="sd">            File basename of implementation.</span>
-<span class="sd">        tarname : str</span>
-<span class="sd">            File basename where the bindings will be generated.</span>
+<span class="sd">        name : apiname</span>
+<span class="sd">            API element name to describe.</span>
 <span class="sd">        kind : str</span>
 <span class="sd">            The kind of type to describe, valid flags are &#39;class&#39;, &#39;func&#39;, and &#39;var&#39;.</span>
 <span class="sd">        rc : xdress.utils.RunControl</span>
@@ -2046,43 +2105,55 @@ if(ga_enabled){
 <span class="sd">            Description dictionary.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">fnames</span> <span class="o">=</span> <span class="n">find_filenames</span><span class="p">(</span><span class="n">srcname</span><span class="p">,</span> <span class="n">tarname</span><span class="o">=</span><span class="n">tarname</span><span class="p">,</span> <span class="n">sourcedir</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">sourcedir</span><span class="p">)</span>
-        <span class="n">srcfname</span> <span class="o">=</span> <span class="n">fnames</span><span class="p">[</span><span class="s">&#39;source_filename&#39;</span><span class="p">]</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">sourcedir</span><span class="p">,</span> <span class="n">srcfname</span><span class="p">)</span>
         <span class="n">cache</span> <span class="o">=</span> <span class="n">rc</span><span class="o">.</span><span class="n">_cache</span>
-        <span class="k">if</span> <span class="n">cache</span><span class="o">.</span><span class="n">isvalid</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">kind</span><span class="p">):</span>
-            <span class="n">srcdesc</span> <span class="o">=</span> <span class="n">cache</span><span class="p">[</span><span class="n">name</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">kind</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">cache</span><span class="o">.</span><span class="n">isvalid</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">kind</span><span class="p">):</span>
+            <span class="n">srcdesc</span> <span class="o">=</span> <span class="n">cache</span><span class="p">[</span><span class="n">name</span><span class="p">,</span> <span class="n">kind</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">srcdesc</span> <span class="o">=</span> <span class="n">describe</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">,</span> <span class="n">includes</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">includes</span><span class="p">,</span> 
-                               <span class="n">defines</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">defines</span><span class="p">,</span> <span class="n">undefines</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">undefines</span><span class="p">,</span> 
-                               <span class="n">parsers</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">parsers</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">ts</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> 
-                               <span class="n">debug</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">debug</span><span class="p">,</span> <span class="n">builddir</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">builddir</span><span class="p">)</span>
-            <span class="n">cache</span><span class="p">[</span><span class="n">name</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">kind</span><span class="p">]</span> <span class="o">=</span> <span class="n">srcdesc</span>
-        <span class="n">pydesc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pysrcenv</span><span class="p">[</span><span class="n">srcname</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="p">{})</span>  <span class="c"># python description</span>
-        <span class="n">desc</span> <span class="o">=</span> <span class="n">merge_descriptions</span><span class="p">([</span><span class="n">srcdesc</span><span class="p">,</span> <span class="n">pydesc</span><span class="p">,</span> <span class="n">fnames</span><span class="p">])</span>
+            <span class="n">srcdesc</span> <span class="o">=</span> <span class="n">describe</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">srcfiles</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="o">.</span><span class="n">srcname</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">,</span> 
+                               <span class="n">includes</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">includes</span><span class="p">,</span> <span class="n">defines</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">defines</span><span class="p">,</span> 
+                               <span class="n">undefines</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">undefines</span><span class="p">,</span> <span class="n">parsers</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">parsers</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">ts</span><span class="p">,</span> 
+                               <span class="n">verbose</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">debug</span><span class="p">,</span> 
+                               <span class="n">builddir</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">builddir</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="n">name</span><span class="o">.</span><span class="n">language</span><span class="p">)</span>
+            <span class="n">srcdesc</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">_fields</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+            <span class="n">cache</span><span class="p">[</span><span class="n">name</span><span class="p">,</span> <span class="n">kind</span><span class="p">]</span> <span class="o">=</span> <span class="n">srcdesc</span>
+        <span class="n">descs</span> <span class="o">=</span> <span class="p">[</span><span class="n">srcdesc</span><span class="p">]</span>
+        <span class="n">descs</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pysrcenv</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">srcname</span><span class="p">,</span> <span class="p">{})</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">name</span><span class="o">.</span><span class="n">sidecars</span><span class="p">]</span>
+        <span class="n">descs</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s">&#39;extra&#39;</span><span class="p">:</span> <span class="n">extra_filenames</span><span class="p">(</span><span class="n">name</span><span class="p">)})</span>
+        <span class="n">desc</span> <span class="o">=</span> <span class="n">merge_descriptions</span><span class="p">(</span><span class="n">descs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">desc</span>
 </div>
+    <span class="n">_extrajoinkeys</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;pxd_header&#39;</span><span class="p">,</span> <span class="s">&#39;pxd_footer&#39;</span><span class="p">,</span> <span class="s">&#39;pyx_header&#39;</span><span class="p">,</span> <span class="s">&#39;pyx_footer&#39;</span><span class="p">,</span> 
+                      <span class="s">&#39;cpppxd_header&#39;</span><span class="p">,</span> <span class="s">&#39;cpppxd_footer&#39;</span><span class="p">]</span>
+
 <div class="viewcode-block" id="XDressPlugin.adddesc2env"><a class="viewcode-back" href="../../libref/autodescribe.html#xdress.autodescribe.XDressPlugin.adddesc2env">[docs]</a>    <span class="k">def</span> <span class="nf">adddesc2env</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">desc</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Adds a description to environment.&quot;&quot;&quot;</span>
         <span class="c"># Add to target environment</span>
         <span class="c"># docstrings overwrite, extras accrete</span>
-        <span class="n">mod</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="o">.</span><span class="n">tarname</span><span class="p">:</span> <span class="n">desc</span><span class="p">,</span> 
-               <span class="s">&#39;docstring&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pysrcenv</span><span class="p">[</span><span class="n">name</span><span class="o">.</span><span class="n">srcfile</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;docstring&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">),</span>
-               <span class="s">&#39;srcpxd_filename&#39;</span><span class="p">:</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;srcpxd_filename&#39;</span><span class="p">],</span>
-               <span class="s">&#39;pxd_filename&#39;</span><span class="p">:</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;pxd_filename&#39;</span><span class="p">],</span>
-               <span class="s">&#39;pyx_filename&#39;</span><span class="p">:</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;pyx_filename&#39;</span><span class="p">],</span> 
-               <span class="s">&#39;language&#39;</span><span class="p">:</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;language&#39;</span><span class="p">],</span>
-               <span class="s">&#39;language_extension&#39;</span><span class="p">:</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;language_extension&#39;</span><span class="p">],}</span>
-        <span class="n">srcfile</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">srcfile</span>
-        <span class="n">tarfile</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">tarfile</span>
-        <span class="k">if</span> <span class="n">tarfile</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">env</span><span class="p">:</span>
-            <span class="n">env</span><span class="p">[</span><span class="n">tarfile</span><span class="p">]</span> <span class="o">=</span> <span class="n">mod</span>
-            <span class="n">env</span><span class="p">[</span><span class="n">tarfile</span><span class="p">][</span><span class="s">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tarfile</span>
-            <span class="n">env</span><span class="p">[</span><span class="n">tarfile</span><span class="p">][</span><span class="s">&#39;extra&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pysrcenv</span><span class="p">[</span><span class="n">srcfile</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;extra&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">docs</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pysrcenv</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">srcname</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;docstring&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span> \
+                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">name</span><span class="o">.</span><span class="n">sidecars</span><span class="p">]</span>
+        <span class="n">docs</span> <span class="o">=</span> <span class="s">&quot;</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">docs</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">mod</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="o">.</span><span class="n">tarname</span><span class="p">:</span> <span class="n">desc</span><span class="p">,</span>
+               <span class="s">&#39;docstring&#39;</span><span class="p">:</span> <span class="n">docs</span><span class="p">,</span>
+               <span class="s">&#39;srcpxd_filename&#39;</span><span class="p">:</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;extra&#39;</span><span class="p">][</span><span class="s">&#39;srcpxd_filename&#39;</span><span class="p">],</span>
+               <span class="s">&#39;pxd_filename&#39;</span><span class="p">:</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;extra&#39;</span><span class="p">][</span><span class="s">&#39;pxd_filename&#39;</span><span class="p">],</span>
+               <span class="s">&#39;pyx_filename&#39;</span><span class="p">:</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;extra&#39;</span><span class="p">][</span><span class="s">&#39;pyx_filename&#39;</span><span class="p">],</span>
+               <span class="s">&#39;language&#39;</span><span class="p">:</span> <span class="n">name</span><span class="o">.</span><span class="n">language</span><span class="p">,</span>
+               <span class="p">}</span>
+        <span class="n">tarbase</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">tarbase</span>
+        <span class="n">extrajoinkeys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extrajoinkeys</span>
+        <span class="k">if</span> <span class="n">tarbase</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">env</span><span class="p">:</span>
+            <span class="n">env</span><span class="p">[</span><span class="n">tarbase</span><span class="p">]</span> <span class="o">=</span> <span class="n">mod</span>
+            <span class="n">env</span><span class="p">[</span><span class="n">tarbase</span><span class="p">][</span><span class="s">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tarbase</span>
+            <span class="n">env</span><span class="p">[</span><span class="n">tarbase</span><span class="p">][</span><span class="s">&#39;extra&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">modextra</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">extrajoinkeys</span><span class="p">,</span> 
+                                                        <span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">extrajoinkeys</span><span class="p">)))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="c">#env[tarname].update(mod)</span>
-            <span class="n">env</span><span class="p">[</span><span class="n">tarfile</span><span class="p">][</span><span class="n">name</span><span class="o">.</span><span class="n">tarname</span><span class="p">]</span> <span class="o">=</span> <span class="n">desc</span>
-            <span class="n">env</span><span class="p">[</span><span class="n">tarfile</span><span class="p">][</span><span class="s">&#39;extra&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pysrcenv</span><span class="p">[</span><span class="n">srcfile</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;extra&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+            <span class="c">#env[tarbase].update(mod)</span>
+            <span class="n">env</span><span class="p">[</span><span class="n">tarbase</span><span class="p">][</span><span class="n">name</span><span class="o">.</span><span class="n">tarname</span><span class="p">]</span> <span class="o">=</span> <span class="n">desc</span>
+            <span class="n">modextra</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="n">tarbase</span><span class="p">][</span><span class="s">&#39;extra&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">sidecar</span> <span class="ow">in</span> <span class="n">name</span><span class="o">.</span><span class="n">sidecars</span><span class="p">:</span>
+            <span class="n">pyextra</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pysrcenv</span><span class="p">[</span><span class="n">sidecar</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">srcname</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;extra&#39;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">extrajoinkeys</span><span class="p">:</span>
+                <span class="n">modextra</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">+=</span> <span class="n">pyextra</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="XDressPlugin.compute_variables"><a class="viewcode-back" href="../../libref/autodescribe.html#xdress.autodescribe.XDressPlugin.compute_variables">[docs]</a>    <span class="k">def</span> <span class="nf">compute_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Computes variables descriptions and loads them into the environment.&quot;&quot;&quot;</span>
@@ -2090,12 +2161,10 @@ if(ga_enabled){
         <span class="n">cache</span> <span class="o">=</span> <span class="n">rc</span><span class="o">.</span><span class="n">_cache</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">variables</span><span class="p">):</span>
             <span class="k">print</span><span class="p">(</span><span class="s">&quot;autodescribe: describing {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var</span><span class="o">.</span><span class="n">srcname</span><span class="p">))</span>
-            <span class="n">desc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_desc</span><span class="p">(</span><span class="n">var</span><span class="o">.</span><span class="n">srcname</span><span class="p">,</span> <span class="n">var</span><span class="o">.</span><span class="n">srcfile</span><span class="p">,</span> <span class="n">var</span><span class="o">.</span><span class="n">tarfile</span><span class="p">,</span> <span class="s">&#39;var&#39;</span><span class="p">,</span> <span class="n">rc</span><span class="p">)</span>
+            <span class="n">desc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_desc</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="s">&#39;var&#39;</span><span class="p">,</span> <span class="n">rc</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">rc</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
                 <span class="n">pprint</span><span class="p">(</span><span class="n">desc</span><span class="p">)</span>
             <span class="n">cache</span><span class="o">.</span><span class="n">dump</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">var</span><span class="o">.</span><span class="n">srcname</span> <span class="o">!=</span> <span class="n">var</span><span class="o">.</span><span class="n">tarname</span><span class="p">:</span>
-                <span class="n">desc</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">tarname</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">adddesc2env</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span>
             <span class="k">if</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">i</span><span class="o">%</span><span class="n">rc</span><span class="o">.</span><span class="n">clear_parser_cache_period</span><span class="p">:</span>
                 <span class="n">astparsers</span><span class="o">.</span><span class="n">clearmemo</span><span class="p">()</span>
@@ -2106,12 +2175,10 @@ if(ga_enabled){
         <span class="n">cache</span> <span class="o">=</span> <span class="n">rc</span><span class="o">.</span><span class="n">_cache</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fnc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">functions</span><span class="p">):</span>
             <span class="k">print</span><span class="p">(</span><span class="s">&quot;autodescribe: describing {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fnc</span><span class="o">.</span><span class="n">srcname</span><span class="p">))</span>
-            <span class="n">desc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_desc</span><span class="p">(</span><span class="n">fnc</span><span class="o">.</span><span class="n">srcname</span><span class="p">,</span> <span class="n">fnc</span><span class="o">.</span><span class="n">srcfile</span><span class="p">,</span> <span class="n">fnc</span><span class="o">.</span><span class="n">tarfile</span><span class="p">,</span> <span class="s">&#39;func&#39;</span><span class="p">,</span> <span class="n">rc</span><span class="p">)</span>
+            <span class="n">desc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_desc</span><span class="p">(</span><span class="n">fnc</span><span class="p">,</span> <span class="s">&#39;func&#39;</span><span class="p">,</span> <span class="n">rc</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">rc</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
                 <span class="n">pprint</span><span class="p">(</span><span class="n">desc</span><span class="p">)</span>
             <span class="n">cache</span><span class="o">.</span><span class="n">dump</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">fnc</span><span class="o">.</span><span class="n">srcname</span> <span class="o">!=</span> <span class="n">fnc</span><span class="o">.</span><span class="n">tarname</span><span class="p">:</span>
-                <span class="n">desc</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fnc</span><span class="o">.</span><span class="n">tarname</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">adddesc2env</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">fnc</span><span class="p">)</span>
             <span class="k">if</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">i</span><span class="o">%</span><span class="n">rc</span><span class="o">.</span><span class="n">clear_parser_cache_period</span><span class="p">:</span>
                 <span class="n">astparsers</span><span class="o">.</span><span class="n">clearmemo</span><span class="p">()</span>
@@ -2123,11 +2190,8 @@ if(ga_enabled){
         <span class="n">env</span> <span class="o">=</span> <span class="n">rc</span><span class="o">.</span><span class="n">env</span>  <span class="c"># target environment, not source one</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">cls</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">classes</span><span class="p">):</span>
             <span class="k">print</span><span class="p">(</span><span class="s">&quot;autodescribe: describing {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">srcname</span><span class="p">))</span>
-            <span class="n">desc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_desc</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">srcname</span><span class="p">,</span> <span class="n">cls</span><span class="o">.</span><span class="n">srcfile</span><span class="p">,</span> <span class="n">cls</span><span class="o">.</span><span class="n">tarfile</span><span class="p">,</span> 
-                                     <span class="s">&#39;class&#39;</span><span class="p">,</span> <span class="n">rc</span><span class="p">)</span>
+            <span class="n">desc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_desc</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="s">&#39;class&#39;</span><span class="p">,</span> <span class="n">rc</span><span class="p">)</span>
             <span class="n">cache</span><span class="o">.</span><span class="n">dump</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">cls</span><span class="o">.</span><span class="n">srcname</span> <span class="o">!=</span> <span class="n">cls</span><span class="o">.</span><span class="n">tarname</span><span class="p">:</span>
-                <span class="n">desc</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">tarname</span>
             <span class="k">if</span> <span class="n">rc</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
                 <span class="n">pprint</span><span class="p">(</span><span class="n">desc</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">adddesc2env</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">cls</span><span class="p">)</span>

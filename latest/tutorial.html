@@ -144,7 +144,6 @@ control file would contain the following variables.</p>
 <p><strong>xdressrc.py</strong>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">package</span> <span class="o">=</span> <span class="s">&#39;mypack&#39;</span>     <span class="c"># top-level python package name</span>
 <span class="n">packagedir</span> <span class="o">=</span> <span class="s">&#39;mypack&#39;</span>  <span class="c"># location of the python package</span>
-<span class="n">sourcedir</span> <span class="o">=</span> <span class="s">&#39;src&#39;</span>      <span class="c"># location of C/C++ source</span>
 
 <span class="n">stlcontainers</span> <span class="o">=</span> <span class="p">[</span>
     <span class="p">(</span><span class="s">&#39;vector&#39;</span><span class="p">,</span> <span class="s">&#39;str&#39;</span><span class="p">),</span>
@@ -241,18 +240,19 @@ we simply need to tell xdress that they live in hoover.  We do this by adding to
 <tt class="docutils literal"><span class="pre">classes</span></tt> and <tt class="docutils literal"><span class="pre">functions</span></tt> lists in the run control file.</p>
 <p><strong>xdressrc.py</strong>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">classes</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="s">&#39;hoover&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s">&#39;B&#39;</span><span class="p">,</span> <span class="s">&#39;hoover&#39;</span><span class="p">,</span> <span class="s">&#39;hoover_b&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="s">&#39;src/hoover.*&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;B&#39;</span><span class="p">,</span> <span class="s">&#39;src/hoover.*&#39;</span><span class="p">,</span> <span class="s">&#39;hoover_b&#39;</span><span class="p">),</span>
     <span class="p">]</span>
 
-<span class="n">functions</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;do_nothing_ab&#39;</span><span class="p">,</span> <span class="s">&#39;hoover&#39;</span><span class="p">)]</span>
+<span class="n">functions</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;do_nothing_ab&#39;</span><span class="p">,</span> <span class="s">&#39;src/hoover.*&#39;</span><span class="p">)]</span>
 </pre></div>
 </div>
 <p>Note that to do this we need only give the construct names &#8211; no signatures need
 be specified.  That is the point of API generation!  Also note that we only give
-the base file name without the preceding <tt class="docutils literal"><span class="pre">src/</span></tt> directory or the file extension
-(<tt class="docutils literal"><span class="pre">.cpp</span></tt>, <tt class="docutils literal"><span class="pre">.h</span></tt>).  Furthermore, the base names of the source and target files need
-not be the same...even for APIs which share the same source file!  We may then run
+the base file name with the preceding <tt class="docutils literal"><span class="pre">src/</span></tt> directory and the file extension
+(<tt class="docutils literal"><span class="pre">.cpp</span></tt>, <tt class="docutils literal"><span class="pre">.h</span></tt>).  Strings passed in here are globbed, so we can be a little lazy.
+Furthermore, the base names of the source and target files need not be the
+same...even for APIs which share the same source file!  We may then run
 xdress normally:</p>
 <div class="highlight-bash"><div class="highlight"><pre>scopatz@ares ~/mypack <span class="nv">$ </span>xdress
 generating C++ standard library wrappers &amp; converters
@@ -450,7 +450,6 @@ in the xdress repo</a></p>
 one might run across in a production level environment.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">package</span> <span class="o">=</span> <span class="s">&#39;mypack&#39;</span>     <span class="c"># top-level python package name</span>
 <span class="n">packagedir</span> <span class="o">=</span> <span class="s">&#39;mypack&#39;</span>  <span class="c"># location of the python package</span>
-<span class="n">sourcedir</span> <span class="o">=</span> <span class="s">&#39;src&#39;</span>      <span class="c"># location of C/C++ source</span>
 
 <span class="c"># wrappers for non-standard types (uints, complex)</span>
 <span class="n">extra_types</span> <span class="o">=</span> <span class="s">&#39;xdress_extra_types&#39;</span>
@@ -531,17 +530,17 @@ one might run across in a production level environment.</p>
 <span class="c">#</span>
 <span class="c"># This is useful for wrapping larger existing libraries.</span>
 <span class="n">classes</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="s">&#39;FCComp&#39;</span><span class="p">,</span> <span class="s">&#39;fccomp&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s">&#39;EnrichmentParameters&#39;</span><span class="p">,</span> <span class="s">&#39;enrichment_parameters&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s">&#39;Enrichment&#39;</span><span class="p">,</span> <span class="s">&#39;bright_enrichment&#39;</span><span class="p">,</span> <span class="s">&#39;enrichment&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s">&#39;DontWrap&#39;</span><span class="p">,</span> <span class="s">&#39;bright_enrichment&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">),</span>
-    <span class="p">(</span><span class="s">&#39;Reprocess&#39;</span><span class="p">,</span> <span class="s">&#39;reprocess&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;FCComp&#39;</span><span class="p">,</span> <span class="s">&#39;src/fccomp.*&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;EnrichmentParameters&#39;</span><span class="p">,</span> <span class="s">&#39;src/enrichment_parameters.*&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Enrichment&#39;</span><span class="p">,</span> <span class="s">&#39;src/bright_enrichment.*&#39;</span><span class="p">,</span> <span class="s">&#39;enrichment&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;DontWrap&#39;</span><span class="p">,</span> <span class="s">&#39;src/bright_enrichment.*&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;Reprocess&#39;</span><span class="p">,</span> <span class="s">&#39;src/reprocess.*&#39;</span><span class="p">),</span>
     <span class="p">]</span>
 
 <span class="c"># List of functions to wrap</span>
 <span class="n">functions</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="s">&#39;*&#39;</span><span class="p">,</span> <span class="s">&#39;reprocess&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s">&#39;fillUraniumEnrichmentDefaults&#39;</span><span class="p">,</span> <span class="s">&#39;enrichment_parameters&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;*&#39;</span><span class="p">,</span> <span class="s">&#39;src/reprocess.*&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;fillUraniumEnrichmentDefaults&#39;</span><span class="p">,</span> <span class="s">&#39;src/enrichment_parameters.*&#39;</span><span class="p">),</span>
     <span class="p">]</span>
 </pre></div>
 </div>

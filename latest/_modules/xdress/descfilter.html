@@ -105,6 +105,10 @@ if(ga_enabled){
 <span class="sd">   b. ``skipmethods`` dictionary. The keys for this dictionary</span>
 <span class="sd">      are the class names and the values are a list of method names that</span>
 <span class="sd">      should be excluded from the wrapper.</span>
+<span class="sd">   c. ``includemethods`` dict. This is the complement of the</span>
+<span class="sd">      ``skipmethods`` dict. The keys are class names and the values are</span>
+<span class="sd">      list of methods that should be included in the wrapper. All</span>
+<span class="sd">      other methods are filtered out.</span>
 
 <span class="sd">.. warning::</span>
 
@@ -264,11 +268,13 @@ if(ga_enabled){
     <span class="n">requires</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;xdress.autodescribe&#39;</span><span class="p">,)</span>
 
     <span class="n">defaultrc</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;skiptypes&#39;</span><span class="p">:</span> <span class="n">NotSpecified</span><span class="p">,</span>
-                 <span class="s">&#39;skipmethods&#39;</span><span class="p">:</span> <span class="n">NotSpecified</span><span class="p">}</span>
+                 <span class="s">&#39;skipmethods&#39;</span><span class="p">:</span> <span class="n">NotSpecified</span><span class="p">,</span>
+                 <span class="s">&#39;includemethods&#39;</span><span class="p">:</span> <span class="n">NotSpecified</span><span class="p">}</span>
 
     <span class="n">rcdocs</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&#39;skiptypes&#39;</span><span class="p">:</span> <span class="s">&#39;The types to filter out from being wrapped&#39;</span><span class="p">,</span>
         <span class="s">&#39;skipmethods&#39;</span><span class="p">:</span> <span class="s">&#39;Method names to filter out from being wrapped&#39;</span><span class="p">,</span>
+        <span class="s">&#39;includemethods&#39;</span><span class="p">:</span> <span class="s">&#39;Method names to be wrapped (dict, keys are class names)&#39;</span>
         <span class="p">}</span>
 
     <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
@@ -310,7 +316,7 @@ if(ga_enabled){
     <span class="k">def</span> <span class="nf">skip_methods</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">rc</span><span class="o">.</span><span class="n">skipmethods</span> <span class="ow">is</span> <span class="n">NotSpecified</span><span class="p">:</span>
             <span class="k">return</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">&quot;descfilter: removing unwanted methods from desc dictionary&quot;</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&quot;descfilter: removing &#39;skipmethods&#39; from desc dictionary&quot;</span><span class="p">)</span>
         <span class="n">skip_classes</span> <span class="o">=</span> <span class="n">rc</span><span class="o">.</span><span class="n">skipmethods</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">m_key</span><span class="p">,</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">rc</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">for</span> <span class="n">k_key</span><span class="p">,</span> <span class="n">kls_desc</span> <span class="ow">in</span> <span class="n">mod</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -320,7 +326,6 @@ if(ga_enabled){
                         <span class="n">m_nms</span> <span class="o">=</span> <span class="n">rc</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">m_key</span><span class="p">][</span><span class="n">k_key</span><span class="p">][</span><span class="s">&#39;methods&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
                         <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">skippers</span><span class="p">:</span>
                             <span class="c"># Find method key</span>
-                            <span class="c"># import pdb; pdb.set_trace()</span>
                             <span class="k">try</span><span class="p">:</span>
                                 <span class="n">del_key</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">m</span><span class="p">),</span>
                                                  <span class="n">m_nms</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -332,9 +337,27 @@ if(ga_enabled){
                             <span class="c"># Remove that method</span>
                             <span class="k">del</span> <span class="n">rc</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">m_key</span><span class="p">][</span><span class="n">k_key</span><span class="p">][</span><span class="s">&#39;methods&#39;</span><span class="p">][</span><span class="n">del_key</span><span class="p">]</span>
 
+    <span class="k">def</span> <span class="nf">include_methods</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">rc</span><span class="o">.</span><span class="n">includemethods</span> <span class="ow">is</span> <span class="n">NotSpecified</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&quot;descfilter: removing all but &#39;includemethods&#39; from desc&quot;</span><span class="p">)</span>
+        <span class="n">inc_classes</span> <span class="o">=</span> <span class="n">rc</span><span class="o">.</span><span class="n">includemethods</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">m_key</span><span class="p">,</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">rc</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">k_key</span><span class="p">,</span> <span class="n">kls_desc</span> <span class="ow">in</span> <span class="n">mod</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">isclassdesc</span><span class="p">(</span><span class="n">kls_desc</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">kls_desc</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">inc_classes</span><span class="p">:</span>
+                        <span class="n">keeps</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">includemethods</span><span class="p">[</span><span class="n">k_key</span><span class="p">])</span>
+                        <span class="n">m_nms</span> <span class="o">=</span> <span class="n">rc</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">m_key</span><span class="p">][</span><span class="n">k_key</span><span class="p">][</span><span class="s">&#39;methods&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                        <span class="n">m_keep</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">keeps</span><span class="p">,</span> <span class="n">m_nms</span><span class="p">)</span>
+                        <span class="n">new_meths</span> <span class="o">=</span> <span class="p">{}</span>
+                        <span class="k">for</span> <span class="n">mm</span> <span class="ow">in</span> <span class="n">m_keep</span><span class="p">:</span>
+                            <span class="n">new_meths</span><span class="p">[</span><span class="n">mm</span><span class="p">]</span> <span class="o">=</span> <span class="n">rc</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">m_key</span><span class="p">][</span><span class="n">k_key</span><span class="p">][</span><span class="s">&#39;methods&#39;</span><span class="p">][</span><span class="n">mm</span><span class="p">]</span>
+                        <span class="n">rc</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">m_key</span><span class="p">][</span><span class="n">k_key</span><span class="p">][</span><span class="s">&#39;methods&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_meths</span>
+
     <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">skip_types</span><span class="p">(</span><span class="n">rc</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">skip_methods</span><span class="p">(</span><span class="n">rc</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skip_methods</span><span class="p">(</span><span class="n">rc</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">include_methods</span><span class="p">(</span><span class="n">rc</span><span class="p">)</span></div>
 </pre></div>
 
           </div>

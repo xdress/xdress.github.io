@@ -316,13 +316,13 @@ if(ga_enabled){
 <span class="c">#  General utilities</span>
 <span class="c">#</span>
 </div>
-<div class="viewcode-block" id="pick_parser"><a class="viewcode-back" href="../../libref/astparsers.html#xdress.astparsers.pick_parser">[docs]</a><span class="k">def</span> <span class="nf">pick_parser</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">parsers</span><span class="p">):</span>
+<div class="viewcode-block" id="pick_parser"><a class="viewcode-back" href="../../libref/astparsers.html#xdress.astparsers.pick_parser">[docs]</a><span class="k">def</span> <span class="nf">pick_parser</span><span class="p">(</span><span class="n">file_or_lang</span><span class="p">,</span> <span class="n">parsers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Determines the parse to use for a file.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    filename : str</span>
-<span class="sd">        The path to the file.</span>
+<span class="sd">    file_or_lang : str </span>
+<span class="sd">        The path to the file OR a valid language flag.</span>
 <span class="sd">    parsers : str, list, or dict, optional</span>
 <span class="sd">        The parser / AST to use to use for the file.  Currently &#39;clang&#39;, &#39;gccxml&#39;, </span>
 <span class="sd">        and &#39;pycparser&#39; are supported, though others may be implemented in the </span>
@@ -346,7 +346,8 @@ if(ga_enabled){
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="n">parser</span> <span class="o">=</span> <span class="n">ps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parsers</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
-        <span class="n">lang</span> <span class="o">=</span> <span class="n">guess_language</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">lang</span> <span class="o">=</span> <span class="n">file_or_lang</span> <span class="k">if</span> <span class="n">file_or_lang</span> <span class="ow">in</span> <span class="n">parsers</span> \
+                            <span class="k">else</span> <span class="n">guess_language</span><span class="p">(</span><span class="n">file_or_lang</span><span class="p">)</span>
         <span class="n">ps</span> <span class="o">=</span> <span class="n">parsers</span><span class="p">[</span><span class="n">lang</span><span class="p">]</span>
         <span class="n">ps</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">ps</span> <span class="k">if</span> <span class="n">PARSERS_AVAILABLE</span><span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">lower</span><span class="p">()]]</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -412,7 +413,7 @@ if(ga_enabled){
     <span class="sd">&quot;&quot;&quot;This plugin requires &#39;xdress.base&#39;.&quot;&quot;&quot;</span>
     
     <span class="n">defaultrc</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">RunControl</span><span class="p">(</span>
-        <span class="n">includes</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">includes</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;.&#39;</span><span class="p">],</span>
         <span class="n">defines</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;XDRESS&quot;</span><span class="p">],</span>
         <span class="n">undefines</span><span class="o">=</span><span class="p">[],</span>
         <span class="n">variables</span><span class="o">=</span><span class="p">(),</span>

@@ -85,7 +85,7 @@ if(ga_enabled){
             
   <div class="section" id="module-xdress.utils">
 <span id="utilities"></span><span id="xdress-utils"></span><h1>Utilities<a class="headerlink" href="#module-xdress.utils" title="Permalink to this headline">¶</a></h1>
-<p>Helper functions for xdress.</p>
+<p>Helpers for xdress.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -122,8 +122,8 @@ The keys are (classname, filename, kind) tuples.  The values are
 
 <dl class="method">
 <dt id="xdress.utils.DescriptionCache.isvalid">
-<tt class="descname">isvalid</tt><big>(</big><em>name</em>, <em>filename</em>, <em>kind</em><big>)</big><a class="reference internal" href="../_modules/xdress/utils.html#DescriptionCache.isvalid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.utils.DescriptionCache.isvalid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Boolean on whether the cach value for a (name, filename, kind)
+<tt class="descname">isvalid</tt><big>(</big><em>name</em>, <em>kind</em><big>)</big><a class="reference internal" href="../_modules/xdress/utils.html#DescriptionCache.isvalid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.utils.DescriptionCache.isvalid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean on whether the cach value for a (apiname, kind)
 tuple matches the state of the file on the system.</p>
 </dd></dl>
 
@@ -151,31 +151,71 @@ attributes dictionary (_dict).</p>
 
 <dl class="class">
 <dt id="xdress.utils.apiname">
-<em class="property">class </em><tt class="descclassname">xdress.utils.</tt><tt class="descname">apiname</tt><a class="headerlink" href="#xdress.utils.apiname" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="xdress.utils.apiname.srcfile">
-<tt class="descname">srcfile</tt><a class="headerlink" href="#xdress.utils.apiname.srcfile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 1</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="xdress.utils.apiname.srcname">
-<tt class="descname">srcname</tt><a class="headerlink" href="#xdress.utils.apiname.srcname" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 0</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="xdress.utils.apiname.tarfile">
-<tt class="descname">tarfile</tt><a class="headerlink" href="#xdress.utils.apiname.tarfile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 2</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="xdress.utils.apiname.tarname">
-<tt class="descname">tarname</tt><a class="headerlink" href="#xdress.utils.apiname.tarname" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 3</p>
-</dd></dl>
-
+<em class="property">class </em><tt class="descclassname">xdress.utils.</tt><tt class="descname">apiname</tt><a class="reference internal" href="../_modules/xdress/utils.html#apiname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.utils.apiname" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a type, based on a named tuple, that represents the API element 
+names and is used to declare or discover where variables, functions, and 
+classes live for the rest of xdress.  All of the fields default to 
+NotSpecified if not given.  These feilds are the sames as what appear in 
+description dictionaries under the &#8216;name&#8217; key.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>srcname</strong> : str, tuple, or NotSpecified</p>
+<blockquote>
+<div><p>The element&#8217;s API name in the original source code, eg. MyClass.</p>
+</div></blockquote>
+<p><strong>srcfiles</strong> : str, tuple of str, or NotSpecified</p>
+<blockquote>
+<div><p>This is a sequence of unique strings which represents the file paths where
+the API element <em>may</em> be defined. For example, (&#8216;myfile.c&#8217;, &#8216;myfile.h&#8217;).  
+If the element is defined outside of these files, then the automatic 
+discovery or description may fail. When using ensure_apiname(), all strings
+are automatically globbed, so &#8216;src/myfile.*&#8217; will be converted to 
+(&#8216;src/myfile.c&#8217;, &#8216;src/myfile.h&#8217;).  Since these files are parsed they must 
+actually exist on the filesystem.</p>
+</div></blockquote>
+<p><strong>tarbase</strong> : str or NotSpecified</p>
+<blockquote>
+<div><p>The base portion of all automatically generated (target) files. This does 
+not include the directory or the file extension.  For example, if you 
+wanted cythongen to create a file name &#8216;mynewfile.pyx&#8217; then the value here
+would be simply &#8216;mynewfile&#8217;.</p>
+</div></blockquote>
+<p><strong>tarname</strong> : str, tuple, or NotSpecified</p>
+<blockquote>
+<div><p>The element&#8217;s API name in the automatically generated (target) files, 
+e.g. MyNewClass.</p>
+</div></blockquote>
+<p><strong>incfiles</strong> : tuple of str or NotSpecified</p>
+<blockquote>
+<div><p>This is a sequence of all files which must be #include&#8217;d to access the 
+srcname at compile time.  This should be as minimal of a set as possible, 
+preferably only one file.  For example even though most HDF5 API 
+declarations are split across multiple files, to use the public API you 
+only ever need to include &#8216;hdf5.h&#8217;. Because these files are not parsed they 
+do not need to exist for xdress to run.  Thus the strings in incfiles are 
+not globbed.</p>
+</div></blockquote>
+<p><strong>sidecars</strong> : str, tuple of str, or NotSpecified</p>
+<blockquote>
+<div><p>This is a sequence of all sidecar files to use for this API element. Like
+srcfiles, these files must exist for xdress to run.  They similarly 
+globbed.  For example, &#8216;myfile.py&#8217;.</p>
+</div></blockquote>
+<p><strong>language</strong> : str or NotSpecified</p>
+<blockquote class="last">
+<div><p>Flag for the language that the srcfiles are implemented in. Valid options 
+are: &#8216;c&#8217;, &#8216;c++&#8217;, &#8216;f&#8217;, &#8216;fortran&#8217;, &#8216;f77&#8217;, &#8216;f90&#8217;, &#8216;python&#8217;, and &#8216;cython&#8217;.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#xdress.utils.ensure_apiname" title="xdress.utils.ensure_apiname"><tt class="xref py py-obj docutils literal"><span class="pre">ensure_apiname</span></tt></a></p>
+</div>
 </dd></dl>
 
 <dl class="class">
@@ -189,7 +229,7 @@ with 8 spaces.</p>
 
 <dl class="function">
 <dt id="xdress.utils.cppint">
-<tt class="descclassname">xdress.utils.</tt><tt class="descname">cppint</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#xdress.utils.cppint" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">cppint</tt><big>(</big><em>s</em><big>)</big><a class="reference internal" href="../_modules/xdress/utils.html#cppint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.utils.cppint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a C++ literal integer string to a Python int.</p>
 </dd></dl>
 
@@ -221,8 +261,33 @@ the default arguments, returning a set of all methods possible.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="xdress.utils.extra_filenames">
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">extra_filenames</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/xdress/utils.html#extra_filenames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.utils.extra_filenames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a diictionary of extra filenames for an API element
+implemented in a given language and bound into a target.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>name</strong> : apiname</p>
+<blockquote>
+<div><p>The API element name.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>extra</strong> : dict</p>
+<blockquote class="last">
+<div><p>Extra filenames.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="xdress.utils.find_filenames">
-<tt class="descclassname">xdress.utils.</tt><tt class="descname">find_filenames</tt><big>(</big><em>srcname</em>, <em>tarname=None</em>, <em>sourcedir='src'</em><big>)</big><a class="reference internal" href="../_modules/xdress/utils.html#find_filenames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.utils.find_filenames" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">find_filenames</tt><big>(</big><em>srcname</em>, <em>tarname=None</em>, <em>sourcedir='src'</em>, <em>language=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/utils.html#find_filenames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.utils.find_filenames" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a description dictionary for a class or function
 implemented in a source file and bound into a target file.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -254,8 +319,14 @@ implemented in a source file and bound into a target file.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="xdress.utils.find_sidecar">
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">find_sidecar</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/utils.html#find_sidecar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.utils.find_sidecar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the sidecar for a filename, if it exists. Otherwise returns None.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="xdress.utils.find_source">
-<tt class="descclassname">xdress.utils.</tt><tt class="descname">find_source</tt><big>(</big><em>basename</em>, <em>sourcedir='.'</em><big>)</big><a class="reference internal" href="../_modules/xdress/utils.html#find_source"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.utils.find_source" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">find_source</tt><big>(</big><em>basename</em>, <em>sourcedir='.'</em>, <em>language=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/utils.html#find_source"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.utils.find_source" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds a source filename, header filename, language name, and language
 source extension given a basename and source directory.</p>
 </dd></dl>
@@ -397,6 +468,12 @@ and returns the corresponding type.</p>
 <tt class="descclassname">xdress.utils.</tt><tt class="descname">split_template_args</tt><big>(</big><em>s</em>, <em>open_brace='&lt;'</em>, <em>close_brace='&gt;'</em>, <em>separator='</em>, <em>'</em><big>)</big><a class="reference internal" href="../_modules/xdress/utils.html#split_template_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.utils.split_template_args" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes a string with template specialization and returns a list
 of the argument values as strings.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.utils.touch">
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">touch</tt><big>(</big><em>filename</em><big>)</big><a class="reference internal" href="../_modules/xdress/utils.html#touch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.utils.touch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Opens a file and updates the mtime, like the posix command of the same name.</p>
 </dd></dl>
 
 <dl class="function">

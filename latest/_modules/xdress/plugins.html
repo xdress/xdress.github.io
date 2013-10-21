@@ -222,6 +222,7 @@ if(ga_enabled){
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">io</span>
 <span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">importlib</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">textwrap</span>
@@ -368,6 +369,7 @@ if(ga_enabled){
         <span class="bp">self</span><span class="o">.</span><span class="n">parser</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rc</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rcdocs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">def</span> <span class="nf">_load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">modnames</span><span class="p">,</span> <span class="n">loaddeps</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">modname</span> <span class="ow">in</span> <span class="n">modnames</span><span class="p">:</span>
@@ -395,6 +397,18 @@ if(ga_enabled){
         <span class="bp">self</span><span class="o">.</span><span class="n">parser</span> <span class="o">=</span> <span class="n">parser</span>
         <span class="k">return</span> <span class="n">parser</span>
 </div>
+    <span class="k">def</span> <span class="nf">_setshowwarning</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">showwarning</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">category</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">lineno</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rc</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+                <span class="n">debugmsg</span> <span class="o">=</span> <span class="s">&quot;{0}: &#39;{1}&#39; from {2}:{3}&quot;</span>
+                <span class="n">debugmsg</span> <span class="o">=</span> <span class="n">debugmsg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">category</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> 
+                                           <span class="n">filename</span><span class="p">,</span> <span class="n">lineno</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">debugmsg</span><span class="p">)</span>
+            <span class="n">printmsg</span> <span class="o">=</span> <span class="s">&quot;WARNING: {0}: {1}&quot;</span>
+            <span class="n">printmsg</span> <span class="o">=</span> <span class="n">printmsg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">category</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">printmsg</span><span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">showwarning</span> <span class="o">=</span> <span class="n">showwarning</span>
+
 <div class="viewcode-block" id="Plugins.merge_rcs"><a class="viewcode-back" href="../../libref/plugins.html#xdress.plugins.Plugins.merge_rcs">[docs]</a>    <span class="k">def</span> <span class="nf">merge_rcs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Finds all of the default run controllers and returns a new and </span>
 <span class="sd">        full default RunControl() instance.  This has also merged all of </span>
@@ -415,10 +429,11 @@ if(ga_enabled){
                 <span class="n">docs</span> <span class="o">=</span> <span class="n">docs</span><span class="p">()</span>
             <span class="n">rcdocs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">docs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rc</span> <span class="o">=</span> <span class="n">rc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setshowwarning</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">rc</span>
 </div>
 <div class="viewcode-block" id="Plugins.setup"><a class="viewcode-back" href="../../libref/plugins.html#xdress.plugins.Plugins.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Preforms all plugin setup tasks.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Performs all plugin setup tasks.&quot;&quot;&quot;</span>
         <span class="n">rc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rc</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">plugin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plugins</span><span class="p">:</span>
@@ -450,8 +465,12 @@ if(ga_enabled){
         <span class="k">if</span> <span class="n">rc</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
             <span class="kn">import</span> <span class="nn">traceback</span>
             <span class="n">sep</span> <span class="o">=</span> <span class="n">nyansep</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;{0}xdress failed with the following error:</span><span class="se">\n\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sep</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">u&#39;{0}xdress failed with the following error:</span><span class="se">\n\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sep</span><span class="p">)</span>
             <span class="n">msg</span> <span class="o">+=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">warnmsg</span> <span class="o">=</span> <span class="s">u&#39;</span><span class="se">\n</span><span class="s">{0}xdress issued the following warnings:</span><span class="se">\n\n</span><span class="s">{1}</span><span class="se">\n\n</span><span class="s">&#39;</span>
+                <span class="n">warnmsg</span> <span class="o">=</span> <span class="n">warnmsg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sep</span><span class="p">,</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="p">))</span>
+                <span class="n">msg</span> <span class="o">+=</span> <span class="n">warnmsg</span>
             <span class="n">msg</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">{0}Run control run-time contents:</span><span class="se">\n\n</span><span class="s">{1}</span><span class="se">\n\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sep</span><span class="p">,</span> 
                                                                     <span class="n">rc</span><span class="o">.</span><span class="n">_pformat</span><span class="p">())</span>
             <span class="k">for</span> <span class="n">plugin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plugins</span><span class="p">:</span>
@@ -459,7 +478,7 @@ if(ga_enabled){
                 <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">plugin_msg</span><span class="p">):</span>
                     <span class="n">msg</span> <span class="o">+=</span> <span class="n">sep</span>
                     <span class="n">msg</span> <span class="o">+=</span> <span class="n">plugin_msg</span>
-            <span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">builddir</span><span class="p">,</span> <span class="s">&#39;debug.txt&#39;</span><span class="p">),</span> <span class="s">&#39;a+b&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">builddir</span><span class="p">,</span> <span class="s">&#39;debug.txt&#39;</span><span class="p">),</span> <span class="s">&#39;a+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
             <span class="k">raise</span>
         <span class="k">else</span><span class="p">:</span>

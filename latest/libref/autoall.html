@@ -310,7 +310,7 @@ copying src filenames to tar filename and the special &#8216;*&#8217; all syntax
 
 <dl class="function">
 <dt id="xdress.autoall.findall">
-<tt class="descclassname">xdress.autoall.</tt><tt class="descname">findall</tt><big>(</big><em>filename</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>parsers='gccxml'</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#findall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.findall" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autoall.</tt><tt class="descname">findall</tt><big>(</big><em>filename</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>parsers='gccxml'</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em>, <em>language='c++'</em><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#findall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.findall" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automatically finds all API elements in a file.  This is the main entry point.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -352,6 +352,10 @@ a dictionary, it specifies the order to use parser based on language, i.e.
 <p><strong>builddir</strong> : str, optional</p>
 <blockquote>
 <div><p>Location of &#8211; often temporary &#8211; build files.</p>
+</div></blockquote>
+<p><strong>language</strong> : str</p>
+<blockquote>
+<div><p>Valid language flag.</p>
 </div></blockquote>
 </td>
 </tr>

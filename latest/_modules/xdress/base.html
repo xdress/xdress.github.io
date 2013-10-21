@@ -88,6 +88,7 @@ if(ga_enabled){
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">RunControl</span><span class="p">,</span> <span class="n">NotSpecified</span><span class="p">,</span> <span class="n">writenewonly</span><span class="p">,</span> <span class="n">DescriptionCache</span><span class="p">,</span> \
     <span class="n">DEFAULT_RC_FILE</span><span class="p">,</span> <span class="n">DEFAULT_PLUGINS</span><span class="p">,</span> <span class="n">nyansep</span>
@@ -109,7 +110,7 @@ if(ga_enabled){
         <span class="n">dumpdesc</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">package</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">,</span>
         <span class="n">packagedir</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">,</span>
-        <span class="n">sourcedir</span><span class="o">=</span><span class="s">&#39;src&#39;</span><span class="p">,</span>
+        <span class="n">sourcedir</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">,</span>
         <span class="n">builddir</span><span class="o">=</span><span class="s">&#39;build&#39;</span><span class="p">,</span>
         <span class="n">bash_completion</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="p">)</span>
@@ -126,7 +127,7 @@ if(ga_enabled){
         <span class="s">&#39;dumpdesc&#39;</span><span class="p">:</span> <span class="s">&quot;Print the description cache&quot;</span><span class="p">,</span>
         <span class="s">&#39;package&#39;</span><span class="p">:</span> <span class="s">&quot;The Python package name for the generated wrappers&quot;</span><span class="p">,</span> 
         <span class="s">&#39;packagedir&#39;</span><span class="p">:</span> <span class="s">&quot;Path to package directory, same as &#39;package&#39; if not specified&quot;</span><span class="p">,</span>
-        <span class="s">&#39;sourcedir&#39;</span><span class="p">:</span> <span class="s">&quot;Path to source directory&quot;</span><span class="p">,</span>
+        <span class="s">&#39;sourcedir&#39;</span><span class="p">:</span> <span class="s">&quot;Path to source directory (deprecated)&quot;</span><span class="p">,</span>
         <span class="s">&#39;builddir&#39;</span><span class="p">:</span> <span class="s">&quot;Path to build directory&quot;</span><span class="p">,</span>
         <span class="s">&#39;bash_completion&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&quot;Flag for enabling / disabling BASH completion. &quot;</span>
                             <span class="s">&quot;This is only relevant when using argcomplete.&quot;</span><span class="p">),</span>
@@ -162,8 +163,9 @@ if(ga_enabled){
             <span class="n">rc</span><span class="o">.</span><span class="n">packagedir</span> <span class="o">=</span> <span class="n">rc</span><span class="o">.</span><span class="n">package</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">packagedir</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">packagedir</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">sourcedir</span><span class="p">):</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">sourcedir</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rc</span><span class="o">.</span><span class="n">sourcedir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">NotSpecified</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s">&quot;run control parameter &#39;sourcedir&#39; has been removed in favor &quot;</span>
+                 <span class="s">&quot;of new apiname semantics&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">builddir</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">builddir</span><span class="p">)</span>
         <span class="n">writenewonly</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">packagedir</span><span class="p">,</span> <span class="s">&#39;__init__.py&#39;</span><span class="p">),</span> <span class="n">rc</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>

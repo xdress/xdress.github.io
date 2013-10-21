@@ -244,6 +244,7 @@ if(ga_enabled){
 <span class="kn">import</span> <span class="nn">io</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span><span class="p">,</span> <span class="n">pformat</span>
 
 <span class="k">try</span><span class="p">:</span>
@@ -262,6 +263,7 @@ if(ga_enabled){
 
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../libref/main.html#xdress.main.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Entry point for xdress API generation.&quot;&quot;&quot;</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s">&#39;default&#39;</span><span class="p">)</span>
     <span class="c"># Preprocess plugin names, which entails preprocessing the rc file</span>
     <span class="n">preparser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="s">&quot;XDress Pre-processor&quot;</span><span class="p">,</span> <span class="n">add_help</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
     <span class="n">preparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--rc&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">,</span> 
