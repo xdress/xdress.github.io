@@ -255,7 +255,15 @@ code to insert directly into the wrapper.</td>
 <p>Suppose we have a C++ class called Toaster that takes bread and makes delicious
 toast.  A valid description dictionary for this class would be as follows:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">class_desc</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Toaster&#39;</span><span class="p">,</span>
+    <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">&#39;language&#39;</span><span class="p">:</span> <span class="s">&#39;c++&#39;</span><span class="p">,</span>
+        <span class="s">&#39;incfiles&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;toaster.h&#39;</span><span class="p">,),</span> 
+        <span class="s">&#39;srcfiles&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;src/toaster.h&#39;</span><span class="p">,</span> <span class="s">&#39;src/toaster.cpp&#39;</span><span class="p">),</span> 
+        <span class="s">&#39;srcname&#39;</span><span class="p">:</span> <span class="s">&#39;Toaster&#39;</span><span class="p">,</span> 
+        <span class="s">&#39;sidecars&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;src/toaster.py&#39;</span><span class="p">,),</span> 
+        <span class="s">&#39;tarbase&#39;</span><span class="p">:</span> <span class="s">&#39;toaster&#39;</span><span class="p">,</span>
+        <span class="s">&#39;tarname&#39;</span><span class="p">:</span> <span class="s">&#39;Toaster&#39;</span><span class="p">,</span> 
+        <span class="p">},</span>
     <span class="s">&#39;parents&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;FCComp&#39;</span><span class="p">],</span>
     <span class="s">&#39;namespace&#39;</span><span class="p">:</span> <span class="s">&#39;bright&#39;</span><span class="p">,</span>
     <span class="s">&#39;attrs&#39;</span><span class="p">:</span> <span class="p">{</span>
