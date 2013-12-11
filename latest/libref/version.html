@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Library Reference &mdash; xdress 0.4-dev documentation</title>
+    <title>Version Information &mdash; xdress 0.4-dev documentation</title>
     
     <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -30,8 +30,9 @@
     <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../_static/cloud.js"></script>
     <link rel="top" title="xdress 0.4-dev documentation" href="../index.html" />
-    <link rel="next" title="Type System" href="typesystem.html" />
-    <link rel="prev" title="Advanced Tutorial" href="../advtut.html" /> 
+    <link rel="up" title="Library Reference" href="index.html" />
+    <link rel="next" title="Run Control Parameters" href="../rcdocs.html" />
+    <link rel="prev" title="Extra Types Plugin" href="extratypes.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
 if(ga_enabled){
@@ -64,13 +65,14 @@ if(ga_enabled){
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="typesystem.html" title="Type System"
+          <a href="../rcdocs.html" title="Run Control Parameters"
              accesskey="N">next</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="../advtut.html" title="Advanced Tutorial"
+          <a href="extratypes.html" title="Extra Types Plugin"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
     <li><a href="../index.html">xdress 0.4-dev documentation</a> &raquo;</li>
- 
+
+          <li><a href="index.html" accesskey="U">Library Reference</a> &raquo;</li> 
       </ul>
     </div>
     </div>
@@ -81,40 +83,29 @@ if(ga_enabled){
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="library-reference">
-<span id="libref"></span><h1>Library Reference<a class="headerlink" href="#library-reference" title="Permalink to this headline">¶</a></h1>
-<p>At its core, xdress is a suite of code generation routines  built on top of a
-dynamic type system.</p>
-<p><strong>Core:</strong></p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="typesystem.html">Type System</a></li>
-<li class="toctree-l1"><a class="reference internal" href="stlwrap.html">Standard Library Container Wrappers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="astparsers.html">Abstract Syntax Tree Parsers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="autodescribe.html">Automatic Descriptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="autoall.html">Automatic API Discovery</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cythongen.html">Cython Generation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="main.html">API Generation CLI</a></li>
-</ul>
-</div>
-<p><strong>Useful Plugins:</strong></p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="descfilter.html">Description Filter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="doxygen.html">dOxygen Docstrings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pep8names.html">PEP-8 Names</a></li>
-</ul>
-</div>
-<p><strong>Helpers:</strong></p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="utils.html">Utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plugins.html">Plugins</a></li>
-<li class="toctree-l1"><a class="reference internal" href="base.html">Base Plugin</a></li>
-<li class="toctree-l1"><a class="reference internal" href="extratypes.html">Extra Types Plugin</a></li>
-<li class="toctree-l1"><a class="reference internal" href="version.html">Version Information</a></li>
-</ul>
-</div>
+  <div class="section" id="module-xdress.version">
+<span id="version-information"></span><span id="xdress-version"></span><h1>Version Information<a class="headerlink" href="#module-xdress.version" title="Permalink to this headline">¶</a></h1>
+<p>Version information about xdress and its dependencies.</p>
+<dl class="class">
+<dt id="xdress.version.version_info">
+<em class="property">class </em><tt class="descclassname">xdress.version.</tt><tt class="descname">version_info</tt><a class="reference internal" href="../_modules/xdress/version.html#version_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.version.version_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>A representation of version information.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.version.report_versions">
+<tt class="descclassname">xdress.version.</tt><tt class="descname">report_versions</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xdress/version.html#report_versions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.version.report_versions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a string that reports the version of xdress and all its
+dependencies.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.version.version_parser">
+<tt class="descclassname">xdress.version.</tt><tt class="descname">version_parser</tt><big>(</big><em>ver</em><big>)</big><a class="reference internal" href="../_modules/xdress/version.html#version_parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.version.version_parser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses a nominal version string into a version_info object.
+e.g. &#8216;0.20dev&#8217; -&gt; version_info(0, 20, 0, &#8216;dev&#8217;).</p>
+</dd></dl>
+
 </div>
 
 
@@ -127,14 +118,14 @@ dynamic type system.</p>
           <img class="logo" src="../_static/HooverJoven.jpg" alt="Logo"/>
         </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../advtut.html"
-                        title="previous chapter">Advanced Tutorial</a></p>
+  <p class="topless"><a href="extratypes.html"
+                        title="previous chapter">Extra Types Plugin</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="typesystem.html"
-                        title="next chapter">Type System</a></p>
+  <p class="topless"><a href="../rcdocs.html"
+                        title="next chapter">Run Control Parameters</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../_sources/libref/index.txt"
+    <li><a href="../_sources/libref/version.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -169,13 +160,14 @@ dynamic type system.</p>
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="typesystem.html" title="Type System"
+          <a href="../rcdocs.html" title="Run Control Parameters"
              >next</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="../advtut.html" title="Advanced Tutorial"
+          <a href="extratypes.html" title="Extra Types Plugin"
              >previous</a> &nbsp; &nbsp;</li>
     <li><a href="../index.html">xdress 0.4-dev documentation</a> &raquo;</li>
- 
+
+          <li><a href="index.html" >Library Reference</a> &raquo;</li> 
       </ul>
     </div>
     </div>

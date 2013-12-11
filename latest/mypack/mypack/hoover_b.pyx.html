@@ -101,14 +101,19 @@ if(ga_enabled){
 <span class="k">cimport</span> <span class="nn">cpp_hoover_b</span>
 <span class="k">cimport</span> <span class="nn">hoover</span>
 <span class="k">cimport</span> <span class="nn">hoover_b</span>
+<span class="k">cimport</span> <span class="nn">stlcontainers</span>
 <span class="k">from</span> <span class="nn">mypack</span> <span class="k">cimport</span> <span class="n">cpp_hoover</span>
 <span class="k">from</span> <span class="nn">mypack</span> <span class="k">cimport</span> <span class="n">cpp_hoover_b</span>
 
 <span class="k">import</span> <span class="nn">hoover</span>
-<span class="k">import</span> <span class="nn">hoover_b</span>
+<span class="k">import</span> <span class="nn">stlcontainers</span>
+
+
 
 <span class="k">cdef</span> <span class="k">class</span> <span class="nf">B</span><span class="p">(</span><span class="n">hoover</span><span class="o">.</span><span class="n">A</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;no docstring for B, please file a bug report!&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;no docstring for {&#39;sidecars&#39;: (), &#39;tarbase&#39;: &#39;hoover_b&#39;, &#39;tarname&#39;: &#39;B&#39;, &#39;language&#39;: &#39;c++&#39;, &#39;srcname&#39;: &#39;B&#39;, &#39;incfiles&#39;: (&#39;hoover.h&#39;,), &#39;srcfiles&#39;: (&#39;src/hoover.h&#39;, &#39;src/hoover.cpp&#39;)}, please file a bug report!&quot;&quot;&quot;</span>
+
+
 
     <span class="c"># constuctors</span>
     <span class="k">def</span> <span class="nf">__cinit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -136,18 +141,27 @@ if(ga_enabled){
     
     
     <span class="c"># methods</span>
+    
+
+    <span class="k">pass</span>
 
 
 
-
-<span class="k">def</span> <span class="nf">do_nothing_ab</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;do_nothing_ab(self, a, b)</span>
+<span class="k">def</span> <span class="nf">do_nothing_ab</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;do_nothing_ab(a, b)</span>
 <span class="sd">    no docstring for do_nothing_ab, please file a bug report!&quot;&quot;&quot;</span>
     <span class="k">cdef</span> <span class="kt">hoover</span>.<span class="kt">A</span> <span class="nf">a_proxy</span>
-    <span class="k">cdef</span> <span class="kt">hoover_b</span>.<span class="kt">B</span> <span class="nf">b_proxy</span>
+    <span class="k">cdef</span> <span class="kt">B</span> <span class="nf">b_proxy</span>
     <span class="n">a_proxy</span> <span class="o">=</span> <span class="p">&lt;</span><span class="kt">hoover.A</span><span class="p">&gt;</span> <span class="n">a</span>
-    <span class="n">b_proxy</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">hoover_b</span><span class="o">.</span><span class="n">B</span><span class="o">&gt;</span> <span class="n">b</span>
+    <span class="n">b_proxy</span> <span class="o">=</span> <span class="p">&lt;</span><span class="kt">B</span><span class="p">&gt;</span> <span class="n">b</span>
     <span class="n">cpp_hoover_b</span><span class="o">.</span><span class="n">do_nothing_ab</span><span class="p">((</span><span class="o">&lt;</span><span class="n">cpp_hoover</span><span class="o">.</span><span class="n">A</span> <span class="o">*&gt;</span> <span class="n">a_proxy</span><span class="o">.</span><span class="n">_inst</span><span class="p">)[</span><span class="mf">0</span><span class="p">],</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">cpp_hoover_b</span><span class="o">.</span><span class="n">B</span> <span class="o">*&gt;</span> <span class="n">b_proxy</span><span class="o">.</span><span class="n">_inst</span><span class="p">)[</span><span class="mf">0</span><span class="p">])</span>
+
+
+
+
+
+
+<span class="p">{</span><span class="s">&#39;cpppxd_footer&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;pyx_header&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;pxd_header&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;pxd_footer&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;cpppxd_header&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;pyx_footer&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>

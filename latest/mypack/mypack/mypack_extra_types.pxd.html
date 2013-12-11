@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>xdress_extra_types.pyx &mdash; xdress 0.4-dev documentation</title>
+    <title>mypack_extra_types.pxd &mdash; xdress 0.4-dev documentation</title>
     
     <link rel="stylesheet" href="../../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -31,8 +31,8 @@
     <script type="text/javascript" src="../../_static/cloud.js"></script>
     <link rel="top" title="xdress 0.4-dev documentation" href="../../index.html" />
     <link rel="up" title="mypack" href="index.html" />
-    <link rel="next" title="src" href="../src/index.html" />
-    <link rel="prev" title="xdress_extra_types.pxd" href="xdress_extra_types.pxd.html" /> 
+    <link rel="next" title="mypack_extra_types.pyx" href="mypack_extra_types.pyx.html" />
+    <link rel="prev" title="test_stlcontainers.py" href="tests/test_stlcontainers.py.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
 if(ga_enabled){
@@ -65,10 +65,10 @@ if(ga_enabled){
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="../src/index.html" title="src"
+          <a href="mypack_extra_types.pyx.html" title="mypack_extra_types.pyx"
              accesskey="N">next</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="xdress_extra_types.pxd.html" title="xdress_extra_types.pxd"
+          <a href="tests/test_stlcontainers.py.html" title="test_stlcontainers.py"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
     <li><a href="../../index.html">xdress 0.4-dev documentation</a> &raquo;</li>
 
@@ -85,15 +85,54 @@ if(ga_enabled){
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="xdress-extra-types-pyx">
-<h1>xdress_extra_types.pyx<a class="headerlink" href="#xdress-extra-types-pyx" title="Permalink to this headline">¶</a></h1>
-<p><a class="reference download internal" href="../../_downloads/xdress_extra_types.pyx"><tt class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">this</span> <span class="pre">file.</span></tt></a></p>
-<div class="highlight-cython"><div class="highlight"><pre><span class="k">cdef</span> <span class="kt">complex_t</span> <span class="nf">py2c_complex</span><span class="p">(</span><span class="nb">object</span> <span class="n">pyv</span><span class="p">):</span>
-    <span class="k">cdef</span> <span class="kt">complex_t</span> <span class="nf">cv</span> <span class="o">=</span> <span class="n">complex_t</span><span class="p">()</span>
-    <span class="n">pyv</span> <span class="o">=</span> <span class="nb">complex</span><span class="p">(</span><span class="n">pyv</span><span class="p">)</span>
-    <span class="n">cv</span><span class="o">.</span><span class="n">re</span> <span class="o">=</span> <span class="n">pyv</span><span class="o">.</span><span class="n">real</span>
-    <span class="n">cv</span><span class="o">.</span><span class="n">im</span> <span class="o">=</span> <span class="n">pyv</span><span class="o">.</span><span class="n">imag</span>
-    <span class="k">return</span> <span class="n">cv</span>
+  <div class="section" id="mypack-extra-types-pxd">
+<h1>mypack_extra_types.pxd<a class="headerlink" href="#mypack-extra-types-pxd" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference download internal" href="../../_downloads/mypack_extra_types.pxd"><tt class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">this</span> <span class="pre">file.</span></tt></a></p>
+<div class="highlight-cython"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;C++ wrapper for extra types header.&quot;&quot;&quot;</span>
+<span class="k">from</span> <span class="nn">libc.stdio</span> <span class="k">cimport</span> <span class="n">FILE</span>
+
+<span class="c"># Dirty ifdef, else, else preprocessor hack</span>
+<span class="c"># see http://comments.gmane.org/gmane.comp.python.cython.user/4080</span>
+<span class="k">cdef</span> <span class="kr">extern</span> <span class="k">from</span> <span class="o">*</span><span class="p">:</span>
+    <span class="k">cdef</span> <span class="kt">void</span> <span class="kt">emit_ifc</span> <span class="s">&quot;#if defined(__STDC__) //&quot;</span> <span class="p">()</span>
+    <span class="k">cdef</span> <span class="kt">void</span> <span class="kt">emit_ifcpp</span> <span class="s">&quot;#if defined(__cplusplus) //&quot;</span> <span class="p">()</span>
+    <span class="k">cdef</span> <span class="kt">void</span> <span class="kt">emit_elifc</span> <span class="s">&quot;#elif defined(__STDC__) //&quot;</span> <span class="p">()</span>
+    <span class="k">cdef</span> <span class="kt">void</span> <span class="kt">emit_elifcpp</span> <span class="s">&quot;#elif defined(__cplusplus) //&quot;</span> <span class="p">()</span>
+    <span class="k">cdef</span> <span class="kt">void</span> <span class="kt">emit_else</span> <span class="s">&quot;#else //&quot;</span> <span class="p">()</span>
+    <span class="k">cdef</span> <span class="kt">void</span> <span class="kt">emit_endif</span> <span class="s">&quot;#endif //&quot;</span> <span class="p">()</span>
+
+<span class="k">ctypedef</span> <span class="n">unsigned</span> <span class="n">char</span> <span class="n">uchar</span>
+<span class="k">ctypedef</span> <span class="nb">long</span> <span class="nb">long</span> <span class="n">int64</span>
+<span class="k">ctypedef</span> <span class="n">unsigned</span> <span class="n">short</span> <span class="n">uint16</span>
+<span class="k">ctypedef</span> <span class="n">unsigned</span> <span class="nb">int</span> <span class="n">uint32</span>
+<span class="k">ctypedef</span> <span class="n">unsigned</span> <span class="nb">long</span> <span class="nb">long</span> <span class="n">uint64</span>
+<span class="k">ctypedef</span> <span class="nb">long</span> <span class="n">double</span> <span class="n">float128</span>
+
+<span class="k">cdef</span> <span class="kr">extern</span> <span class="k">from</span> <span class="s">&quot;mypack_extra_types.h&quot;</span><span class="p">:</span>
+
+    <span class="k">ctypedef</span> <span class="k">struct</span> <span class="nc">complex_t</span> <span class="s">&quot;xd_complex_t&quot;</span><span class="p">:</span>
+        <span class="n">double</span> <span class="n">re</span>
+        <span class="n">double</span> <span class="n">im</span>
+
+<span class="k">cdef</span> <span class="kt">complex_t</span> <span class="nf">py2c_complex</span><span class="p">(</span><span class="nb">object</span> <span class="n">pyv</span><span class="p">)</span>
+
+<span class="k">cdef</span> <span class="kr">extern</span> <span class="k">from</span> <span class="s">&quot;Python.h&quot;</span><span class="p">:</span>
+
+    <span class="nb">object</span> <span class="n">PyFile_FromFile</span><span class="p">(</span><span class="n">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="n">char</span> <span class="o">*</span><span class="n">name</span><span class="p">,</span> <span class="n">char</span> <span class="o">*</span><span class="n">mode</span><span class="p">,</span> <span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">close</span><span class="p">)(</span><span class="n">FILE</span><span class="o">*</span><span class="p">))</span>
+    <span class="n">FILE</span><span class="o">*</span> <span class="n">PyFile_AsFile</span><span class="p">(</span><span class="nb">object</span> <span class="n">p</span><span class="p">)</span>
+
+
+<span class="c">#emit_ifcpp()</span>
+<span class="c">#cdef extern from &quot;&lt;exception&gt;&quot; namespace &quot;std&quot;:</span>
+
+<span class="c">#    cdef cppclass exception:</span>
+<span class="c">#        exception()</span>
+<span class="c">#        exception(const exception&amp;)</span>
+<span class="c">#        exception&amp; operator= (const exception&amp;)</span>
+<span class="c">#        ~exception()</span>
+<span class="c">#        const char * what()</span>
+
+<span class="c">#emit_endif()</span>
 </pre></div>
 </div>
 </div>
@@ -108,14 +147,14 @@ if(ga_enabled){
           <img class="logo" src="../../_static/HooverJoven.jpg" alt="Logo"/>
         </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="xdress_extra_types.pxd.html"
-                        title="previous chapter">xdress_extra_types.pxd</a></p>
+  <p class="topless"><a href="tests/test_stlcontainers.py.html"
+                        title="previous chapter">test_stlcontainers.py</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../src/index.html"
-                        title="next chapter">src</a></p>
+  <p class="topless"><a href="mypack_extra_types.pyx.html"
+                        title="next chapter">mypack_extra_types.pyx</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../../_sources/mypack/mypack/xdress_extra_types.pyx.txt"
+    <li><a href="../../_sources/mypack/mypack/mypack_extra_types.pxd.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -150,10 +189,10 @@ if(ga_enabled){
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="../src/index.html" title="src"
+          <a href="mypack_extra_types.pyx.html" title="mypack_extra_types.pyx"
              >next</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="xdress_extra_types.pxd.html" title="xdress_extra_types.pxd"
+          <a href="tests/test_stlcontainers.py.html" title="test_stlcontainers.py"
              >previous</a> &nbsp; &nbsp;</li>
     <li><a href="../../index.html">xdress 0.4-dev documentation</a> &raquo;</li>
 

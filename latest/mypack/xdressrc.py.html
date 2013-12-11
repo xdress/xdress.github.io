@@ -87,8 +87,12 @@ if(ga_enabled){
   <div class="section" id="xdressrc-py">
 <h1>xdressrc.py<a class="headerlink" href="#xdressrc-py" title="Permalink to this headline">¶</a></h1>
 <p><a class="reference download internal" href="../_downloads/xdressrc.py"><tt class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">this</span> <span class="pre">file.</span></tt></a></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">package</span> <span class="o">=</span> <span class="s">&#39;mypack&#39;</span>     <span class="c"># top-level python package name</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">xdress.utils</span> <span class="kn">import</span> <span class="n">apiname</span>
+
+<span class="n">package</span> <span class="o">=</span> <span class="s">&#39;mypack&#39;</span>     <span class="c"># top-level python package name</span>
 <span class="n">packagedir</span> <span class="o">=</span> <span class="s">&#39;mypack&#39;</span>  <span class="c"># loation of the python package</span>
+
+<span class="n">extra_types</span> <span class="o">=</span> <span class="s">&#39;mypack_extra_types&#39;</span>
 
 <span class="n">stlcontainers</span> <span class="o">=</span> <span class="p">[</span>
     <span class="p">(</span><span class="s">&#39;vector&#39;</span><span class="p">,</span> <span class="s">&#39;str&#39;</span><span class="p">),</span>
@@ -97,11 +101,12 @@ if(ga_enabled){
     <span class="p">]</span>
 
 <span class="n">classes</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;src/hoover.h&#39;</span><span class="p">,</span> <span class="s">&#39;src/hoover.cpp&#39;</span><span class="p">)),</span>
-        <span class="p">(</span><span class="s">&#39;B&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;src/hoover.h&#39;</span><span class="p">,</span> <span class="s">&#39;src/hoover.cpp&#39;</span><span class="p">),</span> <span class="s">&#39;hoover_b&#39;</span><span class="p">),</span>
-        <span class="p">]</span>
+    <span class="n">apiname</span><span class="p">(</span><span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;src/hoover.h&#39;</span><span class="p">,</span> <span class="s">&#39;src/hoover.cpp&#39;</span><span class="p">),</span> <span class="n">incfiles</span><span class="o">=</span><span class="s">&#39;hoover.h&#39;</span><span class="p">),</span>
+    <span class="n">apiname</span><span class="p">(</span><span class="s">&#39;B&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;src/hoover.h&#39;</span><span class="p">,</span> <span class="s">&#39;src/hoover.cpp&#39;</span><span class="p">),</span> <span class="s">&#39;hoover_b&#39;</span><span class="p">,</span> <span class="n">incfiles</span><span class="o">=</span><span class="s">&#39;hoover.h&#39;</span><span class="p">),</span>
+    <span class="p">]</span>
 
-<span class="n">functions</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;do_nothing_ab&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;src/hoover.h&#39;</span><span class="p">,</span> <span class="s">&#39;src/hoover.cpp&#39;</span><span class="p">),</span> <span class="s">&#39;hoover_b&#39;</span><span class="p">)]</span>
+<span class="n">functions</span> <span class="o">=</span> <span class="p">[</span><span class="n">apiname</span><span class="p">(</span><span class="s">&#39;do_nothing_ab&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;src/hoover.h&#39;</span><span class="p">,</span> <span class="s">&#39;src/hoover.cpp&#39;</span><span class="p">),</span> <span class="s">&#39;hoover_b&#39;</span><span class="p">,</span> 
+                     <span class="n">incfiles</span><span class="o">=</span><span class="s">&#39;hoover.h&#39;</span><span class="p">)]</span>
 </pre></div>
 </div>
 </div>

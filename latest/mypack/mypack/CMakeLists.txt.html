@@ -104,12 +104,12 @@ if(ga_enabled){
   <span class="s">hoover_b.pyx</span>
   <span class="s">hoover.pyx</span>
   <span class="s">stlcontainers.pyx</span>
-  <span class="s">xdress_extra_types.pyx</span>
+  <span class="s">mypack_extra_types.pyx</span>
   <span class="p">)</span>
 <span class="nb">set_source_files_properties</span><span class="p">(</span> <span class="o">${</span><span class="nv">cxx_pyx_files</span><span class="o">}</span>
   <span class="s">PROPERTIES</span> <span class="s">CYTHON_IS_CXX</span> <span class="s">TRUE</span> <span class="p">)</span>
 
-<span class="nb">cython_add_module</span><span class="p">(</span> <span class="s">xdress_extra_types</span> <span class="s">xdress_extra_types.pyx</span> <span class="p">)</span>
+<span class="nb">cython_add_module</span><span class="p">(</span> <span class="s">mypack_extra_types</span> <span class="s">mypack_extra_types.pyx</span><span class="p">)</span>
 <span class="nb">cython_add_module</span><span class="p">(</span> <span class="s">stlcontainers</span> <span class="s">stlcontainers.pyx</span> <span class="p">)</span>
 <span class="nb">cython_add_module</span><span class="p">(</span> <span class="s">hoover</span> <span class="s">hoover.pyx</span> <span class="s">../src/hoover.cpp</span> <span class="p">)</span>
 <span class="nb">cython_add_module</span><span class="p">(</span> <span class="s">hoover_b</span> <span class="s">hoover_b.pyx</span> <span class="s">../src/hoover.cpp</span> <span class="p">)</span>

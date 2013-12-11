@@ -652,13 +652,13 @@ if(ga_enabled){
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">desc</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
     <span class="c"># now sanitize methods</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">][</span><span class="s">&#39;srcname&#39;</span><span class="p">]</span> <span class="c"># srcname or tarname?</span>
-    <span class="n">methods</span> <span class="o">=</span> <span class="n">desc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;methods&#39;</span><span class="p">,</span> <span class="p">{})</span>
-    <span class="k">for</span> <span class="n">methkey</span><span class="p">,</span> <span class="n">methval</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">methods</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
-        <span class="k">if</span> <span class="n">methval</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">methname</span> <span class="o">=</span> <span class="n">methkey</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">methkey</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">)</span> <span class="k">else</span> <span class="n">methkey</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">methname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-                <span class="k">del</span> <span class="n">methods</span><span class="p">[</span><span class="n">methkey</span><span class="p">]</span>
+    <span class="c">#name = desc[&#39;name&#39;][&#39;srcname&#39;] # srcname or tarname?</span>
+    <span class="c">#methods = desc.get(&#39;methods&#39;, {})</span>
+    <span class="c">#for methkey, methval in list(methods.items()):</span>
+    <span class="c">#    if methval is None:</span>
+    <span class="c">#        methname = methkey if isinstance(methkey, basestring) else methkey[0]</span>
+    <span class="c">#        if methname[0].endswith(name):</span>
+    <span class="c">#            del methods[methkey]</span>
     <span class="k">return</span> <span class="n">desc</span>
 </div>
 <div class="viewcode-block" id="flatten"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.flatten">[docs]</a><span class="k">def</span> <span class="nf">flatten</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
@@ -927,7 +927,7 @@ if(ga_enabled){
     <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">srcname</span> <span class="ow">is</span> <span class="n">NotSpecified</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;apiname.srcname cannot be unspecified&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">srcfiles</span> <span class="ow">is</span> <span class="n">NotSpecified</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;apiname.srcfiles cannot be unspecified&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;apiname.srcfiles cannot be unspecified: {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
     <span class="n">updates</span><span class="p">[</span><span class="s">&#39;srcfiles&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_ensure_srcfiles</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">srcfiles</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">tarname</span> <span class="ow">is</span> <span class="n">NotSpecified</span><span class="p">:</span>
         <span class="n">updates</span><span class="p">[</span><span class="s">&#39;tarname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">srcname</span>

@@ -325,7 +325,7 @@ will work:</p>
 <span class="n">incdirs</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s">&#39;src&#39;</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">get_include</span><span class="p">()]</span>
 
 <span class="n">ext_modules</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">Extension</span><span class="p">(</span><span class="s">&quot;mypack.xdress_extra_types&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s">&quot;mypack/xdress_extra_types.pyx&quot;</span><span class="p">],</span> 
+    <span class="n">Extension</span><span class="p">(</span><span class="s">&quot;mypack.mypack_extra_types&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s">&quot;mypack/mypack_extra_types.pyx&quot;</span><span class="p">],</span> 
               <span class="n">include_dirs</span><span class="o">=</span><span class="n">incdirs</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s">&quot;c++&quot;</span><span class="p">),</span>
     <span class="n">Extension</span><span class="p">(</span><span class="s">&quot;mypack.stlcontainers&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s">&quot;mypack/stlcontainers.pyx&quot;</span><span class="p">],</span> 
               <span class="n">include_dirs</span><span class="o">=</span><span class="n">incdirs</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s">&quot;c++&quot;</span><span class="p">),</span>
@@ -392,12 +392,12 @@ will work:</p>
   <span class="s">hoover_b.pyx</span>
   <span class="s">hoover.pyx</span>
   <span class="s">stlcontainers.pyx</span>
-  <span class="s">xdress_extra_types.pyx</span>
+  <span class="s">mypack_extra_types.pyx</span>
   <span class="p">)</span>
 <span class="nb">set_source_files_properties</span><span class="p">(</span> <span class="o">${</span><span class="nv">cxx_pyx_files</span><span class="o">}</span>
   <span class="s">PROPERTIES</span> <span class="s">CYTHON_IS_CXX</span> <span class="s">TRUE</span> <span class="p">)</span>
 
-<span class="nb">cython_add_module</span><span class="p">(</span> <span class="s">xdress_extra_types</span> <span class="s">xdress_extra_types.pyx</span> <span class="p">)</span>
+<span class="nb">cython_add_module</span><span class="p">(</span> <span class="s">mypack_extra_types</span> <span class="s">mypack_extra_types.pyx</span><span class="p">)</span>
 <span class="nb">cython_add_module</span><span class="p">(</span> <span class="s">stlcontainers</span> <span class="s">stlcontainers.pyx</span> <span class="p">)</span>
 <span class="nb">cython_add_module</span><span class="p">(</span> <span class="s">hoover</span> <span class="s">hoover.pyx</span> <span class="s">../src/hoover.cpp</span> <span class="p">)</span>
 <span class="nb">cython_add_module</span><span class="p">(</span> <span class="s">hoover_b</span> <span class="s">hoover_b.pyx</span> <span class="s">../src/hoover.cpp</span> <span class="p">)</span>
@@ -427,14 +427,13 @@ in the xdress repo</a></p>
 <li class="toctree-l4"><a class="reference internal" href="mypack/mypack/tests/test_stlcontainers.py.html">test_stlcontainers.py</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="mypack/mypack/xdress_extra_types.pxd.html">xdress_extra_types.pxd</a></li>
-<li class="toctree-l3"><a class="reference internal" href="mypack/mypack/xdress_extra_types.pyx.html">xdress_extra_types.pyx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mypack/mypack/mypack_extra_types.pxd.html">mypack_extra_types.pxd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mypack/mypack/mypack_extra_types.pyx.html">mypack_extra_types.pyx</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="mypack/src/index.html">src</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="mypack/src/hoover.cpp.html">hoover.cpp</a></li>
 <li class="toctree-l3"><a class="reference internal" href="mypack/src/hoover.h.html">hoover.h</a></li>
-<li class="toctree-l3"><a class="reference internal" href="mypack/src/xdress_extra_types.h.html">xdress_extra_types.h</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="mypack/setup.py.html">setup.py</a></li>

@@ -214,7 +214,7 @@ name, parents, namespace, attrs, methods, docstrings, and extra.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">name:</th><td class="field-body">dict, the class name, see above</td>
 </tr>
-<tr class="field-even field"><th class="field-name">parents:</th><td class="field-body">list of strings or None, the immediate parents of the class
+<tr class="field-even field"><th class="field-name">parents:</th><td class="field-body">possibly empty list of strings, the immediate parents of the class
 (not grandparents).</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">namespace:</th><td class="field-body">str or None, the namespace or module the class lives in.</td>
@@ -331,7 +331,7 @@ constructor.  The default visitor methods are valid for classes.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>name</strong> : str</p>
 <blockquote>
-<div><p>The name, this may not have a None value.</p>
+<div><p>The name to describe.</p>
 </div></blockquote>
 <p><strong>root</strong> : element tree node, optional</p>
 <blockquote>
@@ -837,10 +837,9 @@ files, a temporary file will be created that #includes all of the files
 in this list in order.  This temporary file is the one which will be 
 parsed.</p>
 </div></blockquote>
-<p><strong>name</strong> : str or None, optional</p>
+<p><strong>name</strong> : str</p>
 <blockquote>
-<div><p>The name, a &#8216;None&#8217; value will attempt to infer this from the
-filename.</p>
+<div><p>The name to describe.</p>
 </div></blockquote>
 <p><strong>kind</strong> : str, optional</p>
 <blockquote>
@@ -912,10 +911,9 @@ API bindings.</p>
 <blockquote>
 <div><p>The path to the file.</p>
 </div></blockquote>
-<p><strong>name</strong> : str or None, optional</p>
+<p><strong>name</strong> : str</p>
 <blockquote>
-<div><p>The name, a &#8216;None&#8217; value will attempt to infer this from the
-filename.</p>
+<div><p>The name to describe.</p>
 </div></blockquote>
 <p><strong>kind</strong> : str</p>
 <blockquote>
@@ -978,10 +976,9 @@ API bindings.</p>
 <blockquote>
 <div><p>The path to the file.</p>
 </div></blockquote>
-<p><strong>name</strong> : str or None, optional</p>
+<p><strong>name</strong> : str</p>
 <blockquote>
-<div><p>The name, a &#8216;None&#8217; value will attempt to infer this from the
-filename.</p>
+<div><p>The name to describe.</p>
 </div></blockquote>
 <p><strong>kind</strong> : str</p>
 <blockquote>

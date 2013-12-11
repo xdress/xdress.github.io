@@ -104,6 +104,7 @@ if(ga_enabled){
 <span class="k">from</span> <span class="nn">libcpp.utility</span> <span class="k">cimport</span> <span class="n">pair</span>
 <span class="k">from</span> <span class="nn">libcpp.map</span> <span class="k">cimport</span> <span class="nb">map</span> <span class="k">as</span> <span class="n">cpp_map</span>
 <span class="k">from</span> <span class="nn">libcpp.vector</span> <span class="k">cimport</span> <span class="n">vector</span> <span class="k">as</span> <span class="n">cpp_vector</span>
+<span class="k">from</span> <span class="nn">cpython.version</span> <span class="k">cimport</span> <span class="n">PY_MAJOR_VERSION</span>
 <span class="k">from</span> <span class="nn">cpython.ref</span> <span class="k">cimport</span> <span class="n">PyTypeObject</span>
 <span class="k">from</span> <span class="nn">cpython.type</span> <span class="k">cimport</span> <span class="n">PyType_Ready</span>
 <span class="k">from</span> <span class="nn">cpython.object</span> <span class="k">cimport</span> <span class="n">Py_LT</span><span class="p">,</span> <span class="n">Py_LE</span><span class="p">,</span> <span class="n">Py_EQ</span><span class="p">,</span> <span class="n">Py_NE</span><span class="p">,</span> <span class="n">Py_GT</span><span class="p">,</span> <span class="n">Py_GE</span>
@@ -116,9 +117,28 @@ if(ga_enabled){
 
 <span class="n">np</span><span class="o">.</span><span class="n">import_array</span><span class="p">()</span>
 
-<span class="k">cimport</span> <span class="nn">xdress_extra_types</span>
+<span class="k">cimport</span> <span class="nn">mypack_extra_types</span>
+
+<span class="c"># Cython Imports For Types</span>
+<span class="k">cimport</span> <span class="nn">mypack_extra_types</span>
+<span class="k">from</span> <span class="nn">libcpp.string</span> <span class="k">cimport</span> <span class="n">string</span> <span class="k">as</span> <span class="n">std_string</span>
+
+<span class="c"># Imports For Types</span>
+
 
 <span class="n">dtypes</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">if</span> <span class="n">PY_MAJOR_VERSION</span> <span class="o">&gt;=</span> <span class="mf">3</span><span class="p">:</span>
+    <span class="nb">basestring</span> <span class="o">=</span> <span class="nb">str</span>
+
+
+<span class="c"># Dirty ifdef, else, else preprocessor hack</span>
+<span class="c"># see http://comments.gmane.org/gmane.comp.python.cython.user/4080</span>
+<span class="k">cdef</span> <span class="kr">extern</span> <span class="k">from</span> <span class="o">*</span><span class="p">:</span>
+    <span class="k">cdef</span> <span class="kt">void</span> <span class="kt">emit_ifpy2k</span> <span class="s">&quot;#if PY_MAJOR_VERSION == 2 //&quot;</span> <span class="p">()</span>
+    <span class="k">cdef</span> <span class="kt">void</span> <span class="kt">emit_ifpy3k</span> <span class="s">&quot;#if PY_MAJOR_VERSION == 3 //&quot;</span> <span class="p">()</span>
+    <span class="k">cdef</span> <span class="kt">void</span> <span class="kt">emit_else</span> <span class="s">&quot;#else //&quot;</span> <span class="p">()</span>
+    <span class="k">cdef</span> <span class="kt">void</span> <span class="kt">emit_endif</span> <span class="s">&quot;#endif //&quot;</span> <span class="p">()</span>
 
 <span class="c"># std_string dtype</span>
 <span class="k">cdef</span> <span class="kt">MemoryKnight</span>[<span class="kt">std_string</span>] <span class="nf">mk_str</span> <span class="o">=</span> <span class="n">MemoryKnight</span><span class="p">[</span><span class="n">std_string</span><span class="p">]()</span>
@@ -127,16 +147,16 @@ if(ga_enabled){
 <span class="k">cdef</span> <span class="kt">object</span> <span class="nf">pyxd_str_getitem</span><span class="p">(</span><span class="n">void</span> <span class="o">*</span> <span class="n">data</span><span class="p">,</span> <span class="n">void</span> <span class="o">*</span> <span class="n">arr</span><span class="p">):</span>
 
 
-    <span class="n">pyval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="o">&lt;</span><span class="n">char</span> <span class="o">*&gt;</span> <span class="n">deref</span><span class="p">(</span><span class="o">&lt;</span><span class="n">std_string</span> <span class="o">*&gt;</span> <span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">c_str</span><span class="p">())</span>
+    <span class="n">pyval</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="o">&lt;</span><span class="n">char</span> <span class="o">*&gt;</span> <span class="n">deref</span><span class="p">(</span><span class="o">&lt;</span><span class="n">std_string</span> <span class="o">*&gt;</span> <span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">c_str</span><span class="p">())</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">pyval</span>
 
 <span class="k">cdef</span> <span class="kt">int</span> <span class="nf">pyxd_str_setitem</span><span class="p">(</span><span class="nb">object</span> <span class="n">value</span><span class="p">,</span> <span class="n">void</span> <span class="o">*</span> <span class="n">data</span><span class="p">,</span> <span class="n">void</span> <span class="o">*</span> <span class="n">arr</span><span class="p">):</span>
     <span class="k">cdef</span> <span class="kt">std_string</span> * <span class="nf">new_data</span>
-
+    <span class="k">cdef</span> <span class="kt">char</span> * <span class="nf">value_proxy</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
-
+        <span class="n">value_bytes</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
         <span class="n">new_data</span> <span class="o">=</span> <span class="n">mk_str</span><span class="o">.</span><span class="n">renew</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-        <span class="n">new_data</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">std_string</span><span class="p">(</span><span class="o">&lt;</span><span class="n">char</span> <span class="o">*&gt;</span> <span class="n">value</span><span class="p">)</span>
+        <span class="n">new_data</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">std_string</span><span class="p">(</span><span class="o">&lt;</span><span class="n">char</span> <span class="o">*&gt;</span> <span class="n">value_bytes</span><span class="p">)</span>
         <span class="k">return</span> <span class="mf">0</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="o">-</span><span class="mf">1</span>
@@ -242,7 +262,7 @@ if(ga_enabled){
     <span class="k">cdef</span> <span class="kt">PyXDStr_Type</span> * <span class="nf">cself</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">PyXDStr_Type</span> <span class="o">*&gt;</span> <span class="bp">self</span>
 
 
-    <span class="n">pyval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="o">&lt;</span><span class="n">char</span> <span class="o">*&gt;</span> <span class="p">(</span><span class="n">cself</span><span class="o">.</span><span class="n">obval</span><span class="p">)</span><span class="o">.</span><span class="n">c_str</span><span class="p">())</span>
+    <span class="n">pyval</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="o">&lt;</span><span class="n">char</span> <span class="o">*&gt;</span> <span class="p">(</span><span class="n">cself</span><span class="o">.</span><span class="n">obval</span><span class="p">)</span><span class="o">.</span><span class="n">c_str</span><span class="p">())</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
     <span class="n">s</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">pyval</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">s</span>
 
@@ -250,7 +270,7 @@ if(ga_enabled){
     <span class="k">cdef</span> <span class="kt">PyXDStr_Type</span> * <span class="nf">cself</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">PyXDStr_Type</span> <span class="o">*&gt;</span> <span class="bp">self</span>
 
 
-    <span class="n">pyval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="o">&lt;</span><span class="n">char</span> <span class="o">*&gt;</span> <span class="p">(</span><span class="n">cself</span><span class="o">.</span><span class="n">obval</span><span class="p">)</span><span class="o">.</span><span class="n">c_str</span><span class="p">())</span>
+    <span class="n">pyval</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="o">&lt;</span><span class="n">char</span> <span class="o">*&gt;</span> <span class="p">(</span><span class="n">cself</span><span class="o">.</span><span class="n">obval</span><span class="p">)</span><span class="o">.</span><span class="n">c_str</span><span class="p">())</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
     <span class="n">s</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">pyval</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">s</span>
 
@@ -305,7 +325,7 @@ if(ga_enabled){
     <span class="k">return</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
 <span class="k">cdef</span> <span class="kt">PyMemberDef</span> <span class="kt">pyxd_str_type_members</span>[1]
-<span class="n">pyxd_str_type_members</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">PyMemberDef</span><span class="p">(</span><span class="bp">NULL</span><span class="p">)</span>
+<span class="n">pyxd_str_type_members</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">PyMemberDef</span><span class="p">(</span><span class="bp">NULL</span><span class="p">,</span> <span class="mf">0</span><span class="p">,</span> <span class="mf">0</span><span class="p">,</span> <span class="mf">0</span><span class="p">,</span> <span class="bp">NULL</span><span class="p">)</span>
 
 <span class="k">cdef</span> <span class="kt">PyGetSetDef</span> <span class="kt">pyxd_str_type_getset</span>[1]
 <span class="n">pyxd_str_type_getset</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">PyGetSetDef</span><span class="p">(</span><span class="bp">NULL</span><span class="p">)</span>
@@ -316,7 +336,7 @@ if(ga_enabled){
 <span class="p">(</span><span class="o">&lt;</span><span class="n">PyTypeObject</span> <span class="o">*&gt;</span> <span class="n">PyXD_Str</span><span class="p">)</span><span class="o">.</span><span class="n">tp_basicsize</span> <span class="o">=</span> <span class="n">sizeof</span><span class="p">(</span><span class="n">PyXDStr_Type</span><span class="p">)</span>
 <span class="p">(</span><span class="o">&lt;</span><span class="n">PyTypeObject</span> <span class="o">*&gt;</span> <span class="n">PyXD_Str</span><span class="p">)</span><span class="o">.</span><span class="n">tp_itemsize</span> <span class="o">=</span> <span class="mf">0</span>
 <span class="p">(</span><span class="o">&lt;</span><span class="n">PyTypeObject</span> <span class="o">*&gt;</span> <span class="n">PyXD_Str</span><span class="p">)</span><span class="o">.</span><span class="n">tp_doc</span> <span class="o">=</span> <span class="s">&quot;Python scalar type for std_string&quot;</span>
-<span class="p">(</span><span class="o">&lt;</span><span class="n">PyTypeObject</span> <span class="o">*&gt;</span> <span class="n">PyXD_Str</span><span class="p">)</span><span class="o">.</span><span class="n">tp_flags</span> <span class="o">=</span> <span class="n">Py_TPFLAGS_DEFAULT</span> <span class="o">|</span> <span class="n">Py_TPFLAGS_BASETYPE</span> <span class="o">|</span> <span class="n">Py_TPFLAGS_CHECKTYPES</span>
+<span class="p">(</span><span class="o">&lt;</span><span class="n">PyTypeObject</span> <span class="o">*&gt;</span> <span class="n">PyXD_Str</span><span class="p">)</span><span class="o">.</span><span class="n">tp_flags</span> <span class="o">=</span> <span class="n">Py_TPFLAGS_DEFAULT</span> <span class="o">|</span> <span class="n">Py_TPFLAGS_BASETYPE</span> <span class="o">|</span> <span class="n">Py_TPFLAGS_CHECKTYPES</span> <span class="o">|</span> <span class="n">Py_TPFLAGS_HEAPTYPE</span>
 <span class="p">(</span><span class="o">&lt;</span><span class="n">PyTypeObject</span> <span class="o">*&gt;</span> <span class="n">PyXD_Str</span><span class="p">)</span><span class="o">.</span><span class="n">tp_alloc</span> <span class="o">=</span> <span class="n">pyxd_str_type_alloc</span>
 <span class="p">(</span><span class="o">&lt;</span><span class="n">PyTypeObject</span> <span class="o">*&gt;</span> <span class="n">PyXD_Str</span><span class="p">)</span><span class="o">.</span><span class="n">tp_dealloc</span> <span class="o">=</span> <span class="n">pyxd_str_type_dealloc</span>
 <span class="p">(</span><span class="o">&lt;</span><span class="n">PyTypeObject</span> <span class="o">*&gt;</span> <span class="n">PyXD_Str</span><span class="p">)</span><span class="o">.</span><span class="n">tp_new</span> <span class="o">=</span> <span class="n">pyxd_str_type_new</span>
@@ -325,7 +345,9 @@ if(ga_enabled){
 <span class="p">(</span><span class="o">&lt;</span><span class="n">PyTypeObject</span> <span class="o">*&gt;</span> <span class="n">PyXD_Str</span><span class="p">)</span><span class="o">.</span><span class="n">tp_repr</span> <span class="o">=</span> <span class="n">pyxd_str_type_repr</span>
 <span class="p">(</span><span class="o">&lt;</span><span class="n">PyTypeObject</span> <span class="o">*&gt;</span> <span class="n">PyXD_Str</span><span class="p">)</span><span class="o">.</span><span class="n">tp_base</span> <span class="o">=</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">PyTypeObject</span> <span class="o">*&gt;</span> <span class="n">PyArray_API</span><span class="p">[</span><span class="mf">10</span><span class="p">])</span>  <span class="c"># PyGenericArrType_Type</span>
 <span class="p">(</span><span class="o">&lt;</span><span class="n">PyTypeObject</span> <span class="o">*&gt;</span> <span class="n">PyXD_Str</span><span class="p">)</span><span class="o">.</span><span class="n">tp_hash</span> <span class="o">=</span> <span class="n">pyxd_str_type_hash</span>
-<span class="p">(</span><span class="o">&lt;</span><span class="n">PyTypeObject</span> <span class="o">*&gt;</span> <span class="n">PyXD_Str</span><span class="p">)</span><span class="o">.</span><span class="n">tp_compare</span> <span class="o">=</span> <span class="n">pyxd_str_type_compare</span>
+<span class="n">emit_ifpy2k</span><span class="p">()</span>
+<span class="p">(</span><span class="o">&lt;</span><span class="n">PyTypeObject</span> <span class="o">*&gt;</span> <span class="n">PyXD_Str</span><span class="p">)</span><span class="o">.</span><span class="n">tp_compare</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">pyxd_str_type_compare</span>
+<span class="n">emit_endif</span><span class="p">()</span>
 <span class="p">(</span><span class="o">&lt;</span><span class="n">PyTypeObject</span> <span class="o">*&gt;</span> <span class="n">PyXD_Str</span><span class="p">)</span><span class="o">.</span><span class="n">tp_richcompare</span> <span class="o">=</span> <span class="n">pyxd_str_type_richcompare</span>
 <span class="p">(</span><span class="o">&lt;</span><span class="n">PyTypeObject</span> <span class="o">*&gt;</span> <span class="n">PyXD_Str</span><span class="p">)</span><span class="o">.</span><span class="n">tp_members</span> <span class="o">=</span> <span class="n">pyxd_str_type_members</span>
 <span class="p">(</span><span class="o">&lt;</span><span class="n">PyTypeObject</span> <span class="o">*&gt;</span> <span class="n">PyXD_Str</span><span class="p">)</span><span class="o">.</span><span class="n">tp_getset</span> <span class="o">=</span> <span class="n">pyxd_str_type_getset</span>
@@ -333,25 +355,26 @@ if(ga_enabled){
 <span class="n">Py_INCREF</span><span class="p">(</span><span class="n">PyXD_Str</span><span class="p">)</span>
 <span class="n">XDStr</span> <span class="o">=</span> <span class="n">PyXD_Str</span>
 
-<span class="k">cdef</span> <span class="kt">PyArray_Descr</span> <span class="nf">c_xd_str_descr</span> <span class="o">=</span> <span class="n">PyArray_Descr</span><span class="p">(</span>
-    <span class="mf">0</span><span class="p">,</span> <span class="c"># ob_refcnt</span>
-    <span class="p">(</span><span class="o">&lt;</span><span class="n">PyTypeObject</span> <span class="o">*&gt;</span> <span class="n">PyArray_API</span><span class="p">[</span><span class="mf">3</span><span class="p">]),</span> <span class="c"># ob_type == PyArrayDescr_Type</span>
-    <span class="o">&lt;</span><span class="n">PyTypeObject</span> <span class="o">*&gt;</span> <span class="n">PyXD_Str</span><span class="p">,</span> <span class="c"># typeobj</span>
-    <span class="s">&#39;x&#39;</span><span class="p">,</span>  <span class="c"># kind, for xdress</span>
-    <span class="s">&#39;x&#39;</span><span class="p">,</span>  <span class="c"># type</span>
-    <span class="s">&#39;=&#39;</span><span class="p">,</span>  <span class="c"># byteorder</span>
-    <span class="mf">0</span><span class="p">,</span>    <span class="c"># flags</span>
-    <span class="mf">0</span><span class="p">,</span>    <span class="c"># type_num, assigned at registration</span>
-    <span class="n">sizeof</span><span class="p">(</span><span class="n">std_string</span><span class="p">),</span>  <span class="c"># elsize, </span>
-    <span class="mf">8</span><span class="p">,</span>  <span class="c"># alignment</span>
-    <span class="bp">NULL</span><span class="p">,</span>  <span class="c"># subarray</span>
-    <span class="o">&lt;</span><span class="n">PyObject</span> <span class="o">*&gt;</span> <span class="bp">None</span><span class="p">,</span>  <span class="c"># fields</span>
-    <span class="o">&amp;</span><span class="n">PyXD_Str_ArrFuncs</span><span class="p">,</span>  <span class="c"># f == PyArray_ArrFuncs</span>
-    <span class="p">)</span>
-<span class="k">cdef</span> <span class="kt">object</span> <span class="nf">xd_str_descr</span> <span class="o">=</span> <span class="p">&lt;</span><span class="kt">object</span><span class="p">&gt;</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">void</span> <span class="o">*&gt;</span> <span class="o">&amp;</span><span class="n">c_xd_str_descr</span><span class="p">)</span>
+<span class="k">cdef</span> <span class="kt">PyArray_Descr</span> * <span class="nf">c_xd_str_descr</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">PyArray_Descr</span> <span class="o">*&gt;</span> <span class="n">malloc</span><span class="p">(</span><span class="n">sizeof</span><span class="p">(</span><span class="n">PyArray_Descr</span><span class="p">))</span>
+<span class="p">(</span><span class="o">&lt;</span><span class="n">PyObject</span> <span class="o">*&gt;</span> <span class="n">c_xd_str_descr</span><span class="p">)</span><span class="o">.</span><span class="n">ob_refcnt</span> <span class="o">=</span> <span class="mf">0</span> <span class="c"># ob_refcnt</span>
+<span class="p">(</span><span class="o">&lt;</span><span class="n">PyObject</span> <span class="o">*&gt;</span> <span class="n">c_xd_str_descr</span><span class="p">)</span><span class="o">.</span><span class="n">ob_type</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">PyTypeObject</span> <span class="o">*&gt;</span> <span class="n">PyArray_API</span><span class="p">[</span><span class="mf">3</span><span class="p">]</span>
+<span class="n">c_xd_str_descr</span><span class="o">.</span><span class="n">typeobj</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">PyTypeObject</span> <span class="o">*&gt;</span> <span class="n">PyXD_Str</span> <span class="c"># typeobj</span>
+<span class="n">c_xd_str_descr</span><span class="o">.</span><span class="n">kind</span> <span class="o">=</span> <span class="s">&#39;x&#39;</span>  <span class="c"># kind, for xdress</span>
+<span class="n">c_xd_str_descr</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s">&#39;x&#39;</span>  <span class="c"># type</span>
+<span class="n">c_xd_str_descr</span><span class="o">.</span><span class="n">byteorder</span> <span class="o">=</span> <span class="s">&#39;=&#39;</span>  <span class="c"># byteorder</span>
+<span class="n">c_xd_str_descr</span><span class="o">.</span><span class="n">flags</span> <span class="o">=</span> <span class="mf">0</span>    <span class="c"># flags</span>
+<span class="n">c_xd_str_descr</span><span class="o">.</span><span class="n">type_num</span> <span class="o">=</span> <span class="mf">0</span>    <span class="c"># type_num, assigned at registration</span>
+<span class="n">c_xd_str_descr</span><span class="o">.</span><span class="n">elsize</span> <span class="o">=</span> <span class="n">sizeof</span><span class="p">(</span><span class="n">std_string</span><span class="p">)</span>  <span class="c"># elsize, </span>
+<span class="n">c_xd_str_descr</span><span class="o">.</span><span class="n">alignment</span> <span class="o">=</span> <span class="mf">8</span>  <span class="c"># alignment</span>
+<span class="n">c_xd_str_descr</span><span class="o">.</span><span class="n">subarray</span> <span class="o">=</span> <span class="bp">NULL</span>  <span class="c"># subarray</span>
+<span class="n">c_xd_str_descr</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="bp">NULL</span>  <span class="c"># fields</span>
+<span class="n">c_xd_str_descr</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="bp">NULL</span>
+<span class="p">(</span><span class="o">&lt;</span><span class="n">PyArray_Descr</span> <span class="o">*&gt;</span> <span class="n">c_xd_str_descr</span><span class="p">)</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">PyArray_ArrFuncs</span> <span class="o">*&gt;</span> <span class="o">&amp;</span><span class="n">PyXD_Str_ArrFuncs</span>  <span class="c"># f == PyArray_ArrFuncs</span>
+
+<span class="k">cdef</span> <span class="kt">object</span> <span class="nf">xd_str_descr</span> <span class="o">=</span> <span class="p">&lt;</span><span class="kt">object</span><span class="p">&gt;</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">void</span> <span class="o">*&gt;</span> <span class="n">c_xd_str_descr</span><span class="p">)</span>
 <span class="n">Py_INCREF</span><span class="p">(&lt;</span><span class="kt">object</span><span class="p">&gt;</span> <span class="n">xd_str_descr</span><span class="p">)</span>
 <span class="n">xd_str</span> <span class="o">=</span> <span class="n">xd_str_descr</span>
-<span class="k">cdef</span> <span class="kt">int</span> <span class="nf">xd_str_num</span> <span class="o">=</span> <span class="n">PyArray_RegisterDataType</span><span class="p">(</span><span class="o">&amp;</span><span class="n">c_xd_str_descr</span><span class="p">)</span>
+<span class="k">cdef</span> <span class="kt">int</span> <span class="nf">xd_str_num</span> <span class="o">=</span> <span class="n">PyArray_RegisterDataType</span><span class="p">(</span><span class="n">c_xd_str_descr</span><span class="p">)</span>
 <span class="n">dtypes</span><span class="p">[</span><span class="s">&#39;str&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xd_str</span>
 <span class="n">dtypes</span><span class="p">[</span><span class="s">&#39;xd_str&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xd_str</span>
 <span class="n">dtypes</span><span class="p">[</span><span class="n">xd_str_num</span><span class="p">]</span> <span class="o">=</span> <span class="n">xd_str</span>
@@ -360,12 +383,12 @@ if(ga_enabled){
 
 <span class="c"># SetUInt</span>
 <span class="k">cdef</span> <span class="k">class</span> <span class="nf">_SetIterUInt</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">cdef</span> <span class="kt">void</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cpp_set</span><span class="p">[</span><span class="n">xdress_extra_types</span><span class="o">.</span><span class="n">uint</span><span class="p">]</span> <span class="o">*</span> <span class="n">set_ptr</span><span class="p">):</span>
-        <span class="k">cdef</span> <span class="kt">cpp_set</span>[<span class="kt">xdress_extra_types</span>.<span class="kt">uint</span>].<span class="kt">iterator</span> * <span class="nf">itn</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">cpp_set</span><span class="p">[</span><span class="n">xdress_extra_types</span><span class="o">.</span><span class="n">uint</span><span class="p">]</span><span class="o">.</span><span class="n">iterator</span> <span class="o">*&gt;</span> <span class="n">malloc</span><span class="p">(</span><span class="n">sizeof</span><span class="p">(</span><span class="n">set_ptr</span><span class="o">.</span><span class="n">begin</span><span class="p">()))</span>
+    <span class="k">cdef</span> <span class="kt">void</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cpp_set</span><span class="p">[</span><span class="n">mypack_extra_types</span><span class="o">.</span><span class="n">uint32</span><span class="p">]</span> <span class="o">*</span> <span class="n">set_ptr</span><span class="p">):</span>
+        <span class="k">cdef</span> <span class="kt">cpp_set</span>[<span class="kt">mypack_extra_types</span>.<span class="kt">uint32</span>].<span class="kt">iterator</span> * <span class="nf">itn</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">cpp_set</span><span class="p">[</span><span class="n">mypack_extra_types</span><span class="o">.</span><span class="n">uint32</span><span class="p">]</span><span class="o">.</span><span class="n">iterator</span> <span class="o">*&gt;</span> <span class="n">malloc</span><span class="p">(</span><span class="n">sizeof</span><span class="p">(</span><span class="n">set_ptr</span><span class="o">.</span><span class="n">begin</span><span class="p">()))</span>
         <span class="n">itn</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">set_ptr</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">iter_now</span> <span class="o">=</span> <span class="n">itn</span>
 
-        <span class="k">cdef</span> <span class="kt">cpp_set</span>[<span class="kt">xdress_extra_types</span>.<span class="kt">uint</span>].<span class="kt">iterator</span> * <span class="nf">ite</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">cpp_set</span><span class="p">[</span><span class="n">xdress_extra_types</span><span class="o">.</span><span class="n">uint</span><span class="p">]</span><span class="o">.</span><span class="n">iterator</span> <span class="o">*&gt;</span> <span class="n">malloc</span><span class="p">(</span><span class="n">sizeof</span><span class="p">(</span><span class="n">set_ptr</span><span class="o">.</span><span class="n">end</span><span class="p">()))</span>
+        <span class="k">cdef</span> <span class="kt">cpp_set</span>[<span class="kt">mypack_extra_types</span>.<span class="kt">uint32</span>].<span class="kt">iterator</span> * <span class="nf">ite</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">cpp_set</span><span class="p">[</span><span class="n">mypack_extra_types</span><span class="o">.</span><span class="n">uint32</span><span class="p">]</span><span class="o">.</span><span class="n">iterator</span> <span class="o">*&gt;</span> <span class="n">malloc</span><span class="p">(</span><span class="n">sizeof</span><span class="p">(</span><span class="n">set_ptr</span><span class="o">.</span><span class="n">end</span><span class="p">()))</span>
         <span class="n">ite</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">set_ptr</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">iter_end</span> <span class="o">=</span> <span class="n">ite</span>
 
@@ -377,8 +400,8 @@ if(ga_enabled){
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="k">def</span> <span class="nf">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">cdef</span> <span class="kt">cpp_set</span>[<span class="kt">xdress_extra_types</span>.<span class="kt">uint</span>].<span class="kt">iterator</span> <span class="nf">inow</span> <span class="o">=</span> <span class="n">deref</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iter_now</span><span class="p">)</span>
-        <span class="k">cdef</span> <span class="kt">cpp_set</span>[<span class="kt">xdress_extra_types</span>.<span class="kt">uint</span>].<span class="kt">iterator</span> <span class="nf">iend</span> <span class="o">=</span> <span class="n">deref</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iter_end</span><span class="p">)</span>
+        <span class="k">cdef</span> <span class="kt">cpp_set</span>[<span class="kt">mypack_extra_types</span>.<span class="kt">uint32</span>].<span class="kt">iterator</span> <span class="nf">inow</span> <span class="o">=</span> <span class="n">deref</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iter_now</span><span class="p">)</span>
+        <span class="k">cdef</span> <span class="kt">cpp_set</span>[<span class="kt">mypack_extra_types</span>.<span class="kt">uint32</span>].<span class="kt">iterator</span> <span class="nf">iend</span> <span class="o">=</span> <span class="n">deref</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iter_end</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">inow</span> <span class="o">!=</span> <span class="n">iend</span><span class="p">:</span>
 
@@ -392,7 +415,7 @@ if(ga_enabled){
 
 <span class="k">cdef</span> <span class="k">class</span> <span class="nf">_SetUInt</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__cinit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_set</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">bint</span> <span class="n">free_set</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-        <span class="k">cdef</span> <span class="kt">xdress_extra_types</span>.<span class="kt">uint</span> <span class="nf">s</span>
+        <span class="k">cdef</span> <span class="kt">mypack_extra_types</span>.<span class="kt">uint32</span> <span class="nf">s</span>
 
 
         <span class="c"># Decide how to init set, if at all</span>
@@ -401,13 +424,13 @@ if(ga_enabled){
         <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">new_set</span><span class="p">,</span> <span class="s">&#39;__iter__&#39;</span><span class="p">)</span> <span class="ow">or</span> \
                 <span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">new_set</span><span class="p">,</span> <span class="s">&#39;__len__&#39;</span><span class="p">)</span> <span class="ow">and</span>
                 <span class="nb">hasattr</span><span class="p">(</span><span class="n">new_set</span><span class="p">,</span> <span class="s">&#39;__getitem__&#39;</span><span class="p">)):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">set_ptr</span> <span class="o">=</span> <span class="n">new</span> <span class="n">cpp_set</span><span class="p">[</span><span class="n">xdress_extra_types</span><span class="o">.</span><span class="n">uint</span><span class="p">]()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_ptr</span> <span class="o">=</span> <span class="n">new</span> <span class="n">cpp_set</span><span class="p">[</span><span class="n">mypack_extra_types</span><span class="o">.</span><span class="n">uint32</span><span class="p">]()</span>
             <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">new_set</span><span class="p">:</span>
 
-                <span class="n">s</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">xdress_extra_types</span><span class="o">.</span><span class="n">uint</span><span class="o">&gt;</span> <span class="nb">long</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">mypack_extra_types</span><span class="o">.</span><span class="n">uint32</span><span class="o">&gt;</span> <span class="nb">long</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">set_ptr</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">bool</span><span class="p">(</span><span class="n">new_set</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">set_ptr</span> <span class="o">=</span> <span class="n">new</span> <span class="n">cpp_set</span><span class="p">[</span><span class="n">xdress_extra_types</span><span class="o">.</span><span class="n">uint</span><span class="p">]()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_ptr</span> <span class="o">=</span> <span class="n">new</span> <span class="n">cpp_set</span><span class="p">[</span><span class="n">mypack_extra_types</span><span class="o">.</span><span class="n">uint32</span><span class="p">]()</span>
 
         <span class="c"># Store free_set</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_free_set</span> <span class="o">=</span> <span class="n">free_set</span>
@@ -417,11 +440,11 @@ if(ga_enabled){
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_ptr</span>
 
     <span class="k">def</span> <span class="nf">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">cdef</span> <span class="kt">xdress_extra_types</span>.<span class="kt">uint</span> <span class="nf">s</span>
+        <span class="k">cdef</span> <span class="kt">mypack_extra_types</span>.<span class="kt">uint32</span> <span class="nf">s</span>
 
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">long</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
 
-            <span class="n">s</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">xdress_extra_types</span><span class="o">.</span><span class="n">uint</span><span class="o">&gt;</span> <span class="nb">long</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">mypack_extra_types</span><span class="o">.</span><span class="n">uint32</span><span class="o">&gt;</span> <span class="nb">long</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">False</span>
 
@@ -438,20 +461,20 @@ if(ga_enabled){
         <span class="n">si</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">set_ptr</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">si</span>
 
-    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">long</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">cdef</span> <span class="kt">xdress_extra_types</span>.<span class="kt">uint</span> <span class="nf">v</span>
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">cdef</span> <span class="kt">mypack_extra_types</span>.<span class="kt">uint32</span> <span class="nf">v</span>
 
 
-        <span class="n">v</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">xdress_extra_types</span><span class="o">.</span><span class="n">uint</span><span class="o">&gt;</span> <span class="nb">long</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">mypack_extra_types</span><span class="o">.</span><span class="n">uint32</span><span class="o">&gt;</span> <span class="nb">long</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_ptr</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
         <span class="k">return</span>
 
     <span class="k">def</span> <span class="nf">discard</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">cdef</span> <span class="kt">xdress_extra_types</span>.<span class="kt">uint</span> <span class="nf">v</span>
+        <span class="k">cdef</span> <span class="kt">mypack_extra_types</span>.<span class="kt">uint32</span> <span class="nf">v</span>
 
         <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
 
-            <span class="n">v</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">xdress_extra_types</span><span class="o">.</span><span class="n">uint</span><span class="o">&gt;</span> <span class="nb">long</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">mypack_extra_types</span><span class="o">.</span><span class="n">uint32</span><span class="o">&gt;</span> <span class="nb">long</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_ptr</span><span class="o">.</span><span class="n">erase</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
         <span class="k">return</span>
 
@@ -545,7 +568,7 @@ if(ga_enabled){
     <span class="k">def</span> <span class="nf">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="k">cdef</span> <span class="kt">int</span> <span class="nf">k</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">long</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">False</span>
 
         <span class="n">k</span> <span class="o">=</span> <span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">key</span>
@@ -568,7 +591,7 @@ if(ga_enabled){
         <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">v</span>
 
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">long</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;Only integer keys are valid.&quot;</span><span class="p">)</span>
 
         <span class="n">k</span> <span class="o">=</span> <span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">key</span>
@@ -587,6 +610,8 @@ if(ga_enabled){
 
 
         <span class="n">item</span> <span class="o">=</span> <span class="n">pair</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">double</span><span class="p">](&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">key</span><span class="p">,</span> <span class="p">&lt;</span><span class="kt">double</span><span class="p">&gt;</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="mf">0</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_ptr</span><span class="o">.</span><span class="n">count</span><span class="p">(&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">key</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">map_ptr</span><span class="o">.</span><span class="n">erase</span><span class="p">(&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">key</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">map_ptr</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>

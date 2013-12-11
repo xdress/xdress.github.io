@@ -103,6 +103,7 @@ if(ga_enabled){
 <span class="k">from</span> <span class="nn">libcpp.map</span> <span class="k">cimport</span> <span class="nb">map</span> <span class="k">as</span> <span class="n">cpp_map</span>
 <span class="k">from</span> <span class="nn">libcpp.vector</span> <span class="k">cimport</span> <span class="n">vector</span> <span class="k">as</span> <span class="n">cpp_vector</span>
 <span class="k">from</span> <span class="nn">libc</span> <span class="k">cimport</span> <span class="n">stdio</span>
+<span class="k">from</span> <span class="nn">cpython.version</span> <span class="k">cimport</span> <span class="n">PY_MAJOR_VERSION</span>
 <span class="k">from</span> <span class="nn">cpython.ref</span> <span class="k">cimport</span> <span class="n">PyTypeObject</span><span class="p">,</span> <span class="n">Py_INCREF</span><span class="p">,</span> <span class="n">Py_XDECREF</span>
 <span class="k">from</span> <span class="nn">cpython.type</span> <span class="k">cimport</span> <span class="n">PyType_Ready</span>
 <span class="k">from</span> <span class="nn">cpython.object</span> <span class="k">cimport</span> <span class="n">PyObject</span>
@@ -112,9 +113,14 @@ if(ga_enabled){
 <span class="k">cimport</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="c"># Local imports</span>
-<span class="k">cimport</span> <span class="nn">xdress_extra_types</span>
+<span class="k">cimport</span> <span class="nn">mypack_extra_types</span>
 
 <span class="k">cimport</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<span class="c"># Cython Imports For Types</span>
+<span class="k">cimport</span> <span class="nn">mypack_extra_types</span>
+<span class="k">from</span> <span class="nn">libcpp.string</span> <span class="k">cimport</span> <span class="n">string</span> <span class="k">as</span> <span class="n">std_string</span>
 
 <span class="k">cdef</span> <span class="kr">extern</span> <span class="k">from</span> <span class="s">&quot;Python.h&quot;</span><span class="p">:</span>
     <span class="k">ctypedef</span> <span class="n">Py_ssize_t</span> <span class="n">Py_ssize_t</span>
@@ -122,6 +128,10 @@ if(ga_enabled){
     <span class="k">cdef</span> <span class="kt">long</span> <span class="nf">Py_TPFLAGS_DEFAULT</span> 
     <span class="k">cdef</span> <span class="kt">long</span> <span class="nf">Py_TPFLAGS_BASETYPE</span> 
     <span class="k">cdef</span> <span class="kt">long</span> <span class="nf">Py_TPFLAGS_CHECKTYPES</span>
+    <span class="k">cdef</span> <span class="kt">long</span> <span class="nf">Py_TPFLAGS_HEAPTYPE</span>
+
+    <span class="k">ctypedef</span> <span class="k">struct</span> <span class="nc">PyGetSetDef</span><span class="p">:</span>
+        <span class="n">char</span> <span class="o">*</span> <span class="n">name</span>
 
     <span class="k">ctypedef</span> <span class="k">struct</span> <span class="nc">PyTypeObject</span><span class="p">:</span>
         <span class="n">char</span> <span class="o">*</span> <span class="n">tp_name</span>
@@ -129,7 +139,6 @@ if(ga_enabled){
         <span class="nb">int</span> <span class="n">tp_itemsize</span>
         <span class="nb">object</span> <span class="n">tp_alloc</span><span class="p">(</span><span class="n">PyTypeObject</span> <span class="o">*</span><span class="p">,</span> <span class="n">Py_ssize_t</span><span class="p">)</span>
         <span class="n">void</span> <span class="n">tp_dealloc</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
-        <span class="nb">int</span> <span class="n">tp_compare</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
         <span class="nb">object</span> <span class="n">tp_richcompare</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
         <span class="nb">object</span> <span class="n">tp_new</span><span class="p">(</span><span class="n">PyTypeObject</span> <span class="o">*</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
         <span class="nb">object</span> <span class="n">tp_str</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
@@ -141,12 +150,18 @@ if(ga_enabled){
         <span class="n">PyGetSetDef</span> <span class="o">*</span> <span class="n">tp_getset</span>
         <span class="n">PyTypeObject</span> <span class="o">*</span> <span class="n">tp_base</span>
         <span class="n">void</span> <span class="n">tp_free</span><span class="p">(</span><span class="n">void</span> <span class="o">*</span><span class="p">)</span>
+        <span class="c"># This is a dirty hack by declaring to Cython both the Python 2 &amp; 3 APIs</span>
+        <span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">tp_compare</span><span class="p">)(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>      <span class="c"># Python 2</span>
+        <span class="n">void</span> <span class="o">*</span> <span class="p">(</span><span class="o">*</span><span class="n">tp_reserved</span><span class="p">)(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>  <span class="c"># Python 3</span>
 
+<span class="c"># structmember.h isn&#39;t included in Python.h for some reason</span>
+<span class="k">cdef</span> <span class="kr">extern</span> <span class="k">from</span> <span class="s">&quot;structmember.h&quot;</span><span class="p">:</span>
     <span class="k">ctypedef</span> <span class="k">struct</span> <span class="nc">PyMemberDef</span><span class="p">:</span>
         <span class="n">char</span> <span class="o">*</span> <span class="n">name</span>
-
-    <span class="k">ctypedef</span> <span class="k">struct</span> <span class="nc">PyGetSetDef</span><span class="p">:</span>
-        <span class="n">char</span> <span class="o">*</span> <span class="n">name</span>
+        <span class="nb">int</span> <span class="nb">type</span>
+        <span class="n">Py_ssize_t</span> <span class="n">offset</span>
+        <span class="nb">int</span> <span class="n">flags</span>
+        <span class="n">char</span> <span class="o">*</span> <span class="n">doc</span>
 
 <span class="k">cdef</span> <span class="kr">extern</span> <span class="k">from</span> <span class="s">&quot;numpy/arrayobject.h&quot;</span><span class="p">:</span>
 
@@ -195,6 +210,8 @@ if(ga_enabled){
         <span class="n">PyObject</span>  <span class="o">*</span><span class="n">shape</span>
 
     <span class="k">cdef</span> <span class="kt">void</span> ** <span class="nf">PyArray_API</span>
+
+    <span class="k">cdef</span> <span class="kt">PyTypeObject</span> * <span class="nf">PyArrayDescr_Type</span>
     
     <span class="k">ctypedef</span> <span class="k">struct</span> <span class="nc">PyArray_Descr</span><span class="p">:</span>
         <span class="n">Py_ssize_t</span> <span class="n">ob_refcnt</span>
@@ -209,13 +226,14 @@ if(ga_enabled){
         <span class="nb">int</span> <span class="n">alignment</span>
         <span class="n">PyArray_ArrayDescr</span> <span class="o">*</span> <span class="n">subarray</span>
         <span class="n">PyObject</span> <span class="o">*</span> <span class="n">fields</span>
+        <span class="n">PyObject</span> <span class="o">*</span> <span class="n">names</span>
         <span class="n">PyArray_ArrFuncs</span> <span class="o">*</span> <span class="n">f</span>
 
     <span class="k">cdef</span> <span class="kt">int</span> <span class="nf">PyArray_RegisterDataType</span><span class="p">(</span><span class="n">PyArray_Descr</span> <span class="o">*</span><span class="p">)</span>
 
     <span class="k">cdef</span> <span class="kt">object</span> <span class="nf">PyArray_Scalar</span><span class="p">(</span><span class="n">void</span> <span class="o">*</span><span class="p">,</span> <span class="n">PyArray_Descr</span> <span class="o">*</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
 
-<span class="k">cdef</span> <span class="kr">extern</span> <span class="k">from</span> <span class="s">&quot;xdress_extra_types.h&quot;</span> <span class="n">namespace</span> <span class="s">&quot;xdress_extra_types&quot;</span><span class="p">:</span>
+<span class="k">cdef</span> <span class="kr">extern</span> <span class="k">from</span> <span class="s">&quot;mypack_extra_types.h&quot;</span> <span class="n">namespace</span> <span class="s">&quot;mypack_extra_types&quot;</span><span class="p">:</span>
     <span class="k">cdef</span> <span class="kt">cppclass</span> <span class="kt">MemoryKnight</span>[<span class="kt">T</span>]<span class="p">:</span>
         <span class="n">MemoryKnight</span><span class="p">()</span> <span class="k">nogil</span> <span class="k">except</span> <span class="o">+</span>
         <span class="n">T</span> <span class="o">*</span> <span class="n">defnew</span><span class="p">()</span> <span class="k">nogil</span> <span class="k">except</span> <span class="o">+</span>
@@ -237,12 +255,12 @@ if(ga_enabled){
 
 <span class="c"># SetUInt</span>
 <span class="k">cdef</span> <span class="k">class</span> <span class="nf">_SetIterUInt</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">cdef</span> <span class="kt">cpp_set</span>[<span class="kt">xdress_extra_types</span>.<span class="kt">uint</span>].<span class="kt">iterator</span> * <span class="nf">iter_now</span>
-    <span class="k">cdef</span> <span class="kt">cpp_set</span>[<span class="kt">xdress_extra_types</span>.<span class="kt">uint</span>].<span class="kt">iterator</span> * <span class="nf">iter_end</span>
-    <span class="k">cdef</span> <span class="kt">void</span> <span class="nf">init</span><span class="p">(</span><span class="n">_SetIterUInt</span><span class="p">,</span> <span class="n">cpp_set</span><span class="p">[</span><span class="n">xdress_extra_types</span><span class="o">.</span><span class="n">uint</span><span class="p">]</span> <span class="o">*</span><span class="p">)</span>
+    <span class="k">cdef</span> <span class="kt">cpp_set</span>[<span class="kt">mypack_extra_types</span>.<span class="kt">uint32</span>].<span class="kt">iterator</span> * <span class="nf">iter_now</span>
+    <span class="k">cdef</span> <span class="kt">cpp_set</span>[<span class="kt">mypack_extra_types</span>.<span class="kt">uint32</span>].<span class="kt">iterator</span> * <span class="nf">iter_end</span>
+    <span class="k">cdef</span> <span class="kt">void</span> <span class="nf">init</span><span class="p">(</span><span class="n">_SetIterUInt</span><span class="p">,</span> <span class="n">cpp_set</span><span class="p">[</span><span class="n">mypack_extra_types</span><span class="o">.</span><span class="n">uint32</span><span class="p">]</span> <span class="o">*</span><span class="p">)</span>
 
 <span class="k">cdef</span> <span class="k">class</span> <span class="nf">_SetUInt</span><span class="p">:</span>
-    <span class="k">cdef</span> <span class="kt">cpp_set</span>[<span class="kt">xdress_extra_types</span>.<span class="kt">uint</span>] * <span class="nf">set_ptr</span>
+    <span class="k">cdef</span> <span class="kt">cpp_set</span>[<span class="kt">mypack_extra_types</span>.<span class="kt">uint32</span>] * <span class="nf">set_ptr</span>
     <span class="k">cdef</span> <span class="kr">public</span> <span class="kt">bint</span> <span class="nf">_free_set</span>
 
 

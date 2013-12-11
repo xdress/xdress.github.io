@@ -167,7 +167,7 @@ if(ga_enabled){
 <span class="sd">name, parents, namespace, attrs, methods, docstrings, and extra.</span>
 
 <span class="sd">:name: dict, the class name, see above</span>
-<span class="sd">:parents: list of strings or None, the immediate parents of the class</span>
+<span class="sd">:parents: possibly empty list of strings, the immediate parents of the class</span>
 <span class="sd">    (not grandparents).</span>
 <span class="sd">:namespace: str or None, the namespace or module the class lives in.</span>
 <span class="sd">:attrs: dict or dict-like, the names of the attributes (member variables) of the</span>
@@ -200,7 +200,15 @@ if(ga_enabled){
 <span class="sd">toast.  A valid description dictionary for this class would be as follows::</span>
 
 <span class="sd">    class_desc = {</span>
-<span class="sd">        &#39;name&#39;: &#39;Toaster&#39;,</span>
+<span class="sd">        &#39;name&#39;: {</span>
+<span class="sd">            &#39;language&#39;: &#39;c++&#39;,</span>
+<span class="sd">            &#39;incfiles&#39;: (&#39;toaster.h&#39;,), </span>
+<span class="sd">            &#39;srcfiles&#39;: (&#39;src/toaster.h&#39;, &#39;src/toaster.cpp&#39;), </span>
+<span class="sd">            &#39;srcname&#39;: &#39;Toaster&#39;, </span>
+<span class="sd">            &#39;sidecars&#39;: (&#39;src/toaster.py&#39;,), </span>
+<span class="sd">            &#39;tarbase&#39;: &#39;toaster&#39;,</span>
+<span class="sd">            &#39;tarname&#39;: &#39;Toaster&#39;, </span>
+<span class="sd">            },</span>
 <span class="sd">        &#39;parents&#39;: [&#39;FCComp&#39;],</span>
 <span class="sd">        &#39;namespace&#39;: &#39;bright&#39;,</span>
 <span class="sd">        &#39;attrs&#39;: {</span>
@@ -266,6 +274,7 @@ if(ga_enabled){
 <span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">from</span> <span class="nn">hashlib</span> <span class="kn">import</span> <span class="n">md5</span>
 <span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Number</span>
 <span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span><span class="p">,</span> <span class="n">pformat</span>
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
@@ -314,9 +323,8 @@ if(ga_enabled){
 <span class="sd">    ----------</span>
 <span class="sd">    filename : str</span>
 <span class="sd">        The path to the file.</span>
-<span class="sd">    name : str or None, optional</span>
-<span class="sd">        The name, a &#39;None&#39; value will attempt to infer this from the</span>
-<span class="sd">        filename.</span>
+<span class="sd">    name : str</span>
+<span class="sd">        The name to describe.</span>
 <span class="sd">    kind : str</span>
 <span class="sd">        The kind of type to describe, valid flags are &#39;class&#39;, &#39;func&#39;, and &#39;var&#39;.</span>
 <span class="sd">    includes: list of str, optional</span>
@@ -371,7 +379,7 @@ if(ga_enabled){
         <span class="sd">&quot;&quot;&quot;Parameters</span>
 <span class="sd">        -------------</span>
 <span class="sd">        name : str</span>
-<span class="sd">            The name, this may not have a None value.</span>
+<span class="sd">            The name to describe.</span>
 <span class="sd">        root : element tree node, optional</span>
 <span class="sd">            The root element node.</span>
 <span class="sd">        onlyin :  str, optional</span>
@@ -544,7 +552,7 @@ if(ga_enabled){
                        <span class="s">&quot;of type {0!r} somewhere in the source or header.&quot;</span><span class="p">)</span>
                 <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
             <span class="n">bases</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s">&#39;bases&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-            <span class="n">bases</span> <span class="o">=</span> <span class="bp">None</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bases</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bases</span><span class="p">]</span>
+            <span class="n">bases</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bases</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;parents&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bases</span>
             <span class="n">ns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s">&#39;context&#39;</span><span class="p">])</span>
             <span class="k">if</span> <span class="n">ns</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">ns</span> <span class="o">!=</span> <span class="s">&quot;::&quot;</span><span class="p">:</span>
@@ -836,7 +844,7 @@ if(ga_enabled){
         <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">canon</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="c"># Gross, but it solves the problem that for uint valued template parameters</span>
         <span class="c"># (ie MyClass&lt;3&gt;) gccxml names this MyClass&lt;3u&gt; or MyClass&lt;3d&gt; but</span>
-        <span class="c"># the type system has no way of dsitinguising this from MyClass&lt;3&gt; as an int.</span>
+        <span class="c"># the type system has no way of distinguising this from MyClass&lt;3&gt; as an int.</span>
         <span class="c"># maybe it should, but I think this will get us pretty far.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="bp">None</span>
 
@@ -1448,7 +1456,7 @@ if(ga_enabled){
         <span class="sd">&quot;&quot;&quot;Parameters</span>
 <span class="sd">        -------------</span>
 <span class="sd">        name : str</span>
-<span class="sd">            The name, this may not have a None value.</span>
+<span class="sd">            The name to describe.</span>
 <span class="sd">        root : pycparser AST</span>
 <span class="sd">            The root of the abstract syntax tree.</span>
 <span class="sd">        onlyin :  str, optional</span>
@@ -1791,7 +1799,7 @@ if(ga_enabled){
         <span class="sd">&quot;&quot;&quot;Parameters</span>
 <span class="sd">        -------------</span>
 <span class="sd">        name : str</span>
-<span class="sd">            The name, this may not have a None value.</span>
+<span class="sd">            The name to describe.</span>
 <span class="sd">        root : pycparser AST</span>
 <span class="sd">            The root of the abstract syntax tree.</span>
 <span class="sd">        onlyin :  str, optional</span>
@@ -1812,7 +1820,7 @@ if(ga_enabled){
                                                       <span class="n">ts</span><span class="o">=</span><span class="n">ts</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;attrs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_funckey</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;parents&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;parents&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;construct&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_constructvalue</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">canon</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
@@ -1857,9 +1865,8 @@ if(ga_enabled){
 <span class="sd">    ----------</span>
 <span class="sd">    filename : str</span>
 <span class="sd">        The path to the file.</span>
-<span class="sd">    name : str or None, optional</span>
-<span class="sd">        The name, a &#39;None&#39; value will attempt to infer this from the</span>
-<span class="sd">        filename.</span>
+<span class="sd">    name : str</span>
+<span class="sd">        The name to describe.</span>
 <span class="sd">    kind : str</span>
 <span class="sd">        The kind of type to describe, valid flags are &#39;class&#39;, &#39;func&#39;, and &#39;var&#39;.</span>
 <span class="sd">    includes: list of str, optional</span>
@@ -1909,7 +1916,11 @@ if(ga_enabled){
     <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
         <span class="n">newnames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span><span class="p">,</span> <span class="s">&#39;_&#39;</span><span class="p">))</span>
         <span class="n">newfile</span> <span class="o">+=</span> <span class="s">&#39;#include &quot;{0}&quot;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-    <span class="n">newname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">builddir</span><span class="p">,</span> <span class="s">&quot;-&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">newnames</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="n">_lang_exts</span><span class="p">[</span><span class="n">language</span><span class="p">])</span>
+    <span class="n">newnames</span> <span class="o">=</span> <span class="s">&quot;-&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">newnames</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">newnames</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">250</span><span class="p">:</span>
+        <span class="c"># this is needed to prevent &#39;IOError: [Errno 36] File name too long&#39;</span>
+        <span class="n">newnames</span> <span class="o">=</span> <span class="n">md5</span><span class="p">(</span><span class="n">newnames</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+    <span class="n">newname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">builddir</span><span class="p">,</span> <span class="n">newnames</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="n">_lang_exts</span><span class="p">[</span><span class="n">language</span><span class="p">])</span>
     <span class="n">newoverwrite</span><span class="p">(</span><span class="n">newfile</span><span class="p">,</span> <span class="n">newname</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">newname</span>
 
@@ -1931,9 +1942,8 @@ if(ga_enabled){
 <span class="sd">        files, a temporary file will be created that #includes all of the files</span>
 <span class="sd">        in this list in order.  This temporary file is the one which will be </span>
 <span class="sd">        parsed.</span>
-<span class="sd">    name : str or None, optional</span>
-<span class="sd">        The name, a &#39;None&#39; value will attempt to infer this from the</span>
-<span class="sd">        filename.</span>
+<span class="sd">    name : str</span>
+<span class="sd">        The name to describe.</span>
 <span class="sd">    kind : str, optional</span>
 <span class="sd">        The kind of type to describe, valid flags are &#39;class&#39;, &#39;func&#39;, and &#39;var&#39;.</span>
 <span class="sd">    includes: list of str, optional</span>

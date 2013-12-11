@@ -91,9 +91,10 @@ if(ga_enabled){
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">RunControl</span><span class="p">,</span> <span class="n">NotSpecified</span><span class="p">,</span> <span class="n">writenewonly</span><span class="p">,</span> <span class="n">DescriptionCache</span><span class="p">,</span> \
-    <span class="n">DEFAULT_RC_FILE</span><span class="p">,</span> <span class="n">DEFAULT_PLUGINS</span><span class="p">,</span> <span class="n">nyansep</span>
+    <span class="n">DEFAULT_RC_FILE</span><span class="p">,</span> <span class="n">DEFAULT_PLUGINS</span><span class="p">,</span> <span class="n">nyansep</span><span class="p">,</span> <span class="n">indent</span>
 <span class="kn">from</span> <span class="nn">.plugins</span> <span class="kn">import</span> <span class="n">Plugin</span>
 <span class="kn">from</span> <span class="nn">.typesystem</span> <span class="kn">import</span> <span class="n">TypeSystem</span>
+<span class="kn">from</span> <span class="nn">.version</span> <span class="kn">import</span> <span class="n">report_versions</span>
 
 <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
     <span class="nb">basestring</span> <span class="o">=</span> <span class="nb">str</span>
@@ -107,6 +108,7 @@ if(ga_enabled){
         <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">ts</span><span class="o">=</span><span class="n">TypeSystem</span><span class="p">(),</span>
         <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">version</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">dumpdesc</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">package</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">,</span>
         <span class="n">packagedir</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">,</span>
@@ -124,6 +126,7 @@ if(ga_enabled){
         <span class="s">&#39;debug&#39;</span><span class="p">:</span> <span class="s">&#39;Build in debugging mode&#39;</span><span class="p">,</span> 
         <span class="s">&#39;ts&#39;</span><span class="p">:</span> <span class="s">&quot;The xdress type system.&quot;</span><span class="p">,</span>
         <span class="s">&#39;verbose&#39;</span><span class="p">:</span> <span class="s">&quot;Print more output.&quot;</span><span class="p">,</span>
+        <span class="s">&#39;version&#39;</span><span class="p">:</span> <span class="s">&quot;Print version information.&quot;</span><span class="p">,</span>
         <span class="s">&#39;dumpdesc&#39;</span><span class="p">:</span> <span class="s">&quot;Print the description cache&quot;</span><span class="p">,</span>
         <span class="s">&#39;package&#39;</span><span class="p">:</span> <span class="s">&quot;The Python package name for the generated wrappers&quot;</span><span class="p">,</span> 
         <span class="s">&#39;packagedir&#39;</span><span class="p">:</span> <span class="s">&quot;Path to package directory, same as &#39;package&#39; if not specified&quot;</span><span class="p">,</span>
@@ -140,6 +143,8 @@ if(ga_enabled){
                             <span class="n">help</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rcdocs</span><span class="p">[</span><span class="s">&quot;debug&quot;</span><span class="p">])</span>
         <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-v&#39;</span><span class="p">,</span> <span class="s">&#39;--verbose&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&#39;verbose&#39;</span><span class="p">,</span>
                             <span class="n">help</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rcdocs</span><span class="p">[</span><span class="s">&quot;verbose&quot;</span><span class="p">])</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--version&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&#39;version&#39;</span><span class="p">,</span>
+                            <span class="n">help</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rcdocs</span><span class="p">[</span><span class="s">&quot;version&quot;</span><span class="p">])</span>
         <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--dumpdesc&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&#39;dumpdesc&#39;</span><span class="p">,</span>
                             <span class="n">help</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rcdocs</span><span class="p">[</span><span class="s">&quot;dumpdesc&quot;</span><span class="p">])</span>
         <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--package&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&#39;package&#39;</span><span class="p">,</span>
@@ -156,6 +161,10 @@ if(ga_enabled){
                             <span class="n">help</span><span class="o">=</span><span class="s">&quot;disable bash completion&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;bash_completion&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">rc</span><span class="o">.</span><span class="n">version</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">report_versions</span><span class="p">())</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+
         <span class="k">if</span> <span class="n">rc</span><span class="o">.</span><span class="n">package</span> <span class="ow">is</span> <span class="n">NotSpecified</span><span class="p">:</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="s">&quot;no package name given; please add &#39;package&#39; to {0}&quot;</span>
             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">rc</span><span class="p">))</span>
@@ -177,8 +186,10 @@ if(ga_enabled){
             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">report_debug</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Current descripton cache contents:</span><span class="se">\n\n</span><span class="s">{0}</span><span class="se">\n\n</span><span class="s">&#39;</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">_cache</span><span class="p">))</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Version Information:</span><span class="se">\n\n</span><span class="s">{0}</span><span class="se">\n\n</span><span class="s">&#39;</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="n">nyansep</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n\n</span><span class="s">&quot;</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="s">&#39;Current descripton cache contents:</span><span class="se">\n\n</span><span class="s">{1}</span><span class="se">\n\n</span><span class="s">&#39;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">indent</span><span class="p">(</span><span class="n">report_versions</span><span class="p">()),</span> <span class="nb">str</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">_cache</span><span class="p">))</span>
         <span class="n">msg</span> <span class="o">+=</span> <span class="n">nyansep</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n\n</span><span class="s">&quot;</span>
         <span class="n">msg</span> <span class="o">+=</span> <span class="s">&quot;Current type system contents:</span><span class="se">\n\n</span><span class="s">&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">ts</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n\n</span><span class="s">&quot;</span>
         <span class="k">return</span> <span class="n">msg</span>
