@@ -87,6 +87,7 @@ if(ga_enabled){
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">io</span>
 <span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">ast</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">functools</span>
@@ -95,10 +96,18 @@ if(ga_enabled){
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">namedtuple</span>
 <span class="kn">from</span> <span class="nn">hashlib</span> <span class="kn">import</span> <span class="n">md5</span>
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">cPickle</span> <span class="kn">as</span> <span class="nn">pickle</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">pickle</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">IntEnum</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">._enum</span> <span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">IntEnum</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
     <span class="nb">basestring</span> <span class="o">=</span> <span class="nb">str</span>
@@ -142,45 +151,68 @@ if(ga_enabled){
         <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">super</span><span class="p">(</span><span class="n">indentstr</span><span class="p">,</span> <span class="bp">self</span><span class="p">),</span> <span class="n">key</span><span class="p">)</span>
 
 </div>
+<span class="k">class</span> <span class="nc">Arg</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="n">NONE</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">TYPE</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">LIT</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">VAR</span> <span class="o">=</span> <span class="mi">3</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+
 <div class="viewcode-block" id="expand_default_args"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.expand_default_args">[docs]</a><span class="k">def</span> <span class="nf">expand_default_args</span><span class="p">(</span><span class="n">methods</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;This function takes a collection of method tuples and expands all of</span>
 <span class="sd">    the default arguments, returning a set of all methods possible.&quot;&quot;&quot;</span>
     <span class="n">methitems</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">mkey</span><span class="p">,</span> <span class="n">mrtn</span> <span class="ow">in</span> <span class="n">methods</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">mkey</span><span class="p">,</span> <span class="n">mval</span> <span class="ow">in</span> <span class="n">methods</span><span class="p">:</span>
         <span class="n">mname</span><span class="p">,</span> <span class="n">margs</span> <span class="o">=</span> <span class="n">mkey</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mkey</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-        <span class="n">havedefaults</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">margs</span><span class="p">]</span>
+        <span class="n">mrtn</span> <span class="o">=</span> <span class="n">mval</span><span class="p">[</span><span class="s">&#39;return&#39;</span><span class="p">]</span>
+        <span class="n">mdefargs</span> <span class="o">=</span> <span class="n">mval</span><span class="p">[</span><span class="s">&#39;defaults&#39;</span><span class="p">]</span>
+        <span class="n">havedefaults</span> <span class="o">=</span> <span class="p">[</span><span class="n">arg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">Arg</span><span class="o">.</span><span class="n">NONE</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">margs</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">havedefaults</span><span class="p">):</span>
             <span class="c"># expand default arguments</span>
             <span class="n">n</span> <span class="o">=</span> <span class="n">havedefaults</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
             <span class="n">items</span> <span class="o">=</span> <span class="p">[((</span><span class="n">mname</span><span class="p">,)</span><span class="o">+</span><span class="nb">tuple</span><span class="p">(</span><span class="n">margs</span><span class="p">[:</span><span class="n">n</span><span class="p">]),</span> <span class="n">mrtn</span><span class="p">)]</span> <span class="o">+</span> \
-                    <span class="p">[((</span><span class="n">mname</span><span class="p">,)</span><span class="o">+</span><span class="nb">tuple</span><span class="p">(</span><span class="n">margs</span><span class="p">[:</span><span class="n">i</span><span class="p">]),</span> <span class="n">mrtn</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">margs</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+                <span class="p">[((</span><span class="n">mname</span><span class="p">,)</span><span class="o">+</span><span class="nb">tuple</span><span class="p">(</span><span class="n">margs</span><span class="p">[:</span><span class="n">i</span><span class="p">]),</span> <span class="n">mrtn</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">margs</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
             <span class="n">methitems</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c"># no default args</span>
             <span class="n">methitems</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">mkey</span><span class="p">,</span> <span class="n">mrtn</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">methitems</span>
-
 </div>
-<span class="n">_CPP_LITERAL_INT</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&#39;[+-]?([1-9][0-9]*|0o?[0-7]+|0x[0-9a-f]+|&#39;</span>
-                              <span class="s">&#39;0b[01]+|0)u?(l{1,2})?u?&#39;</span><span class="p">)</span>
+<span class="n">_bool_literals</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;true&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s">&#39;false&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">}</span>
+<span class="n">_c_literal_int</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;^([+-]?([1-9][0-9]*|0o?[0-7]+|0x[0-9a-f]+|&#39;</span>
+                                   <span class="s">r&#39;0b[01]+|0))u?(l{1,2})?u?$&#39;</span><span class="p">)</span>
+<span class="n">_c_int_bases</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;0x&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="s">&#39;0o&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s">&#39;0b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&#39;0&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                <span class="s">&#39;00&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s">&#39;01&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s">&#39;02&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s">&#39;03&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s">&#39;04&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s">&#39;05&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s">&#39;06&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s">&#39;07&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">}</span>
+<span class="n">_c_float</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;^([+-]?([0-9]+\.[0-9]*|\.[0-9]+)(e[+-]?[0-9]+)?)([lf]?)$&#39;</span><span class="p">)</span>
+<span class="n">_c_float_types</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="s">&#39;f&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="s">&#39;l&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">longfloat</span><span class="p">}</span>
 
-<div class="viewcode-block" id="cppint"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.cppint">[docs]</a><span class="k">def</span> <span class="nf">cppint</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Converts a C++ literal integer string to a Python int.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="n">m</span> <span class="o">=</span> <span class="n">_CPP_LITERAL_INT</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
-    <span class="n">g1</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">g1</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;0x&#39;</span><span class="p">):</span>
-        <span class="n">base</span> <span class="o">=</span> <span class="mi">16</span>
-    <span class="k">elif</span> <span class="n">g1</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;0o&#39;</span><span class="p">):</span>
-        <span class="n">base</span> <span class="o">=</span> <span class="mi">8</span>
-    <span class="k">elif</span> <span class="n">g1</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;0b&#39;</span><span class="p">):</span>
-        <span class="n">base</span> <span class="o">=</span> <span class="mi">2</span>
-    <span class="k">elif</span> <span class="n">g1</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;0&#39;</span><span class="p">):</span>
-        <span class="n">base</span> <span class="o">=</span> <span class="mi">8</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">base</span> <span class="o">=</span> <span class="mi">10</span>
-    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;u&#39;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;l&#39;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">),</span> <span class="n">base</span><span class="p">)</span>
+<div class="viewcode-block" id="c_literal"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.c_literal">[docs]</a><span class="k">def</span> <span class="nf">c_literal</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert a C/C++ literal to the corresponding Python value.&quot;&quot;&quot;</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c"># ast.literal_eval isn&#39;t precisely correct, since there are Python</span>
+        <span class="c"># literals which aren&#39;t valid C++, but it is close enough and faster</span>
+        <span class="c"># than the custom code below in the common case.</span>
+        <span class="k">return</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">SyntaxError</span><span class="p">):</span>
+        <span class="k">pass</span>
+    <span class="k">if</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">_bool_literals</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_bool_literals</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
+    <span class="n">lo</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">_c_literal_int</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">lo</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="n">_c_int_bases</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)[:</span><span class="mi">2</span><span class="p">],</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">base</span><span class="p">)</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">_c_float</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">lo</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_c_float_types</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">4</span><span class="p">)](</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;unknown literal: {0!r}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
     </div>
 <div class="viewcode-block" id="newoverwrite"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.newoverwrite">[docs]</a><span class="k">def</span> <span class="nf">newoverwrite</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Useful for not forcing re-compiles and thus playing nicely with the</span>
@@ -389,6 +421,24 @@ if(ga_enabled){
             <span class="k">elif</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_updaters</span> <span class="ow">and</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
                 <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_updaters</span><span class="p">[</span><span class="n">k</span><span class="p">](</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">),</span> <span class="n">v</span><span class="p">)</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="parse_global_rc"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.parse_global_rc">[docs]</a><span class="k">def</span> <span class="nf">parse_global_rc</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;Search a global xdressrc file and parse if it exists.</span>
+<span class="sd">    If nothing is found, an empty RunControl is returned.&#39;&#39;&#39;</span>
+    <span class="n">home</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s">&#39;~&#39;</span><span class="p">)</span>
+    <span class="n">globalrcs</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">home</span><span class="p">,</span> <span class="s">&#39;.xdressrc&#39;</span><span class="p">),</span>
+                 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">home</span><span class="p">,</span> <span class="s">&#39;.xdressrc.py&#39;</span><span class="p">),</span>
+                 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">home</span><span class="p">,</span> <span class="s">&#39;.config&#39;</span><span class="p">,</span> <span class="s">&#39;xdressrc&#39;</span><span class="p">),</span>
+                 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">home</span><span class="p">,</span> <span class="s">&#39;.config&#39;</span><span class="p">,</span> <span class="s">&#39;xdressrc.py&#39;</span><span class="p">),</span>
+                 <span class="p">]</span>
+    <span class="n">rc</span> <span class="o">=</span> <span class="n">RunControl</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">globalrc</span> <span class="ow">in</span> <span class="n">globalrcs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">globalrc</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="n">globalrcdict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">exec_file</span><span class="p">(</span><span class="n">globalrc</span><span class="p">,</span> <span class="n">globalrcdict</span><span class="p">,</span> <span class="n">globalrcdict</span><span class="p">)</span>
+        <span class="n">rc</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">globalrcdict</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rc</span>
 </div>
 <span class="n">_lang_exts</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s">&#39;c&#39;</span><span class="p">:</span> <span class="s">&#39;c&#39;</span><span class="p">,</span>
@@ -652,13 +702,13 @@ if(ga_enabled){
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">desc</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
     <span class="c"># now sanitize methods</span>
-    <span class="c">#name = desc[&#39;name&#39;][&#39;srcname&#39;] # srcname or tarname?</span>
-    <span class="c">#methods = desc.get(&#39;methods&#39;, {})</span>
-    <span class="c">#for methkey, methval in list(methods.items()):</span>
-    <span class="c">#    if methval is None:</span>
-    <span class="c">#        methname = methkey if isinstance(methkey, basestring) else methkey[0]</span>
-    <span class="c">#        if methname[0].endswith(name):</span>
-    <span class="c">#            del methods[methkey]</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">][</span><span class="s">&#39;srcname&#39;</span><span class="p">]</span> <span class="c"># srcname or tarname?</span>
+    <span class="n">methods</span> <span class="o">=</span> <span class="n">desc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;methods&#39;</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="k">for</span> <span class="n">methkey</span><span class="p">,</span> <span class="n">methval</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">methods</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+        <span class="k">if</span> <span class="n">methval</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">methname</span> <span class="o">=</span> <span class="n">methkey</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">methkey</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">)</span> <span class="k">else</span> <span class="n">methkey</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">methname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+                <span class="k">del</span> <span class="n">methods</span><span class="p">[</span><span class="n">methkey</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">desc</span>
 </div>
 <div class="viewcode-block" id="flatten"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.flatten">[docs]</a><span class="k">def</span> <span class="nf">flatten</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
@@ -695,7 +745,7 @@ if(ga_enabled){
         <span class="k">return</span> <span class="n">s</span>
     <span class="k">if</span> <span class="n">open_brace</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">s</span> <span class="ow">and</span> <span class="n">close_brace</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">s</span>
-    <span class="n">t</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">open_brace</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">open_brace</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;::&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
     <span class="n">targs</span> <span class="o">=</span> <span class="n">split_template_args</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">open_brace</span><span class="o">=</span><span class="n">open_brace</span><span class="p">,</span>
                                 <span class="n">close_brace</span><span class="o">=</span><span class="n">close_brace</span><span class="p">,</span> <span class="n">separator</span><span class="o">=</span><span class="n">separator</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">targ</span> <span class="ow">in</span> <span class="n">targs</span><span class="p">:</span>

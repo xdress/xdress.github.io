@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Version Information &mdash; xdress 0.4-dev documentation</title>
+    <title>Extra Types Plugin &mdash; xdress 0.4-dev documentation</title>
     
     <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -31,8 +31,8 @@
     <script type="text/javascript" src="../_static/cloud.js"></script>
     <link rel="top" title="xdress 0.4-dev documentation" href="../index.html" />
     <link rel="up" title="Library Reference" href="index.html" />
-    <link rel="next" title="Run Control Parameters" href="../rcdocs.html" />
-    <link rel="prev" title="NumPy DTypes Plugin" href="extratypes.html" /> 
+    <link rel="next" title="Standard Library Container Wrappers" href="stlwrap.html" />
+    <link rel="prev" title="Type System" href="typesystem.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
 if(ga_enabled){
@@ -65,10 +65,10 @@ if(ga_enabled){
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="../rcdocs.html" title="Run Control Parameters"
+          <a href="stlwrap.html" title="Standard Library Container Wrappers"
              accesskey="N">next</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="extratypes.html" title="NumPy DTypes Plugin"
+          <a href="typesystem.html" title="Type System"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
     <li><a href="../index.html">xdress 0.4-dev documentation</a> &raquo;</li>
 
@@ -83,29 +83,28 @@ if(ga_enabled){
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-xdress.version">
-<span id="version-information"></span><span id="xdress-version"></span><h1>Version Information<a class="headerlink" href="#module-xdress.version" title="Permalink to this headline">¶</a></h1>
-<p>Version information about xdress and its dependencies.</p>
+  <div class="section" id="module-xdress.extratypes">
+<span id="extra-types-plugin"></span><span id="xdress-extratypes"></span><h1>Extra Types Plugin<a class="headerlink" href="#module-xdress.extratypes" title="Permalink to this headline">¶</a></h1>
+<p>The extra types plugin for XDress.</p>
+<p>This module is available as an xdress plugin by the name <tt class="docutils literal"><span class="pre">xdress.extratypes</span></tt>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">Anthony Scopatz &lt;<a class="reference external" href="mailto:scopatz&#37;&#52;&#48;gmail&#46;com">scopatz<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="extra-types-plugin-api">
+<h2>Extra Types Plugin API<a class="headerlink" href="#extra-types-plugin-api" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="xdress.version.version_info">
-<em class="property">class </em><tt class="descclassname">xdress.version.</tt><tt class="descname">version_info</tt><a class="reference internal" href="../_modules/xdress/version.html#version_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.version.version_info" title="Permalink to this definition">¶</a></dt>
-<dd><p>A representation of version information.</p>
+<dt id="xdress.extratypes.XDressPlugin">
+<em class="property">class </em><tt class="descclassname">xdress.extratypes.</tt><tt class="descname">XDressPlugin</tt><a class="reference internal" href="../_modules/xdress/extratypes.html#XDressPlugin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.extratypes.XDressPlugin" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class provides extra type functionality for xdress.</p>
+<p>The __init__() method may take no arguments or keyword arguments.</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="xdress.version.report_versions">
-<tt class="descclassname">xdress.version.</tt><tt class="descname">report_versions</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xdress/version.html#report_versions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.version.report_versions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a string that reports the version of xdress and all its
-dependencies.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="xdress.version.version_parser">
-<tt class="descclassname">xdress.version.</tt><tt class="descname">version_parser</tt><big>(</big><em>ver</em><big>)</big><a class="reference internal" href="../_modules/xdress/version.html#version_parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.version.version_parser" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parses a nominal version string into a version_info object.
-e.g. &#8216;0.20dev&#8217; -&gt; version_info(0, 20, 0, &#8216;dev&#8217;).</p>
-</dd></dl>
-
+</div>
 </div>
 
 
@@ -117,15 +116,25 @@ e.g. &#8216;0.20dev&#8217; -&gt; version_info(0, 20, 0, &#8216;dev&#8217;).</p>
         <p class="logo"><a href="../index.html">
           <img class="logo" src="../_static/HooverJoven.jpg" alt="Logo"/>
         </a></p>
+  <div class="sphinxlocaltoc">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Extra Types Plugin</a><ul>
+<li><a class="reference internal" href="#extra-types-plugin-api">Extra Types Plugin API</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="extratypes.html"
-                        title="previous chapter">NumPy DTypes Plugin</a></p>
+  <p class="topless"><a href="typesystem.html"
+                        title="previous chapter">Type System</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../rcdocs.html"
-                        title="next chapter">Run Control Parameters</a></p>
+  <p class="topless"><a href="stlwrap.html"
+                        title="next chapter">Standard Library Container Wrappers</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../_sources/libref/version.txt"
+    <li><a href="../_sources/libref/dtypes.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -160,10 +169,10 @@ e.g. &#8216;0.20dev&#8217; -&gt; version_info(0, 20, 0, &#8216;dev&#8217;).</p>
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="../rcdocs.html" title="Run Control Parameters"
+          <a href="stlwrap.html" title="Standard Library Container Wrappers"
              >next</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="extratypes.html" title="NumPy DTypes Plugin"
+          <a href="typesystem.html" title="Type System"
              >previous</a> &nbsp; &nbsp;</li>
     <li><a href="../index.html">xdress 0.4-dev documentation</a> &raquo;</li>
 

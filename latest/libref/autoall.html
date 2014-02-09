@@ -86,7 +86,7 @@ if(ga_enabled){
   <div class="section" id="module-xdress.autoall">
 <span id="automatic-api-discovery"></span><span id="xdress-autoall"></span><h1>Automatic API Discovery<a class="headerlink" href="#module-xdress.autoall" title="Permalink to this headline">¶</a></h1>
 <p>This module is used to scrape the all of the APIs from a given source file
-and return thier name and kind.  These include classes, structs, functions, 
+and return their name and kind.  These include classes, structs, functions,
 and certain variable types.  It is not used to actually describe these elements.
 That is the job of the autodescriber.</p>
 <p>This module is available as an xdress plugin by the name <tt class="docutils literal"><span class="pre">xdress.autoall</span></tt>.</p>
@@ -301,16 +301,66 @@ copying src filenames to tar filename and the special &#8216;*&#8217; all syntax
 
 <dl class="function">
 <dt id="xdress.autoall.clang_findall">
-<tt class="descclassname">xdress.autoall.</tt><tt class="descname">clang_findall</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#clang_findall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.clang_findall" title="Permalink to this definition">¶</a></dt>
-<dd><div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">This has not yet been implemented fully or at all.</p>
-</div>
+<tt class="descclassname">xdress.autoall.</tt><tt class="descname">clang_findall</tt><big>(</big><em>filename</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>extra_parser_args=()</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em>, <em>language='c++'</em>, <em>clang_includes=()</em><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#clang_findall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.clang_findall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Automatically finds all API elements in a file via clang.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>The path to the file</p>
+</div></blockquote>
+<p><strong>includes</strong> : list of str, optional</p>
+<blockquote>
+<div><p>The list of extra include directories to search for header files.</p>
+</div></blockquote>
+<p><strong>defines</strong> : list of str, optional</p>
+<blockquote>
+<div><p>The list of extra macro definitions to apply.</p>
+</div></blockquote>
+<p><strong>undefines</strong> : list of str, optional</p>
+<blockquote>
+<div><p>The list of extra macro undefinitions to apply.</p>
+</div></blockquote>
+<p><strong>extra_parser_args</strong> : list of str, optional</p>
+<blockquote>
+<div><p>Further command line arguments to pass to the parser.</p>
+</div></blockquote>
+<p><strong>language</strong> : str</p>
+<blockquote>
+<div><p>Valid language flag.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : Ignored</p>
+<p><strong>debug</strong> : Ignored</p>
+<p><strong>builddir</strong> : Ignored</p>
+<p><strong>clang_includes</strong> : list of str, optional</p>
+<blockquote>
+<div><p>clang-specific include paths.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>variables</strong> : list of strings</p>
+<blockquote>
+<div><p>A list of variable names to wrap from the file.</p>
+</div></blockquote>
+<p><strong>functions</strong> : list of strings</p>
+<blockquote>
+<div><p>A list of function names to wrap from the file.</p>
+</div></blockquote>
+<p><strong>classes</strong> : list of strings</p>
+<blockquote class="last">
+<div><p>A list of class names to wrap from the file.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.autoall.findall">
-<tt class="descclassname">xdress.autoall.</tt><tt class="descname">findall</tt><big>(</big><em>filename</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>parsers='gccxml'</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em>, <em>language='c++'</em><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#findall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.findall" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autoall.</tt><tt class="descname">findall</tt><big>(</big><em>filename</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>extra_parser_args=()</em>, <em>parsers='gccxml'</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em>, <em>language='c++'</em>, <em>clang_includes=()</em><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#findall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.findall" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automatically finds all API elements in a file.  This is the main entry point.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -331,6 +381,10 @@ copying src filenames to tar filename and the special &#8216;*&#8217; all syntax
 <p><strong>undefines: list of str, optional</strong> :</p>
 <blockquote>
 <div><p>The list of extra macro undefinitions to apply.</p>
+</div></blockquote>
+<p><strong>extra_parser_args</strong> : list of str, optional</p>
+<blockquote>
+<div><p>Further command line arguments to pass to the parser.</p>
 </div></blockquote>
 <p><strong>parsers</strong> : str, list, or dict, optional</p>
 <blockquote>
@@ -357,6 +411,10 @@ a dictionary, it specifies the order to use parser based on language, i.e.
 <blockquote>
 <div><p>Valid language flag.</p>
 </div></blockquote>
+<p><strong>clang_includes</strong> : list of str, optional</p>
+<blockquote>
+<div><p>clang-specific include paths.</p>
+</div></blockquote>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>variables</strong> : list of strings</p>
@@ -379,7 +437,7 @@ a dictionary, it specifies the order to use parser based on language, i.e.
 
 <dl class="function">
 <dt id="xdress.autoall.gccxml_findall">
-<tt class="descclassname">xdress.autoall.</tt><tt class="descname">gccxml_findall</tt><big>(</big><em>filename</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#gccxml_findall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.gccxml_findall" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autoall.</tt><tt class="descname">gccxml_findall</tt><big>(</big><em>filename</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>extra_parser_args=()</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em>, <em>language='c++'</em>, <em>clang_includes=()</em><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#gccxml_findall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.gccxml_findall" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automatically finds all API elements in a file via GCC-XML.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -401,14 +459,9 @@ a dictionary, it specifies the order to use parser based on language, i.e.
 <blockquote>
 <div><p>The list of extra macro undefinitions to apply.</p>
 </div></blockquote>
-<p><strong>parsers</strong> : str, list, or dict, optional</p>
+<p><strong>extra_parser_args</strong> : list of str, optional</p>
 <blockquote>
-<div><p>The parser / AST to use to use for the file.  Currently &#8216;clang&#8217;, &#8216;gccxml&#8217;, 
-and &#8216;pycparser&#8217; are supported, though others may be implemented in the 
-future.  If this is a string, then this parser is used.  If this is a list, 
-this specifies the parser order to use based on availability.  If this is
-a dictionary, it specifies the order to use parser based on language, i.e.
-<tt class="docutils literal"><span class="pre">{'c'</span> <span class="pre">['pycparser',</span> <span class="pre">'gccxml'],</span> <span class="pre">'c++':</span> <span class="pre">['gccxml',</span> <span class="pre">'pycparser']}</span></tt>.</p>
+<div><p>Further command line arguments to pass to the parser.</p>
 </div></blockquote>
 <p><strong>verbose</strong> : bool, optional</p>
 <blockquote>
@@ -422,6 +475,11 @@ a dictionary, it specifies the order to use parser based on language, i.e.
 <blockquote>
 <div><p>Location of &#8211; often temporary &#8211; build files.</p>
 </div></blockquote>
+<p><strong>language</strong> : str</p>
+<blockquote>
+<div><p>Valid language flag.</p>
+</div></blockquote>
+<p><strong>clang_includes</strong> : ignored</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>variables</strong> : list of strings</p>
@@ -444,7 +502,7 @@ a dictionary, it specifies the order to use parser based on language, i.e.
 
 <dl class="function">
 <dt id="xdress.autoall.pycparser_findall">
-<tt class="descclassname">xdress.autoall.</tt><tt class="descname">pycparser_findall</tt><big>(</big><em>filename</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#pycparser_findall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.pycparser_findall" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autoall.</tt><tt class="descname">pycparser_findall</tt><big>(</big><em>filename</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>extra_parser_args=()</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em>, <em>language='c'</em>, <em>clang_includes=()</em><big>)</big><a class="reference internal" href="../_modules/xdress/autoall.html#pycparser_findall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autoall.pycparser_findall" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automatically finds all API elements in a file via GCC-XML.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -466,6 +524,10 @@ a dictionary, it specifies the order to use parser based on language, i.e.
 <blockquote>
 <div><p>The list of extra macro undefinitions to apply.</p>
 </div></blockquote>
+<p><strong>extra_parser_args</strong> : list of str, optional</p>
+<blockquote>
+<div><p>Further command line arguments to pass to the parser.</p>
+</div></blockquote>
 <p><strong>verbose</strong> : bool, optional</p>
 <blockquote>
 <div><p>Flag to diplay extra information while describing the class.</p>
@@ -478,6 +540,11 @@ a dictionary, it specifies the order to use parser based on language, i.e.
 <blockquote>
 <div><p>Location of &#8211; often temporary &#8211; build files.</p>
 </div></blockquote>
+<p><strong>language</strong> : str</p>
+<blockquote>
+<div><p>Valid language flag.</p>
+</div></blockquote>
+<p><strong>clang_includes</strong> : ignored</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>variables</strong> : list of strings</p>

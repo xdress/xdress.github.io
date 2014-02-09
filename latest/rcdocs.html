@@ -83,6 +83,24 @@ if(ga_enabled){
             
   <div class="section" id="run-control-parameters">
 <h1>Run Control Parameters<a class="headerlink" href="#run-control-parameters" title="Permalink to this headline">¶</a></h1>
+<p>Run control parameters (rc params, for short) determine how xdress is run in
+and allow the user to customize execution for their project or their system.
+Typically each project will have an <tt class="docutils literal"><span class="pre">xdressrc.py</span></tt> file in the directory where
+they intend to run xdress.  Alternative paths to this file may be specified on
+the command line with <tt class="docutils literal"><span class="pre">--rc</span></tt> option.  This file is simply a python file
+whose module-level variables are the run control parameters.  See below for
+information on specific parameters and their effects.</p>
+<p>Additionally, it is sometimes useful to be able to set global run control parameters
+on a system.  XDress will search the following files in order of increasing
+precedence.</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">$HOME/.xdressrc</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">$HOME/.xdressrc.py</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">$HOME/.config/xdressrc</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">$HOME/.config/xdressrc.py</span></tt></li>
+</ul>
+<p><tt class="docutils literal"><span class="pre">$HOME</span></tt> is the user&#8217;s home directory.  Settings in the project run control file
+take precedence over the values here.</p>
 <div class="section" id="xdress-base">
 <h2>xdress.base<a class="headerlink" href="#xdress-base" title="Permalink to this headline">¶</a></h2>
 <table class="docutils field-list" frame="void" rules="none">
@@ -97,20 +115,26 @@ relevant when using argcomplete., <em>default:</em> True.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">debug:</th><td class="field-body">Build in debugging mode, <em>default:</em> False.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">dumpdesc:</th><td class="field-body">Print the description cache, <em>default:</em> False.</td>
+<tr class="field-even field"><th class="field-name">dtypes_module:</th><td class="field-body">Module name for numpy dtype wrappers., <em>default:</em> &#8216;dtypes&#8217;.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">package:</th><td class="field-body">The Python package name for the generated wrappers, <em>default:</em>
+<tr class="field-odd field"><th class="field-name">dumpdesc:</th><td class="field-body">Print the description cache, <em>default:</em> False.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">package:</th><td class="field-body">The Python package name for the generated wrappers, <em>default:</em>
 NotSpecified.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">packagedir:</th><td class="field-body">Path to package directory, same as &#8216;package&#8217; if not specified,
+<tr class="field-odd field"><th class="field-name">packagedir:</th><td class="field-body">Path to package directory, same as &#8216;package&#8217; if not specified,
 <em>default:</em> NotSpecified.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">plugins:</th><td class="field-body">Plugins to include, <em>default:</em> (&#8216;xdress.autoall&#8217;, &#8216;xdress.cythongen&#8217;,
+<tr class="field-even field"><th class="field-name">plugins:</th><td class="field-body">Plugins to include, <em>default:</em> (&#8216;xdress.autoall&#8217;, &#8216;xdress.cythongen&#8217;,
 &#8216;xdress.stlwrap&#8217;).</td>
 </tr>
-<tr class="field-even field"><th class="field-name">rc:</th><td class="field-body">Path to run control file, <em>default:</em> &#8216;xdressrc.py&#8217;.</td>
+<tr class="field-odd field"><th class="field-name">rc:</th><td class="field-body">Path to run control file, <em>default:</em> &#8216;xdressrc.py&#8217;.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">sourcedir:</th><td class="field-body">Path to source directory (deprecated), <em>default:</em> NotSpecified.</td>
+<tr class="field-even field"><th class="field-name">sourcedir:</th><td class="field-body">Path to source directory (deprecated), <em>default:</em> NotSpecified.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">stlcontainers_module:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">Module name for C++ standard library container wrappers.,
+<em>default:</em> &#8216;stlcontainers&#8217;.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">ts:</th><td class="field-body">The xdress type system., <em>default:</em> xdress.typesystem.TypeSystem instance.</td>
 </tr>
@@ -127,25 +151,31 @@ NotSpecified.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">classes:</th><td class="field-body">A list of class names in sequence, mapping, or apiname format,
+<tr class="field-odd field"><th class="field-name">clang_includes:</th><td class="field-body">clang-specific include paths, <em>default:</em> ().</td>
+</tr>
+<tr class="field-even field"><th class="field-name">classes:</th><td class="field-body">A list of class names in sequence, mapping, or apiname format,
 <em>default:</em> ().</td>
 </tr>
-<tr class="field-even field"><th class="field-name" colspan="2">clear_parser_cache_period:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body">Number of parser calls to perform before clearing
+<tr class="field-odd field"><th class="field-name" colspan="2">clear_parser_cache_period:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">Number of parser calls to perform before clearing
 the internal cache.  This prevents nasty memory overflow issues., <em>default:</em>
 50.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">defines:</th><td class="field-body">Set additional macro definitions, <em>default:</em> [&#8216;XDRESS&#8217;].</td>
+<tr class="field-even field"><th class="field-name">defines:</th><td class="field-body">Set additional macro definitions, <em>default:</em> [&#8216;XDRESS&#8217;].</td>
 </tr>
-<tr class="field-even field"><th class="field-name">dumpast:</th><td class="field-body">Prints the abstract syntax tree of a file., <em>default:</em> NotSpecified.</td>
+<tr class="field-odd field"><th class="field-name">dumpast:</th><td class="field-body">Prints the abstract syntax tree of a file., <em>default:</em> NotSpecified.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">extra_parser_args:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">Further command line arguments to pass to the parser,
+<em>default:</em> ().</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">functions:</th><td class="field-body">A list of function names in sequence, mapping, or apiname format,
 <em>default:</em> ().</td>
 </tr>
 <tr class="field-even field"><th class="field-name">includes:</th><td class="field-body">Additional include directories, <em>default:</em> [&#8216;.&#8217;].</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">parsers:</th><td class="field-body">Parser(s) name, list, or dict, <em>default:</em> {&#8216;c&#8217;: [&#8216;pycparser&#8217;,
-&#8216;gccxml&#8217;, &#8216;clang&#8217;], &#8216;c++&#8217;: [&#8216;gccxml&#8217;, &#8216;clang&#8217;, &#8216;pycparser&#8217;]}.</td>
+<tr class="field-odd field"><th class="field-name">parsers:</th><td class="field-body">Parser(s) name, list, or dict, <em>default:</em> {&#8216;c&#8217;: [&#8216;pycparser&#8217;, &#8216;clang&#8217;,
+&#8216;gccxml&#8217;], &#8216;c++&#8217;: [&#8216;clang&#8217;, &#8216;gccxml&#8217;, &#8216;pycparser&#8217;]}.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">undefines:</th><td class="field-body">Unset additional macro definitions, <em>default:</em> [].</td>
 </tr>
@@ -161,27 +191,33 @@ the internal cache.  This prevents nasty memory overflow issues., <em>default:</
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">classes:</th><td class="field-body">A list of class names in sequence, mapping, or apiname format,
+<tr class="field-odd field"><th class="field-name">clang_includes:</th><td class="field-body">clang-specific include paths, <em>default:</em> ().</td>
+</tr>
+<tr class="field-even field"><th class="field-name">classes:</th><td class="field-body">A list of class names in sequence, mapping, or apiname format,
 <em>default:</em> ().</td>
 </tr>
-<tr class="field-even field"><th class="field-name" colspan="2">clear_parser_cache_period:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body">Number of parser calls to perform before clearing
+<tr class="field-odd field"><th class="field-name" colspan="2">clear_parser_cache_period:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">Number of parser calls to perform before clearing
 the internal cache.  This prevents nasty memory overflow issues., <em>default:</em>
 50.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">defines:</th><td class="field-body">Set additional macro definitions, <em>default:</em> [&#8216;XDRESS&#8217;].</td>
+<tr class="field-even field"><th class="field-name">defines:</th><td class="field-body">Set additional macro definitions, <em>default:</em> [&#8216;XDRESS&#8217;].</td>
 </tr>
-<tr class="field-even field"><th class="field-name">dumpast:</th><td class="field-body">Prints the abstract syntax tree of a file., <em>default:</em> NotSpecified.</td>
+<tr class="field-odd field"><th class="field-name">dumpast:</th><td class="field-body">Prints the abstract syntax tree of a file., <em>default:</em> NotSpecified.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">env:</th><td class="field-body">The target environment computed by the autodescriber., <em>default:</em> {}.</td>
+<tr class="field-even field"><th class="field-name">env:</th><td class="field-body">The target environment computed by the autodescriber., <em>default:</em> {}.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">extra_parser_args:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">Further command line arguments to pass to the parser,
+<em>default:</em> ().</td>
 </tr>
 <tr class="field-even field"><th class="field-name">functions:</th><td class="field-body">A list of function names in sequence, mapping, or apiname format,
 <em>default:</em> ().</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">includes:</th><td class="field-body">Additional include directories, <em>default:</em> [&#8216;.&#8217;].</td>
 </tr>
-<tr class="field-even field"><th class="field-name">parsers:</th><td class="field-body">Parser(s) name, list, or dict, <em>default:</em> {&#8216;c&#8217;: [&#8216;pycparser&#8217;,
-&#8216;gccxml&#8217;, &#8216;clang&#8217;], &#8216;c++&#8217;: [&#8216;gccxml&#8217;, &#8216;clang&#8217;, &#8216;pycparser&#8217;]}.</td>
+<tr class="field-even field"><th class="field-name">parsers:</th><td class="field-body">Parser(s) name, list, or dict, <em>default:</em> {&#8216;c&#8217;: [&#8216;pycparser&#8217;, &#8216;clang&#8217;,
+&#8216;gccxml&#8217;], &#8216;c++&#8217;: [&#8216;clang&#8217;, &#8216;gccxml&#8217;, &#8216;pycparser&#8217;]}.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">undefines:</th><td class="field-body">Unset additional macro definitions, <em>default:</em> [].</td>
 </tr>
@@ -254,6 +290,20 @@ NotSpecified.</td>
 </tbody>
 </table>
 </div>
+<div class="section" id="xdress-dtypes">
+<h2>xdress.dtypes<a class="headerlink" href="#xdress-dtypes" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">dtypes:</th><td class="field-body">List of types to create numpy dtypes for., <em>default:</em> [].</td>
+</tr>
+<tr class="field-even field"><th class="field-name">make_dtypes:</th><td class="field-body">Flag for enabling / disabling the generation of numpy dtype
+wrappers., <em>default:</em> True.</td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="section" id="xdress-stlwrap">
 <h2>xdress.stlwrap<a class="headerlink" href="#xdress-stlwrap" title="Permalink to this headline">¶</a></h2>
 <table class="docutils field-list" frame="void" rules="none">
@@ -265,10 +315,6 @@ NotSpecified.</td>
 library container wrappers., <em>default:</em> True.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">stlcontainers:</th><td class="field-body">List of C++ standard library containers to wrap., <em>default:</em> [].</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">stlcontainers_module:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">Module name for C++ standard library container wrappers.,
-<em>default:</em> &#8216;stlcontainers&#8217;.</td>
 </tr>
 </tbody>
 </table>
@@ -295,6 +341,7 @@ library container wrappers., <em>default:</em> True.</td>
 <li><a class="reference internal" href="#xdress-descfilter">xdress.descfilter</a></li>
 <li><a class="reference internal" href="#xdress-doxygen">xdress.doxygen</a></li>
 <li><a class="reference internal" href="#xdress-extratypes">xdress.extratypes</a></li>
+<li><a class="reference internal" href="#xdress-dtypes">xdress.dtypes</a></li>
 <li><a class="reference internal" href="#xdress-stlwrap">xdress.stlwrap</a></li>
 </ul>
 </li>

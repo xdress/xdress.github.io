@@ -228,9 +228,9 @@ with 8 spaces.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="xdress.utils.cppint">
-<tt class="descclassname">xdress.utils.</tt><tt class="descname">cppint</tt><big>(</big><em>s</em><big>)</big><a class="reference internal" href="../_modules/xdress/utils.html#cppint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.utils.cppint" title="Permalink to this definition">¶</a></dt>
-<dd><p>Converts a C++ literal integer string to a Python int.</p>
+<dt id="xdress.utils.c_literal">
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">c_literal</tt><big>(</big><em>s</em><big>)</big><a class="reference internal" href="../_modules/xdress/utils.html#c_literal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.utils.c_literal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a C/C++ literal to the corresponding Python value.</p>
 </dd></dl>
 
 <dl class="function">
@@ -448,6 +448,13 @@ contents are exactly the same as what would be written out.</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.utils.parse_global_rc">
+<tt class="descclassname">xdress.utils.</tt><tt class="descname">parse_global_rc</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xdress/utils.html#parse_global_rc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.utils.parse_global_rc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search a global xdressrc file and parse if it exists.
+If nothing is found, an empty RunControl is returned.</p>
 </dd></dl>
 
 <dl class="function">

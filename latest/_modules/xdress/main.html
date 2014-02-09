@@ -253,7 +253,7 @@ if(ga_enabled){
     <span class="n">argcomplete</span> <span class="o">=</span> <span class="bp">None</span>
 
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">NotSpecified</span><span class="p">,</span> <span class="n">RunControl</span><span class="p">,</span> <span class="n">DEFAULT_RC_FILE</span><span class="p">,</span> <span class="n">DEFAULT_PLUGINS</span><span class="p">,</span> \
-    <span class="n">exec_file</span>
+    <span class="n">exec_file</span><span class="p">,</span> <span class="n">parse_global_rc</span>
 
 <span class="kn">from</span> <span class="nn">.plugins</span> <span class="kn">import</span> <span class="n">Plugins</span>
 
@@ -293,6 +293,7 @@ if(ga_enabled){
         <span class="n">argcomplete</span><span class="o">.</span><span class="n">autocomplete</span><span class="p">(</span><span class="n">parser</span><span class="p">)</span>
     <span class="n">ns</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
     <span class="n">rc</span> <span class="o">=</span> <span class="n">plugins</span><span class="o">.</span><span class="n">merge_rcs</span><span class="p">()</span>
+    <span class="n">rc</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">parse_global_rc</span><span class="p">())</span>
     <span class="n">rc</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">rcdict</span><span class="p">)</span>
     <span class="n">rc</span><span class="o">.</span><span class="n">_update</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ns</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
     <span class="n">plugins</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>

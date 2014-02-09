@@ -31,7 +31,7 @@
     <script type="text/javascript" src="../_static/cloud.js"></script>
     <link rel="top" title="xdress 0.4-dev documentation" href="../index.html" />
     <link rel="up" title="Library Reference" href="index.html" />
-    <link rel="next" title="Standard Library Container Wrappers" href="stlwrap.html" />
+    <link rel="next" title="Extra Types Plugin" href="dtypes.html" />
     <link rel="prev" title="Library Reference" href="index.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
@@ -65,7 +65,7 @@ if(ga_enabled){
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="stlwrap.html" title="Standard Library Container Wrappers"
+          <a href="dtypes.html" title="Extra Types Plugin"
              accesskey="N">next</a> &nbsp; &nbsp;</li>
         <li class="right" >
           <a href="index.html" title="Library Reference"
@@ -399,7 +399,7 @@ following:</p>
 
 <dl class="class">
 <dt id="xdress.typesystem.TypeSystem">
-<em class="property">class </em><tt class="descclassname">xdress.typesystem.</tt><tt class="descname">TypeSystem</tt><big>(</big><em>base_types=None</em>, <em>template_types=None</em>, <em>refined_types=None</em>, <em>humannames=None</em>, <em>extra_types='xdress_extra_types'</em>, <em>stlcontainers='stlcontainers'</em>, <em>type_aliases=None</em>, <em>cpp_types=None</em>, <em>numpy_types=None</em>, <em>from_pytypes=None</em>, <em>cython_ctypes=None</em>, <em>cython_cytypes=None</em>, <em>cython_pytypes=None</em>, <em>cython_cimports=None</em>, <em>cython_cyimports=None</em>, <em>cython_pyimports=None</em>, <em>cython_functionnames=None</em>, <em>cython_classnames=None</em>, <em>cython_c2py_conv=None</em>, <em>cython_py2c_conv=None</em>, <em>typestring=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">xdress.typesystem.</tt><tt class="descname">TypeSystem</tt><big>(</big><em>base_types=None</em>, <em>template_types=None</em>, <em>refined_types=None</em>, <em>humannames=None</em>, <em>extra_types='xdress_extra_types'</em>, <em>dtypes='dtypes'</em>, <em>stlcontainers='stlcontainers'</em>, <em>argument_kinds=None</em>, <em>variable_namespace=None</em>, <em>type_aliases=None</em>, <em>cpp_types=None</em>, <em>numpy_types=None</em>, <em>from_pytypes=None</em>, <em>cython_ctypes=None</em>, <em>cython_cytypes=None</em>, <em>cython_pytypes=None</em>, <em>cython_cimports=None</em>, <em>cython_cyimports=None</em>, <em>cython_pyimports=None</em>, <em>cython_functionnames=None</em>, <em>cython_classnames=None</em>, <em>cython_c2py_conv=None</em>, <em>cython_py2c_conv=None</em>, <em>typestring=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class representing a type system.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -428,9 +428,26 @@ types, or other refined types!</p>
 <blockquote>
 <div><p>The name of the xdress extra types module.</p>
 </div></blockquote>
+<p><strong>dtypes</strong> : str, optional</p>
+<blockquote>
+<div><p>The name of the xdress numpy dtypes wrapper module.</p>
+</div></blockquote>
 <p><strong>stlcontainers</strong> : str, optional</p>
 <blockquote>
 <div><p>The name of the xdress C++ standard library containers wrapper module.</p>
+</div></blockquote>
+<p><strong>argument_kinds</strong> : dict, optional</p>
+<blockquote>
+<div><p>Templates types have arguments. This is a mapping from type name to a 
+tuple of utils.Arg kind flags.  The order in the tuple matches the value
+in template_types. This is only vaid for concrete types, ie 
+(&#8216;vector&#8217;, &#8216;int&#8217;, 0) and not just &#8216;vector&#8217;.</p>
+</div></blockquote>
+<p><strong>variable_namespace</strong> : dict, optional</p>
+<blockquote>
+<div><p>Templates arguments may be variables. These variables may live in a 
+namespace which is required for specifiying the type.  This is a 
+dictionary mapping variable names to thier namespace.</p>
 </div></blockquote>
 <p><strong>type_aliases</strong> : dict, optional</p>
 <blockquote>
@@ -526,11 +543,18 @@ Valuse are tuples with the form of <tt class="docutils literal"><span class="pre
 
 <dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.cpp_funcname">
-<em class="property">static </em><tt class="descname">cpp_funcname</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.cpp_funcname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.cpp_funcname" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">cpp_funcname</tt><big>(</big><em>name</em>, <em>argkinds=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.cpp_funcname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.cpp_funcname" title="Permalink to this definition">¶</a></dt>
 <dd><p>This returns a name for a function based on its name, rather than
 its type.  The name may be either a string or a tuple of the form 
-(&#8216;name&#8217;, template_arg_type1, template_arg_type2, ...).  This is not ment
-to replace cpp_type(), but complement it.</p>
+(&#8216;name&#8217;, template_arg1, template_arg2, ...). The argkinds argument here 
+refers only to the template arguments, not the function signature default 
+arguments. This is not meant to replace cpp_type(), but complement it.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="xdress.typesystem.TypeSystem.cpp_literal">
+<em class="property">static </em><tt class="descname">cpp_literal</tt><big>(</big><em>lit</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.cpp_literal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.cpp_literal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a literal value to it C++ form.</p>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -594,11 +618,13 @@ interpretations based on the length and values:</p>
 
 <dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.cython_funcname">
-<em class="property">static </em><tt class="descname">cython_funcname</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.cython_funcname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_funcname" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">cython_funcname</tt><big>(</big><em>name</em>, <em>argkinds=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.cython_funcname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_funcname" title="Permalink to this definition">¶</a></dt>
 <dd><p>This returns a name for a function based on its name, rather than
 its type.  The name may be either a string or a tuple of the form 
-(&#8216;name&#8217;, template_arg_type1, template_arg_type2, ...).  This is not ment
-to replace cython_functionname(), but complement it.</p>
+(&#8216;name&#8217;, template_arg1, template_arg2, ...). The argkinds argument here 
+refers only to the template arguments, not the function signature default 
+arguments. This is not meant to replace cython_functionname(), but 
+complement it.</p>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -628,6 +654,12 @@ interpretations based on the length and values:</p>
 <li><tt class="docutils literal"><span class="pre">(module-name,</span> <span class="pre">'as',</span> <span class="pre">alias)</span></tt> becomes <tt class="docutils literal"><span class="pre">import</span> <span class="pre">{module-name}</span> <span class="pre">as</span> <span class="pre">{alias}</span></tt></li>
 </ul>
 <p>Any of these may be used.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="xdress.typesystem.TypeSystem.cython_literal">
+<em class="property">static </em><tt class="descname">cython_literal</tt><big>(</big><em>lit</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.cython_literal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.cython_literal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a literal to a Cython compatible form.</p>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -661,6 +693,12 @@ and return statement) to convert the variable from Python to C/C++.</p>
 <dt id="xdress.typesystem.TypeSystem.delmemo">
 <tt class="descname">delmemo</tt><big>(</big><em>meth</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.delmemo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.delmemo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deletes a single key from a method on this type system instance.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xdress.typesystem.TypeSystem.deregister_argument_kinds">
+<tt class="descname">deregister_argument_kinds</tt><big>(</big><em>t</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.deregister_argument_kinds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.deregister_argument_kinds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a type and its argument kind tuple from the type system.</p>
 </dd></dl>
 
 <dl class="method">
@@ -789,6 +827,12 @@ it is infered from the filenme.  Options are:</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="xdress.typesystem.TypeSystem.register_argument_kinds">
+<tt class="descname">register_argument_kinds</tt><big>(</big><em>t</em>, <em>argkinds</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.register_argument_kinds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.register_argument_kinds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Registers an argument kind tuple into the type system for a template type.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="xdress.typesystem.TypeSystem.register_class">
 <tt class="descname">register_class</tt><big>(</big><em>name=None</em>, <em>template_args=None</em>, <em>cython_c_type=None</em>, <em>cython_cimport=None</em>, <em>cython_cy_type=None</em>, <em>cython_py_type=None</em>, <em>cython_template_class_name=None</em>, <em>cython_template_function_name=None</em>, <em>cython_cyimport=None</em>, <em>cython_pyimport=None</em>, <em>cython_c2py=None</em>, <em>cython_py2c=None</em>, <em>cpp_type=None</em>, <em>human_name=None</em>, <em>from_pytype=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.register_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.register_class" title="Permalink to this definition">¶</a></dt>
 <dd><p>Classes are user specified types.  This function will add a class to 
@@ -798,7 +842,7 @@ type system.</p>
 
 <dl class="method">
 <dt id="xdress.typesystem.TypeSystem.register_classname">
-<tt class="descname">register_classname</tt><big>(</big><em>classname</em>, <em>package</em>, <em>pxd_base</em>, <em>cpppxd_base</em>, <em>cpp_classname=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.register_classname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.register_classname" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">register_classname</tt><big>(</big><em>classname</em>, <em>package</em>, <em>pxd_base</em>, <em>cpppxd_base</em>, <em>cpp_classname=None</em>, <em>make_dtypes=True</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.register_classname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.register_classname" title="Permalink to this definition">¶</a></dt>
 <dd><p>Registers a class with the type system from only its name, 
 and relevant header file information.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -819,8 +863,13 @@ and relevant header file information.</p>
 <div><p>Base name of the cpppxd file to cimport.</p>
 </div></blockquote>
 <p><strong>cpp_classname</strong> : str or tuple, optional</p>
-<blockquote class="last">
+<blockquote>
 <div><p>Name of class in C++, equiv. to apiname.srcname. Defaults to classname.</p>
+</div></blockquote>
+<p><strong>make_dtypes</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>Flag for registering dtypes for this class simeltaneously with 
+registering the class itself.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -832,7 +881,7 @@ and relevant header file information.</p>
 <dt id="xdress.typesystem.TypeSystem.register_numpy_dtype">
 <tt class="descname">register_numpy_dtype</tt><big>(</big><em>t</em>, <em>cython_cimport=None</em>, <em>cython_cyimport=None</em>, <em>cython_pyimport=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.register_numpy_dtype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.register_numpy_dtype" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function will add a type to the system as numpy dtype that lives in
-the stlcontainers module.</p>
+the dtypes module.</p>
 </dd></dl>
 
 <dl class="method">
@@ -849,10 +898,23 @@ may be used normally with the rest of the type system.</p>
 normally with the rest of the type system.</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="xdress.typesystem.TypeSystem.register_variable_namespace">
+<tt class="descname">register_variable_namespace</tt><big>(</big><em>name</em>, <em>namespace</em>, <em>t=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.register_variable_namespace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.register_variable_namespace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Registers a variable and its namespace in the typesystem.</p>
+</dd></dl>
+
 <dl class="staticmethod">
 <dt id="xdress.typesystem.TypeSystem.strip_predicates">
 <em class="property">static </em><tt class="descname">strip_predicates</tt><big>(</big><em>t</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.strip_predicates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.strip_predicates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes all outer predicates from a type.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xdress.typesystem.TypeSystem.swap_dtypes">
+<tt class="descname">swap_dtypes</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="../_modules/xdress/typesystem.html#TypeSystem.swap_dtypes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.typesystem.TypeSystem.swap_dtypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>A context manager for temporarily swapping out the dtypes value
+with a new value and replacing the original value before exiting.</p>
 </dd></dl>
 
 <dl class="method">
@@ -1097,8 +1159,8 @@ comments.</p>
   <p class="topless"><a href="index.html"
                         title="previous chapter">Library Reference</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="stlwrap.html"
-                        title="next chapter">Standard Library Container Wrappers</a></p>
+  <p class="topless"><a href="dtypes.html"
+                        title="next chapter">Extra Types Plugin</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/libref/typesystem.txt"
@@ -1136,7 +1198,7 @@ comments.</p>
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="stlwrap.html" title="Standard Library Container Wrappers"
+          <a href="dtypes.html" title="Extra Types Plugin"
              >next</a> &nbsp; &nbsp;</li>
         <li class="right" >
           <a href="index.html" title="Library Reference"

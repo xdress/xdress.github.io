@@ -115,6 +115,8 @@ if(ga_enabled){
         <span class="n">sourcedir</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">,</span>
         <span class="n">builddir</span><span class="o">=</span><span class="s">&#39;build&#39;</span><span class="p">,</span>
         <span class="n">bash_completion</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">dtypes_module</span><span class="o">=</span><span class="s">&#39;dtypes&#39;</span><span class="p">,</span>
+        <span class="n">stlcontainers_module</span><span class="o">=</span><span class="s">&#39;stlcontainers&#39;</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="c"># Sweet hack because ts.update() returns None</span>
@@ -134,6 +136,9 @@ if(ga_enabled){
         <span class="s">&#39;builddir&#39;</span><span class="p">:</span> <span class="s">&quot;Path to build directory&quot;</span><span class="p">,</span>
         <span class="s">&#39;bash_completion&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&quot;Flag for enabling / disabling BASH completion. &quot;</span>
                             <span class="s">&quot;This is only relevant when using argcomplete.&quot;</span><span class="p">),</span>
+        <span class="s">&#39;dtypes_module&#39;</span><span class="p">:</span> <span class="s">&quot;Module name for numpy dtype wrappers.&quot;</span><span class="p">,</span>
+        <span class="s">&#39;stlcontainers_module&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&quot;Module name for C++ standard library &quot;</span>
+                                 <span class="s">&quot;container wrappers.&quot;</span><span class="p">),</span>
         <span class="p">}</span>
 
     <span class="k">def</span> <span class="nf">update_argparser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
@@ -159,11 +164,20 @@ if(ga_enabled){
                             <span class="n">help</span><span class="o">=</span><span class="s">&quot;enable bash completion&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;bash_completion&quot;</span><span class="p">)</span>
         <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--no-bash-completion&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_false&#39;</span><span class="p">,</span>
                             <span class="n">help</span><span class="o">=</span><span class="s">&quot;disable bash completion&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;bash_completion&quot;</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--dtypes-module&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&#39;dtypes_module&#39;</span><span class="p">,</span> 
+                            <span class="n">help</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rcdocs</span><span class="p">[</span><span class="s">&quot;dtypes_module&quot;</span><span class="p">])</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--stlcontainers-module&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span>
+                            <span class="n">dest</span><span class="o">=</span><span class="s">&#39;stlcontainers_module&#39;</span><span class="p">,</span> 
+                            <span class="n">help</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rcdocs</span><span class="p">[</span><span class="s">&quot;stlcontainers_module&quot;</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">rc</span><span class="o">.</span><span class="n">version</span><span class="p">:</span>
             <span class="k">print</span><span class="p">(</span><span class="n">report_versions</span><span class="p">())</span>
             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+
+        <span class="c"># This should be done ASAP after the ts is set</span>
+        <span class="n">rc</span><span class="o">.</span><span class="n">ts</span><span class="o">.</span><span class="n">dtypes</span> <span class="o">=</span> <span class="n">rc</span><span class="o">.</span><span class="n">dtypes_module</span>
+        <span class="n">rc</span><span class="o">.</span><span class="n">ts</span><span class="o">.</span><span class="n">stlcontainers</span> <span class="o">=</span> <span class="n">rc</span><span class="o">.</span><span class="n">stlcontainers_module</span>
 
         <span class="k">if</span> <span class="n">rc</span><span class="o">.</span><span class="n">package</span> <span class="ow">is</span> <span class="n">NotSpecified</span><span class="p">:</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="s">&quot;no package name given; please add &#39;package&#39; to {0}&quot;</span>
