@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Advanced Tutorial &mdash; xdress 0.4-dev documentation</title>
+    <title>Using libclang &mdash; xdress 0.4-dev documentation</title>
     
     <link rel="stylesheet" href="_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -30,8 +30,8 @@
     <script type="text/javascript" src="_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="_static/cloud.js"></script>
     <link rel="top" title="xdress 0.4-dev documentation" href="index.html" />
-    <link rel="next" title="Using libclang" href="libclang.html" />
-    <link rel="prev" title="xdressrc.py" href="mypack/xdressrc.py.html" /> 
+    <link rel="next" title="Library Reference" href="libref/index.html" />
+    <link rel="prev" title="Advanced Tutorial" href="advtut.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
 if(ga_enabled){
@@ -64,10 +64,10 @@ if(ga_enabled){
           <a href="np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="libclang.html" title="Using libclang"
+          <a href="libref/index.html" title="Library Reference"
              accesskey="N">next</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="mypack/xdressrc.py.html" title="xdressrc.py"
+          <a href="advtut.html" title="Advanced Tutorial"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
     <li><a href="index.html">xdress 0.4-dev documentation</a> &raquo;</li>
  
@@ -81,63 +81,63 @@ if(ga_enabled){
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="advanced-tutorial">
-<span id="id1"></span><h1>Advanced Tutorial<a class="headerlink" href="#advanced-tutorial" title="Permalink to this headline">¶</a></h1>
-<p>The point of xdress is to wrap code.  The purpose of xdress is to generate
-idiomatic wrappers.  This tutorial describes some awesome things that you can
-do with xdress.</p>
-<div class="section" id="numpy-dtypes-of-classes-struct">
-<h2>NumPy dtypes of Classes &amp; Struct<a class="headerlink" href="#numpy-dtypes-of-classes-struct" title="Permalink to this headline">¶</a></h2>
-<p>When using <tt class="docutils literal"><span class="pre">stlwrap</span></tt>, the <tt class="docutils literal"><span class="pre">vector</span></tt> type actually creates custom
-numpy dtypes for the templated type.  This works not only on primitive types,
-other STL containers (map, set, vector), but also on any custom type that the
-type system knows about!  Say we have the following run control file, which is
-used to wrap a C++ class Joan:</p>
-<p><strong>xdressrc.py:</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">package</span> <span class="o">=</span> <span class="s">&quot;france&quot;</span>
-<span class="n">classes</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;Joan&#39;</span><span class="p">,</span> <span class="s">&#39;france.cpp&#39;</span><span class="p">)]</span>
-<span class="n">stlcontainers</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;vector&#39;</span><span class="p">,</span> <span class="s">&#39;Joan&#39;</span><span class="p">)]</span>
-</pre></div>
+  <div class="section" id="using-libclang">
+<h1>Using libclang<a class="headerlink" href="#using-libclang" title="Permalink to this headline">¶</a></h1>
+<p>libclang is an extension module which allows XDress to use the excellent Clang
+compiler for parsing C and C++ source files.</p>
+<p><strong>NOTE</strong>: libclang is an official part of the Clang software distribution. As of
+XDress version 0.4, the libclang used by XDress is a fork of the source code
+in the main Clang distribution (due to missing features in the official version).
+Patches have been submitted upstream, and the fork will be retired once those
+changes are merged.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li>Start by downloading a source tarball for a current <a class="reference external" href="http://llvm.org/releases/">Clang distribution</a></li>
+<li>We highly recommend following the detailed <a class="reference external" href="http://clang.llvm.org/get_started.html">build instructions</a> on the LLVM website.</li>
+<li>Once you&#8217;ve built LLVM/Clang, install it in a location which is appropriate for
+your system. If that location is not part of your executable path, you will need
+to set the <cite>LLVM_CONFIG</cite> environment variable to point to the <cite>llvm-config</cite> program.
+XDress will check the environment variable before searching for an <cite>llvm-config</cite>
+program in your path.</li>
+<li>Build XDress</li>
+<li>Enjoy!</li>
+</ul>
+</div></blockquote>
 </div>
-<p>The classes list, with the autodescribe and cythongen plugins, will create
-Python wrappers for he Joan class.  The stlcontainers will then see that the
-vector template is dependent on Joan.  This will create and register a dtype
-called <tt class="docutils literal"><span class="pre">xd_joan</span></tt> that you can use with ndarrays.  You may then get and set
-elements out of this array via the wrapper class that was created with cythongen.
-For exmaple:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">france.stlcontainer</span> <span class="kn">import</span> <span class="n">xd_joan</span>
-
-<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">xd_joan</span><span class="p">)</span>
-
-<span class="c"># A scalar array with dtype xd_joan</span>
-<span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-<span class="c"># A Joan wrapper object with a copy of the 0th element of the array</span>
-<span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
-</pre></div>
+<div class="section" id="os-x-issues">
+<h2>OS X Issues<a class="headerlink" href="#os-x-issues" title="Permalink to this headline">¶</a></h2>
+<p>If you are building on a recent version of OS X, you must take care to use the
+same C++ library for both LLVM/Clang and libclang in XDress. Mixing libc++ and
+libstdc++ will cause link errors and you will not be able to import libclang.</p>
+<p>Because LLVM/Clang will likely use libc++ by default, the easiest solution is
+to add <cite>-stdlib=libc++</cite> to the compiler flags for XDress. This might not be an
+option depending on how your Python installation is configured. If you get an
+error which looks like this:</p>
+<p><cite>clang: error: invalid deployment target for -stdlib=libc++ (requires OS X 10.7 or later)</cite></p>
+<p>Then you will need to build LLVM/Clang against libstdc++ in order to build XDress.</p>
+<div class="section" id="building-llvm-clang-with-libstdc">
+<h3>Building LLVM/Clang with libstdc++<a class="headerlink" href="#building-llvm-clang-with-libstdc" title="Permalink to this headline">¶</a></h3>
+<p>Building LLVM/Clang with libstdc++ is fairly straightforward. All you need to
+do is set a <cite>CPPFLAGS</cite> environment variable before running the included
+<cite>configure</cite> script:</p>
+<div class="highlight-python"><pre># "/usr/include/c++/4.2.1/" should be replaced with the location of the
+# GNU C++ headers on your system.
+$ export CPPFLAGS="-I/usr/include/c++/4.2.1/ -stdlib=libstdc++"
+$ ../configure</pre>
 </div>
-<p>Note that the underlying memory is a contiguous block of Joans.  The Python
-wrappers are regenerated on every getitem() call.  Thus this is more truly an
-array of structs, as opposed to a structured array ;).</p>
+<p>You can confirm that you are linked against libstdc++ by running the following
+command in the output library build directory:</p>
+<div class="highlight-python"><pre>$ strings libLLVMSupport.a | grep __ZN4llvm27install_fatal_error_handler | c++filt</pre>
 </div>
-<div class="section" id="importable-type-systems">
-<h2>Importable Type Systems<a class="headerlink" href="#importable-type-systems" title="Permalink to this headline">¶</a></h2>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This is only starting to be explored</p>
+<p>That command can be run fairly early in the build process because libLLVMSupport
+is one of the first libraries which gets build. Here are the two possible results:</p>
+<ul class="simple">
+<li>libstdc++: <cite>llvm::install_fatal_error_handler(void (*)(void*, std::string const&amp;, bool), void*)</cite></li>
+<li>libc++: <cite>llvm::install_fatal_error_handler(void (*)(void*, std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;, bool), void*)</cite></li>
+</ul>
 </div>
-<p>The <tt class="docutils literal"><span class="pre">TypeSystem</span></tt> class has a mechanism to save and reload via <tt class="docutils literal"><span class="pre">dump()</span></tt> and
-<tt class="docutils literal"><span class="pre">load()</span></tt> methods.  Furthermore, type system variables by the name <tt class="docutils literal"><span class="pre">ts</span></tt> in
-run control and side car files are all merged together with the default type
-system.  This allows the users of xdress in project-beta to use
-the type system developed in project-alpha with out having to re-expose,
-re-register, or re-parse any project-alpha code at all!</p>
-<p>This is an import-esque mechanism for acting on the type systems themselves.
-This should be a huge boon to mutlti-project systems.  You can also choose to
-provide xdress type systems to down stream users and a convenience or favor to
-them. Only pickle and gzip pickle are currently supported, though others may be
-forthcoming.</p>
 </div>
 </div>
 
@@ -153,23 +153,26 @@ forthcoming.</p>
   <div class="sphinxlocaltoc">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Advanced Tutorial</a><ul>
-<li><a class="reference internal" href="#numpy-dtypes-of-classes-struct">NumPy dtypes of Classes &amp; Struct</a></li>
-<li><a class="reference internal" href="#importable-type-systems">Importable Type Systems</a></li>
+<li><a class="reference internal" href="#">Using libclang</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#os-x-issues">OS X Issues</a><ul>
+<li><a class="reference internal" href="#building-llvm-clang-with-libstdc">Building LLVM/Clang with libstdc++</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 
   </div>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="mypack/xdressrc.py.html"
-                        title="previous chapter">xdressrc.py</a></p>
+  <p class="topless"><a href="advtut.html"
+                        title="previous chapter">Advanced Tutorial</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="libclang.html"
-                        title="next chapter">Using libclang</a></p>
+  <p class="topless"><a href="libref/index.html"
+                        title="next chapter">Library Reference</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="_sources/advtut.txt"
+    <li><a href="_sources/libclang.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -204,10 +207,10 @@ forthcoming.</p>
           <a href="np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="libclang.html" title="Using libclang"
+          <a href="libref/index.html" title="Library Reference"
              >next</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="mypack/xdressrc.py.html" title="xdressrc.py"
+          <a href="advtut.html" title="Advanced Tutorial"
              >previous</a> &nbsp; &nbsp;</li>
     <li><a href="index.html">xdress 0.4-dev documentation</a> &raquo;</li>
  

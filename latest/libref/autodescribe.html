@@ -904,7 +904,7 @@ node is given, we verify that they match and find argument names where we can.</
 <dl class="function">
 <dt id="xdress.autodescribe.clang_describe_template_args">
 <tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_describe_template_args</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_describe_template_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_describe_template_args" title="Permalink to this definition">¶</a></dt>
-<dd><p>TODO: Broken version handling defaults 
+<dd><p>TODO: Broken version handling defaults
 automatically:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">_</span><span class="p">,</span> <span class="n">defaults</span> <span class="o">=</span> <span class="n">clang_template_arg_info</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">specialized_template</span><span class="p">)</span>
 <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">clang_describe_template_arg</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">get_template_args</span><span class="p">()]</span>
@@ -932,7 +932,7 @@ automatically:</p>
 <dl class="function">
 <dt id="xdress.autodescribe.clang_expand_template_args">
 <tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_expand_template_args</tt><big>(</big><em>node</em>, <em>args</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_expand_template_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_expand_template_args" title="Permalink to this definition">¶</a></dt>
-<dd><p>TODO: Broken version handling defaults 
+<dd><p>TODO: Broken version handling defaults
 automatically:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">count</span><span class="p">,</span><span class="n">defaults</span> <span class="o">=</span> <span class="n">clang_template_arg_info</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="s">&#39;SP </span><span class="si">%s</span><span class="s">, COUNT </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">spelling</span><span class="p">,</span><span class="n">count</span><span class="p">,</span><span class="n">defaults</span><span class="p">,</span><span class="n">args</span><span class="p">))</span>

@@ -587,7 +587,7 @@ if(ga_enabled){
         <span class="k">if</span> <span class="n">node</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
         <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">iterfind</span><span class="p">(</span><span class="s">&#39;EnumValue&#39;</span><span class="p">):</span>
-            <span class="k">if</span>  <span class="n">child</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s">&#39;init&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">val</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s">&#39;init&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">val</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">child</span>
         <span class="k">return</span> <span class="bp">None</span>
 
@@ -1552,7 +1552,6 @@ if(ga_enabled){
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">merge</span><span class="p">(</span><span class="n">descs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">descs</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
                 <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                    <span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
                     <span class="n">pprint</span><span class="p">(</span><span class="n">descs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
                     <span class="n">pprint</span><span class="p">(</span><span class="n">descs</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;mismatch between declarations of &#39;{0}&#39; at {1} and {2}: {3}&quot;</span>
@@ -1656,7 +1655,7 @@ if(ga_enabled){
     <span class="k">return</span> <span class="n">kinds</span>
 </div>
 <div class="viewcode-block" id="clang_describe_template_args"><a class="viewcode-back" href="../../libref/autodescribe.html#xdress.autodescribe.clang_describe_template_args">[docs]</a><span class="k">def</span> <span class="nf">clang_describe_template_args</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;TODO: Broken version handling defaults </span>
+    <span class="sd">&quot;&quot;&quot;TODO: Broken version handling defaults</span>
 <span class="sd">    automatically::</span>
 
 <span class="sd">        _, defaults = clang_template_arg_info(node.specialized_template)</span>
@@ -1676,7 +1675,7 @@ if(ga_enabled){
         <span class="k">return</span> <span class="n">args</span>
 </div>
 <div class="viewcode-block" id="clang_expand_template_args"><a class="viewcode-back" href="../../libref/autodescribe.html#xdress.autodescribe.clang_expand_template_args">[docs]</a><span class="k">def</span> <span class="nf">clang_expand_template_args</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;TODO: Broken version handling defaults </span>
+    <span class="sd">&quot;&quot;&quot;TODO: Broken version handling defaults</span>
 <span class="sd">    automatically::</span>
 
 <span class="sd">        count,defaults = clang_template_arg_info(node)</span>

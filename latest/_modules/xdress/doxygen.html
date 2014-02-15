@@ -181,16 +181,16 @@ if(ga_enabled){
         <span class="kn">import</span> <span class="nn">xml.etree.cElementTree</span> <span class="kn">as</span> <span class="nn">etree</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
-          <span class="c"># Python 2.5</span>
-          <span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="kn">as</span> <span class="nn">etree</span>
+            <span class="c"># Python 2.5</span>
+            <span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="kn">as</span> <span class="nn">etree</span>
         <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="c"># normal cElementTree install</span>
                 <span class="kn">import</span> <span class="nn">cElementTree</span> <span class="kn">as</span> <span class="nn">etree</span>
             <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
-                  <span class="c"># normal ElementTree install</span>
-                  <span class="kn">import</span> <span class="nn">elementtree.ElementTree</span> <span class="kn">as</span> <span class="nn">etree</span>
+                    <span class="c"># normal ElementTree install</span>
+                    <span class="kn">import</span> <span class="nn">elementtree.ElementTree</span> <span class="kn">as</span> <span class="nn">etree</span>
                 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
                     <span class="k">pass</span>
 

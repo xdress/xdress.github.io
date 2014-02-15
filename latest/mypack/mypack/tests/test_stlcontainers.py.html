@@ -32,7 +32,7 @@
     <link rel="top" title="xdress 0.4-dev documentation" href="../../../index.html" />
     <link rel="up" title="tests" href="index.html" />
     <link rel="next" title="mypack_extra_types.pxd" href="../mypack_extra_types.pxd.html" />
-    <link rel="prev" title="tests" href="index.html" /> 
+    <link rel="prev" title="test_dtypes.py" href="test_dtypes.py.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
 if(ga_enabled){
@@ -68,7 +68,7 @@ if(ga_enabled){
           <a href="../mypack_extra_types.pxd.html" title="mypack_extra_types.pxd"
              accesskey="N">next</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="index.html" title="tests"
+          <a href="test_dtypes.py.html" title="test_dtypes.py"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
     <li><a href="../../../index.html">xdress 0.4-dev documentation</a> &raquo;</li>
 
@@ -110,23 +110,7 @@ if(ga_enabled){
 <span class="kn">from</span> <span class="nn">mypack</span> <span class="kn">import</span> <span class="n">stlcontainers</span>
 
 
-<span class="c"># VectorStr</span>
-<span class="k">def</span> <span class="nf">test_vector_str</span><span class="p">():</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s">&#39;Aha&#39;</span><span class="p">,</span> <span class="s">&#39;Take&#39;</span><span class="p">,</span> <span class="s">&#39;Me&#39;</span><span class="p">,</span> <span class="s">&#39;On&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">stlcontainers</span><span class="o">.</span><span class="n">xd_str</span><span class="p">)</span>
-    <span class="c">#for x, y in zip(a, np.array([&#39;Aha&#39;, &#39;Take&#39;, &#39;Me&#39;, &#39;On&#39;], dtype=stlcontainers.xd_str)):</span>
-    <span class="c">#    assert_equal(x, y)</span>
-    <span class="n">a</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;On&#39;</span><span class="p">,</span> <span class="s">&#39;Me&#39;</span><span class="p">,</span> <span class="s">&#39;Take&#39;</span><span class="p">,</span> <span class="s">&#39;Aha&#39;</span><span class="p">]</span>
-    <span class="c">#for x, y in zip(a, np.array([&#39;On&#39;, &#39;Me&#39;, &#39;Take&#39;, &#39;Aha&#39;], dtype=stlcontainers.xd_str)):</span>
-    <span class="c">#    assert_equal(x, y)</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s">&#39;Aha&#39;</span><span class="p">,</span> <span class="s">&#39;Me&#39;</span><span class="p">,</span> <span class="s">&#39;Aha&#39;</span><span class="p">,</span> <span class="s">&#39;Me&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s">&#39;Take&#39;</span><span class="p">,</span> <span class="s">&#39;On&#39;</span><span class="p">,</span> <span class="s">&#39;Take&#39;</span><span class="p">,</span> <span class="s">&#39;On&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">stlcontainers</span><span class="o">.</span><span class="n">xd_str</span><span class="p">)</span>
-    <span class="c">#for x, y in zip(a, np.array([&#39;Aha&#39;, &#39;Me&#39;, &#39;Aha&#39;, &#39;Me&#39;] + [&#39;Take&#39;, &#39;On&#39;, &#39;Take&#39;, &#39;On&#39;], dtype=stlcontainers.xd_str)):</span>
-    <span class="c">#    assert_equal(x, y)</span>
-    <span class="n">b</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="s">&#39;Aha&#39;</span><span class="p">,</span> <span class="s">&#39;Me&#39;</span><span class="p">,</span> <span class="s">&#39;Aha&#39;</span><span class="p">,</span> <span class="s">&#39;Me&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s">&#39;Take&#39;</span><span class="p">,</span> <span class="s">&#39;On&#39;</span><span class="p">,</span> <span class="s">&#39;Take&#39;</span><span class="p">,</span> <span class="s">&#39;On&#39;</span><span class="p">])[::</span><span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">stlcontainers</span><span class="o">.</span><span class="n">xd_str</span><span class="p">)</span>
-    <span class="c">#for x, y in zip(a[::2], b):</span>
-    <span class="c">#    assert_equal(x, y)</span>
-    <span class="n">a</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-
+<span class="c"># Vector Str</span>
 
 
 <span class="c"># SetUInt</span>
@@ -213,8 +197,8 @@ if(ga_enabled){
           <img class="logo" src="../../../_static/HooverJoven.jpg" alt="Logo"/>
         </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">tests</a></p>
+  <p class="topless"><a href="test_dtypes.py.html"
+                        title="previous chapter">test_dtypes.py</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="../mypack_extra_types.pxd.html"
                         title="next chapter">mypack_extra_types.pxd</a></p>
@@ -258,7 +242,7 @@ if(ga_enabled){
           <a href="../mypack_extra_types.pxd.html" title="mypack_extra_types.pxd"
              >next</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="index.html" title="tests"
+          <a href="test_dtypes.py.html" title="test_dtypes.py"
              >previous</a> &nbsp; &nbsp;</li>
     <li><a href="../../../index.html">xdress 0.4-dev documentation</a> &raquo;</li>
 

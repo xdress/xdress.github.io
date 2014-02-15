@@ -152,10 +152,10 @@ attributes dictionary (_dict).</p>
 <dl class="class">
 <dt id="xdress.utils.apiname">
 <em class="property">class </em><tt class="descclassname">xdress.utils.</tt><tt class="descname">apiname</tt><a class="reference internal" href="../_modules/xdress/utils.html#apiname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.utils.apiname" title="Permalink to this definition">¶</a></dt>
-<dd><p>This is a type, based on a named tuple, that represents the API element 
-names and is used to declare or discover where variables, functions, and 
-classes live for the rest of xdress.  All of the fields default to 
-NotSpecified if not given.  These feilds are the sames as what appear in 
+<dd><p>This is a type, based on a named tuple, that represents the API element
+names and is used to declare or discover where variables, functions, and
+classes live for the rest of xdress.  All of the fields default to
+NotSpecified if not given.  These feilds are the sames as what appear in
 description dictionaries under the &#8216;name&#8217; key.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -168,44 +168,44 @@ description dictionaries under the &#8216;name&#8217; key.</p>
 <p><strong>srcfiles</strong> : str, tuple of str, or NotSpecified</p>
 <blockquote>
 <div><p>This is a sequence of unique strings which represents the file paths where
-the API element <em>may</em> be defined. For example, (&#8216;myfile.c&#8217;, &#8216;myfile.h&#8217;).  
-If the element is defined outside of these files, then the automatic 
+the API element <em>may</em> be defined. For example, (&#8216;myfile.c&#8217;, &#8216;myfile.h&#8217;).
+If the element is defined outside of these files, then the automatic
 discovery or description may fail. When using ensure_apiname(), all strings
-are automatically globbed, so &#8216;src/myfile.*&#8217; will be converted to 
-(&#8216;src/myfile.c&#8217;, &#8216;src/myfile.h&#8217;).  Since these files are parsed they must 
+are automatically globbed, so &#8216;src/myfile.*&#8217; will be converted to
+(&#8216;src/myfile.c&#8217;, &#8216;src/myfile.h&#8217;).  Since these files are parsed they must
 actually exist on the filesystem.</p>
 </div></blockquote>
 <p><strong>tarbase</strong> : str or NotSpecified</p>
 <blockquote>
-<div><p>The base portion of all automatically generated (target) files. This does 
-not include the directory or the file extension.  For example, if you 
+<div><p>The base portion of all automatically generated (target) files. This does
+not include the directory or the file extension.  For example, if you
 wanted cythongen to create a file name &#8216;mynewfile.pyx&#8217; then the value here
 would be simply &#8216;mynewfile&#8217;.</p>
 </div></blockquote>
 <p><strong>tarname</strong> : str, tuple, or NotSpecified</p>
 <blockquote>
-<div><p>The element&#8217;s API name in the automatically generated (target) files, 
+<div><p>The element&#8217;s API name in the automatically generated (target) files,
 e.g. MyNewClass.</p>
 </div></blockquote>
 <p><strong>incfiles</strong> : tuple of str or NotSpecified</p>
 <blockquote>
-<div><p>This is a sequence of all files which must be #include&#8217;d to access the 
-srcname at compile time.  This should be as minimal of a set as possible, 
-preferably only one file.  For example even though most HDF5 API 
-declarations are split across multiple files, to use the public API you 
-only ever need to include &#8216;hdf5.h&#8217;. Because these files are not parsed they 
-do not need to exist for xdress to run.  Thus the strings in incfiles are 
+<div><p>This is a sequence of all files which must be #include&#8217;d to access the
+srcname at compile time.  This should be as minimal of a set as possible,
+preferably only one file.  For example even though most HDF5 API
+declarations are split across multiple files, to use the public API you
+only ever need to include &#8216;hdf5.h&#8217;. Because these files are not parsed they
+do not need to exist for xdress to run.  Thus the strings in incfiles are
 not globbed.</p>
 </div></blockquote>
 <p><strong>sidecars</strong> : str, tuple of str, or NotSpecified</p>
 <blockquote>
 <div><p>This is a sequence of all sidecar files to use for this API element. Like
-srcfiles, these files must exist for xdress to run.  They similarly 
+srcfiles, these files must exist for xdress to run.  They similarly
 globbed.  For example, &#8216;myfile.py&#8217;.</p>
 </div></blockquote>
 <p><strong>language</strong> : str or NotSpecified</p>
 <blockquote class="last">
-<div><p>Flag for the language that the srcfiles are implemented in. Valid options 
+<div><p>Flag for the language that the srcfiles are implemented in. Valid options
 are: &#8216;c&#8217;, &#8216;c++&#8217;, &#8216;f&#8217;, &#8216;fortran&#8217;, &#8216;f77&#8217;, &#8216;f90&#8217;, &#8216;python&#8217;, and &#8216;cython&#8217;.</p>
 </div></blockquote>
 </td>

@@ -354,22 +354,22 @@ if(ga_enabled){
     <span class="sd">&quot;&quot;&quot;A class representing a type system.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">datafields</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="s">&#39;base_types&#39;</span><span class="p">,</span> <span class="s">&#39;template_types&#39;</span><span class="p">,</span> <span class="s">&#39;refined_types&#39;</span><span class="p">,</span> <span class="s">&#39;humannames&#39;</span><span class="p">,</span> 
-        <span class="s">&#39;extra_types&#39;</span><span class="p">,</span> <span class="s">&#39;dtypes&#39;</span><span class="p">,</span> <span class="s">&#39;stlcontainers&#39;</span><span class="p">,</span> <span class="s">&#39;argument_kinds&#39;</span><span class="p">,</span> 
-        <span class="s">&#39;variable_namespace&#39;</span><span class="p">,</span> <span class="s">&#39;type_aliases&#39;</span><span class="p">,</span> <span class="s">&#39;cpp_types&#39;</span><span class="p">,</span> 
-        <span class="s">&#39;numpy_types&#39;</span><span class="p">,</span> <span class="s">&#39;from_pytypes&#39;</span><span class="p">,</span> <span class="s">&#39;cython_ctypes&#39;</span><span class="p">,</span> <span class="s">&#39;cython_cytypes&#39;</span><span class="p">,</span> 
-        <span class="s">&#39;cython_pytypes&#39;</span><span class="p">,</span> <span class="s">&#39;cython_cimports&#39;</span><span class="p">,</span> <span class="s">&#39;cython_cyimports&#39;</span><span class="p">,</span> <span class="s">&#39;cython_pyimports&#39;</span><span class="p">,</span> 
-        <span class="s">&#39;cython_functionnames&#39;</span><span class="p">,</span> <span class="s">&#39;cython_classnames&#39;</span><span class="p">,</span> <span class="s">&#39;cython_c2py_conv&#39;</span><span class="p">,</span> 
+    <span class="n">datafields</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="s">&#39;base_types&#39;</span><span class="p">,</span> <span class="s">&#39;template_types&#39;</span><span class="p">,</span> <span class="s">&#39;refined_types&#39;</span><span class="p">,</span> <span class="s">&#39;humannames&#39;</span><span class="p">,</span>
+        <span class="s">&#39;extra_types&#39;</span><span class="p">,</span> <span class="s">&#39;dtypes&#39;</span><span class="p">,</span> <span class="s">&#39;stlcontainers&#39;</span><span class="p">,</span> <span class="s">&#39;argument_kinds&#39;</span><span class="p">,</span>
+        <span class="s">&#39;variable_namespace&#39;</span><span class="p">,</span> <span class="s">&#39;type_aliases&#39;</span><span class="p">,</span> <span class="s">&#39;cpp_types&#39;</span><span class="p">,</span>
+        <span class="s">&#39;numpy_types&#39;</span><span class="p">,</span> <span class="s">&#39;from_pytypes&#39;</span><span class="p">,</span> <span class="s">&#39;cython_ctypes&#39;</span><span class="p">,</span> <span class="s">&#39;cython_cytypes&#39;</span><span class="p">,</span>
+        <span class="s">&#39;cython_pytypes&#39;</span><span class="p">,</span> <span class="s">&#39;cython_cimports&#39;</span><span class="p">,</span> <span class="s">&#39;cython_cyimports&#39;</span><span class="p">,</span> <span class="s">&#39;cython_pyimports&#39;</span><span class="p">,</span>
+        <span class="s">&#39;cython_functionnames&#39;</span><span class="p">,</span> <span class="s">&#39;cython_classnames&#39;</span><span class="p">,</span> <span class="s">&#39;cython_c2py_conv&#39;</span><span class="p">,</span>
         <span class="s">&#39;cython_py2c_conv&#39;</span><span class="p">])</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_types</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">template_types</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">refined_types</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> 
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_types</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">template_types</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">refined_types</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                  <span class="n">humannames</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">extra_types</span><span class="o">=</span><span class="s">&#39;xdress_extra_types&#39;</span><span class="p">,</span> <span class="n">dtypes</span><span class="o">=</span><span class="s">&#39;dtypes&#39;</span><span class="p">,</span>
-                 <span class="n">stlcontainers</span><span class="o">=</span><span class="s">&#39;stlcontainers&#39;</span><span class="p">,</span> <span class="n">argument_kinds</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> 
-                 <span class="n">variable_namespace</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">type_aliases</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cpp_types</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> 
-                 <span class="n">numpy_types</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">from_pytypes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cython_ctypes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> 
-                 <span class="n">cython_cytypes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cython_pytypes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cython_cimports</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> 
-                 <span class="n">cython_cyimports</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cython_pyimports</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> 
-                 <span class="n">cython_functionnames</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cython_classnames</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> 
+                 <span class="n">stlcontainers</span><span class="o">=</span><span class="s">&#39;stlcontainers&#39;</span><span class="p">,</span> <span class="n">argument_kinds</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">variable_namespace</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">type_aliases</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cpp_types</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">numpy_types</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">from_pytypes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cython_ctypes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">cython_cytypes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cython_pytypes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cython_cimports</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">cython_cyimports</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cython_pyimports</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">cython_functionnames</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cython_classnames</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                  <span class="n">cython_c2py_conv</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cython_py2c_conv</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">typestring</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Parameters</span>
 <span class="sd">        ----------</span>
@@ -378,7 +378,7 @@ if(ga_enabled){
 <span class="sd">        template_types : dict, optional</span>
 <span class="sd">            Template types are types whose instantiations are based on meta-types.</span>
 <span class="sd">            this dict maps their names to meta-type names in order.</span>
-<span class="sd">        refined_types : dict, optional </span>
+<span class="sd">        refined_types : dict, optional</span>
 <span class="sd">            This is a mapping from refinement type names to the parent types.</span>
 <span class="sd">            The parent types may either be base types, compound types, template</span>
 <span class="sd">            types, or other refined types!</span>
@@ -391,13 +391,13 @@ if(ga_enabled){
 <span class="sd">        stlcontainers : str, optional</span>
 <span class="sd">            The name of the xdress C++ standard library containers wrapper module.</span>
 <span class="sd">        argument_kinds : dict, optional</span>
-<span class="sd">            Templates types have arguments. This is a mapping from type name to a </span>
+<span class="sd">            Templates types have arguments. This is a mapping from type name to a</span>
 <span class="sd">            tuple of utils.Arg kind flags.  The order in the tuple matches the value</span>
-<span class="sd">            in template_types. This is only vaid for concrete types, ie </span>
+<span class="sd">            in template_types. This is only vaid for concrete types, ie</span>
 <span class="sd">            (&#39;vector&#39;, &#39;int&#39;, 0) and not just &#39;vector&#39;.</span>
 <span class="sd">        variable_namespace : dict, optional</span>
-<span class="sd">            Templates arguments may be variables. These variables may live in a </span>
-<span class="sd">            namespace which is required for specifiying the type.  This is a </span>
+<span class="sd">            Templates arguments may be variables. These variables may live in a</span>
+<span class="sd">            namespace which is required for specifiying the type.  This is a</span>
 <span class="sd">            dictionary mapping variable names to thier namespace.</span>
 <span class="sd">        type_aliases : dict, optional</span>
 <span class="sd">            Aliases that may be used to substitute one type name for another.</span>
@@ -423,14 +423,14 @@ if(ga_enabled){
 <span class="sd">            A sequence of tuples representing imports that are needed for Cython</span>
 <span class="sd">            to represent Python types.</span>
 <span class="sd">        cython_functionnames : dict, optional</span>
-<span class="sd">            Cython alternate name fragments used for mangling function and </span>
+<span class="sd">            Cython alternate name fragments used for mangling function and</span>
 <span class="sd">            variable names.  These should try to adhere to a lowercase_and_underscore</span>
-<span class="sd">            convention.  These may contain template argument namess as part of a </span>
+<span class="sd">            convention.  These may contain template argument namess as part of a</span>
 <span class="sd">            format string, ie ``{&#39;map&#39;: &#39;map_{key_type}_{value_type}&#39;}``.</span>
 <span class="sd">        cython_classnames : dict, optional</span>
-<span class="sd">            Cython alternate name fragments used for mangling class names.  </span>
-<span class="sd">            These should try to adhere to a CapCase convention.  These may contain </span>
-<span class="sd">            template argument namess as part of a format string, </span>
+<span class="sd">            Cython alternate name fragments used for mangling class names.</span>
+<span class="sd">            These should try to adhere to a CapCase convention.  These may contain</span>
+<span class="sd">            template argument namess as part of a format string,</span>
 <span class="sd">            ie ``{&#39;map&#39;: &#39;Map{key_type}{value_type}&#39;}``.</span>
 <span class="sd">        cython_c2py_conv : dict, optional</span>
 <span class="sd">            Cython convertors from C/C++ types to the representative Python types.</span>
@@ -441,9 +441,9 @@ if(ga_enabled){
 <span class="sd">            An type that is used to format types to strings in conversion routines.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">base_types</span> <span class="o">=</span> <span class="n">base_types</span> <span class="k">if</span> <span class="n">base_types</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="nb">set</span><span class="p">([</span><span class="s">&#39;char&#39;</span><span class="p">,</span> 
-            <span class="s">&#39;uchar&#39;</span><span class="p">,</span> <span class="s">&#39;str&#39;</span><span class="p">,</span> <span class="s">&#39;int16&#39;</span><span class="p">,</span> <span class="s">&#39;int32&#39;</span><span class="p">,</span> <span class="s">&#39;int64&#39;</span><span class="p">,</span> <span class="s">&#39;int128&#39;</span><span class="p">,</span> <span class="s">&#39;uint16&#39;</span><span class="p">,</span> <span class="s">&#39;uint32&#39;</span><span class="p">,</span> 
-            <span class="s">&#39;uint64&#39;</span><span class="p">,</span> <span class="s">&#39;uint128&#39;</span><span class="p">,</span> <span class="s">&#39;float32&#39;</span><span class="p">,</span> <span class="s">&#39;float64&#39;</span><span class="p">,</span> <span class="s">&#39;float128&#39;</span><span class="p">,</span> <span class="s">&#39;complex128&#39;</span><span class="p">,</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_types</span> <span class="o">=</span> <span class="n">base_types</span> <span class="k">if</span> <span class="n">base_types</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="nb">set</span><span class="p">([</span><span class="s">&#39;char&#39;</span><span class="p">,</span>
+            <span class="s">&#39;uchar&#39;</span><span class="p">,</span> <span class="s">&#39;str&#39;</span><span class="p">,</span> <span class="s">&#39;int16&#39;</span><span class="p">,</span> <span class="s">&#39;int32&#39;</span><span class="p">,</span> <span class="s">&#39;int64&#39;</span><span class="p">,</span> <span class="s">&#39;int128&#39;</span><span class="p">,</span> <span class="s">&#39;uint16&#39;</span><span class="p">,</span> <span class="s">&#39;uint32&#39;</span><span class="p">,</span>
+            <span class="s">&#39;uint64&#39;</span><span class="p">,</span> <span class="s">&#39;uint128&#39;</span><span class="p">,</span> <span class="s">&#39;float32&#39;</span><span class="p">,</span> <span class="s">&#39;float64&#39;</span><span class="p">,</span> <span class="s">&#39;float128&#39;</span><span class="p">,</span> <span class="s">&#39;complex128&#39;</span><span class="p">,</span>
             <span class="s">&#39;void&#39;</span><span class="p">,</span> <span class="s">&#39;bool&#39;</span><span class="p">,</span> <span class="s">&#39;type&#39;</span><span class="p">,</span> <span class="s">&#39;file&#39;</span><span class="p">,</span> <span class="s">&#39;exception&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">template_types</span> <span class="o">=</span> <span class="n">template_types</span> <span class="k">if</span> <span class="n">template_types</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="p">{</span>
             <span class="s">&#39;map&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;key_type&#39;</span><span class="p">,</span> <span class="s">&#39;value_type&#39;</span><span class="p">),</span>
@@ -460,7 +460,7 @@ if(ga_enabled){
         <span class="bp">self</span><span class="o">.</span><span class="n">refined_types</span> <span class="o">=</span> <span class="n">refined_types</span> <span class="k">if</span> <span class="n">refined_types</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="p">{</span>
             <span class="s">&#39;nucid&#39;</span><span class="p">:</span> <span class="s">&#39;int32&#39;</span><span class="p">,</span>
             <span class="s">&#39;nucname&#39;</span><span class="p">:</span> <span class="s">&#39;str&#39;</span><span class="p">,</span>
-            <span class="p">(</span><span class="s">&#39;enum&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;str&#39;</span><span class="p">),</span> 
+            <span class="p">(</span><span class="s">&#39;enum&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;str&#39;</span><span class="p">),</span>
                      <span class="p">(</span><span class="s">&#39;aliases&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;dict&#39;</span><span class="p">,</span> <span class="s">&#39;str&#39;</span><span class="p">,</span> <span class="s">&#39;int32&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))):</span> <span class="s">&#39;int32&#39;</span><span class="p">,</span>
             <span class="p">(</span><span class="s">&#39;function&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;arguments&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;list&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;pair&#39;</span><span class="p">,</span> <span class="s">&#39;str&#39;</span><span class="p">,</span> <span class="s">&#39;type&#39;</span><span class="p">))),</span>
                          <span class="p">(</span><span class="s">&#39;returns&#39;</span><span class="p">,</span> <span class="s">&#39;type&#39;</span><span class="p">)):</span> <span class="s">&#39;void&#39;</span><span class="p">,</span>
@@ -590,7 +590,7 @@ if(ga_enabled){
             <span class="s">&#39;float128&#39;</span><span class="p">:</span> <span class="s">&#39;long double&#39;</span><span class="p">,</span>
             <span class="s">&#39;complex128&#39;</span><span class="p">:</span> <span class="s">&#39;{extra_types}complex_t&#39;</span><span class="p">,</span>
             <span class="s">&#39;bool&#39;</span><span class="p">:</span> <span class="s">&#39;bool&#39;</span><span class="p">,</span>
-            <span class="s">&#39;void&#39;</span><span class="p">:</span> <span class="s">&#39;void&#39;</span><span class="p">,</span> 
+            <span class="s">&#39;void&#39;</span><span class="p">:</span> <span class="s">&#39;void&#39;</span><span class="p">,</span>
             <span class="s">&#39;file&#39;</span><span class="p">:</span> <span class="s">&#39;FILE&#39;</span><span class="p">,</span>
             <span class="s">&#39;exception&#39;</span><span class="p">:</span> <span class="s">&#39;{extra_types}exception&#39;</span><span class="p">,</span>
             <span class="s">&#39;map&#39;</span><span class="p">:</span> <span class="s">&#39;std::map&#39;</span><span class="p">,</span>
@@ -676,7 +676,7 @@ if(ga_enabled){
             <span class="s">&#39;float64&#39;</span><span class="p">:</span> <span class="s">&#39;double&#39;</span><span class="p">,</span>
             <span class="s">&#39;float128&#39;</span><span class="p">:</span> <span class="s">&#39;{extra_types}float128&#39;</span><span class="p">,</span>
             <span class="s">&#39;complex128&#39;</span><span class="p">:</span> <span class="s">&#39;{extra_types}complex_t&#39;</span><span class="p">,</span>
-            <span class="s">&#39;bool&#39;</span><span class="p">:</span> <span class="s">&#39;bint&#39;</span><span class="p">,</span>
+            <span class="s">&#39;bool&#39;</span><span class="p">:</span> <span class="s">&#39;cpp_bool&#39;</span><span class="p">,</span>
             <span class="s">&#39;void&#39;</span><span class="p">:</span> <span class="s">&#39;void&#39;</span><span class="p">,</span>
             <span class="s">&#39;file&#39;</span><span class="p">:</span> <span class="s">&#39;c_file&#39;</span><span class="p">,</span>
             <span class="s">&#39;exception&#39;</span><span class="p">:</span> <span class="s">&#39;{extra_types}exception&#39;</span><span class="p">,</span>
@@ -705,7 +705,7 @@ if(ga_enabled){
             <span class="s">&#39;float64&#39;</span><span class="p">:</span> <span class="s">&#39;float&#39;</span><span class="p">,</span>
             <span class="s">&#39;float128&#39;</span><span class="p">:</span> <span class="s">&#39;long double&#39;</span><span class="p">,</span>
             <span class="s">&#39;complex128&#39;</span><span class="p">:</span> <span class="s">&#39;object&#39;</span><span class="p">,</span>
-            <span class="s">&#39;bool&#39;</span><span class="p">:</span> <span class="s">&#39;bint&#39;</span><span class="p">,</span>
+            <span class="s">&#39;bool&#39;</span><span class="p">:</span> <span class="s">&#39;bool&#39;</span><span class="p">,</span>
             <span class="s">&#39;void&#39;</span><span class="p">:</span> <span class="s">&#39;void&#39;</span><span class="p">,</span>
             <span class="s">&#39;file&#39;</span><span class="p">:</span> <span class="s">&#39;c_file&#39;</span><span class="p">,</span>
             <span class="s">&#39;exception&#39;</span><span class="p">:</span> <span class="s">&#39;{extra_types}exception&#39;</span><span class="p">,</span>
@@ -766,7 +766,7 @@ if(ga_enabled){
             <span class="s">&#39;float64&#39;</span><span class="p">:</span> <span class="p">(</span><span class="bp">None</span><span class="p">,),</span>
             <span class="s">&#39;float128&#39;</span><span class="p">:</span>  <span class="p">((</span><span class="s">&#39;{extra_types}&#39;</span><span class="p">,),),</span>
             <span class="s">&#39;complex128&#39;</span><span class="p">:</span> <span class="p">((</span><span class="s">&#39;{extra_types}&#39;</span><span class="p">,),),</span>
-            <span class="s">&#39;bool&#39;</span><span class="p">:</span> <span class="p">(</span><span class="bp">None</span><span class="p">,),</span>
+            <span class="s">&#39;bool&#39;</span><span class="p">:</span> <span class="p">((</span><span class="s">&#39;libcpp&#39;</span><span class="p">,</span> <span class="s">&#39;bool&#39;</span><span class="p">,</span> <span class="s">&#39;cpp_bool&#39;</span><span class="p">),),</span>
             <span class="s">&#39;void&#39;</span><span class="p">:</span> <span class="p">(</span><span class="bp">None</span><span class="p">,),</span>
             <span class="s">&#39;file&#39;</span><span class="p">:</span> <span class="p">((</span><span class="s">&#39;libc.stdio&#39;</span><span class="p">,</span> <span class="s">&#39;FILE&#39;</span><span class="p">,</span> <span class="s">&#39;c_file&#39;</span><span class="p">),),</span>
             <span class="s">&#39;exception&#39;</span><span class="p">:</span> <span class="p">((</span><span class="s">&#39;{extra_types}&#39;</span><span class="p">,),),</span>
@@ -776,7 +776,7 @@ if(ga_enabled){
             <span class="s">&#39;set&#39;</span><span class="p">:</span> <span class="p">((</span><span class="s">&#39;libcpp.set&#39;</span><span class="p">,</span> <span class="s">&#39;set&#39;</span><span class="p">,</span> <span class="s">&#39;cpp_set&#39;</span><span class="p">),),</span>
             <span class="s">&#39;vector&#39;</span><span class="p">:</span> <span class="p">((</span><span class="s">&#39;libcpp.vector&#39;</span><span class="p">,</span> <span class="s">&#39;vector&#39;</span><span class="p">,</span> <span class="s">&#39;cpp_vector&#39;</span><span class="p">),),</span>
             <span class="s">&#39;nucid&#39;</span><span class="p">:</span> <span class="p">((</span><span class="s">&#39;pyne&#39;</span><span class="p">,</span> <span class="s">&#39;cpp_nucname&#39;</span><span class="p">),),</span>
-            <span class="s">&#39;nucname&#39;</span><span class="p">:</span> <span class="p">((</span><span class="s">&#39;pyne&#39;</span><span class="p">,</span> <span class="s">&#39;cpp_nucname&#39;</span><span class="p">),</span> 
+            <span class="s">&#39;nucname&#39;</span><span class="p">:</span> <span class="p">((</span><span class="s">&#39;pyne&#39;</span><span class="p">,</span> <span class="s">&#39;cpp_nucname&#39;</span><span class="p">),</span>
                         <span class="p">(</span><span class="s">&#39;libcpp.string&#39;</span><span class="p">,</span> <span class="s">&#39;string&#39;</span><span class="p">,</span> <span class="s">&#39;std_string&#39;</span><span class="p">)),</span>
             <span class="s">&#39;function&#39;</span><span class="p">:</span> <span class="n">cython_cimports_functionish</span><span class="p">,</span>
             <span class="s">&#39;function_pointer&#39;</span><span class="p">:</span> <span class="n">cython_cimports_functionish</span><span class="p">,</span>
@@ -936,14 +936,14 @@ if(ga_enabled){
                 <span class="n">rtnprox</span> <span class="o">+=</span> <span class="s">&#39;_&#39;</span>
             <span class="n">argdecls</span> <span class="o">=</span> <span class="n">indent</span><span class="p">(</span><span class="n">argdecls</span><span class="p">)</span>
             <span class="n">argbodys</span> <span class="o">=</span> <span class="n">indent</span><span class="p">(</span><span class="n">argbodys</span><span class="p">)</span>
-            <span class="n">rtndecl</span><span class="p">,</span> <span class="n">rtnbody</span><span class="p">,</span> <span class="n">rtnrtn</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">cython_c2py</span><span class="p">(</span><span class="n">rtncall</span><span class="p">,</span> <span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> 
+            <span class="n">rtndecl</span><span class="p">,</span> <span class="n">rtnbody</span><span class="p">,</span> <span class="n">rtnrtn</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">cython_c2py</span><span class="p">(</span><span class="n">rtncall</span><span class="p">,</span> <span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span>
                 <span class="n">cached</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">proxy_name</span><span class="o">=</span><span class="n">rtnprox</span><span class="p">,</span> <span class="n">existing_name</span><span class="o">=</span><span class="n">rtncall</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">rtndecl</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">rtnbody</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
                 <span class="n">rtnprox</span> <span class="o">=</span> <span class="n">rtnname</span>
             <span class="n">rtndecls</span> <span class="o">=</span> <span class="p">[</span><span class="n">rtndecl</span><span class="p">]</span>
             <span class="n">returns_void</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;void&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">returns_void</span><span class="p">:</span>
-                 <span class="n">rtndecls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;cdef {0} {1}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">cython_ctype</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]),</span> 
+                <span class="n">rtndecls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;cdef {0} {1}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">cython_ctype</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]),</span>
                                                        <span class="n">rtncall</span><span class="p">))</span>
             <span class="n">rtndecl</span> <span class="o">=</span> <span class="n">indent</span><span class="p">(</span><span class="n">rtndecls</span><span class="p">)</span>
             <span class="n">rtnbody</span> <span class="o">=</span> <span class="n">indent</span><span class="p">(</span><span class="n">rtnbody</span><span class="p">)</span>
@@ -959,7 +959,7 @@ if(ga_enabled){
             <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;{rtnbody}</span><span class="se">\n</span><span class="s">&#39;</span>
             <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">arglist</span><span class="o">=</span><span class="s">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">argnames</span><span class="p">),</span> <span class="n">argdecls</span><span class="o">=</span><span class="n">argdecls</span><span class="p">,</span>
                          <span class="n">cvartypeptr</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">cython_ctype</span><span class="p">(</span><span class="n">t_</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">type_name</span><span class="o">=</span><span class="s">&#39;cvartype&#39;</span><span class="p">),</span>
-                         <span class="n">argbodys</span><span class="o">=</span><span class="n">argbodys</span><span class="p">,</span> <span class="n">rtndecl</span><span class="o">=</span><span class="n">rtndecl</span><span class="p">,</span> <span class="n">rtnprox</span><span class="o">=</span><span class="n">rtnprox</span><span class="p">,</span> 
+                         <span class="n">argbodys</span><span class="o">=</span><span class="n">argbodys</span><span class="p">,</span> <span class="n">rtndecl</span><span class="o">=</span><span class="n">rtndecl</span><span class="p">,</span> <span class="n">rtnprox</span><span class="o">=</span><span class="n">rtnprox</span><span class="p">,</span>
                          <span class="n">rtncall</span><span class="o">=</span><span class="n">rtncall</span><span class="p">,</span> <span class="n">carglist</span><span class="o">=</span><span class="s">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">argrtns</span><span class="p">),</span> <span class="n">rtnbody</span><span class="o">=</span><span class="n">rtnbody</span><span class="p">)</span>
             <span class="n">caches</span> <span class="o">=</span> <span class="s">&#39;if {cache_name} is None:</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">indent</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">returns_void</span><span class="p">:</span>
@@ -1090,7 +1090,7 @@ if(ga_enabled){
             <span class="n">TypeMatcher</span><span class="p">(((</span><span class="s">&#39;enum&#39;</span><span class="p">,</span> <span class="n">MatchAny</span><span class="p">,</span> <span class="n">MatchAny</span><span class="p">),</span> <span class="s">&#39;*&#39;</span><span class="p">)):</span> <span class="p">(</span><span class="s">&#39;int({var}[0])&#39;</span><span class="p">,),</span>
             <span class="n">TypeMatcher</span><span class="p">(((</span><span class="s">&#39;int32&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;enum&#39;</span><span class="p">,</span> <span class="n">MatchAny</span><span class="p">,</span> <span class="n">MatchAny</span><span class="p">)),</span> <span class="s">&#39;*&#39;</span><span class="p">)):</span> \
                                                                 <span class="p">(</span><span class="s">&#39;int({var}[0])&#39;</span><span class="p">,),</span>
-            <span class="c"># Strip const when going c -&gt; py </span>
+            <span class="c"># Strip const when going c -&gt; py</span>
             <span class="n">TypeMatcher</span><span class="p">((</span><span class="n">MatchAny</span><span class="p">,</span> <span class="s">&#39;const&#39;</span><span class="p">)):</span> <span class="p">(</span>
                 <span class="k">lambda</span> <span class="n">t</span><span class="p">,</span> <span class="n">ts</span><span class="p">:</span> <span class="n">ts</span><span class="o">.</span><span class="n">cython_c2py_getitem</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">])),</span>
             <span class="n">TypeMatcher</span><span class="p">(((</span><span class="n">MatchAny</span><span class="p">,</span> <span class="s">&#39;const&#39;</span><span class="p">),</span> <span class="s">&#39;&amp;&#39;</span><span class="p">))</span> <span class="p">:</span> <span class="p">(</span>
@@ -1126,7 +1126,7 @@ if(ga_enabled){
             <span class="n">argrtns</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">argt</span> <span class="ow">in</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]:</span>
                 <span class="n">argnames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-                <span class="n">decl</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">rtn</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">cython_c2py</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">argt</span><span class="p">,</span> <span class="n">proxy_name</span><span class="o">=</span><span class="s">&quot;c_&quot;</span> <span class="o">+</span> <span class="n">n</span><span class="p">,</span> 
+                <span class="n">decl</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">rtn</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">cython_c2py</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">argt</span><span class="p">,</span> <span class="n">proxy_name</span><span class="o">=</span><span class="s">&quot;c_&quot;</span> <span class="o">+</span> <span class="n">n</span><span class="p">,</span>
                                                     <span class="n">cached</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
                 <span class="n">argdecls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">decl</span><span class="p">)</span>
                 <span class="c">#argdecls.append(&quot;cdef {0} {1}&quot;.format(cython_pytype(argt), &quot;c_&quot; + n))</span>
@@ -1145,7 +1145,7 @@ if(ga_enabled){
             <span class="n">argbodys</span> <span class="o">=</span> <span class="n">indent</span><span class="p">(</span><span class="n">argbodys</span><span class="p">)</span>
             <span class="c">#rtndecl, rtnbody, rtnrtn = cython_py2c(rtnname, t[2][2], proxy_name=rtnprox)</span>
             <span class="c">#rtndecl, rtnbody, rtnrtn = cython_py2c(rtnname, t[2][2], proxy_name=rtncall)</span>
-            <span class="n">rtndecl</span><span class="p">,</span> <span class="n">rtnbody</span><span class="p">,</span> <span class="n">rtnrtn</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">cython_py2c</span><span class="p">(</span><span class="n">rtncall</span><span class="p">,</span> <span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> 
+            <span class="n">rtndecl</span><span class="p">,</span> <span class="n">rtnbody</span><span class="p">,</span> <span class="n">rtnrtn</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">cython_py2c</span><span class="p">(</span><span class="n">rtncall</span><span class="p">,</span> <span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span>
                                                       <span class="n">proxy_name</span><span class="o">=</span><span class="n">rtnprox</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">rtndecl</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">rtnbody</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
                 <span class="n">rtnprox</span> <span class="o">=</span> <span class="n">rtnname</span>
@@ -1165,9 +1165,9 @@ if(ga_enabled){
                   <span class="s">&#39;    return {rtnrtn}</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
             <span class="n">arglist</span> <span class="o">=</span> <span class="s">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&quot;{0} {1}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">argcts</span><span class="p">,</span> <span class="n">argnames</span><span class="p">)])</span>
             <span class="n">pyarglist</span><span class="o">=</span><span class="s">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">argrtns</span><span class="p">)</span>
-            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rtnct</span><span class="o">=</span><span class="n">rtnct</span><span class="p">,</span> <span class="n">arglist</span><span class="o">=</span><span class="n">arglist</span><span class="p">,</span> <span class="n">argdecls</span><span class="o">=</span><span class="n">argdecls</span><span class="p">,</span> 
-                         <span class="n">rtndecl</span><span class="o">=</span><span class="n">rtndecl</span><span class="p">,</span> <span class="n">argbodys</span><span class="o">=</span><span class="n">argbodys</span><span class="p">,</span> <span class="n">rtnprox</span><span class="o">=</span><span class="n">rtnprox</span><span class="p">,</span> 
-                         <span class="n">pyarglist</span><span class="o">=</span><span class="n">pyarglist</span><span class="p">,</span> <span class="n">rtnbody</span><span class="o">=</span><span class="n">rtnbody</span><span class="p">,</span> <span class="n">rtnrtn</span><span class="o">=</span><span class="n">rtnrtn</span><span class="p">,</span> 
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rtnct</span><span class="o">=</span><span class="n">rtnct</span><span class="p">,</span> <span class="n">arglist</span><span class="o">=</span><span class="n">arglist</span><span class="p">,</span> <span class="n">argdecls</span><span class="o">=</span><span class="n">argdecls</span><span class="p">,</span>
+                         <span class="n">rtndecl</span><span class="o">=</span><span class="n">rtndecl</span><span class="p">,</span> <span class="n">argbodys</span><span class="o">=</span><span class="n">argbodys</span><span class="p">,</span> <span class="n">rtnprox</span><span class="o">=</span><span class="n">rtnprox</span><span class="p">,</span>
+                         <span class="n">pyarglist</span><span class="o">=</span><span class="n">pyarglist</span><span class="p">,</span> <span class="n">rtnbody</span><span class="o">=</span><span class="n">rtnbody</span><span class="p">,</span> <span class="n">rtnrtn</span><span class="o">=</span><span class="n">rtnrtn</span><span class="p">,</span>
                          <span class="n">rtncall</span><span class="o">=</span><span class="n">rtncall</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">s</span><span class="p">,</span> <span class="bp">False</span>
 
@@ -1180,7 +1180,7 @@ if(ga_enabled){
             <span class="p">((</span><span class="s">&#39;char&#39;</span><span class="p">,</span> <span class="s">&#39;*&#39;</span><span class="p">),</span> <span class="s">&#39;*&#39;</span><span class="p">):</span> <span class="p">(</span><span class="s">&#39;cdef char * {var}_bytes_</span><span class="se">\n</span><span class="s">&#39;</span>
                                    <span class="s">&#39;{var}_bytes = {var}[0].encode()</span><span class="se">\n</span><span class="s">&#39;</span>
                                    <span class="s">&#39;{var}_bytes_ = {var}_bytes</span><span class="se">\n</span><span class="s">&#39;</span>
-                                   <span class="s">&#39;{proxy_name} = &amp;{var}_bytes_&#39;</span><span class="p">,</span> 
+                                   <span class="s">&#39;{proxy_name} = &amp;{var}_bytes_&#39;</span><span class="p">,</span>
                                    <span class="s">&#39;{proxy_name}&#39;</span><span class="p">),</span>
             <span class="s">&#39;uchar&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;{var}_bytes = {var}.encode()&#39;</span><span class="p">,</span> <span class="s">&#39;(&lt;unsigned char *&gt; {var}_bytes)[0]&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s">&#39;uchar&#39;</span><span class="p">,</span> <span class="s">&#39;*&#39;</span><span class="p">):</span> <span class="p">(</span><span class="s">&#39;{var}_bytes = {var}.encode()&#39;</span><span class="p">,</span> <span class="s">&#39;&lt;unsigned char *&gt; {var}_bytes&#39;</span><span class="p">),</span>
@@ -1269,11 +1269,11 @@ if(ga_enabled){
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="TypeSystem.empty"><a class="viewcode-back" href="../../libref/typesystem.html#xdress.typesystem.TypeSystem.empty">[docs]</a>    <span class="k">def</span> <span class="nf">empty</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;This is a class method which returns an empty type system.&quot;&quot;&quot;</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">cls</span><span class="p">(</span><span class="n">base_types</span><span class="o">=</span><span class="nb">set</span><span class="p">(),</span> <span class="n">template_types</span><span class="o">=</span><span class="p">{},</span> <span class="n">refined_types</span><span class="o">=</span><span class="p">{},</span> <span class="n">humannames</span><span class="o">=</span><span class="p">{},</span> 
-                <span class="n">type_aliases</span><span class="o">=</span><span class="p">{},</span> <span class="n">cpp_types</span><span class="o">=</span><span class="p">{},</span> <span class="n">numpy_types</span><span class="o">=</span><span class="p">{},</span> <span class="n">from_pytypes</span><span class="o">=</span><span class="p">{},</span> 
-                <span class="n">cython_ctypes</span><span class="o">=</span><span class="p">{},</span> <span class="n">cython_cytypes</span><span class="o">=</span><span class="p">{},</span> <span class="n">cython_pytypes</span><span class="o">=</span><span class="p">{},</span> 
-                <span class="n">cython_cimports</span><span class="o">=</span><span class="p">{},</span> <span class="n">cython_cyimports</span><span class="o">=</span><span class="p">{},</span> <span class="n">cython_pyimports</span><span class="o">=</span><span class="p">{},</span> 
-                <span class="n">cython_functionnames</span><span class="o">=</span><span class="p">{},</span> <span class="n">cython_classnames</span><span class="o">=</span><span class="p">{},</span> <span class="n">cython_c2py_conv</span><span class="o">=</span><span class="p">{},</span> 
+        <span class="n">x</span> <span class="o">=</span> <span class="n">cls</span><span class="p">(</span><span class="n">base_types</span><span class="o">=</span><span class="nb">set</span><span class="p">(),</span> <span class="n">template_types</span><span class="o">=</span><span class="p">{},</span> <span class="n">refined_types</span><span class="o">=</span><span class="p">{},</span> <span class="n">humannames</span><span class="o">=</span><span class="p">{},</span>
+                <span class="n">type_aliases</span><span class="o">=</span><span class="p">{},</span> <span class="n">cpp_types</span><span class="o">=</span><span class="p">{},</span> <span class="n">numpy_types</span><span class="o">=</span><span class="p">{},</span> <span class="n">from_pytypes</span><span class="o">=</span><span class="p">{},</span>
+                <span class="n">cython_ctypes</span><span class="o">=</span><span class="p">{},</span> <span class="n">cython_cytypes</span><span class="o">=</span><span class="p">{},</span> <span class="n">cython_pytypes</span><span class="o">=</span><span class="p">{},</span>
+                <span class="n">cython_cimports</span><span class="o">=</span><span class="p">{},</span> <span class="n">cython_cyimports</span><span class="o">=</span><span class="p">{},</span> <span class="n">cython_pyimports</span><span class="o">=</span><span class="p">{},</span>
+                <span class="n">cython_functionnames</span><span class="o">=</span><span class="p">{},</span> <span class="n">cython_classnames</span><span class="o">=</span><span class="p">{},</span> <span class="n">cython_c2py_conv</span><span class="o">=</span><span class="p">{},</span>
                 <span class="n">cython_py2c_conv</span><span class="o">=</span><span class="p">{})</span>
         <span class="k">del</span> <span class="n">x</span><span class="o">.</span><span class="n">extra_types</span>
         <span class="k">del</span> <span class="n">x</span><span class="o">.</span><span class="n">dtypes</span>
@@ -1290,7 +1290,7 @@ if(ga_enabled){
 <span class="sd">        filename : str</span>
 <span class="sd">            Path to file.</span>
 <span class="sd">        format : str, optional</span>
-<span class="sd">            The file format to save the type system as.  If this is not provided, </span>
+<span class="sd">            The file format to save the type system as.  If this is not provided,</span>
 <span class="sd">            it is infered from the filenme.  Options are:</span>
 
 <span class="sd">            * pickle (&#39;.pkl&#39;)</span>
@@ -1321,7 +1321,7 @@ if(ga_enabled){
 <span class="sd">        filename : str</span>
 <span class="sd">            Path to file.</span>
 <span class="sd">        format : str, optional</span>
-<span class="sd">            The file format to save the type system as.  If this is not provided, </span>
+<span class="sd">            The file format to save the type system as.  If this is not provided,</span>
 <span class="sd">            it is infered from the filenme.  Options are:</span>
 
 <span class="sd">            * pickle (&#39;.pkl&#39;)</span>
@@ -1342,15 +1342,15 @@ if(ga_enabled){
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">pickle</span><span class="o">.</span><span class="n">HIGHEST_PROTOCOL</span><span class="p">))</span>
 </div>
 <div class="viewcode-block" id="TypeSystem.update"><a class="viewcode-back" href="../../libref/typesystem.html#xdress.typesystem.TypeSystem.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Updates the type system in-place. Only updates the data attributes </span>
-<span class="sd">        named in &#39;datafields&#39;.  This may be called with any of the following </span>
+        <span class="sd">&quot;&quot;&quot;Updates the type system in-place. Only updates the data attributes</span>
+<span class="sd">        named in &#39;datafields&#39;.  This may be called with any of the following</span>
 <span class="sd">        signatures::</span>
 
 <span class="sd">            ts.update(&lt;TypeSystem&gt;)</span>
 <span class="sd">            ts.update(&lt;dict-like&gt;)</span>
 <span class="sd">            ts.update(key1=value1, key2=value2, ...)</span>
 
-<span class="sd">        Valid keyword arguments are the same here as for the type system </span>
+<span class="sd">        Valid keyword arguments are the same here as for the type system</span>
 <span class="sd">        constructor.  See this documentation for more detail.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">datafields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datafields</span>
@@ -1479,7 +1479,7 @@ if(ga_enabled){
             <span class="n">resotype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">canon</span><span class="p">(</span><span class="n">depval</span><span class="p">),</span> <span class="p">(</span><span class="n">tname</span><span class="p">,)</span> <span class="o">+</span> \
                         <span class="nb">tuple</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">canon</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">depkey</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">typemap</span><span class="p">])</span> <span class="o">+</span> \
                         <span class="nb">tuple</span><span class="p">([(</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">canon</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">instval</span><span class="p">)</span> \
-                            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">instval</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">depkey</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">tinst</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> 
+                            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">instval</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">depkey</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">tinst</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
                             <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">typemap</span><span class="p">])</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">typemap</span><span class="p">:</span>
                 <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">type_aliases</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
@@ -1600,7 +1600,7 @@ if(ga_enabled){
         <span class="sd">&quot;&quot;&quot;Given a type t, returns the corresponding C++ type declaration.&quot;&quot;&quot;</span>
         <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">canon</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
-            <span class="k">if</span>  <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_types</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_types</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpp_types</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
         <span class="c"># must be tuple below this line</span>
         <span class="n">tlen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
@@ -1663,9 +1663,9 @@ if(ga_enabled){
     <span class="nd">@memoize_method</span>
 <div class="viewcode-block" id="TypeSystem.cpp_funcname"><a class="viewcode-back" href="../../libref/typesystem.html#xdress.typesystem.TypeSystem.cpp_funcname">[docs]</a>    <span class="k">def</span> <span class="nf">cpp_funcname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">argkinds</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;This returns a name for a function based on its name, rather than</span>
-<span class="sd">        its type.  The name may be either a string or a tuple of the form </span>
-<span class="sd">        (&#39;name&#39;, template_arg1, template_arg2, ...). The argkinds argument here </span>
-<span class="sd">        refers only to the template arguments, not the function signature default </span>
+<span class="sd">        its type.  The name may be either a string or a tuple of the form</span>
+<span class="sd">        (&#39;name&#39;, template_arg1, template_arg2, ...). The argkinds argument here</span>
+<span class="sd">        refers only to the template arguments, not the function signature default</span>
 <span class="sd">        arguments. This is not meant to replace cpp_type(), but complement it.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
@@ -1729,7 +1729,7 @@ if(ga_enabled){
             <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cython_nptype</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
         <span class="k">elif</span> <span class="mi">3</span> <span class="o">==</span> <span class="n">tlen</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">istemplate</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cython_nptype</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-        <span class="k">else</span><span class="p">:</span>  <span class="c">#elif 3 &lt;= tlen:</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c"># elif 3 &lt;= tlen:</span>
             <span class="k">return</span> <span class="s">&#39;np.NPY_OBJECT&#39;</span>
 
     <span class="c">#########################   Cython Functions   ############################</span>
@@ -1837,7 +1837,7 @@ if(ga_enabled){
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cython_cytype</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cython_cytype_add_predicate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cython_cytype</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> 
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cython_cytype_add_predicate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cython_cytype</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
                                                          <span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">elif</span> <span class="mi">3</span> <span class="o">&lt;=</span> <span class="n">tlen</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cython_cytypes</span><span class="p">:</span>
@@ -1987,9 +1987,9 @@ if(ga_enabled){
 <span class="sd">        interpretations based on the length and values:</span>
 
 <span class="sd">        * ``(module-name,)`` becomes ``import {module-name}``</span>
-<span class="sd">        * ``(module-name, var-or-mod)`` becomes </span>
+<span class="sd">        * ``(module-name, var-or-mod)`` becomes</span>
 <span class="sd">          ``from {module-name} import {var-or-mod}``</span>
-<span class="sd">        * ``(module-name, var-or-mod, alias)`` becomes </span>
+<span class="sd">        * ``(module-name, var-or-mod, alias)`` becomes</span>
 <span class="sd">          ``from {module-name} import {var-or-mod} as {alias}``</span>
 <span class="sd">        * ``(module-name, &#39;as&#39;, alias)`` becomes ``import {module-name} as {alias}``</span>
 
@@ -2052,23 +2052,23 @@ if(ga_enabled){
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">lit</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
             <span class="n">cy_lit</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">lit</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">cy_lit</span>
-    
+
 </div>
     <span class="nd">@memoize_method</span>
 <div class="viewcode-block" id="TypeSystem.cython_funcname"><a class="viewcode-back" href="../../libref/typesystem.html#xdress.typesystem.TypeSystem.cython_funcname">[docs]</a>    <span class="k">def</span> <span class="nf">cython_funcname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">argkinds</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;This returns a name for a function based on its name, rather than</span>
-<span class="sd">        its type.  The name may be either a string or a tuple of the form </span>
-<span class="sd">        (&#39;name&#39;, template_arg1, template_arg2, ...). The argkinds argument here </span>
-<span class="sd">        refers only to the template arguments, not the function signature default </span>
-<span class="sd">        arguments. This is not meant to replace cython_functionname(), but </span>
+<span class="sd">        its type.  The name may be either a string or a tuple of the form</span>
+<span class="sd">        (&#39;name&#39;, template_arg1, template_arg2, ...). The argkinds argument here</span>
+<span class="sd">        refers only to the template arguments, not the function signature default</span>
+<span class="sd">        arguments. This is not meant to replace cython_functionname(), but</span>
 <span class="sd">        complement it.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">name</span>
         <span class="k">if</span> <span class="n">argkinds</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">argkinds</span> <span class="o">=</span> <span class="p">[(</span><span class="n">Arg</span><span class="o">.</span><span class="n">NONE</span><span class="p">,</span> <span class="bp">None</span><span class="p">)]</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">fname</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> 
-        <span class="n">cfs</span> <span class="o">=</span> <span class="p">[]</span> 
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">cfs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">argkind</span><span class="p">,</span> <span class="n">argvalue</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">argkinds</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">argkind</span> <span class="ow">is</span> <span class="n">Arg</span><span class="o">.</span><span class="n">TYPE</span><span class="p">:</span>
                 <span class="n">cf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cython_functionname</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
@@ -2083,7 +2083,7 @@ if(ga_enabled){
                     <span class="n">cf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cython_functionname</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>  <span class="c"># guess type</span>
                 <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
                     <span class="n">cf</span> <span class="o">=</span> <span class="n">x</span>  <span class="c"># guess variable</span>
-            <span class="n">cfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cf</span><span class="p">)</span> 
+            <span class="n">cfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cf</span><span class="p">)</span>
         <span class="n">fname</span> <span class="o">+=</span> <span class="s">&#39;&#39;</span> <span class="k">if</span> <span class="mi">0</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">cfs</span><span class="p">)</span> <span class="k">else</span> <span class="s">&quot;_&quot;</span> <span class="o">+</span> <span class="s">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cfs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">fname</span>
 </div>
@@ -2158,8 +2158,8 @@ if(ga_enabled){
         <span class="k">return</span> <span class="n">c2pyt</span>
 </div>
     <span class="nd">@memoize_method</span>
-<div class="viewcode-block" id="TypeSystem.cython_c2py"><a class="viewcode-back" href="../../libref/typesystem.html#xdress.typesystem.TypeSystem.cython_c2py">[docs]</a>    <span class="k">def</span> <span class="nf">cython_c2py</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">view</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">cached</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">inst_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> 
-                    <span class="n">proxy_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cache_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cache_prefix</span><span class="o">=</span><span class="s">&#39;self&#39;</span><span class="p">,</span> 
+<div class="viewcode-block" id="TypeSystem.cython_c2py"><a class="viewcode-back" href="../../libref/typesystem.html#xdress.typesystem.TypeSystem.cython_c2py">[docs]</a>    <span class="k">def</span> <span class="nf">cython_c2py</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">view</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">cached</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">inst_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="n">proxy_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cache_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cache_prefix</span><span class="o">=</span><span class="s">&#39;self&#39;</span><span class="p">,</span>
                     <span class="n">existing_name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Given a varibale name and type, returns cython code (declaration, body,</span>
 <span class="sd">        and return statements) to convert the variable from C/C++ to Python.&quot;&quot;&quot;</span>
@@ -2180,7 +2180,7 @@ if(ga_enabled){
         <span class="n">proxy_name</span> <span class="o">=</span> <span class="s">&quot;{0}_proxy&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">if</span> <span class="n">proxy_name</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">proxy_name</span>
         <span class="n">iscached</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="n">tstr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">typestr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
-        <span class="n">template_kw</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="n">var</span><span class="p">,</span> <span class="n">cache_name</span><span class="o">=</span><span class="n">cache_name</span><span class="p">,</span> <span class="n">proxy_name</span><span class="o">=</span><span class="n">proxy_name</span><span class="p">,</span> 
+        <span class="n">template_kw</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="n">var</span><span class="p">,</span> <span class="n">cache_name</span><span class="o">=</span><span class="n">cache_name</span><span class="p">,</span> <span class="n">proxy_name</span><span class="o">=</span><span class="n">proxy_name</span><span class="p">,</span>
                            <span class="n">t</span><span class="o">=</span><span class="n">tstr</span><span class="p">)</span>
 <span class="c">#        if callable(c2pyt):</span>
 <span class="c">#            import pdb; pdb.set_trace()</span>
@@ -2299,13 +2299,13 @@ if(ga_enabled){
 </div>
 <div class="viewcode-block" id="TypeSystem.register_class"><a class="viewcode-back" href="../../libref/typesystem.html#xdress.typesystem.TypeSystem.register_class">[docs]</a>    <span class="k">def</span> <span class="nf">register_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">template_args</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cython_c_type</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                        <span class="n">cython_cimport</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cython_cy_type</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cython_py_type</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                       <span class="n">cython_template_class_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> 
-                       <span class="n">cython_template_function_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cython_cyimport</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> 
-                       <span class="n">cython_pyimport</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cython_c2py</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> 
-                       <span class="n">cython_py2c</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cpp_type</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">human_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> 
+                       <span class="n">cython_template_class_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                       <span class="n">cython_template_function_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cython_cyimport</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                       <span class="n">cython_pyimport</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cython_c2py</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                       <span class="n">cython_py2c</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cpp_type</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">human_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                        <span class="n">from_pytype</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Classes are user specified types.  This function will add a class to </span>
-<span class="sd">        the type system so that it may be used normally with the rest of the </span>
+        <span class="sd">&quot;&quot;&quot;Classes are user specified types.  This function will add a class to</span>
+<span class="sd">        the type system so that it may be used normally with the rest of the</span>
 <span class="sd">        type system.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2361,7 +2361,7 @@ if(ga_enabled){
             <span class="bp">self</span><span class="o">.</span><span class="n">cython_functionnames</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">cython_template_function_name</span>
 </div>
 <div class="viewcode-block" id="TypeSystem.deregister_class"><a class="viewcode-back" href="../../libref/typesystem.html#xdress.typesystem.TypeSystem.deregister_class">[docs]</a>    <span class="k">def</span> <span class="nf">deregister_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;This function will remove a previously registered class from </span>
+        <span class="sd">&quot;&quot;&quot;This function will remove a previously registered class from</span>
 <span class="sd">        the type system.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">isbase</span> <span class="o">=</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">base_types</span>
@@ -2388,9 +2388,9 @@ if(ga_enabled){
 
         <span class="bp">self</span><span class="o">.</span><span class="n">clearmemo</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="TypeSystem.register_classname"><a class="viewcode-back" href="../../libref/typesystem.html#xdress.typesystem.TypeSystem.register_classname">[docs]</a>    <span class="k">def</span> <span class="nf">register_classname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classname</span><span class="p">,</span> <span class="n">package</span><span class="p">,</span> <span class="n">pxd_base</span><span class="p">,</span> <span class="n">cpppxd_base</span><span class="p">,</span> 
+<div class="viewcode-block" id="TypeSystem.register_classname"><a class="viewcode-back" href="../../libref/typesystem.html#xdress.typesystem.TypeSystem.register_classname">[docs]</a>    <span class="k">def</span> <span class="nf">register_classname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classname</span><span class="p">,</span> <span class="n">package</span><span class="p">,</span> <span class="n">pxd_base</span><span class="p">,</span> <span class="n">cpppxd_base</span><span class="p">,</span>
                            <span class="n">cpp_classname</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">make_dtypes</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Registers a class with the type system from only its name, </span>
+        <span class="sd">&quot;&quot;&quot;Registers a class with the type system from only its name,</span>
 <span class="sd">        and relevant header file information.</span>
 
 <span class="sd">        Parameters</span>
@@ -2405,7 +2405,7 @@ if(ga_enabled){
 <span class="sd">        cpp_classname : str or tuple, optional</span>
 <span class="sd">            Name of class in C++, equiv. to apiname.srcname. Defaults to classname.</span>
 <span class="sd">        make_dtypes : bool, optional</span>
-<span class="sd">            Flag for registering dtypes for this class simeltaneously with </span>
+<span class="sd">            Flag for registering dtypes for this class simeltaneously with</span>
 <span class="sd">            registering the class itself.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c"># target classname</span>
@@ -2454,9 +2454,9 @@ if(ga_enabled){
             <span class="n">template_args</span><span class="o">=</span><span class="n">template_args</span><span class="p">,</span>
             <span class="n">cython_c_type</span><span class="o">=</span><span class="n">cpppxd_base</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="n">cpp_baseclassname</span><span class="p">,</span> <span class="c"># cpp_fccomp.FCComp</span>
             <span class="n">cython_cimport</span><span class="o">=</span><span class="n">class_cimport</span><span class="p">,</span>
-            <span class="n">cython_cy_type</span><span class="o">=</span><span class="n">pxd_base</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="n">baseclassname</span><span class="p">,</span>      <span class="c"># fccomp.FCComp   </span>
-            <span class="n">cython_py_type</span><span class="o">=</span><span class="n">pxd_base</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="n">baseclassname</span><span class="p">,</span>      <span class="c"># fccomp.FCComp   </span>
-            <span class="n">from_pytype</span><span class="o">=</span><span class="p">[</span><span class="n">pxd_base</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="n">baseclassname</span><span class="p">],</span>      <span class="c"># fccomp.FCComp   </span>
+            <span class="n">cython_cy_type</span><span class="o">=</span><span class="n">pxd_base</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="n">baseclassname</span><span class="p">,</span>      <span class="c"># fccomp.FCComp</span>
+            <span class="n">cython_py_type</span><span class="o">=</span><span class="n">pxd_base</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="n">baseclassname</span><span class="p">,</span>      <span class="c"># fccomp.FCComp</span>
+            <span class="n">from_pytype</span><span class="o">=</span><span class="p">[</span><span class="n">pxd_base</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="n">baseclassname</span><span class="p">],</span>      <span class="c"># fccomp.FCComp</span>
             <span class="n">cpp_type</span><span class="o">=</span><span class="n">cpp_baseclassname</span><span class="p">,</span>
             <span class="n">human_name</span><span class="o">=</span><span class="n">templateclassname</span><span class="p">,</span>
             <span class="n">cython_template_class_name</span><span class="o">=</span><span class="n">templateclassname</span><span class="p">,</span>
@@ -2571,10 +2571,10 @@ if(ga_enabled){
             <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">register_class</span><span class="p">(</span><span class="o">**</span><span class="n">kwclassdblptr</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="TypeSystem.register_refinement"><a class="viewcode-back" href="../../libref/typesystem.html#xdress.typesystem.TypeSystem.register_refinement">[docs]</a>    <span class="k">def</span> <span class="nf">register_refinement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">refinementof</span><span class="p">,</span> <span class="n">cython_cimport</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> 
-                            <span class="n">cython_cyimport</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cython_pyimport</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> 
+<div class="viewcode-block" id="TypeSystem.register_refinement"><a class="viewcode-back" href="../../libref/typesystem.html#xdress.typesystem.TypeSystem.register_refinement">[docs]</a>    <span class="k">def</span> <span class="nf">register_refinement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">refinementof</span><span class="p">,</span> <span class="n">cython_cimport</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                            <span class="n">cython_cyimport</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cython_pyimport</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                             <span class="n">cython_c2py</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cython_py2c</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;This function will add a refinement to the type system so that it </span>
+        <span class="sd">&quot;&quot;&quot;This function will add a refinement to the type system so that it</span>
 <span class="sd">        may be used normally with the rest of the type system.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">refined_types</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">refinementof</span>
@@ -2600,7 +2600,7 @@ if(ga_enabled){
             <span class="bp">self</span><span class="o">.</span><span class="n">cython_py2c_conv</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">cython_py2c</span>
 </div>
 <div class="viewcode-block" id="TypeSystem.deregister_refinement"><a class="viewcode-back" href="../../libref/typesystem.html#xdress.typesystem.TypeSystem.deregister_refinement">[docs]</a>    <span class="k">def</span> <span class="nf">deregister_refinement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;This function will remove a previously registered refinement from </span>
+        <span class="sd">&quot;&quot;&quot;This function will remove a previously registered refinement from</span>
 <span class="sd">        the type system.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">refined_types</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
@@ -2642,7 +2642,7 @@ if(ga_enabled){
         <span class="bp">self</span><span class="o">.</span><span class="n">cython_pyimports</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">clearmemo</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="TypeSystem.register_numpy_dtype"><a class="viewcode-back" href="../../libref/typesystem.html#xdress.typesystem.TypeSystem.register_numpy_dtype">[docs]</a>    <span class="k">def</span> <span class="nf">register_numpy_dtype</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">cython_cimport</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cython_cyimport</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> 
+<div class="viewcode-block" id="TypeSystem.register_numpy_dtype"><a class="viewcode-back" href="../../libref/typesystem.html#xdress.typesystem.TypeSystem.register_numpy_dtype">[docs]</a>    <span class="k">def</span> <span class="nf">register_numpy_dtype</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">cython_cimport</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cython_cyimport</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                              <span class="n">cython_pyimport</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;This function will add a type to the system as numpy dtype that lives in</span>
 <span class="sd">        the dtypes module.</span>
@@ -2706,7 +2706,7 @@ if(ga_enabled){
             <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">canon</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">register_variable_namespace</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">namespace</span><span class="p">)</span>
-        
+
 
     <span class="c">#################### Type system helpers ###################################</span>
 </div>
@@ -3062,7 +3062,7 @@ if(ga_enabled){
 <span class="c">#################### Type string for formatting ################################</span>
 
 <div class="viewcode-block" id="typestr"><a class="viewcode-back" href="../../libref/typesystem.html#xdress.typesystem.typestr">[docs]</a><span class="k">class</span> <span class="nc">typestr</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;This is class whose attributes are properties that expose various </span>
+    <span class="sd">&quot;&quot;&quot;This is class whose attributes are properties that expose various</span>
 <span class="sd">    string representations of a type.  This is useful for the Python string</span>
 <span class="sd">    formatting mini-language where attributes of an object may be accessed.</span>
 <span class="sd">    For example:</span>
@@ -3088,7 +3088,7 @@ if(ga_enabled){
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="typestr.type"><a class="viewcode-back" href="../../libref/typesystem.html#xdress.typesystem.typestr.type">[docs]</a>    <span class="k">def</span> <span class="nf">type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;This is a repr string of the raw type (self.t), mostly useful for </span>
+        <span class="sd">&quot;&quot;&quot;This is a repr string of the raw type (self.t), mostly useful for</span>
 <span class="sd">        comments.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
@@ -3278,7 +3278,7 @@ if(ga_enabled){
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cython_npctype_nopred</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">npt_nopred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ts</span><span class="o">.</span><span class="n">cython_nptype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_nopred</span><span class="p">)</span>
-            <span class="n">npct_nopred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cython_ctype</span><span class="p">(</span><span class="n">npt_nopred</span><span class="p">)</span>            
+            <span class="n">npct_nopred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cython_ctype</span><span class="p">(</span><span class="n">npt_nopred</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cython_npctype_nopred</span> <span class="o">=</span> <span class="n">npct_nopred</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cython_npctype_nopred</span>
 </div>
@@ -3290,7 +3290,7 @@ if(ga_enabled){
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cython_npcytype_nopred</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">npt_nopred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ts</span><span class="o">.</span><span class="n">cython_nptype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_nopred</span><span class="p">)</span>
-            <span class="n">npcyt_nopred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cython_cytype</span><span class="p">(</span><span class="n">npt_nopred</span><span class="p">)</span>            
+            <span class="n">npcyt_nopred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cython_cytype</span><span class="p">(</span><span class="n">npt_nopred</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cython_npcytype_nopred</span> <span class="o">=</span> <span class="n">npcyt_nopred</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cython_npcytype_nopred</span>
 </div>
@@ -3302,7 +3302,7 @@ if(ga_enabled){
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cython_nppytype_nopred</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">npt_nopred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ts</span><span class="o">.</span><span class="n">cython_nptype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_nopred</span><span class="p">)</span>
-            <span class="n">nppyt_nopred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cython_pytype</span><span class="p">(</span><span class="n">npt_nopred</span><span class="p">)</span>            
+            <span class="n">nppyt_nopred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cython_pytype</span><span class="p">(</span><span class="n">npt_nopred</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cython_nppytype_nopred</span> <span class="o">=</span> <span class="n">nppyt_nopred</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cython_nppytype_nopred</span>
 </div>

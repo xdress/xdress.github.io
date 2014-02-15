@@ -93,6 +93,7 @@ the purpose of API generation in mind.</p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advtut.html">Advanced Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libclang.html">Using libclang</a></li>
 <li class="toctree-l1"><a class="reference internal" href="libref/index.html">Library Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rcdocs.html">Run Control Parameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="previous/index.html">Previous Versions</a></li>
@@ -110,7 +111,7 @@ to grab and install the code:</p>
 $ easy_install xdress</pre>
 </div>
 <p>The source code repository for xdress may be found at the
-<a class="reference external" href="http://github.com/scopatz/xdress">GitHub project site</a>.
+<a class="reference external" href="http://github.com/xdress/xdress">GitHub project site</a>.
 You may simply clone the development branch using git:</p>
 <div class="highlight-python"><pre>git clone git://github.com/xdress/xdress.git</pre>
 </div>
@@ -126,6 +127,7 @@ eval "$(register-python-argcomplete xdress)"</pre>
 <p><em>Run Time:</em></p>
 <blockquote>
 <div><ol class="arabic simple">
+<li><a class="reference external" href="http://llvm.org/releases/">Clang/LLVM</a>, optional for C/C++</li>
 <li><a class="reference external" href="https://bitbucket.org/eliben/pycparser">pycparser</a>, optional for C</li>
 <li><a class="reference external" href="http://www.gccxml.org/HTML/Index.html">GCC-XML</a>, optional for C++</li>
 <li><a class="reference external" href="http://www.doxygen.org/">dOxygen</a>, optional for docstrings</li>

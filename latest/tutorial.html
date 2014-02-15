@@ -224,7 +224,7 @@ living in the <tt class="docutils literal"><span class="pre">src/</span></tt> di
 <p><strong>src/hoover.cpp</strong>:</p>
 <div class="highlight-cpp"><div class="highlight"><pre><span class="cp">#include &quot;hoover.h&quot;</span>
 
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">hoover</span><span class="p">;</span>
+<span class="k">namespace</span> <span class="n">hoover</span> <span class="p">{</span>
 
 <span class="n">A</span><span class="o">::</span><span class="n">A</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span><span class="n">y</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="mf">42.0</span><span class="p">;};</span>
 <span class="n">A</span><span class="o">::~</span><span class="n">A</span><span class="p">(){};</span>
@@ -233,6 +233,8 @@ living in the <tt class="docutils literal"><span class="pre">src/</span></tt> di
 <span class="n">B</span><span class="o">::~</span><span class="n">B</span><span class="p">(){};</span>
 
 <span class="kt">void</span> <span class="nf">do_nothing_ab</span><span class="p">(</span><span class="n">A</span> <span class="n">a</span><span class="p">,</span> <span class="n">B</span> <span class="n">b</span><span class="p">)</span> <span class="p">{};</span>
+
+<span class="p">};</span> <span class="c1">// namespace hoover</span>
 </pre></div>
 </div>
 <p>To tell xdress that we what to wrap the A &amp; B classes and the do nothing function,
@@ -407,7 +409,7 @@ will work:</p>
 <div class="section" id="code-listings">
 <h2>Code Listings<a class="headerlink" href="#code-listings" title="Permalink to this headline">¶</a></h2>
 <p>The following are code listings of the files generated above, since they are too
-large to in-line into the tutorial text.  You may also find <a class="reference external" href="https://github.com/scopatz/xdress/tree/master/docs/mypack">this example implemented
+large to in-line into the tutorial text.  You may also find <a class="reference external" href="https://github.com/xdress/xdress/tree/master/docs/mypack">this example implemented
 in the xdress repo</a></p>
 <div class="toctree-wrapper compound">
 <ul>
@@ -421,9 +423,12 @@ in the xdress repo</a></p>
 <li class="toctree-l3"><a class="reference internal" href="mypack/mypack/hoover.pyx.html">hoover.pyx</a></li>
 <li class="toctree-l3"><a class="reference internal" href="mypack/mypack/hoover_b.pxd.html">hoover_b.pxd</a></li>
 <li class="toctree-l3"><a class="reference internal" href="mypack/mypack/hoover_b.pyx.html">hoover_b.pyx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mypack/mypack/dtypes.pxd.html">dtypes.pxd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mypack/mypack/dtypes.pyx.html">dtypes.pyx</a></li>
 <li class="toctree-l3"><a class="reference internal" href="mypack/mypack/stlcontainers.pxd.html">stlcontainers.pxd</a></li>
 <li class="toctree-l3"><a class="reference internal" href="mypack/mypack/stlcontainers.pyx.html">stlcontainers.pyx</a></li>
 <li class="toctree-l3"><a class="reference internal" href="mypack/mypack/tests/index.html">tests</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mypack/mypack/tests/test_dtypes.py.html">test_dtypes.py</a></li>
 <li class="toctree-l4"><a class="reference internal" href="mypack/mypack/tests/test_stlcontainers.py.html">test_stlcontainers.py</a></li>
 </ul>
 </li>

@@ -213,7 +213,7 @@ if(ga_enabled){
     <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">_c_float_types</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">4</span><span class="p">)](</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;unknown literal: {0!r}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
-    </div>
+</div>
 <div class="viewcode-block" id="newoverwrite"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.newoverwrite">[docs]</a><span class="k">def</span> <span class="nf">newoverwrite</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Useful for not forcing re-compiles and thus playing nicely with the</span>
 <span class="sd">    build system.  This is acomplished by not writing the file if the existsing</span>
@@ -494,12 +494,12 @@ if(ga_enabled){
     <span class="sd">&quot;&quot;&quot;Finds a source filename, header filename, language name, and language</span>
 <span class="sd">    source extension given a basename and source directory.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-      <span class="n">files</span> <span class="o">=</span> <span class="p">[</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">basename</span> <span class="p">]</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">basename</span> <span class="p">]</span>
     <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isabs</span><span class="p">(</span><span class="n">basename</span><span class="p">):</span>
-      <span class="n">files</span> <span class="o">=</span> <span class="p">[</span> <span class="n">basename</span> <span class="p">]</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[</span> <span class="n">basename</span> <span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-      <span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">sourcedir</span><span class="p">)</span>
-      <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">basename</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span><span class="p">)]</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">sourcedir</span><span class="p">)</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">basename</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span><span class="p">)]</span>
     <span class="n">langs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([(</span><span class="n">f</span><span class="p">,</span> <span class="n">guess_language</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">])</span>
     <span class="n">lang</span> <span class="o">=</span> <span class="n">src</span> <span class="o">=</span> <span class="n">hdr</span> <span class="o">=</span> <span class="n">srcext</span> <span class="o">=</span> <span class="bp">None</span>
     <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">langs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -538,7 +538,7 @@ if(ga_enabled){
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">desc</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">srcfname</span><span class="p">,</span> <span class="n">hdrfname</span><span class="p">,</span> <span class="n">lang</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">find_source</span><span class="p">(</span><span class="n">srcname</span><span class="p">,</span> <span class="n">sourcedir</span><span class="o">=</span><span class="n">sourcedir</span><span class="p">,</span> 
+    <span class="n">srcfname</span><span class="p">,</span> <span class="n">hdrfname</span><span class="p">,</span> <span class="n">lang</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">find_source</span><span class="p">(</span><span class="n">srcname</span><span class="p">,</span> <span class="n">sourcedir</span><span class="o">=</span><span class="n">sourcedir</span><span class="p">,</span>
                                                 <span class="n">language</span><span class="o">=</span><span class="n">language</span><span class="p">)</span>
     <span class="n">desc</span><span class="p">[</span><span class="s">&#39;source_filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">srcfname</span>
     <span class="n">desc</span><span class="p">[</span><span class="s">&#39;header_filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdrfname</span>
@@ -766,7 +766,7 @@ if(ga_enabled){
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
             <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">ishashable</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-         <span class="k">return</span> <span class="bp">True</span>
+            <span class="k">return</span> <span class="bp">True</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">False</span>
 </div>
@@ -822,16 +822,16 @@ if(ga_enabled){
 <span class="c"># API Name Tuples and Functions</span>
 <span class="c">#</span>
 </div>
-<div class="viewcode-block" id="apiname"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.apiname">[docs]</a><span class="k">class</span> <span class="nc">apiname</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;apiname&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;srcname&#39;</span><span class="p">,</span> <span class="s">&#39;srcfiles&#39;</span><span class="p">,</span> <span class="s">&#39;tarbase&#39;</span><span class="p">,</span> <span class="s">&#39;tarname&#39;</span><span class="p">,</span> 
+<div class="viewcode-block" id="apiname"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.apiname">[docs]</a><span class="k">class</span> <span class="nc">apiname</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;apiname&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;srcname&#39;</span><span class="p">,</span> <span class="s">&#39;srcfiles&#39;</span><span class="p">,</span> <span class="s">&#39;tarbase&#39;</span><span class="p">,</span> <span class="s">&#39;tarname&#39;</span><span class="p">,</span>
                                      <span class="s">&#39;incfiles&#39;</span><span class="p">,</span> <span class="s">&#39;sidecars&#39;</span><span class="p">,</span> <span class="s">&#39;language&#39;</span><span class="p">])):</span>
-    <span class="sd">&quot;&quot;&quot;apiname(srcname=NotSpecified, srcfiles=NotSpecified, tarbase=NotSpecified, </span>
-<span class="sd">               tarname=NotSpecified, incfiles=NotSpecified, sidecars=NotSpecified, </span>
+    <span class="sd">&quot;&quot;&quot;apiname(srcname=NotSpecified, srcfiles=NotSpecified, tarbase=NotSpecified,</span>
+<span class="sd">               tarname=NotSpecified, incfiles=NotSpecified, sidecars=NotSpecified,</span>
 <span class="sd">               language=NotSpecified)</span>
 
-<span class="sd">    This is a type, based on a named tuple, that represents the API element </span>
-<span class="sd">    names and is used to declare or discover where variables, functions, and </span>
-<span class="sd">    classes live for the rest of xdress.  All of the fields default to </span>
-<span class="sd">    NotSpecified if not given.  These feilds are the sames as what appear in </span>
+<span class="sd">    This is a type, based on a named tuple, that represents the API element</span>
+<span class="sd">    names and is used to declare or discover where variables, functions, and</span>
+<span class="sd">    classes live for the rest of xdress.  All of the fields default to</span>
+<span class="sd">    NotSpecified if not given.  These feilds are the sames as what appear in</span>
 <span class="sd">    description dictionaries under the &#39;name&#39; key.</span>
 
 <span class="sd">    Parameters</span>
@@ -840,34 +840,34 @@ if(ga_enabled){
 <span class="sd">        The element&#39;s API name in the original source code, eg. MyClass.</span>
 <span class="sd">    srcfiles : str, tuple of str, or NotSpecified</span>
 <span class="sd">        This is a sequence of unique strings which represents the file paths where</span>
-<span class="sd">        the API element *may* be defined. For example, (&#39;myfile.c&#39;, &#39;myfile.h&#39;).  </span>
-<span class="sd">        If the element is defined outside of these files, then the automatic </span>
+<span class="sd">        the API element *may* be defined. For example, (&#39;myfile.c&#39;, &#39;myfile.h&#39;).</span>
+<span class="sd">        If the element is defined outside of these files, then the automatic</span>
 <span class="sd">        discovery or description may fail. When using ensure_apiname(), all strings</span>
-<span class="sd">        are automatically globbed, so &#39;src/myfile.*&#39; will be converted to </span>
-<span class="sd">        (&#39;src/myfile.c&#39;, &#39;src/myfile.h&#39;).  Since these files are parsed they must </span>
+<span class="sd">        are automatically globbed, so &#39;src/myfile.*&#39; will be converted to</span>
+<span class="sd">        (&#39;src/myfile.c&#39;, &#39;src/myfile.h&#39;).  Since these files are parsed they must</span>
 <span class="sd">        actually exist on the filesystem.</span>
 <span class="sd">    tarbase : str or NotSpecified</span>
-<span class="sd">        The base portion of all automatically generated (target) files. This does </span>
-<span class="sd">        not include the directory or the file extension.  For example, if you </span>
+<span class="sd">        The base portion of all automatically generated (target) files. This does</span>
+<span class="sd">        not include the directory or the file extension.  For example, if you</span>
 <span class="sd">        wanted cythongen to create a file name &#39;mynewfile.pyx&#39; then the value here</span>
 <span class="sd">        would be simply &#39;mynewfile&#39;.</span>
 <span class="sd">    tarname : str, tuple, or NotSpecified</span>
-<span class="sd">        The element&#39;s API name in the automatically generated (target) files, </span>
+<span class="sd">        The element&#39;s API name in the automatically generated (target) files,</span>
 <span class="sd">        e.g. MyNewClass.</span>
 <span class="sd">    incfiles : tuple of str or NotSpecified</span>
-<span class="sd">        This is a sequence of all files which must be #include&#39;d to access the </span>
-<span class="sd">        srcname at compile time.  This should be as minimal of a set as possible, </span>
-<span class="sd">        preferably only one file.  For example even though most HDF5 API </span>
-<span class="sd">        declarations are split across multiple files, to use the public API you </span>
-<span class="sd">        only ever need to include &#39;hdf5.h&#39;. Because these files are not parsed they </span>
-<span class="sd">        do not need to exist for xdress to run.  Thus the strings in incfiles are </span>
+<span class="sd">        This is a sequence of all files which must be #include&#39;d to access the</span>
+<span class="sd">        srcname at compile time.  This should be as minimal of a set as possible,</span>
+<span class="sd">        preferably only one file.  For example even though most HDF5 API</span>
+<span class="sd">        declarations are split across multiple files, to use the public API you</span>
+<span class="sd">        only ever need to include &#39;hdf5.h&#39;. Because these files are not parsed they</span>
+<span class="sd">        do not need to exist for xdress to run.  Thus the strings in incfiles are</span>
 <span class="sd">        not globbed.</span>
 <span class="sd">    sidecars : str, tuple of str, or NotSpecified</span>
 <span class="sd">        This is a sequence of all sidecar files to use for this API element. Like</span>
-<span class="sd">        srcfiles, these files must exist for xdress to run.  They similarly </span>
+<span class="sd">        srcfiles, these files must exist for xdress to run.  They similarly</span>
 <span class="sd">        globbed.  For example, &#39;myfile.py&#39;.</span>
 <span class="sd">    language : str or NotSpecified</span>
-<span class="sd">        Flag for the language that the srcfiles are implemented in. Valid options </span>
+<span class="sd">        Flag for the language that the srcfiles are implemented in. Valid options</span>
 <span class="sd">        are: &#39;c&#39;, &#39;c++&#39;, &#39;f&#39;, &#39;fortran&#39;, &#39;f77&#39;, &#39;f90&#39;, &#39;python&#39;, and &#39;cython&#39;.</span>
 
 <span class="sd">    See Also</span>
@@ -875,7 +875,7 @@ if(ga_enabled){
 <span class="sd">    ensure_apiname</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">srcname</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">,</span> <span class="n">srcfiles</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">,</span> 
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">srcname</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">,</span> <span class="n">srcfiles</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">,</span>
                 <span class="n">tarbase</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">,</span> <span class="n">tarname</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">,</span> <span class="n">incfiles</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">,</span>
                 <span class="n">sidecars</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">apiname</span><span class="p">,</span> <span class="n">cls</span><span class="p">)</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">srcname</span><span class="p">,</span> <span class="n">srcfiles</span><span class="p">,</span> <span class="n">tarbase</span><span class="p">,</span> <span class="n">tarname</span><span class="p">,</span>
@@ -884,7 +884,7 @@ if(ga_enabled){
 <span class="n">notspecified_apiname</span> <span class="o">=</span> <span class="n">apiname</span><span class="p">(</span><span class="o">*</span><span class="p">([</span><span class="n">NotSpecified</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">apiname</span><span class="o">.</span><span class="n">_fields</span><span class="p">)))</span>
 
 <span class="k">def</span> <span class="nf">_ensure_srcfiles</span><span class="p">(</span><span class="n">inp</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;This ensures that srcsfiles is a tuple of filenames that has been </span>
+    <span class="sd">&quot;&quot;&quot;This ensures that srcsfiles is a tuple of filenames that has been</span>
 <span class="sd">    expanded out and the files actually exist on the file system.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inp</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
@@ -898,7 +898,7 @@ if(ga_enabled){
     <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">_guess_base</span><span class="p">(</span><span class="n">srcfiles</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Guesses the base name for target files from source file names, or </span>
+    <span class="sd">&quot;&quot;&quot;Guesses the base name for target files from source file names, or</span>
 <span class="sd">    failing that, a default value.&quot;&quot;&quot;</span>
     <span class="n">basefiles</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">srcfiles</span><span class="p">]</span>
     <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">commonprefix</span><span class="p">(</span><span class="n">basefiles</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
@@ -907,14 +907,14 @@ if(ga_enabled){
     <span class="k">return</span> <span class="n">basename</span>
 
 <span class="k">def</span> <span class="nf">_guess_incfiles</span><span class="p">(</span><span class="n">srcfiles</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;This function guess potential include files from the headers that are </span>
+    <span class="sd">&quot;&quot;&quot;This function guess potential include files from the headers that are</span>
 <span class="sd">    present in the source files.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">incs</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">srcfiles</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">s</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span> <span class="ow">in</span> <span class="n">_hdr_exts</span><span class="p">]</span>
     <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">incs</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">_ensure_incfiles</span><span class="p">(</span><span class="n">inp</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;This ensures that incfiles is a tuple of unique filenames. This does not </span>
+    <span class="sd">&quot;&quot;&quot;This ensures that incfiles is a tuple of unique filenames. This does not</span>
 <span class="sd">    test that the files actually exist on the file system nor glob the filenames.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inp</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
@@ -943,7 +943,7 @@ if(ga_enabled){
     <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">scs</span><span class="p">))</span>
 
 <span class="k">def</span> <span class="nf">_find_language</span><span class="p">(</span><span class="n">lang</span><span class="p">,</span> <span class="n">srcfiles</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Tries to discover the canonical language that the srcfiles are </span>
+    <span class="sd">&quot;&quot;&quot;Tries to discover the canonical language that the srcfiles are</span>
 <span class="sd">    implmenetd in.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">lang</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
         <span class="n">lang</span> <span class="o">=</span> <span class="n">lang</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -982,7 +982,7 @@ if(ga_enabled){
     <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">tarname</span> <span class="ow">is</span> <span class="n">NotSpecified</span><span class="p">:</span>
         <span class="n">updates</span><span class="p">[</span><span class="s">&#39;tarname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">srcname</span>
     <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">tarbase</span> <span class="ow">is</span> <span class="n">NotSpecified</span><span class="p">:</span>
-        <span class="n">updates</span><span class="p">[</span><span class="s">&#39;tarbase&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_guess_base</span><span class="p">(</span><span class="n">updates</span><span class="p">[</span><span class="s">&#39;srcfiles&#39;</span><span class="p">],</span> 
+        <span class="n">updates</span><span class="p">[</span><span class="s">&#39;tarbase&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_guess_base</span><span class="p">(</span><span class="n">updates</span><span class="p">[</span><span class="s">&#39;srcfiles&#39;</span><span class="p">],</span>
                                          <span class="n">updates</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;tarname&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">.</span><span class="n">tarname</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">incfiles</span> <span class="ow">is</span> <span class="n">NotSpecified</span><span class="p">:</span>
         <span class="n">updates</span><span class="p">[</span><span class="s">&#39;incfiles&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_guess_incfiles</span><span class="p">(</span><span class="n">updates</span><span class="p">[</span><span class="s">&#39;srcfiles&#39;</span><span class="p">])</span>
