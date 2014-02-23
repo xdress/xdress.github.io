@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>xdress.cythongen &mdash; xdress 0.4-dev documentation</title>
+    <title>xdress.cythongen &mdash; xdress 0.4-rc1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.4-dev',
+        VERSION:     '0.4-rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.4-dev documentation" href="../../index.html" />
+    <link rel="top" title="xdress 0.4-rc1 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
@@ -62,7 +62,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.4-dev documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.4-rc1 documentation</a> &raquo;</li>
 
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
@@ -392,7 +392,6 @@ if(ga_enabled){
     <span class="n">cpppxd</span> <span class="o">=</span> <span class="n">_cpppxd_func_template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">d</span><span class="p">)</span>
     <span class="n">extra</span> <span class="o">=</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;extra&#39;</span><span class="p">]</span>
     <span class="k">if</span> <span class="s">&#39;srcpxd_filename&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">extra</span><span class="p">:</span>
-        <span class="n">ext</span> <span class="o">=</span> <span class="n">_lang_exts</span><span class="p">[</span><span class="n">name</span><span class="o">.</span><span class="n">language</span><span class="p">]</span>
         <span class="n">extra</span><span class="p">[</span><span class="s">&#39;srcpxd_filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;{0}_{1}.pxd&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">][</span><span class="s">&#39;tarbase&#39;</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">cimport_tups</span><span class="p">,</span> <span class="n">cpppxd</span>
 </div>
@@ -1095,10 +1094,11 @@ if(ga_enabled){
         <span class="k">elif</span> <span class="n">kind</span> <span class="ow">is</span> <span class="n">Arg</span><span class="o">.</span><span class="n">VAR</span><span class="p">:</span>
             <span class="n">afillval</span> <span class="o">=</span> <span class="s">&quot;{0}={1}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">kind</span> <span class="ow">is</span> <span class="n">Arg</span><span class="o">.</span><span class="n">TYPE</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;default argument value cannot be a type: {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;default argument value cannot be a type: &quot;</span>
+                             <span class="s">&quot;{0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;default argument value cannot be determined: &quot;</span>
-                             <span class="s">&quot;{0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+                             <span class="s">&quot;{0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
         <span class="n">afill</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">afillval</span><span class="p">)</span>
     <span class="k">return</span> <span class="s">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">afill</span><span class="p">),</span> <span class="n">names</span>
 
@@ -1833,7 +1833,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.4-dev documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.4-rc1 documentation</a> &raquo;</li>
 
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
