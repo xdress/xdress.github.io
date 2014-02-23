@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Automatic Descriptions &mdash; xdress 0.3 documentation</title>
+    <title>Automatic Descriptions &mdash; xdress 0.4-rc1 documentation</title>
     
     <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.3',
+        VERSION:     '0.4-rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.3 documentation" href="../index.html" />
+    <link rel="top" title="xdress 0.4-rc1 documentation" href="../index.html" />
     <link rel="up" title="Library Reference" href="index.html" />
     <link rel="next" title="Automatic API Discovery" href="autoall.html" />
     <link rel="prev" title="Abstract Syntax Tree Parsers" href="astparsers.html" /> 
@@ -70,7 +70,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="astparsers.html" title="Abstract Syntax Tree Parsers"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.3 documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.4-rc1 documentation</a> &raquo;</li>
 
           <li><a href="index.html" accesskey="U">Library Reference</a> &raquo;</li> 
       </ul>
@@ -105,6 +105,48 @@ basic constructs which may be wrapped: variables, functions, and classes.</p>
 <em>desc</em>).  This description is simply a Python dictionary with a specific structure.
 This structure makes heavy use of the type system to declare the types of all needed
 parameters.</p>
+<div class="section" id="the-name-key">
+<h3>The Name Key<a class="headerlink" href="#the-name-key" title="Permalink to this headline">¶</a></h3>
+<p>The <em>name</em> key is a dictionary that represents the API name of the element
+being described.  This contains exactly the same keys that the utils.apiname()
+type has fields.  While apiname is used for user input and validation, the values
+here must truly describe the API element.  The following keys &#8211; and only the
+following keys &#8211; are allowed in the name dictionary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">srcname:</th><td class="field-body">str or tuple, the element&#8217;s API name in the original source code,
+eg. MyClass.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">srcfiles:</th><td class="field-body">tuple of str, this is a sequence of unique strings which represents
+the file paths where the API element <em>may</em> be defined. For example, (&#8216;myfile.c&#8217;,
+&#8216;myfile.h&#8217;).  If the element is defined outside of these files, then the automatic
+discovery or description may fail. Since these files are parsed they must
+actually exist on the filesystem.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">tarbase:</th><td class="field-body">str, the base portion of all automatically generated (target) files.
+This does not include the directory or the file extension.  For example, if you
+wanted cythongen to create a file name &#8216;mynewfile.pyx&#8217; then the value here would
+be simply &#8216;mynewfile&#8217;.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">tarname:</th><td class="field-body">str or tuple, the element&#8217;s API name in the automatically generated
+(target) files, e.g. MyNewClass.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">incfiles:</th><td class="field-body">tuple of str, this is a sequence of all files which must be #include&#8217;d
+to access the srcname at compile time.  This should be as minimal of a set as
+possible, preferably only one file.  For example, &#8216;hdf5.h&#8217;.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">sidecars:</th><td class="field-body">tuple of str, this is a sequence of all sidecar files to use for
+this API element. Like srcfiles, these files must exist for xdress to run.
+For example, &#8216;myfile.py&#8217;.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">language:</th><td class="field-body">str, flag for the language that the srcfiles are implemented in. Valid
+options are: &#8216;c&#8217;, &#8216;c++&#8217;, &#8216;f&#8217;, &#8216;fortran&#8217;, &#8216;f77&#8217;, &#8216;f90&#8217;, &#8216;python&#8217;, and &#8216;cython&#8217;.</td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="section" id="variable-description-top-level-keys">
 <h3>Variable Description Top-Level Keys<a class="headerlink" href="#variable-description-top-level-keys" title="Permalink to this headline">¶</a></h3>
 <p>The following are valid top-level keys in a variable description dictionary:
@@ -113,7 +155,7 @@ name, namespace, type, docstring, and extra.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body">str, the variable name</td>
+<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body">dict, the variable name, see above</td>
 </tr>
 <tr class="field-even field"><th class="field-name">namespace:</th><td class="field-body">str or None, the namespace or module the variable lives in.</td>
 </tr>
@@ -138,26 +180,50 @@ name, namespace, signatures, docstring, and extra.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body">str or tuple, the function name</td>
+<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first">dict, the function name, see above</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">namespace:</th><td class="field-body">str or None, the namespace or module the function lives in.</td>
+<tr class="field-even field"><th class="field-name">namespace:</th><td class="field-body"><p class="first">str or None, the namespace or module the function lives in.</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">signatures:</th><td class="field-body">dict or dict-like, the keys of this dictionary are function call
-signatures and the values are the function return types. The signatures
-themselves are tuples. The first element of these tuples is the function name.
-The remaining elements (if any) are the function arguments.  Arguments are
-themselves length-2 or -3 tuples whose first elements are the argument names,
-the second element is the argument type, and the third element (if present) is
-the default value. Unlike class constuctors and destructors, the return type may
-not be None (only &#8216;void&#8217; values are allowed).</td>
+<tr class="field-odd field"><th class="field-name">signatures:</th><td class="field-body"><p class="first">dict or dict-like, the keys of this dictionary are function call
+signatures and the values are dicts of non-signature information.
+The signatures themselves are tuples. The first element of these tuples is the
+method name. The remaining elements (if any) are the function arguments.
+Arguments are themselves length-2 tuples whose first elements are the argument
+names and the second element is the argument type. The values are themselves
+dicts with the following keys:</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">the return type of this function. Unlike class constuctors
+and destructors, the return type may not be None (only &#8216;void&#8217; values
+are allowed).</td>
 </tr>
-<tr class="field-even field"><th class="field-name">docstring:</th><td class="field-body">str, optional, this is a documentation string for the function.</td>
+<tr class="field-even field"><th class="field-name">defaults:</th><td class="field-body">a length-N tuple of length-2 tuples of the default argument
+kinds and values. N must be the number of arguments in the signature.
+In the length-2 tuples, the first element must be a member of the
+utils.Arg enum and the second element is the associated default value.
+If no default argument exists use utils.Args.NONE as the kind and
+by convention set the value to None, though this should be ignored in all
+cases.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">extra:</th><td class="field-body">dict, optional, this stores arbitrary metadata that may be used with
+</tbody>
+</table>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">docstring:</th><td class="field-body"><p class="first">str, optional, this is a documentation string for the function.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">extra:</th><td class="field-body"><p class="first last">dict, optional, this stores arbitrary metadata that may be used with
 different backends. It is not added by any auto-describe routine but may be
 inserted later if needed.  One example use case is that the Cython generation
 looks for the pyx, pxd, and cpppxd keys for strings of supplemental Cython
-code to insert directly into the wrapper.</td>
+code to insert directly into the wrapper.</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -170,40 +236,67 @@ name, parents, namespace, attrs, methods, docstrings, and extra.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body">str or tuple, the class name</td>
+<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first">dict, the class name, see above</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">parents:</th><td class="field-body">list of strings or None, the immediate parents of the class
-(not grandparents).</td>
+<tr class="field-even field"><th class="field-name">parents:</th><td class="field-body"><p class="first">possibly empty list of strings, the immediate parents of the class
+(not grandparents).</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">namespace:</th><td class="field-body">str or None, the namespace or module the class lives in.</td>
+<tr class="field-odd field"><th class="field-name">namespace:</th><td class="field-body"><p class="first">str or None, the namespace or module the class lives in.</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">attrs:</th><td class="field-body">dict or dict-like, the names of the attributes (member variables) of the
-class mapped to their types, given in the format of the type system.</td>
+<tr class="field-even field"><th class="field-name">attrs:</th><td class="field-body"><p class="first">dict or dict-like, the names of the attributes (member variables) of the
+class mapped to their types, given in the format of the type system.</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">methods:</th><td class="field-body">dict or dict-like, similar to the attrs except that the keys are now
-function signatures and the values are the method return types.  The signatures
-themselves are tuples. The first element of these tuples is the method name.
-The remaining elements (if any) are the function arguments.  Arguments are
-themselves length-2 or -3 tuples whose first elements are the argument names,
-the second element is the argument type, and the third element (if present) is
-the default value.  If the return type is None (as opposed to &#8216;void&#8217;), then
-this method is assumed to be a constructor or destructor.</td>
+<tr class="field-odd field"><th class="field-name">methods:</th><td class="field-body"><p class="first">dict or dict-like, similar to the attrs except that the keys are now
+function signatures and the values are dicts of non-signature information.
+The signatures themselves are tuples. The first element of these tuples is the
+method name. The remaining elements (if any) are the function arguments.
+Arguments are themselves length-2 tuples whose first elements are the argument
+names and the second element is the argument type. The values are themselves
+dicts with the following keys:</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">the return type of this function. If the return type is None
+(as opposed to &#8216;void&#8217;), then this method is assumed to be a constructor
+or destructor.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">construct:</th><td class="field-body">str, optional, this is a flag for how the class is implemented.
+<tr class="field-even field"><th class="field-name">defaults:</th><td class="field-body">a length-N tuple of length-2 tuples of the default argument
+kinds and values. N must be the number of arguments in the signature.
+In the length-2 tuples, the first element must be a member of the
+utils.Arg enum and the second element is the associated default value.
+If no default argument exists use utils.Args.NONE as the kind and
+by convention set the value to None, though this should be ignored in all
+cases.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">construct:</th><td class="field-body"><p class="first">str, optional, this is a flag for how the class is implemented.
 Accepted values are &#8216;class&#8217; and &#8216;struct&#8217;.  If this is not present, then &#8216;class&#8217;
-is assumed.  This is most useful from wrapping C structs as Python classes.</td>
+is assumed.  This is most useful from wrapping C structs as Python classes.</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">docstrings:</th><td class="field-body">dict, optional, this dictionary is meant for storing documentation
+<tr class="field-even field"><th class="field-name">docstrings:</th><td class="field-body"><p class="first">dict, optional, this dictionary is meant for storing documentation
 strings.  All values are thus either strings or dictionaries of strings.
 Valid keys include: class, attrs, and methods.  The attrs and methods
 keys are dictionaries which may include keys that mirror the top-level keys of
-the same name.</td>
+the same name.</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">extra:</th><td class="field-body">dict, optional, this stores arbitrary metadata that may be used with
+<tr class="field-odd field"><th class="field-name">extra:</th><td class="field-body"><p class="first last">dict, optional, this stores arbitrary metadata that may be used with
 different backends. It is not added by any auto-describe routine but may be
 inserted later if needed.  One example use case is that the Cython generation
 looks for the pyx, pxd, and cpppxd keys for strings of supplemental Cython
-code to insert directly into the wrapper.</td>
+code to insert directly into the wrapper.</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -213,25 +306,45 @@ code to insert directly into the wrapper.</td>
 <p>Suppose we have a C++ class called Toaster that takes bread and makes delicious
 toast.  A valid description dictionary for this class would be as follows:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">class_desc</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Toaster&#39;</span><span class="p">,</span>
+    <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">&#39;language&#39;</span><span class="p">:</span> <span class="s">&#39;c++&#39;</span><span class="p">,</span>
+        <span class="s">&#39;incfiles&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;toaster.h&#39;</span><span class="p">,),</span>
+        <span class="s">&#39;srcfiles&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;src/toaster.h&#39;</span><span class="p">,</span> <span class="s">&#39;src/toaster.cpp&#39;</span><span class="p">),</span>
+        <span class="s">&#39;srcname&#39;</span><span class="p">:</span> <span class="s">&#39;Toaster&#39;</span><span class="p">,</span>
+        <span class="s">&#39;sidecars&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;src/toaster.py&#39;</span><span class="p">,),</span>
+        <span class="s">&#39;tarbase&#39;</span><span class="p">:</span> <span class="s">&#39;toaster&#39;</span><span class="p">,</span>
+        <span class="s">&#39;tarname&#39;</span><span class="p">:</span> <span class="s">&#39;Toaster&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
     <span class="s">&#39;parents&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;FCComp&#39;</span><span class="p">],</span>
     <span class="s">&#39;namespace&#39;</span><span class="p">:</span> <span class="s">&#39;bright&#39;</span><span class="p">,</span>
+    <span class="s">&#39;construct&#39;</span><span class="p">:</span> <span class="s">&#39;class&#39;</span><span class="p">,</span>
     <span class="s">&#39;attrs&#39;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s">&#39;n_slices&#39;</span><span class="p">:</span> <span class="s">&#39;int32&#39;</span><span class="p">,</span>
         <span class="s">&#39;rate&#39;</span><span class="p">:</span> <span class="s">&#39;float64&#39;</span><span class="p">,</span>
         <span class="s">&#39;toastiness&#39;</span><span class="p">:</span> <span class="s">&#39;str&#39;</span><span class="p">,</span>
         <span class="p">},</span>
     <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="p">(</span><span class="s">&#39;Toaster&#39;</span><span class="p">,):</span> <span class="bp">None</span><span class="p">,</span>
-        <span class="p">(</span><span class="s">&#39;Toaster&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;str&#39;</span><span class="p">,</span> <span class="s">&#39;&quot;&quot;&#39;</span><span class="p">)):</span> <span class="bp">None</span><span class="p">,</span>
-        <span class="p">(</span><span class="s">&#39;Toaster&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;paramtrack&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;set&#39;</span><span class="p">,</span> <span class="s">&#39;str&#39;</span><span class="p">)),</span> <span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;str&#39;</span><span class="p">,</span> <span class="s">&#39;&quot;&quot;&#39;</span><span class="p">)):</span> <span class="bp">None</span><span class="p">,</span>
-        <span class="p">(</span><span class="s">&#39;~Toaster&#39;</span><span class="p">,):</span> <span class="bp">None</span><span class="p">,</span>
-        <span class="p">(</span><span class="s">&#39;tostring&#39;</span><span class="p">,):</span> <span class="s">&#39;str&#39;</span><span class="p">,</span>
-        <span class="p">(</span><span class="s">&#39;calc&#39;</span><span class="p">,):</span> <span class="s">&#39;Material&#39;</span><span class="p">,</span>
-        <span class="p">(</span><span class="s">&#39;calc&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;incomp&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;map&#39;</span><span class="p">,</span> <span class="s">&#39;int32&#39;</span><span class="p">,</span> <span class="s">&#39;float64&#39;</span><span class="p">))):</span> <span class="s">&#39;Material&#39;</span><span class="p">,</span>
-        <span class="p">(</span><span class="s">&#39;calc&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;mat&#39;</span><span class="p">,</span> <span class="s">&#39;Material&#39;</span><span class="p">)):</span> <span class="s">&#39;Material&#39;</span><span class="p">,</span>
-        <span class="p">(</span><span class="s">&#39;write&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;filename&#39;</span><span class="p">,</span> <span class="s">&#39;str&#39;</span><span class="p">,</span> <span class="s">&#39;&quot;toaster.txt&quot;&#39;</span><span class="p">)):</span> <span class="s">&#39;void&#39;</span><span class="p">,</span>
-        <span class="p">(</span><span class="s">&#39;write&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;filename&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;char&#39;</span> <span class="s">&#39;*&#39;</span><span class="p">),</span> <span class="s">&#39;&quot;toaster.txt&quot;&#39;</span><span class="p">)):</span> <span class="s">&#39;void&#39;</span><span class="p">,</span>
+        <span class="p">(</span><span class="s">&#39;Toaster&#39;</span><span class="p">,):</span> <span class="p">{</span><span class="s">&#39;return&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;defaults&#39;</span><span class="p">:</span> <span class="p">()},</span>
+        <span class="p">(</span><span class="s">&#39;Toaster&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;str&#39;</span><span class="p">)):</span> <span class="p">{</span><span class="s">&#39;return&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+            <span class="s">&#39;defaults&#39;</span><span class="p">:</span> <span class="p">((</span><span class="n">Args</span><span class="o">.</span><span class="n">LIT</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">),)},</span>
+        <span class="p">(</span><span class="s">&#39;Toaster&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;paramtrack&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;set&#39;</span><span class="p">,</span> <span class="s">&#39;str&#39;</span><span class="p">)),</span> <span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;str&#39;</span><span class="p">,</span> <span class="s">&#39;&quot;&quot;&#39;</span><span class="p">)):</span> <span class="p">{</span>
+            <span class="s">&#39;return&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+            <span class="s">&#39;defaults&#39;</span><span class="p">:</span> <span class="p">((</span><span class="n">Args</span><span class="o">.</span><span class="n">NONE</span><span class="p">,</span> <span class="bp">None</span><span class="p">),</span> <span class="p">(</span><span class="n">Args</span><span class="o">.</span><span class="n">LIT</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">))},</span>
+        <span class="p">(</span><span class="s">&#39;~Toaster&#39;</span><span class="p">,):</span> <span class="p">{</span><span class="s">&#39;return&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;defaults&#39;</span><span class="p">:</span> <span class="p">()},</span>
+        <span class="p">(</span><span class="s">&#39;tostring&#39;</span><span class="p">,):</span> <span class="p">{</span><span class="s">&#39;return&#39;</span><span class="p">:</span> <span class="s">&#39;str&#39;</span><span class="p">,</span> <span class="s">&#39;defaults&#39;</span><span class="p">:</span> <span class="p">()},</span>
+        <span class="p">(</span><span class="s">&#39;calc&#39;</span><span class="p">,):</span> <span class="p">{</span><span class="s">&#39;return&#39;</span><span class="p">:</span> <span class="s">&#39;Material&#39;</span><span class="p">,</span> <span class="s">&#39;defaults&#39;</span><span class="p">:</span> <span class="p">()},</span>
+        <span class="p">(</span><span class="s">&#39;calc&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;incomp&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;map&#39;</span><span class="p">,</span> <span class="s">&#39;int32&#39;</span><span class="p">,</span> <span class="s">&#39;float64&#39;</span><span class="p">))):</span> <span class="p">{</span>
+            <span class="s">&#39;return&#39;</span><span class="p">:</span> <span class="s">&#39;Material&#39;</span><span class="p">,</span>
+            <span class="s">&#39;defaults&#39;</span><span class="p">:</span> <span class="p">((</span><span class="n">Args</span><span class="o">.</span><span class="n">NONE</span><span class="p">,</span> <span class="bp">None</span><span class="p">),)},</span>
+        <span class="p">(</span><span class="s">&#39;calc&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;mat&#39;</span><span class="p">,</span> <span class="s">&#39;Material&#39;</span><span class="p">)):</span> <span class="p">{</span>
+            <span class="s">&#39;return&#39;</span><span class="p">:</span> <span class="s">&#39;Material&#39;</span><span class="p">,</span>
+            <span class="s">&#39;defaults&#39;</span><span class="p">:</span> <span class="p">((</span><span class="n">Args</span><span class="o">.</span><span class="n">NONE</span><span class="p">,</span> <span class="bp">None</span><span class="p">),)},</span>
+        <span class="p">(</span><span class="s">&#39;write&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;filename&#39;</span><span class="p">,</span> <span class="s">&#39;str&#39;</span><span class="p">)):</span> <span class="p">{</span>
+            <span class="s">&#39;return&#39;</span><span class="p">:</span> <span class="s">&#39;void&#39;</span><span class="p">,</span>
+            <span class="s">&#39;defaults&#39;</span><span class="p">:</span> <span class="p">((</span><span class="n">Args</span><span class="o">.</span><span class="n">LIT</span><span class="p">,</span> <span class="s">&quot;toaster.txt&quot;</span><span class="p">),)},</span>
+        <span class="p">(</span><span class="s">&#39;write&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;filename&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;char&#39;</span> <span class="s">&#39;*&#39;</span><span class="p">),</span> <span class="s">&#39;&quot;toaster.txt&quot;&#39;</span><span class="p">)):</span> <span class="p">{</span>
+            <span class="s">&#39;return&#39;</span><span class="p">:</span> <span class="s">&#39;void&#39;</span><span class="p">,</span>
+            <span class="s">&#39;defaults&#39;</span><span class="p">:</span> <span class="p">((</span><span class="n">Args</span><span class="o">.</span><span class="n">LIT</span><span class="p">,</span> <span class="s">&quot;toaster.txt&quot;</span><span class="p">),)},</span>
         <span class="p">},</span>
     <span class="s">&#39;docstrings&#39;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&quot;I am a toaster!&quot;</span><span class="p">,</span>
@@ -281,7 +394,7 @@ constructor.  The default visitor methods are valid for classes.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>name</strong> : str</p>
 <blockquote>
-<div><p>The name, this may not have a None value.</p>
+<div><p>The name to describe.</p>
 </div></blockquote>
 <p><strong>root</strong> : element tree node, optional</p>
 <blockquote>
@@ -374,7 +487,7 @@ finding elements of the same name coming from other libraries.</p>
 <dl class="method">
 <dt id="xdress.autodescribe.GccxmlBaseDescriber.visit_functiontype">
 <tt class="descname">visit_functiontype</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlBaseDescriber.visit_functiontype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_functiontype" title="Permalink to this definition">¶</a></dt>
-<dd><p>visits an function type and returns a &#8216;function&#8217; dependent 
+<dd><p>visits an function type and returns a &#8216;function&#8217; dependent
 refinement type.</p>
 </dd></dl>
 
@@ -406,7 +519,7 @@ type system.</p>
 <dl class="method">
 <dt id="xdress.autodescribe.GccxmlBaseDescriber.visit_referencetype">
 <tt class="descname">visit_referencetype</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#GccxmlBaseDescriber.visit_referencetype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.GccxmlBaseDescriber.visit_referencetype" title="Permalink to this definition">¶</a></dt>
-<dd><p>visits a refernece and maps it to a &#8216;&amp;&#8217; refinement type.</p>
+<dd><p>visits a reference and maps it to a &#8216;&amp;&#8217; refinement type.</p>
 </dd></dl>
 
 <dl class="method">
@@ -607,24 +720,16 @@ target files.</p>
 
 <dl class="method">
 <dt id="xdress.autodescribe.XDressPlugin.compute_desc">
-<tt class="descname">compute_desc</tt><big>(</big><em>name</em>, <em>srcname</em>, <em>tarname</em>, <em>kind</em>, <em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#XDressPlugin.compute_desc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.compute_desc" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">compute_desc</tt><big>(</big><em>name</em>, <em>kind</em>, <em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#XDressPlugin.compute_desc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.compute_desc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a description dictionary for a class or function
 implemented in a source file and bound into a target file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>name</strong> : str</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>name</strong> : apiname</p>
 <blockquote>
-<div><p>Class or function name to describe.</p>
-</div></blockquote>
-<p><strong>srcname</strong> : str</p>
-<blockquote>
-<div><p>File basename of implementation.</p>
-</div></blockquote>
-<p><strong>tarname</strong> : str</p>
-<blockquote>
-<div><p>File basename where the bindings will be generated.</p>
+<div><p>API element name to describe.</p>
 </div></blockquote>
 <p><strong>kind</strong> : str</p>
 <blockquote>
@@ -666,8 +771,8 @@ implemented in a source file and bound into a target file.</p>
 
 <dl class="method">
 <dt id="xdress.autodescribe.XDressPlugin.load_pysrcmod">
-<tt class="descname">load_pysrcmod</tt><big>(</big><em>srcname</em>, <em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#XDressPlugin.load_pysrcmod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.load_pysrcmod" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads a module dictionary from a src file intox the pysrcenv cache.</p>
+<tt class="descname">load_pysrcmod</tt><big>(</big><em>sidecar</em>, <em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#XDressPlugin.load_pysrcmod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.XDressPlugin.load_pysrcmod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a module dictionary from a sidecar file into the pysrcenv cache.</p>
 </dd></dl>
 
 <dl class="method">
@@ -699,79 +804,193 @@ copying src filenames to tar filename.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="xdress.autodescribe.ClangTypeVisitor">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">ClangTypeVisitor</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#ClangTypeVisitor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.ClangTypeVisitor" title="Permalink to this definition">¶</a></dt>
-<dd><p>For a Clang type located at a root node, compute the cooresponding
-typesystem type.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="xdress.autodescribe.clang_canonize">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_canonize</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_canonize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_canonize" title="Permalink to this definition">¶</a></dt>
-<dd><div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">This has not yet been implemented fully or at all.</p>
-</div>
-</dd></dl>
-
-<dl class="function">
 <dt id="xdress.autodescribe.clang_describe">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_describe</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_describe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_describe" title="Permalink to this definition">¶</a></dt>
-<dd><p>Use clang to describe the class.</p>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">This has not yet been implemented fully or at all.</p>
-</div>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_describe</tt><big>(</big><em>filename</em>, <em>name</em>, <em>kind</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>extra_parser_args=()</em>, <em>ts=None</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir=None</em>, <em>onlyin=None</em>, <em>language='c++'</em>, <em>clang_includes=()</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_describe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_describe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use Clang to describe the class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>The path to the file.</p>
+</div></blockquote>
+<p><strong>name</strong> : str</p>
+<blockquote>
+<div><p>The name to describe.</p>
+</div></blockquote>
+<p><strong>kind</strong> : str</p>
+<blockquote>
+<div><p>The kind of type to describe, valid flags are &#8216;class&#8217;, &#8216;func&#8217;, and &#8216;var&#8217;.</p>
+</div></blockquote>
+<p><strong>includes: list of str, optional</strong> :</p>
+<blockquote>
+<div><p>The list of extra include directories to search for header files.</p>
+</div></blockquote>
+<p><strong>defines: list of str, optional</strong> :</p>
+<blockquote>
+<div><p>The list of extra macro definitions to apply.</p>
+</div></blockquote>
+<p><strong>undefines: list of str, optional</strong> :</p>
+<blockquote>
+<div><p>The list of extra macro undefinitions to apply.</p>
+</div></blockquote>
+<p><strong>extra_parser_args</strong> : list of str, optional</p>
+<blockquote>
+<div><p>Further command line arguments to pass to the parser.</p>
+</div></blockquote>
+<p><strong>ts</strong> : TypeSystem, optional</p>
+<blockquote>
+<div><p>A type system instance.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : bool, optional</p>
+<blockquote>
+<div><p>Flag to diplay extra information while describing the class.</p>
+</div></blockquote>
+<p><strong>debug</strong> : bool, optional</p>
+<blockquote>
+<div><p>Flag to enable/disable debug mode.  Currently ignored.</p>
+</div></blockquote>
+<p><strong>builddir</strong> : str, optional</p>
+<blockquote>
+<div><p>Ignored.  Exists only for compatibility with gccxml_describe.</p>
+</div></blockquote>
+<p><strong>onlyin</strong> : set of str, optional</p>
+<blockquote>
+<div><p>The paths to the files that the definition is allowed to exist in.</p>
+</div></blockquote>
+<p><strong>language</strong> : str</p>
+<blockquote>
+<div><p>Valid language flag.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>desc</strong> : dict</p>
+<blockquote class="last">
+<div><p>A dictionary describing the class which may be used to generate
+API bindings.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
-<dt id="xdress.autodescribe.clang_find_attributes">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_find_attributes</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_find_attributes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_find_attributes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Finds attributes one level below the Clang node.</p>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">This has not yet been implemented fully or at all.</p>
+<dt id="xdress.autodescribe.clang_describe_class">
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_describe_class</tt><big>(</big><em>cls</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_describe_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_describe_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe the class at the given clang AST node</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.autodescribe.clang_describe_function">
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_describe_function</tt><big>(</big><em>func</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_describe_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_describe_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe the function at the given clang AST node.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.autodescribe.clang_describe_functions">
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_describe_functions</tt><big>(</big><em>funcs</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_describe_functions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_describe_functions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe the function at the given clang AST nodes.  If more than one
+node is given, we verify that they match and find argument names where we can.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.autodescribe.clang_describe_template_arg">
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_describe_template_arg</tt><big>(</big><em>arg</em>, <em>loc</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_describe_template_arg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_describe_template_arg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe a template argument</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.autodescribe.clang_describe_template_args">
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_describe_template_args</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_describe_template_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_describe_template_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO: Broken version handling defaults
+automatically:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">_</span><span class="p">,</span> <span class="n">defaults</span> <span class="o">=</span> <span class="n">clang_template_arg_info</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">specialized_template</span><span class="p">)</span>
+<span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">clang_describe_template_arg</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">get_template_args</span><span class="p">()]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">defaults</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">defaults</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">args</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+<span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</pre></div>
 </div>
+<p>TODO: Needs a better docstring.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.autodescribe.clang_describe_type">
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_describe_type</tt><big>(</big><em>typ</em>, <em>loc</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_describe_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_describe_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe the type reference at the given cursor</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.autodescribe.clang_describe_var">
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_describe_var</tt><big>(</big><em>var</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_describe_var"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_describe_var" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe the var at the given clang AST node</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.autodescribe.clang_expand_template_args">
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_expand_template_args</tt><big>(</big><em>node</em>, <em>args</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_expand_template_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_expand_template_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO: Broken version handling defaults
+automatically:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">count</span><span class="p">,</span><span class="n">defaults</span> <span class="o">=</span> <span class="n">clang_template_arg_info</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&#39;SP </span><span class="si">%s</span><span class="s">, COUNT </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">spelling</span><span class="p">,</span><span class="n">count</span><span class="p">,</span><span class="n">defaults</span><span class="p">,</span><span class="n">args</span><span class="p">))</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">+</span> <span class="n">defaults</span><span class="p">[(</span><span class="n">count</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)):]</span>
+<span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">args</span><span class="p">)</span><span class="o">+</span><span class="n">defaults</span><span class="p">[</span><span class="n">count</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>TODO: Needs a better docstring.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.autodescribe.clang_find_class">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_find_class</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_find_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_find_class" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find the node for a given class underneath the current node.</p>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">This has not yet been implemented fully or at all.</p>
-</div>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_find_class</tt><big>(</big><em>tu</em>, <em>name</em>, <em>ts</em>, <em>namespace=None</em>, <em>filename=None</em>, <em>onlyin=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_find_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_find_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the node for a given class in the given translation unit.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="xdress.autodescribe.clang_find_declarations">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_find_declarations</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_find_declarations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_find_declarations" title="Permalink to this definition">¶</a></dt>
-<dd><p>Finds declarations one level below the Clang node.</p>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">This has not yet been implemented fully or at all.</p>
-</div>
+<dt id="xdress.autodescribe.clang_find_decls">
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_find_decls</tt><big>(</big><em>tu</em>, <em>name</em>, <em>kinds</em>, <em>onlyin</em>, <em>namespace=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_find_decls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_find_decls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all declarations of the given name and kind in the given scopes.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="xdress.autodescribe.clang_is_loc_in_range">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_is_loc_in_range</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_is_loc_in_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_is_loc_in_range" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns whether a given Clang location is part of a source file range.</p>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">This has not yet been implemented fully or at all.</p>
-</div>
+<dt id="xdress.autodescribe.clang_find_function">
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_find_function</tt><big>(</big><em>tu</em>, <em>name</em>, <em>ts</em>, <em>namespace=None</em>, <em>filename=None</em>, <em>onlyin=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_find_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_find_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all nodes corresponding to a given function.  If there is a separate declaration
+and definition, they will be returned as separate nodes, in the order given in the file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.autodescribe.clang_find_scopes">
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_find_scopes</tt><big>(</big><em>tu</em>, <em>onlyin</em>, <em>namespace=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_find_scopes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_find_scopes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all &#8216;toplevel&#8217; scopes, optionally restricting to a given namespace</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.autodescribe.clang_find_var">
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_find_var</tt><big>(</big><em>tu</em>, <em>name</em>, <em>ts</em>, <em>namespace=None</em>, <em>filename=None</em>, <em>onlyin=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_find_var"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_find_var" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the node for a given var.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.autodescribe.clang_fix_onlyin">
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_fix_onlyin</tt><big>(</big><em>onlyin</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_fix_onlyin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_fix_onlyin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make sure onlyin is a set and add ./path versions for each relative path</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="xdress.autodescribe.clang_range_str">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_range_str</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_range_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_range_str" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_range_str</tt><big>(</big><em>source_range</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_range_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_range_str" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the text present on a source range.</p>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">This has not yet been implemented fully or at all.</p>
-</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.autodescribe.clang_template_param_kinds">
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">clang_template_param_kinds</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#clang_template_param_kinds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.clang_template_param_kinds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the Arg kind of each template argument of node</p>
 </dd></dl>
 
 <dl class="function">
@@ -782,20 +1001,22 @@ typesystem type.</p>
 
 <dl class="function">
 <dt id="xdress.autodescribe.describe">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">describe</tt><big>(</big><em>filename</em>, <em>name=None</em>, <em>kind='class'</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>parsers='gccxml'</em>, <em>ts=None</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#describe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.describe" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">describe</tt><big>(</big><em>filename</em>, <em>name=None</em>, <em>kind='class'</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>extra_parser_args=()</em>, <em>parsers='gccxml'</em>, <em>ts=None</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em>, <em>language='c++'</em>, <em>clang_includes=()</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#describe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.describe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automatically describes an API element in a file.  This is the main entry point.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str or container of strs</p>
 <blockquote>
-<div><p>The path to the file.</p>
+<div><p>The path to the file or a list of file paths.  If this is a list to many
+files, a temporary file will be created that #includes all of the files
+in this list in order.  This temporary file is the one which will be
+parsed.</p>
 </div></blockquote>
-<p><strong>name</strong> : str or None, optional</p>
+<p><strong>name</strong> : str</p>
 <blockquote>
-<div><p>The name, a &#8216;None&#8217; value will attempt to infer this from the
-filename.</p>
+<div><p>The name to describe.</p>
 </div></blockquote>
 <p><strong>kind</strong> : str, optional</p>
 <blockquote>
@@ -812,6 +1033,10 @@ filename.</p>
 <p><strong>undefines: list of str, optional</strong> :</p>
 <blockquote>
 <div><p>The list of extra macro undefinitions to apply.</p>
+</div></blockquote>
+<p><strong>extra_parser_args</strong> : list of str, optional</p>
+<blockquote>
+<div><p>Further command line arguments to pass to the parser.</p>
 </div></blockquote>
 <p><strong>parsers</strong> : str, list, or dict, optional</p>
 <blockquote>
@@ -838,6 +1063,14 @@ a dictionary, it specifies the order to use parser based on language, i.e.
 <blockquote>
 <div><p>Location of &#8211; often temporary &#8211; build files.</p>
 </div></blockquote>
+<p><strong>language</strong> : str</p>
+<blockquote>
+<div><p>Valid language flag.</p>
+</div></blockquote>
+<p><strong>clang_includes</strong> : list of str, optional</p>
+<blockquote>
+<div><p>clang-specific include paths.</p>
+</div></blockquote>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>desc</strong> : dict</p>
@@ -853,7 +1086,7 @@ API bindings.</p>
 
 <dl class="function">
 <dt id="xdress.autodescribe.gccxml_describe">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">gccxml_describe</tt><big>(</big><em>filename</em>, <em>name</em>, <em>kind</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>ts=None</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#gccxml_describe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.gccxml_describe" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">gccxml_describe</tt><big>(</big><em>filename</em>, <em>name</em>, <em>kind</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>extra_parser_args=()</em>, <em>ts=None</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em>, <em>onlyin=None</em>, <em>language='c++'</em>, <em>clang_includes=()</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#gccxml_describe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.gccxml_describe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use GCC-XML to describe the class.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -863,10 +1096,9 @@ API bindings.</p>
 <blockquote>
 <div><p>The path to the file.</p>
 </div></blockquote>
-<p><strong>name</strong> : str or None, optional</p>
+<p><strong>name</strong> : str</p>
 <blockquote>
-<div><p>The name, a &#8216;None&#8217; value will attempt to infer this from the
-filename.</p>
+<div><p>The name to describe.</p>
 </div></blockquote>
 <p><strong>kind</strong> : str</p>
 <blockquote>
@@ -884,6 +1116,10 @@ filename.</p>
 <blockquote>
 <div><p>The list of extra macro undefinitions to apply.</p>
 </div></blockquote>
+<p><strong>extra_parser_args</strong> : list of str, optional</p>
+<blockquote>
+<div><p>Further command line arguments to pass to the parser.</p>
+</div></blockquote>
 <p><strong>ts</strong> : TypeSystem, optional</p>
 <blockquote>
 <div><p>A type system instance.</p>
@@ -900,6 +1136,15 @@ filename.</p>
 <blockquote>
 <div><p>Location of &#8211; often temporary &#8211; build files.</p>
 </div></blockquote>
+<p><strong>onlyin: set of str</strong> :</p>
+<blockquote>
+<div><p>The paths to the files that the definition is allowed to exist in.</p>
+</div></blockquote>
+<p><strong>language</strong> : str</p>
+<blockquote>
+<div><p>Valid language flag.</p>
+</div></blockquote>
+<p><strong>clang_includes</strong> : ignored</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>desc</strong> : dict</p>
@@ -915,7 +1160,7 @@ API bindings.</p>
 
 <dl class="function">
 <dt id="xdress.autodescribe.pycparser_describe">
-<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">pycparser_describe</tt><big>(</big><em>filename</em>, <em>name</em>, <em>kind</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>ts=None</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#pycparser_describe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.pycparser_describe" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.autodescribe.</tt><tt class="descname">pycparser_describe</tt><big>(</big><em>filename</em>, <em>name</em>, <em>kind</em>, <em>includes=()</em>, <em>defines=('XDRESS'</em>, <em>)</em>, <em>undefines=()</em>, <em>extra_parser_args=()</em>, <em>ts=None</em>, <em>verbose=False</em>, <em>debug=False</em>, <em>builddir='build'</em>, <em>onlyin=None</em>, <em>language='c'</em>, <em>clang_includes=()</em><big>)</big><a class="reference internal" href="../_modules/xdress/autodescribe.html#pycparser_describe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.autodescribe.pycparser_describe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use pycparser to describe the fucntion or struct (class).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -925,10 +1170,9 @@ API bindings.</p>
 <blockquote>
 <div><p>The path to the file.</p>
 </div></blockquote>
-<p><strong>name</strong> : str or None, optional</p>
+<p><strong>name</strong> : str</p>
 <blockquote>
-<div><p>The name, a &#8216;None&#8217; value will attempt to infer this from the
-filename.</p>
+<div><p>The name to describe.</p>
 </div></blockquote>
 <p><strong>kind</strong> : str</p>
 <blockquote>
@@ -946,6 +1190,10 @@ filename.</p>
 <blockquote>
 <div><p>The list of extra macro undefinitions to apply.</p>
 </div></blockquote>
+<p><strong>extra_parser_args</strong> : list of str, optional</p>
+<blockquote>
+<div><p>Further command line arguments to pass to the parser.</p>
+</div></blockquote>
 <p><strong>ts</strong> : TypeSystem, optional</p>
 <blockquote>
 <div><p>A type system instance.</p>
@@ -962,6 +1210,15 @@ filename.</p>
 <blockquote>
 <div><p>Location of &#8211; often temporary &#8211; build files.</p>
 </div></blockquote>
+<p><strong>onlyin</strong> : set of str</p>
+<blockquote>
+<div><p>The paths to the files that the definition is allowed to exist in.</p>
+</div></blockquote>
+<p><strong>language</strong> : str</p>
+<blockquote>
+<div><p>Must be &#8216;c&#8217;.</p>
+</div></blockquote>
+<p><strong>clang_includes</strong> : ignored</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>desc</strong> : dict</p>
@@ -992,6 +1249,7 @@ API bindings.</p>
   <ul>
 <li><a class="reference internal" href="#">Automatic Descriptions</a><ul>
 <li><a class="reference internal" href="#descriptions">Descriptions</a><ul>
+<li><a class="reference internal" href="#the-name-key">The Name Key</a></li>
 <li><a class="reference internal" href="#variable-description-top-level-keys">Variable Description Top-Level Keys</a></li>
 <li><a class="reference internal" href="#function-description-top-level-keys">Function Description Top-Level Keys</a></li>
 <li><a class="reference internal" href="#class-description-top-level-keys">Class Description Top-Level Keys</a></li>
@@ -1053,7 +1311,7 @@ API bindings.</p>
         <li class="right" >
           <a href="astparsers.html" title="Abstract Syntax Tree Parsers"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.3 documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.4-rc1 documentation</a> &raquo;</li>
 
           <li><a href="index.html" >Library Reference</a> &raquo;</li> 
       </ul>

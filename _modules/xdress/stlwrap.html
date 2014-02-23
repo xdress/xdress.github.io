@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>xdress.stlwrap &mdash; xdress 0.3 documentation</title>
+    <title>xdress.stlwrap &mdash; xdress 0.4-rc1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.3',
+        VERSION:     '0.4-rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.3 documentation" href="../../index.html" />
+    <link rel="top" title="xdress 0.4-rc1 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
@@ -62,7 +62,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.3 documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.4-rc1 documentation</a> &raquo;</li>
 
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
@@ -83,7 +83,7 @@ if(ga_enabled){
 
 <span class="sd">:author: Anthony Scopatz &lt;scopatz@gmail.com&gt;</span>
 
-<span class="sd">C++ STL Warpper API</span>
+<span class="sd">C++ STL Wrapper API</span>
 <span class="sd">===================</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
@@ -165,11 +165,18 @@ if(ga_enabled){
 <span class="s">cdef class _Set{clsname}:</span>
 <span class="s">    def __cinit__(self, new_set=True, bint free_set=True):</span>
 <span class="s">        cdef {ctype} s</span>
+<span class="s">        cdef cpp_set[{ctype}] * set_ptr</span>
 <span class="s">{py2cdecl.indent8}</span>
 
 <span class="s">        # Decide how to init set, if at all</span>
 <span class="s">        if isinstance(new_set, _Set{clsname}):</span>
 <span class="s">            self.set_ptr = (&lt;_Set{clsname}&gt; new_set).set_ptr</span>
+<span class="s">        elif isinstance(new_set, np.generic) and np.PyArray_DescrFromScalar(new_set).type_num == {set_cython_nptype}:</span>
+<span class="s">            # scalars are copies, sadly not views, so we need to re-copy</span>
+<span class="s">            if self.set_ptr == NULL:</span>
+<span class="s">                self.set_ptr = new cpp_set[{ctype}]()</span>
+<span class="s">            np.PyArray_ScalarAsCtype(new_set, &amp;set_ptr)</span>
+<span class="s">            self.set_ptr[0] = set_ptr[0]</span>
 <span class="s">        elif hasattr(new_set, &#39;__iter__&#39;) or </span><span class="se">\\</span><span class="s"></span>
 <span class="s">                (hasattr(new_set, &#39;__len__&#39;) and</span>
 <span class="s">                hasattr(new_set, &#39;__getitem__&#39;)):</span>
@@ -232,6 +239,7 @@ if(ga_enabled){
 <span class="s">    &quot;&quot;&quot;Wrapper class for C++ standard library sets of type &lt;{humname}&gt;.</span>
 <span class="s">    Provides set like interface on the Python level.</span>
 
+
 <span class="s">    Parameters</span>
 <span class="s">    ----------</span>
 <span class="s">    new_set : bool or set-like</span>
@@ -258,11 +266,12 @@ if(ga_enabled){
     <span class="n">fpt</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">from_pytypes</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
     <span class="n">kw</span><span class="p">[</span><span class="s">&#39;isinst&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot; or &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&quot;isinstance(value, {0})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">fpt</span><span class="p">])</span>
     <span class="n">c2pykeys</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;c2pydecl&#39;</span><span class="p">,</span> <span class="s">&#39;c2pybody&#39;</span><span class="p">,</span> <span class="s">&#39;c2pyrtn&#39;</span><span class="p">]</span>
-    <span class="n">c2py</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">cython_c2py</span><span class="p">(</span><span class="s">&quot;deref(inow)&quot;</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">cached</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">c2py</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">cython_c2py</span><span class="p">(</span><span class="s">&#39;inow&#39;</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">existing_name</span><span class="o">=</span><span class="s">&quot;deref(inow)&quot;</span><span class="p">,</span> <span class="n">cached</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
     <span class="n">kw</span><span class="o">.</span><span class="n">update</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span> <span class="n">indentstr</span><span class="p">(</span><span class="n">v</span> <span class="ow">or</span> <span class="s">&#39;&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">c2pykeys</span><span class="p">,</span> <span class="n">c2py</span><span class="p">)])</span>
     <span class="n">py2ckeys</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;py2cdecl&#39;</span><span class="p">,</span> <span class="s">&#39;py2cbody&#39;</span><span class="p">,</span> <span class="s">&#39;py2crtn&#39;</span><span class="p">]</span>
     <span class="n">py2c</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">cython_py2c</span><span class="p">(</span><span class="s">&quot;value&quot;</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
     <span class="n">kw</span><span class="o">.</span><span class="n">update</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span> <span class="n">indentstr</span><span class="p">(</span><span class="n">v</span> <span class="ow">or</span> <span class="s">&#39;&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">py2ckeys</span><span class="p">,</span> <span class="n">py2c</span><span class="p">)])</span>
+    <span class="n">kw</span><span class="p">[</span><span class="s">&#39;set_cython_nptype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">cython_nptype</span><span class="p">((</span><span class="s">&#39;set&#39;</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">_pyxset</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
 </div>
 <span class="n">_pxdset</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;# Set{clsname}</span>
@@ -297,6 +306,8 @@ if(ga_enabled){
 <div class="viewcode-block" id="gentest_set"><a class="viewcode-back" href="../../libref/stlwrap.html#xdress.stlwrap.gentest_set">[docs]</a><span class="k">def</span> <span class="nf">gentest_set</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">ts</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Returns the test snippet for a set of type t.&quot;&quot;&quot;</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">canon</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">testvals</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&quot;&quot;</span>
     <span class="k">return</span> <span class="n">_testset</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="nb">repr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">testvals</span><span class="p">[</span><span class="n">t</span><span class="p">]],</span> 
                            <span class="n">clsname</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">cython_classname</span><span class="p">(</span><span class="n">t</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
                            <span class="n">fncname</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">cython_functionname</span><span class="p">(</span><span class="n">t</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
@@ -339,12 +350,19 @@ if(ga_enabled){
 <span class="s">cdef class _Map{tclsname}{uclsname}:</span>
 <span class="s">    def __cinit__(self, new_map=True, bint free_map=True):</span>
 <span class="s">        cdef pair[{tctype}, {uctype}] item</span>
+<span class="s">        cdef cpp_map[{tctype}, {uctype}] * map_ptr</span>
 <span class="s">{tpy2cdecl.indent8}</span>
 <span class="s">{upy2cdecl.indent8}</span>
 
 <span class="s">        # Decide how to init map, if at all</span>
 <span class="s">        if isinstance(new_map, _Map{tclsname}{uclsname}):</span>
 <span class="s">            self.map_ptr = (&lt;_Map{tclsname}{uclsname}&gt; new_map).map_ptr</span>
+<span class="s">        elif isinstance(new_map, np.generic) and np.PyArray_DescrFromScalar(new_map).type_num == {map_cython_nptype}:</span>
+<span class="s">            # scalars are copies, sadly not views, so we need to re-copy</span>
+<span class="s">            if self.map_ptr == NULL:</span>
+<span class="s">                self.map_ptr = new cpp_map[{tctype}, {uctype}]()</span>
+<span class="s">            np.PyArray_ScalarAsCtype(new_map, &amp;map_ptr)</span>
+<span class="s">            self.map_ptr[0] = map_ptr[0]</span>
 <span class="s">        elif hasattr(new_map, &#39;items&#39;):</span>
 <span class="s">            self.map_ptr = new cpp_map[{tctype}, {uctype}]()</span>
 <span class="s">            for key, value in new_map.items():</span>
@@ -460,7 +478,8 @@ if(ga_enabled){
     <span class="n">tisnotinst</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;not isinstance(key, {0})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">from_pytypes</span><span class="p">[</span><span class="n">t</span><span class="p">]]</span>
     <span class="n">kw</span><span class="p">[</span><span class="s">&#39;tisnotinst&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot; and &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tisnotinst</span><span class="p">)</span>
     <span class="n">tc2pykeys</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;tc2pydecl&#39;</span><span class="p">,</span> <span class="s">&#39;tc2pybody&#39;</span><span class="p">,</span> <span class="s">&#39;tc2pyrtn&#39;</span><span class="p">]</span>
-    <span class="n">tc2py</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">cython_c2py</span><span class="p">(</span><span class="s">&quot;deref(inow).first&quot;</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">cached</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">tc2py</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">cython_c2py</span><span class="p">(</span><span class="s">&#39;inow_first&#39;</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">existing_name</span><span class="o">=</span><span class="s">&quot;deref(inow).first&quot;</span><span class="p">,</span> 
+                           <span class="n">cached</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
     <span class="n">kw</span><span class="o">.</span><span class="n">update</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span> <span class="n">indentstr</span><span class="p">(</span><span class="n">v</span> <span class="ow">or</span> <span class="s">&#39;&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">tc2pykeys</span><span class="p">,</span> <span class="n">tc2py</span><span class="p">)])</span>
     <span class="n">uc2pykeys</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;uc2pydecl&#39;</span><span class="p">,</span> <span class="s">&#39;uc2pybody&#39;</span><span class="p">,</span> <span class="s">&#39;uc2pyrtn&#39;</span><span class="p">]</span>
     <span class="n">uc2py</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">cython_c2py</span><span class="p">(</span><span class="s">&quot;v&quot;</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">cached</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> 
@@ -472,6 +491,7 @@ if(ga_enabled){
     <span class="n">upy2ckeys</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;upy2cdecl&#39;</span><span class="p">,</span> <span class="s">&#39;upy2cbody&#39;</span><span class="p">,</span> <span class="s">&#39;upy2crtn&#39;</span><span class="p">]</span>
     <span class="n">upy2c</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">cython_py2c</span><span class="p">(</span><span class="s">&quot;value&quot;</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
     <span class="n">kw</span><span class="o">.</span><span class="n">update</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span> <span class="n">indentstr</span><span class="p">(</span><span class="n">v</span> <span class="ow">or</span> <span class="s">&#39;&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">upy2ckeys</span><span class="p">,</span> <span class="n">upy2c</span><span class="p">)])</span>
+    <span class="n">kw</span><span class="p">[</span><span class="s">&#39;map_cython_nptype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">cython_nptype</span><span class="p">((</span><span class="s">&#39;map&#39;</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">_pyxmap</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
 
 </div>
@@ -577,321 +597,34 @@ if(ga_enabled){
 <span class="c"># Vectors</span>
 <span class="c">#</span>
 </div>
-<span class="n">_pyxvector</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;# {ctype} dtype</span>
-<span class="s">cdef MemoryKnight[{ctype}] mk_{fncname} = MemoryKnight[{ctype}]()</span>
-<span class="s">cdef MemoryKnight[PyXD{clsname}_Type] mk_{fncname}_type = MemoryKnight[PyXD{clsname}_Type]()</span>
-
-<span class="s">cdef object pyxd_{fncname}_getitem(void * data, void * arr):</span>
-<span class="s">{c2pydecl.indent4}</span>
-<span class="s">{c2pybody.indent4}</span>
-<span class="s">    pyval = {c2pyrtn}</span>
-<span class="s">    return pyval</span>
-
-<span class="s">cdef int pyxd_{fncname}_setitem(object value, void * data, void * arr):</span>
-<span class="s">    cdef {ctype} * new_data</span>
-<span class="s">{py2cdecl.indent4}</span>
-<span class="s">    if {isinst}:</span>
-<span class="s">{py2cbody.indent8}</span>
-<span class="s">        new_data = mk_{fncname}.renew(data)</span>
-<span class="s">        new_data[0] = {py2crtn}</span>
-<span class="s">        return 0</span>
-<span class="s">    else:</span>
-<span class="s">        return -1</span>
-
-<span class="s">cdef void pyxd_{fncname}_copyswapn(void * dest, np.npy_intp dstride, void * src, np.npy_intp sstride, np.npy_intp n, int swap, void * arr):</span>
-<span class="s">    cdef np.npy_intp i</span>
-<span class="s">    cdef char * a </span>
-<span class="s">    cdef char * b </span>
-<span class="s">    cdef char c = 0</span>
-<span class="s">    cdef int j</span>
-<span class="s">    cdef int m</span>
-<span class="s">    cdef {ctype} * new_dest</span>
-
-<span class="s">    if src != NULL:</span>
-<span class="s">        if (sstride == sizeof({ctype}) and dstride == sizeof({ctype})):</span>
-<span class="s">            new_dest = mk_{fncname}.renew(dest)</span>
-<span class="s">            new_dest[0] = deref(&lt;{ctype} *&gt; src)</span>
-<span class="s">        else:</span>
-<span class="s">            a = &lt;char *&gt; dest</span>
-<span class="s">            b = &lt;char *&gt; src</span>
-<span class="s">            for i in range(n):</span>
-<span class="s">                new_dest = mk_{fncname}.renew(&lt;void *&gt; a)</span>
-<span class="s">                new_dest[0] = deref(&lt;{ctype} *&gt; b)</span>
-<span class="s">                a += dstride</span>
-<span class="s">                b += sstride</span>
-<span class="s">    if swap: </span>
-<span class="s">        m = sizeof({ctype}) / 2</span>
-<span class="s">        a = &lt;char *&gt; dest</span>
-<span class="s">        for i in range(n, 0, -1):</span>
-<span class="s">            b = a + (sizeof({ctype}) - 1);</span>
-<span class="s">            for j in range(m):</span>
-<span class="s">                c = a[0]</span>
-<span class="s">                a[0] = b[0]</span>
-<span class="s">                a += 1</span>
-<span class="s">                b[0] = c</span>
-<span class="s">                b -= 1</span>
-<span class="s">            a += dstride - m</span>
-
-<span class="s">cdef void pyxd_{fncname}_copyswap(void * dest, void * src, int swap, void * arr):</span>
-<span class="s">    cdef char * a </span>
-<span class="s">    cdef char * b </span>
-<span class="s">    cdef char c = 0</span>
-<span class="s">    cdef int j</span>
-<span class="s">    cdef int m</span>
-<span class="s">    cdef {ctype} * new_dest</span>
-<span class="s">    if src != NULL:</span>
-<span class="s">        new_dest = mk_{fncname}.renew(dest)</span>
-<span class="s">        new_dest[0] = (&lt;{ctype} *&gt; src)[0]</span>
-<span class="s">    if swap:</span>
-<span class="s">        m = sizeof({ctype}) / 2</span>
-<span class="s">        a = &lt;char *&gt; dest</span>
-<span class="s">        b = a + (sizeof({ctype}) - 1);</span>
-<span class="s">        for j in range(m):</span>
-<span class="s">            c = a[0]</span>
-<span class="s">            a[0] = b[0]</span>
-<span class="s">            a += 1</span>
-<span class="s">            b[0] = c</span>
-<span class="s">            b -= 1</span>
-
-<span class="s">cdef np.npy_bool pyxd_{fncname}_nonzero(void * data, void * arr):</span>
-<span class="s">    return (data != NULL)</span>
-<span class="s">    # FIXME comparisons not defined for arbitrary types</span>
-<span class="s">    #cdef {ctype} zero = {ctype}()</span>
-<span class="s">    #return ((&lt;{ctype} *&gt; data)[0] != zero)</span>
-
-<span class="s">cdef int pyxd_{fncname}_compare(const void * d1, const void * d2, void * arr):</span>
-<span class="s">    return (d1 == d2) - 1</span>
-<span class="s">    # FIXME comparisons not defined for arbitrary types</span>
-<span class="s">    #if deref(&lt;{ctype} *&gt; d1) == deref(&lt;{ctype} *&gt; d2):</span>
-<span class="s">    #    return 0</span>
-<span class="s">    #else:</span>
-<span class="s">    #    return -1</span>
-
-<span class="s">cdef PyArray_ArrFuncs PyXD_{clsname}_ArrFuncs </span>
-<span class="s">PyArray_InitArrFuncs(&amp;PyXD_{clsname}_ArrFuncs)</span>
-<span class="s">PyXD_{clsname}_ArrFuncs.getitem = &lt;PyArray_GetItemFunc *&gt; (&amp;pyxd_{fncname}_getitem)</span>
-<span class="s">PyXD_{clsname}_ArrFuncs.setitem = &lt;PyArray_SetItemFunc *&gt; (&amp;pyxd_{fncname}_setitem)</span>
-<span class="s">PyXD_{clsname}_ArrFuncs.copyswapn = &lt;PyArray_CopySwapNFunc *&gt; (&amp;pyxd_{fncname}_copyswapn)</span>
-<span class="s">PyXD_{clsname}_ArrFuncs.copyswap = &lt;PyArray_CopySwapFunc *&gt; (&amp;pyxd_{fncname}_copyswap)</span>
-<span class="s">PyXD_{clsname}_ArrFuncs.nonzero = &lt;PyArray_NonzeroFunc *&gt; (&amp;pyxd_{fncname}_nonzero)</span>
-<span class="s">PyXD_{clsname}_ArrFuncs.compare = &lt;PyArray_CompareFunc *&gt; (&amp;pyxd_{fncname}_compare)</span>
-
-<span class="s">cdef object pyxd_{fncname}_type_alloc(PyTypeObject * self, Py_ssize_t nitems):</span>
-<span class="s">    cdef PyXD{clsname}_Type * cval</span>
-<span class="s">    cdef object pyval</span>
-<span class="s">    cval = mk_{fncname}_type.defnew()</span>
-<span class="s">    cval.ob_typ = self</span>
-<span class="s">    pyval = &lt;object&gt; cval</span>
-<span class="s">    return pyval</span>
-
-<span class="s">cdef void pyxd_{fncname}_type_dealloc(object self):</span>
-<span class="s">    cdef PyXD{clsname}_Type * cself = &lt;PyXD{clsname}_Type *&gt; self</span>
-<span class="s">    mk_{fncname}_type.deall(cself)</span>
-<span class="s">    return</span>
-
-<span class="s">cdef object pyxd_{fncname}_type_new(PyTypeObject * subtype, object args, object kwds):</span>
-<span class="s">    return pyxd_{fncname}_type_alloc(subtype, 0)</span>
-
-<span class="s">cdef void pyxd_{fncname}_type_free(void * self):</span>
-<span class="s">    return</span>
-
-<span class="s">cdef object pyxd_{fncname}_type_str(object self):</span>
-<span class="s">    cdef PyXD{clsname}_Type * cself = &lt;PyXD{clsname}_Type *&gt; self</span>
-<span class="s">{cself2pydecl.indent4}</span>
-<span class="s">{cself2pybody.indent4}</span>
-<span class="s">    pyval = {cself2pyrtn}</span>
-<span class="s">    s = str(pyval)</span>
-<span class="s">    return s</span>
-
-<span class="s">cdef object pyxd_{fncname}_type_repr(object self):</span>
-<span class="s">    cdef PyXD{clsname}_Type * cself = &lt;PyXD{clsname}_Type *&gt; self</span>
-<span class="s">{cself2pydecl.indent4}</span>
-<span class="s">{cself2pybody.indent4}</span>
-<span class="s">    pyval = {cself2pyrtn}</span>
-<span class="s">    s = repr(pyval)</span>
-<span class="s">    return s</span>
-
-<span class="s">cdef int pyxd_{fncname}_type_compare(object a, object b):</span>
-<span class="s">    return (a is b) - 1</span>
-<span class="s">    # FIXME comparisons not defined for arbitrary types</span>
-<span class="s">    #cdef PyXD{clsname}_Type * x</span>
-<span class="s">    #cdef PyXD{clsname}_Type * y</span>
-<span class="s">    #if type(a) is not type(b):</span>
-<span class="s">    #    raise NotImplementedError</span>
-<span class="s">    #x = &lt;PyXD{clsname}_Type *&gt; a</span>
-<span class="s">    #y = &lt;PyXD{clsname}_Type *&gt; b</span>
-<span class="s">    #if (x.obval == y.obval):</span>
-<span class="s">    #    return 0</span>
-<span class="s">    #elif (x.obval &lt; y.obval):</span>
-<span class="s">    #    return -1</span>
-<span class="s">    #elif (x.obval &gt; y.obval):</span>
-<span class="s">    #    return 1</span>
-<span class="s">    #else:</span>
-<span class="s">    #    raise NotImplementedError</span>
-
-<span class="s">cdef object pyxd_{fncname}_type_richcompare(object a, object b, int op):</span>
-<span class="s">    if op == Py_EQ:</span>
-<span class="s">        return (a is b)</span>
-<span class="s">    elif op == Py_NE:</span>
-<span class="s">        return (a is not b)</span>
-<span class="s">    else:</span>
-<span class="s">        return NotImplemented</span>
-<span class="s">    # FIXME comparisons not defined for arbitrary types</span>
-<span class="s">    #cdef PyXD{clsname}_Type * x</span>
-<span class="s">    #cdef PyXD{clsname}_Type * y</span>
-<span class="s">    #if type(a) is not type(b):</span>
-<span class="s">    #    return NotImplemented</span>
-<span class="s">    #x = &lt;PyXD{clsname}_Type *&gt; a</span>
-<span class="s">    #y = &lt;PyXD{clsname}_Type *&gt; b</span>
-<span class="s">    #if op == Py_LT:</span>
-<span class="s">    #    return (x.obval &lt; y.obval)</span>
-<span class="s">    #elif op == Py_LE:</span>
-<span class="s">    #    return (x.obval &lt;= y.obval)</span>
-<span class="s">    #elif op == Py_EQ:</span>
-<span class="s">    #    return (x.obval == y.obval)</span>
-<span class="s">    #elif op == Py_NE:</span>
-<span class="s">    #    return (x.obval != y.obval)</span>
-<span class="s">    #elif op == Py_GT:</span>
-<span class="s">    #    return (x.obval &gt; y.obval)</span>
-<span class="s">    #elif op == Py_GE:</span>
-<span class="s">    #    return (x.obval &gt;= y.obval)</span>
-<span class="s">    #else:</span>
-<span class="s">    #    return NotImplemented    </span>
-
-<span class="s">cdef long pyxd_{fncname}_type_hash(object self):</span>
-<span class="s">    return id(self)</span>
-
-<span class="s">cdef PyMemberDef pyxd_{fncname}_type_members[1]</span>
-<span class="s">pyxd_{fncname}_type_members[0] = PyMemberDef(NULL, 0, 0, 0, NULL)</span>
-
-<span class="s">cdef PyGetSetDef pyxd_{fncname}_type_getset[1]</span>
-<span class="s">pyxd_{fncname}_type_getset[0] = PyGetSetDef(NULL)</span>
-
-<span class="s">cdef bint pyxd_{fncname}_is_ready</span>
-<span class="s">cdef type PyXD_{clsname} = type(&quot;xd_{fncname}&quot;, ((&lt;object&gt; PyArray_API[10]),), {{}})</span>
-<span class="s">pyxd_{fncname}_is_ready = PyType_Ready(&lt;object&gt; PyXD_{clsname})</span>
-<span class="s">(&lt;PyTypeObject *&gt; PyXD_{clsname}).tp_basicsize = sizeof(PyXD{clsname}_Type)</span>
-<span class="s">(&lt;PyTypeObject *&gt; PyXD_{clsname}).tp_itemsize = 0</span>
-<span class="s">(&lt;PyTypeObject *&gt; PyXD_{clsname}).tp_doc = &quot;Python scalar type for {ctype}&quot;</span>
-<span class="s">(&lt;PyTypeObject *&gt; PyXD_{clsname}).tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE | Py_TPFLAGS_CHECKTYPES | Py_TPFLAGS_HEAPTYPE</span>
-<span class="s">(&lt;PyTypeObject *&gt; PyXD_{clsname}).tp_alloc = pyxd_{fncname}_type_alloc</span>
-<span class="s">(&lt;PyTypeObject *&gt; PyXD_{clsname}).tp_dealloc = pyxd_{fncname}_type_dealloc</span>
-<span class="s">(&lt;PyTypeObject *&gt; PyXD_{clsname}).tp_new = pyxd_{fncname}_type_new</span>
-<span class="s">(&lt;PyTypeObject *&gt; PyXD_{clsname}).tp_free = pyxd_{fncname}_type_free</span>
-<span class="s">(&lt;PyTypeObject *&gt; PyXD_{clsname}).tp_str = pyxd_{fncname}_type_str</span>
-<span class="s">(&lt;PyTypeObject *&gt; PyXD_{clsname}).tp_repr = pyxd_{fncname}_type_repr</span>
-<span class="s">(&lt;PyTypeObject *&gt; PyXD_{clsname}).tp_base = (&lt;PyTypeObject *&gt; PyArray_API[10])  # PyGenericArrType_Type</span>
-<span class="s">(&lt;PyTypeObject *&gt; PyXD_{clsname}).tp_hash = pyxd_{fncname}_type_hash</span>
-<span class="s">emit_ifpy2k()</span>
-<span class="s">(&lt;PyTypeObject *&gt; PyXD_{clsname}).tp_compare = &amp;pyxd_{fncname}_type_compare</span>
-<span class="s">emit_endif()</span>
-<span class="s">(&lt;PyTypeObject *&gt; PyXD_{clsname}).tp_richcompare = pyxd_{fncname}_type_richcompare</span>
-<span class="s">(&lt;PyTypeObject *&gt; PyXD_{clsname}).tp_members = pyxd_{fncname}_type_members</span>
-<span class="s">(&lt;PyTypeObject *&gt; PyXD_{clsname}).tp_getset = pyxd_{fncname}_type_getset</span>
-<span class="s">pyxd_{fncname}_is_ready = PyType_Ready(&lt;object&gt; PyXD_{clsname})</span>
-<span class="s">Py_INCREF(PyXD_{clsname})</span>
-<span class="s">XD{clsname} = PyXD_{clsname}</span>
-
-<span class="s">cdef PyArray_Descr * c_xd_{fncname}_descr = &lt;PyArray_Descr *&gt; malloc(sizeof(PyArray_Descr))</span>
-<span class="s">(&lt;PyObject *&gt; c_xd_{fncname}_descr).ob_refcnt = 0 # ob_refcnt</span>
-<span class="s">(&lt;PyObject *&gt; c_xd_{fncname}_descr).ob_type = &lt;PyTypeObject *&gt; PyArray_API[3]</span>
-<span class="s">c_xd_{fncname}_descr.typeobj = &lt;PyTypeObject *&gt; PyXD_{clsname} # typeobj</span>
-<span class="s">c_xd_{fncname}_descr.kind = &#39;x&#39;  # kind, for xdress</span>
-<span class="s">c_xd_{fncname}_descr.type = &#39;x&#39;  # type</span>
-<span class="s">c_xd_{fncname}_descr.byteorder = &#39;=&#39;  # byteorder</span>
-<span class="s">c_xd_{fncname}_descr.flags = 0    # flags</span>
-<span class="s">c_xd_{fncname}_descr.type_num = 0    # type_num, assigned at registration</span>
-<span class="s">c_xd_{fncname}_descr.elsize = sizeof({ctype})  # elsize, </span>
-<span class="s">c_xd_{fncname}_descr.alignment = 8  # alignment</span>
-<span class="s">c_xd_{fncname}_descr.subarray = NULL  # subarray</span>
-<span class="s">c_xd_{fncname}_descr.fields = NULL  # fields</span>
-<span class="s">c_xd_{fncname}_descr.names = NULL</span>
-<span class="s">(&lt;PyArray_Descr *&gt; c_xd_{fncname}_descr).f = &lt;PyArray_ArrFuncs *&gt; &amp;PyXD_{clsname}_ArrFuncs  # f == PyArray_ArrFuncs</span>
-
-<span class="s">cdef object xd_{fncname}_descr = &lt;object&gt; (&lt;void *&gt; c_xd_{fncname}_descr)</span>
-<span class="s">Py_INCREF(&lt;object&gt; xd_{fncname}_descr)</span>
-<span class="s">xd_{fncname} = xd_{fncname}_descr</span>
-<span class="s">cdef int xd_{fncname}_num = PyArray_RegisterDataType(c_xd_{fncname}_descr)</span>
-<span class="s">dtypes[&#39;{fncname}&#39;] = xd_{fncname}</span>
-<span class="s">dtypes[&#39;xd_{fncname}&#39;] = xd_{fncname}</span>
-<span class="s">dtypes[xd_{fncname}_num] = xd_{fncname}</span>
-
+<span class="n">_pyxvector</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;# {ctype} vector</span>
 <span class="s">&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="genpyx_vector"><a class="viewcode-back" href="../../libref/stlwrap.html#xdress.stlwrap.genpyx_vector">[docs]</a><span class="k">def</span> <span class="nf">genpyx_vector</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">ts</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Returns the pyx snippet for a vector of type t.&quot;&quot;&quot;</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">canon</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-    <span class="n">kw</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">clsname</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">cython_classname</span><span class="p">(</span><span class="n">t</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span> <span class="n">humname</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">humanname</span><span class="p">(</span><span class="n">t</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span> 
-              <span class="n">fncname</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">cython_functionname</span><span class="p">(</span><span class="n">t</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span> 
-              <span class="n">ctype</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">cython_ctype</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">pytype</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">cython_pytype</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> 
-              <span class="n">cytype</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">cython_cytype</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">stlcontainers</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">stlcontainers</span><span class="p">,</span> 
-              <span class="n">extra_types</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">extra_types</span><span class="p">)</span>
-    <span class="n">t0</span> <span class="o">=</span> <span class="n">t</span>
-    <span class="k">while</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
-        <span class="n">t0</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">fpt</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">from_pytypes</span><span class="p">[</span><span class="n">t0</span><span class="p">]</span>
-    <span class="n">kw</span><span class="p">[</span><span class="s">&#39;isinst&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot; or &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&quot;isinstance(value, {0})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">fpt</span><span class="p">])</span>
-    <span class="n">c2pykeys</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;c2pydecl&#39;</span><span class="p">,</span> <span class="s">&#39;c2pybody&#39;</span><span class="p">,</span> <span class="s">&#39;c2pyrtn&#39;</span><span class="p">]</span>
-    <span class="n">c2py</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">cython_c2py</span><span class="p">(</span><span class="s">&quot;deref(&lt;{0} *&gt; data)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kw</span><span class="p">[</span><span class="s">&#39;ctype&#39;</span><span class="p">]),</span> <span class="n">t</span><span class="p">,</span> <span class="n">cached</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-                          <span class="n">proxy_name</span><span class="o">=</span><span class="s">&quot;data_proxy&quot;</span><span class="p">)</span>
-    <span class="n">kw</span><span class="o">.</span><span class="n">update</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span> <span class="n">indentstr</span><span class="p">(</span><span class="n">v</span> <span class="ow">or</span> <span class="s">&#39;&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">c2pykeys</span><span class="p">,</span> <span class="n">c2py</span><span class="p">)])</span>
-    <span class="n">cself2pykeys</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;cself2pydecl&#39;</span><span class="p">,</span> <span class="s">&#39;cself2pybody&#39;</span><span class="p">,</span> <span class="s">&#39;cself2pyrtn&#39;</span><span class="p">]</span>
-    <span class="n">cself2py</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">cython_c2py</span><span class="p">(</span><span class="s">&quot;(cself.obval)&quot;</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">cached</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">proxy_name</span><span class="o">=</span><span class="s">&quot;val_proxy&quot;</span><span class="p">)</span>
-    <span class="n">kw</span><span class="o">.</span><span class="n">update</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span> <span class="n">indentstr</span><span class="p">(</span><span class="n">v</span> <span class="ow">or</span> <span class="s">&#39;&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">cself2pykeys</span><span class="p">,</span> <span class="n">cself2py</span><span class="p">)])</span>
-    <span class="n">py2ckeys</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;py2cdecl&#39;</span><span class="p">,</span> <span class="s">&#39;py2cbody&#39;</span><span class="p">,</span> <span class="s">&#39;py2crtn&#39;</span><span class="p">]</span>
-    <span class="n">py2c</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">cython_py2c</span><span class="p">(</span><span class="s">&quot;value&quot;</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
-    <span class="n">kw</span><span class="o">.</span><span class="n">update</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span> <span class="n">indentstr</span><span class="p">(</span><span class="n">v</span> <span class="ow">or</span> <span class="s">&#39;&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">py2ckeys</span><span class="p">,</span> <span class="n">py2c</span><span class="p">)])</span>
+    <span class="n">kw</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">ctype</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">cython_ctype</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="p">)</span>
     <span class="k">return</span> <span class="n">_pyxvector</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
 </div>
-<span class="n">_pxdvector</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;# {ctype} dtype</span>
-<span class="s">ctypedef struct PyXD{clsname}_Type:</span>
-<span class="s">    Py_ssize_t ob_refcnt</span>
-<span class="s">    PyTypeObject *ob_typ</span>
-<span class="s">    {ctype} obval</span>
-
-<span class="s">cdef object pyxd_{fncname}_getitem(void * data, void * arr)</span>
-<span class="s">cdef int pyxd_{fncname}_setitem(object value, void * data, void * arr)</span>
-<span class="s">cdef void pyxd_{fncname}_copyswapn(void * dest, np.npy_intp dstride, void * src, np.npy_intp sstride, np.npy_intp n, int swap, void * arr)</span>
-<span class="s">cdef void pyxd_{fncname}_copyswap(void * dest, void * src, int swap, void * arr)</span>
-<span class="s">cdef np.npy_bool pyxd_{fncname}_nonzero(void * data, void * arr)</span>
+<span class="n">_pxdvector</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;# {ctype} vector</span>
 <span class="s">&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="genpxd_vector"><a class="viewcode-back" href="../../libref/stlwrap.html#xdress.stlwrap.genpxd_vector">[docs]</a><span class="k">def</span> <span class="nf">genpxd_vector</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">ts</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Returns the pxd snippet for a vector of type t.&quot;&quot;&quot;</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">canon</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-    <span class="n">kw</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">clsname</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">cython_classname</span><span class="p">(</span><span class="n">t</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span> <span class="n">humname</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">humanname</span><span class="p">(</span><span class="n">t</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span> 
-              <span class="n">ctype</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">cython_ctype</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">pytype</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">cython_pytype</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> 
-              <span class="n">fncname</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">cython_functionname</span><span class="p">(</span><span class="n">t</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span> 
-              <span class="n">cytype</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">cython_cytype</span><span class="p">(</span><span class="n">t</span><span class="p">),)</span>
+    <span class="n">kw</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">ctype</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">cython_ctype</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="p">)</span>
     <span class="k">return</span> <span class="n">_pxdvector</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
 
 </div>
-<span class="n">_testvector</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;# Vector{clsname}</span>
-<span class="s">def test_vector_{fncname}():</span>
-<span class="s">    a = np.array({0}, dtype={stlcontainers}.xd_{fncname})</span>
-<span class="s">    #for x, y in zip(a, np.array({0}, dtype={stlcontainers}.xd_{fncname})):</span>
-<span class="s">    #    assert_equal(x, y)</span>
-<span class="s">    a[:] = {1}</span>
-<span class="s">    #for x, y in zip(a, np.array({1}, dtype={stlcontainers}.xd_{fncname})):</span>
-<span class="s">    #    assert_equal(x, y)</span>
-<span class="s">    a = np.array({2} + {3}, dtype={stlcontainers}.xd_{fncname})</span>
-<span class="s">    #for x, y in zip(a, np.array({2} + {3}, dtype={stlcontainers}.xd_{fncname})):</span>
-<span class="s">    #    assert_equal(x, y)</span>
-<span class="s">    b =  np.array(({2} + {3})[::2], dtype={stlcontainers}.xd_{fncname})</span>
-<span class="s">    #for x, y in zip(a[::2], b):</span>
-<span class="s">    #    assert_equal(x, y)</span>
-<span class="s">    a[:2] = b[-2:]</span>
-<span class="s">    print(a)</span>
-
+<span class="n">_testvector</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;# Vector {clsname}</span>
 <span class="s">&quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="gentest_vector"><a class="viewcode-back" href="../../libref/stlwrap.html#xdress.stlwrap.gentest_vector">[docs]</a><span class="k">def</span> <span class="nf">gentest_vector</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">ts</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Returns the test snippet for a set of type t.&quot;&quot;&quot;</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">canon</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
     <span class="k">if</span> <span class="p">(</span><span class="s">&#39;vector&#39;</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">in</span> <span class="n">testvals</span><span class="p">:</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">_testvector</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="nb">repr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">testvals</span><span class="p">[</span><span class="s">&#39;vector&#39;</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span> 
-                               <span class="n">clsname</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">cython_classname</span><span class="p">(</span><span class="n">t</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
-                               <span class="n">fncname</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">cython_functionname</span><span class="p">(</span><span class="n">t</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
-                               <span class="n">stlcontainers</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">stlcontainers</span><span class="p">)</span>
+                               <span class="n">clsname</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">cython_classname</span><span class="p">(</span><span class="n">t</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">s</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
     <span class="k">return</span> <span class="n">s</span>
@@ -908,8 +641,6 @@ if(ga_enabled){
 <span class="s"># This file has been autogenerated</span>
 
 <span class="s"># Cython imports</span>
-<span class="s">from libcpp.set cimport set as cpp_set</span>
-<span class="s">from libcpp.vector cimport vector as cpp_vector</span>
 <span class="s">from cython.operator cimport dereference as deref</span>
 <span class="s">from cython.operator cimport preincrement as inc</span>
 <span class="s">from libc.stdlib cimport malloc, free</span>
@@ -917,11 +648,10 @@ if(ga_enabled){
 <span class="s">from libcpp.string cimport string as std_string</span>
 <span class="s">from libcpp.utility cimport pair</span>
 <span class="s">from libcpp.map cimport map as cpp_map</span>
+<span class="s">from libcpp.set cimport set as cpp_set</span>
+<span class="s">from libcpp cimport bool as cpp_bool</span>
 <span class="s">from libcpp.vector cimport vector as cpp_vector</span>
 <span class="s">from cpython.version cimport PY_MAJOR_VERSION</span>
-<span class="s">from cpython.ref cimport PyTypeObject</span>
-<span class="s">from cpython.type cimport PyType_Ready</span>
-<span class="s">from cpython.object cimport Py_LT, Py_LE, Py_EQ, Py_NE, Py_GT, Py_GE</span>
 
 <span class="s"># Python Imports</span>
 <span class="s">import collections</span>
@@ -939,11 +669,8 @@ if(ga_enabled){
 <span class="s"># Imports For Types</span>
 <span class="s">{imports}</span>
 
-<span class="s">dtypes = {{}}</span>
-
 <span class="s">if PY_MAJOR_VERSION &gt;= 3:</span>
 <span class="s">    basestring = str</span>
-
 
 <span class="s"># Dirty ifdef, else, else preprocessor hack</span>
 <span class="s"># see http://comments.gmane.org/gmane.comp.python.cython.user/4080</span>
@@ -982,20 +709,17 @@ if(ga_enabled){
 <span class="s"># This file has been autogenerated</span>
 
 <span class="s"># Cython imports</span>
-<span class="s">from libcpp.set cimport set as cpp_set</span>
-<span class="s">from libcpp.vector cimport vector as cpp_vector</span>
 <span class="s">from cython.operator cimport dereference as deref</span>
 <span class="s">from cython.operator cimport preincrement as inc</span>
 <span class="s">from libcpp.string cimport string as std_string</span>
 <span class="s">from libcpp.utility cimport pair</span>
 <span class="s">from libcpp.map cimport map as cpp_map</span>
+<span class="s">from libcpp.set cimport set as cpp_set</span>
 <span class="s">from libcpp.vector cimport vector as cpp_vector</span>
+<span class="s">from libcpp cimport bool as cpp_bool</span>
 <span class="s">from libc cimport stdio</span>
 <span class="s">from cpython.version cimport PY_MAJOR_VERSION</span>
 <span class="s">from cpython.ref cimport PyTypeObject, Py_INCREF, Py_XDECREF</span>
-<span class="s">from cpython.type cimport PyType_Ready</span>
-<span class="s">from cpython.object cimport PyObject</span>
-<span class="s">from cpython.object cimport Py_LT, Py_LE, Py_EQ, Py_NE, Py_GT, Py_GE</span>
 
 <span class="s"># Python Imports</span>
 <span class="s">cimport numpy as np</span>
@@ -1008,124 +732,6 @@ if(ga_enabled){
 
 <span class="s"># Cython Imports For Types</span>
 <span class="s">{cimports}</span>
-
-<span class="s">cdef extern from &quot;Python.h&quot;:</span>
-<span class="s">    ctypedef Py_ssize_t Py_ssize_t</span>
-
-<span class="s">    cdef long Py_TPFLAGS_DEFAULT </span>
-<span class="s">    cdef long Py_TPFLAGS_BASETYPE </span>
-<span class="s">    cdef long Py_TPFLAGS_CHECKTYPES</span>
-<span class="s">    cdef long Py_TPFLAGS_HEAPTYPE</span>
-
-<span class="s">    ctypedef struct PyGetSetDef:</span>
-<span class="s">        char * name</span>
-
-<span class="s">    ctypedef struct PyTypeObject:</span>
-<span class="s">        char * tp_name</span>
-<span class="s">        int tp_basicsize</span>
-<span class="s">        int tp_itemsize</span>
-<span class="s">        object tp_alloc(PyTypeObject *, Py_ssize_t)</span>
-<span class="s">        void tp_dealloc(object)</span>
-<span class="s">        object tp_richcompare(object, object, int)</span>
-<span class="s">        object tp_new(PyTypeObject *, object, object)</span>
-<span class="s">        object tp_str(object)</span>
-<span class="s">        object tp_repr(object)</span>
-<span class="s">        long tp_hash(object)</span>
-<span class="s">        long tp_flags</span>
-<span class="s">        char * tp_doc</span>
-<span class="s">        PyMemberDef * tp_members</span>
-<span class="s">        PyGetSetDef * tp_getset</span>
-<span class="s">        PyTypeObject * tp_base</span>
-<span class="s">        void tp_free(void *)</span>
-<span class="s">        # This is a dirty hack by declaring to Cython both the Python 2 &amp; 3 APIs</span>
-<span class="s">        int (*tp_compare)(object, object)      # Python 2</span>
-<span class="s">        void * (*tp_reserved)(object, object)  # Python 3</span>
-
-<span class="s"># structmember.h isn&#39;t included in Python.h for some reason</span>
-<span class="s">cdef extern from &quot;structmember.h&quot;:</span>
-<span class="s">    ctypedef struct PyMemberDef:</span>
-<span class="s">        char * name</span>
-<span class="s">        int type</span>
-<span class="s">        Py_ssize_t offset</span>
-<span class="s">        int flags</span>
-<span class="s">        char * doc</span>
-
-<span class="s">cdef extern from &quot;numpy/arrayobject.h&quot;:</span>
-
-<span class="s">    ctypedef object (*PyArray_GetItemFunc)(void *, void *)</span>
-<span class="s">    ctypedef int (*PyArray_SetItemFunc)(object, void *, void *)</span>
-<span class="s">    ctypedef void (*PyArray_CopySwapNFunc)(void *, np.npy_intp, void *, np.npy_intp, np.npy_intp, int, void *)</span>
-<span class="s">    ctypedef void (*PyArray_CopySwapFunc)(void *, void *, int, void *)</span>
-<span class="s">    ctypedef int (*PyArray_CompareFunc)(const void* d1, const void *, void *)</span>
-<span class="s">    ctypedef int (*PyArray_ArgFunc)(void *, np.npy_intp, np.npy_intp *, void *)</span>
-<span class="s">    ctypedef void (*PyArray_DotFunc)(void *, np.npy_intp, void *, np.npy_intp, void *, np.npy_intp, void *)</span>
-<span class="s">    ctypedef int (*PyArray_ScanFunc)(stdio.FILE *, void *, void *, void *)</span>
-<span class="s">    ctypedef int (*PyArray_FromStrFunc)(char *, void *, char **, void *)</span>
-<span class="s">    ctypedef np.npy_bool (*PyArray_NonzeroFunc)(void *, void *)</span>
-<span class="s">    ctypedef void (*PyArray_FillFunc)(void *, np.npy_intp, void *)</span>
-<span class="s">    ctypedef void (*PyArray_FillWithScalarFunc)(void *, np.npy_intp, void *, void *)</span>
-<span class="s">    ctypedef int (*PyArray_SortFunc)(void *, np.npy_intp, void *)</span>
-<span class="s">    ctypedef int (*PyArray_ArgSortFunc)(void *, np.npy_intp *, np.npy_intp, void *)</span>
-<span class="s">    ctypedef np.NPY_SCALARKIND (*PyArray_ScalarKindFunc)(np.PyArrayObject *)</span>
-
-<span class="s">    ctypedef struct PyArray_ArrFuncs:</span>
-<span class="s">        np.PyArray_VectorUnaryFunc ** cast</span>
-<span class="s">        PyArray_GetItemFunc *getitem</span>
-<span class="s">        PyArray_SetItemFunc *setitem</span>
-<span class="s">        PyArray_CopySwapNFunc *copyswapn</span>
-<span class="s">        PyArray_CopySwapFunc *copyswap</span>
-<span class="s">        PyArray_CompareFunc *compare</span>
-<span class="s">        PyArray_ArgFunc *argmax</span>
-<span class="s">        PyArray_DotFunc *dotfunc</span>
-<span class="s">        PyArray_ScanFunc *scanfunc</span>
-<span class="s">        PyArray_FromStrFunc *fromstr</span>
-<span class="s">        PyArray_NonzeroFunc *nonzero</span>
-<span class="s">        PyArray_FillFunc *fill</span>
-<span class="s">        PyArray_FillWithScalarFunc *fillwithscalar</span>
-<span class="s">        PyArray_SortFunc *sort</span>
-<span class="s">        PyArray_ArgSortFunc *argsort</span>
-<span class="s">        PyObject *castdict</span>
-<span class="s">        PyArray_ScalarKindFunc *scalarkind</span>
-<span class="s">        int **cancastscalarkindto</span>
-<span class="s">        int *cancastto</span>
-<span class="s">        int listpickle</span>
-
-<span class="s">    cdef void PyArray_InitArrFuncs(PyArray_ArrFuncs *)</span>
-
-<span class="s">    ctypedef struct PyArray_ArrayDescr:</span>
-<span class="s">        PyArray_Descr * base</span>
-<span class="s">        PyObject  *shape</span>
-
-<span class="s">    cdef void ** PyArray_API</span>
-
-<span class="s">    cdef PyTypeObject * PyArrayDescr_Type</span>
-<span class="s">    </span>
-<span class="s">    ctypedef struct PyArray_Descr:</span>
-<span class="s">        Py_ssize_t ob_refcnt</span>
-<span class="s">        PyTypeObject * ob_type</span>
-<span class="s">        PyTypeObject * typeobj</span>
-<span class="s">        char kind</span>
-<span class="s">        char type</span>
-<span class="s">        char byteorder</span>
-<span class="s">        int flags</span>
-<span class="s">        int type_num</span>
-<span class="s">        int elsize</span>
-<span class="s">        int alignment</span>
-<span class="s">        PyArray_ArrayDescr * subarray</span>
-<span class="s">        PyObject * fields</span>
-<span class="s">        PyObject * names</span>
-<span class="s">        PyArray_ArrFuncs * f</span>
-
-<span class="s">    cdef int PyArray_RegisterDataType(PyArray_Descr *)</span>
-
-<span class="s">    cdef object PyArray_Scalar(void *, PyArray_Descr *, object)</span>
-
-<span class="s">cdef extern from &quot;{extra_types}.h&quot; namespace &quot;{extra_types}&quot;:</span>
-<span class="s">    cdef cppclass MemoryKnight[T]:</span>
-<span class="s">        MemoryKnight() nogil except +</span>
-<span class="s">        T * defnew() nogil except +</span>
-<span class="s">        T * renew(void *) nogil except +</span>
-<span class="s">        void deall(T *) nogil except +</span>
 
 <span class="s">&quot;&quot;&quot;</span>
 <div class="viewcode-block" id="genpxd"><a class="viewcode-back" href="../../libref/stlwrap.html#xdress.stlwrap.genpxd">[docs]</a><span class="k">def</span> <span class="nf">genpxd</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -1199,11 +805,6 @@ if(ga_enabled){
     <span class="n">testname</span> <span class="o">=</span> <span class="n">testname</span> <span class="o">+</span> <span class="s">&#39;.py&#39;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">testname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;.py&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">testname</span>
     <span class="n">fname</span> <span class="o">+=</span> <span class="s">&#39;.pyx&#39;</span>
 
-    <span class="c"># register dtypes</span>
-    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">template</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;vector&#39;</span><span class="p">:</span>
-            <span class="n">ts</span><span class="o">.</span><span class="n">register_numpy_dtype</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-
     <span class="n">pyx</span> <span class="o">=</span> <span class="n">genpyx</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">pyxheader</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="n">ts</span><span class="p">)</span>
     <span class="n">pxd</span> <span class="o">=</span> <span class="n">genpxd</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">pxdheader</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="n">ts</span><span class="p">)</span>
     <span class="n">test</span> <span class="o">=</span> <span class="n">gentest</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">testheader</span><span class="p">,</span> <span class="n">package</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="n">ts</span><span class="p">)</span>
@@ -1220,25 +821,21 @@ if(ga_enabled){
 <div class="viewcode-block" id="XDressPlugin"><a class="viewcode-back" href="../../libref/stlwrap.html#xdress.stlwrap.XDressPlugin">[docs]</a><span class="k">class</span> <span class="nc">XDressPlugin</span><span class="p">(</span><span class="n">Plugin</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;This class provides extra type functionality for xdress.&quot;&quot;&quot;</span>
 
-    <span class="n">requires</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;xdress.base&#39;</span><span class="p">,</span> <span class="s">&#39;xdress.extratypes&#39;</span><span class="p">)</span>
+    <span class="n">requires</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;xdress.base&#39;</span><span class="p">,</span> <span class="s">&#39;xdress.extratypes&#39;</span><span class="p">,</span> <span class="s">&#39;xdress.dtypes&#39;</span><span class="p">)</span>
 
     <span class="n">defaultrc</span> <span class="o">=</span> <span class="n">RunControl</span><span class="p">(</span>
         <span class="n">stlcontainers</span><span class="o">=</span><span class="p">[],</span>
-        <span class="n">stlcontainers_module</span><span class="o">=</span><span class="s">&#39;stlcontainers&#39;</span><span class="p">,</span>
+        <span class="c">#stlcontainers_module=&#39;stlcontainers&#39;,  # Moved to base plugin</span>
         <span class="n">make_stlcontainers</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="n">rcdocs</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&quot;stlcontainers&quot;</span><span class="p">:</span> <span class="s">&quot;List of C++ standard library containers to wrap.&quot;</span><span class="p">,</span>
-        <span class="s">&quot;stlcontainers_module&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s">&quot;Module name for C++ standard library &quot;</span>
-                                 <span class="s">&quot;container wrappers.&quot;</span><span class="p">),</span>
         <span class="s">&quot;make_stlcontainers&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s">&quot;Flag for enabling / disabling creating the &quot;</span>
                                <span class="s">&quot;C++ standard library container wrappers.&quot;</span><span class="p">),</span>
         <span class="p">}</span>
 
     <span class="k">def</span> <span class="nf">update_argparser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
-        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--stlcontainers-module&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span> 
-                <span class="n">dest</span><span class="o">=</span><span class="s">&#39;stlcontainers_module&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rcdocs</span><span class="p">[</span><span class="s">&quot;stlcontainers_module&quot;</span><span class="p">])</span>
         <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--make-stlcontainers&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
                     <span class="n">dest</span><span class="o">=</span><span class="s">&#39;make_stlcontainers&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;make C++ STL container wrappers&quot;</span><span class="p">)</span>
         <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--no-make-stlcontainers&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_false&#39;</span><span class="p">,</span>
@@ -1247,12 +844,11 @@ if(ga_enabled){
     <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
         <span class="k">print</span><span class="p">(</span><span class="s">&quot;stlwrap: registering C++ standard library types&quot;</span><span class="p">)</span>
         <span class="n">ts</span> <span class="o">=</span> <span class="n">rc</span><span class="o">.</span><span class="n">ts</span>
-        <span class="n">ts</span><span class="o">.</span><span class="n">stlcontainers</span> <span class="o">=</span> <span class="n">rc</span><span class="o">.</span><span class="n">stlcontainers_module</span>
         <span class="c"># register dtypes</span>
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">rc</span><span class="o">.</span><span class="n">stlcontainers</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;vector&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;vector&#39;</span> <span class="ow">and</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">rc</span><span class="o">.</span><span class="n">dtypes</span><span class="p">:</span>
+                <span class="n">rc</span><span class="o">.</span><span class="n">dtypes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
                 <span class="n">ts</span><span class="o">.</span><span class="n">register_numpy_dtype</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-
 
     <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">rc</span><span class="o">.</span><span class="n">make_stlcontainers</span><span class="p">:</span>
@@ -1265,19 +861,7 @@ if(ga_enabled){
         <span class="n">ensuredirs</span><span class="p">(</span><span class="n">testname</span><span class="p">)</span>
         <span class="n">genfiles</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">stlcontainers</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="n">fname</span><span class="p">,</span> <span class="n">testname</span><span class="o">=</span><span class="n">testname</span><span class="p">,</span> <span class="n">package</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">package</span><span class="p">,</span> 
                  <span class="n">ts</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">ts</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
-
-
-<span class="c">#</span>
-<span class="c"># Test main</span>
-<span class="c">#</span>
-</div>
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="c">#t = [(&#39;set&#39;, &#39;int&#39;)]</span>
-    <span class="c">#t = [(&#39;set&#39;, &#39;str&#39;)]</span>
-    <span class="c">#t = [(&#39;py2c_map&#39;, &#39;int&#39;, &#39;int&#39;)]</span>
-    <span class="n">t</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;py2c_set&#39;</span><span class="p">,</span> <span class="s">&#39;str&#39;</span><span class="p">)]</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">genpyx</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
-</pre></div>
+</pre></div></div>
 
           </div>
         </div>
@@ -1318,7 +902,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.3 documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.4-rc1 documentation</a> &raquo;</li>
 
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>

@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Cython Generation &mdash; xdress 0.3 documentation</title>
+    <title>Cython Generation &mdash; xdress 0.4-rc1 documentation</title>
     
     <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.3',
+        VERSION:     '0.4-rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.3 documentation" href="../index.html" />
+    <link rel="top" title="xdress 0.4-rc1 documentation" href="../index.html" />
     <link rel="up" title="Library Reference" href="index.html" />
     <link rel="next" title="API Generation CLI" href="main.html" />
     <link rel="prev" title="Automatic API Discovery" href="autoall.html" /> 
@@ -70,7 +70,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="autoall.html" title="Automatic API Discovery"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.3 documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.4-rc1 documentation</a> &raquo;</li>
 
           <li><a href="index.html" accesskey="U">Library Reference</a> &raquo;</li> 
       </ul>
@@ -91,8 +91,8 @@ Python types in a seamless way.  While this module does not explicitly rely on t
 auto-describer, it sure helps!  The functions in this module are conceptually
 easy to understand &#8211; given class descriptions they generate strings of Cython
 code &#8211; their implementations do a lot of heavy lifting.</p>
-<p>This module is available as an xdress plugin by the name <tt class="docutils literal"><span class="pre">xdress.cythongen</span></tt>. 
-Note that while the module does not rely on the autodescriber the plugin does.</p>
+<p>This module is available as an xdress plugin by the name <tt class="docutils literal"><span class="pre">xdress.cythongen</span></tt>.
+Note that while the module does not rely on the autodescriber, the plugin does.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -241,7 +241,7 @@ dependencies.</p>
 <dl class="function">
 <dt id="xdress.cythongen.cpppxd_sorted_names">
 <tt class="descclassname">xdress.cythongen.</tt><tt class="descname">cpppxd_sorted_names</tt><big>(</big><em>mod</em>, <em>ts</em><big>)</big><a class="reference internal" href="../_modules/xdress/cythongen.html#cpppxd_sorted_names"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.cythongen.cpppxd_sorted_names" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sorts the variable names in a cpp_*.pxd module so that C/C++ 
+<dd><p>Sorts the variable names in a cpp_*.pxd module so that C/C++
 declarations happen in the proper order.</p>
 </dd></dl>
 
@@ -538,6 +538,13 @@ dependencies.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="xdress.cythongen.pxd_sorted_names">
+<tt class="descclassname">xdress.cythongen.</tt><tt class="descname">pxd_sorted_names</tt><big>(</big><em>mod</em><big>)</big><a class="reference internal" href="../_modules/xdress/cythongen.html#pxd_sorted_names"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.cythongen.pxd_sorted_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sorts the names in a module to make sure that pxd declarations happen in the
+proper order.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="xdress.cythongen.varcpppxd">
 <tt class="descclassname">xdress.cythongen.</tt><tt class="descname">varcpppxd</tt><big>(</big><em>desc</em>, <em>exceptions=True</em>, <em>ts=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/cythongen.html#varcpppxd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.cythongen.varcpppxd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a cpp_*.pxd Cython header snippet for exposing a C/C++ variable
@@ -675,7 +682,7 @@ variable based off of a dictionary description.</p>
         <li class="right" >
           <a href="autoall.html" title="Automatic API Discovery"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.3 documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.4-rc1 documentation</a> &raquo;</li>
 
           <li><a href="index.html" >Library Reference</a> &raquo;</li> 
       </ul>

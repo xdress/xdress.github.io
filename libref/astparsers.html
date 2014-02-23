@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Abstract Syntax Tree Parsers &mdash; xdress 0.3 documentation</title>
+    <title>Abstract Syntax Tree Parsers &mdash; xdress 0.4-rc1 documentation</title>
     
     <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.3',
+        VERSION:     '0.4-rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.3 documentation" href="../index.html" />
+    <link rel="top" title="xdress 0.4-rc1 documentation" href="../index.html" />
     <link rel="up" title="Library Reference" href="index.html" />
     <link rel="next" title="Automatic Descriptions" href="autodescribe.html" />
     <link rel="prev" title="Standard Library Container Wrappers" href="stlwrap.html" /> 
@@ -70,7 +70,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="stlwrap.html" title="Standard Library Container Wrappers"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.3 documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.4-rc1 documentation</a> &raquo;</li>
 
           <li><a href="index.html" accesskey="U">Library Reference</a> &raquo;</li> 
       </ul>
@@ -86,7 +86,7 @@ if(ga_enabled){
   <div class="section" id="abstract-syntax-tree-parsers">
 <span id="xdress-astparsers"></span><h1>Abstract Syntax Tree Parsers<a class="headerlink" href="#abstract-syntax-tree-parsers" title="Permalink to this headline">¶</a></h1>
 <img alt="../_images/astall.jpg" class="align-center" src="../_images/astall.jpg" />
-<span class="target" id="module-xdress.astparsers"></span><p>This module creates abstract syntax trees using external tools 
+<span class="target" id="module-xdress.astparsers"></span><p>This module creates abstract syntax trees using external tools
 (GCC-XML, pycparser) of C/C++ code.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -125,6 +125,63 @@ It should not be used directly.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="xdress.astparsers.clang_parse">
+<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">clang_parse</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/xdress/astparsers.html#clang_parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.astparsers.clang_parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use clang to parse a file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>The path to the file.</p>
+</div></blockquote>
+<p><strong>includes: list of str, optional</strong> :</p>
+<blockquote>
+<div><p>The list of extra include directories to search for header files.</p>
+</div></blockquote>
+<p><strong>defines: list of str, optional</strong> :</p>
+<blockquote>
+<div><p>The list of extra macro definitions to apply.</p>
+</div></blockquote>
+<p><strong>undefines: list of str, optional</strong> :</p>
+<blockquote>
+<div><p>The list of extra macro undefinitions to apply.</p>
+</div></blockquote>
+<p><strong>extra_parser_args</strong> : list of str, optional</p>
+<blockquote>
+<div><p>Further command line arguments to pass to the parser.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : bool, optional</p>
+<blockquote>
+<div><p>Flag to display extra information while describing the class.  Ignored.</p>
+</div></blockquote>
+<p><strong>debug</strong> : bool, optional</p>
+<blockquote>
+<div><p>Flag to enable/disable debug mode.  Currently ignored.</p>
+</div></blockquote>
+<p><strong>builddir</strong> : str, optional</p>
+<blockquote>
+<div><p>Ignored.  Exists only for compatibility with gccxml_describe.</p>
+</div></blockquote>
+<p><strong>language</strong> : str</p>
+<blockquote>
+<div><p>Valid language flag.</p>
+</div></blockquote>
+<p><strong>clang_includes</strong> : list of str, optional</p>
+<blockquote>
+<div><p>clang-specific includes paths.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>tu</strong> : libclang TranslationUnit object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="xdress.astparsers.clearmemo">
 <tt class="descclassname">xdress.astparsers.</tt><tt class="descname">clearmemo</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xdress/astparsers.html#clearmemo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.astparsers.clearmemo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clears all function memoizations for autodescribers.</p>
@@ -148,21 +205,25 @@ It should not be used directly.</p>
 <blockquote>
 <div><p>The path to the file.</p>
 </div></blockquote>
-<p><strong>includes: list of str, optional</strong> :</p>
+<p><strong>includes</strong> : list of str, optional</p>
 <blockquote>
 <div><p>The list of extra include directories to search for header files.</p>
 </div></blockquote>
-<p><strong>defines: list of str, optional</strong> :</p>
+<p><strong>defines</strong> : list of str, optional</p>
 <blockquote>
 <div><p>The list of extra macro definitions to apply.</p>
 </div></blockquote>
-<p><strong>undefines: list of str, optional</strong> :</p>
+<p><strong>undefines</strong> : list of str, optional</p>
 <blockquote>
 <div><p>The list of extra macro undefinitions to apply.</p>
 </div></blockquote>
+<p><strong>extra_parser_args</strong> : list of str, optional</p>
+<blockquote>
+<div><p>Further command line arguments to pass to the parser.</p>
+</div></blockquote>
 <p><strong>verbose</strong> : bool, optional</p>
 <blockquote>
-<div><p>Flag to diplay extra information while describing the class.</p>
+<div><p>Flag to display extra information while describing the class.</p>
 </div></blockquote>
 <p><strong>debug</strong> : bool, optional</p>
 <blockquote>
@@ -172,6 +233,7 @@ It should not be used directly.</p>
 <blockquote>
 <div><p>Location of &#8211; often temporary &#8211; build files.</p>
 </div></blockquote>
+<p><strong>clang_includes</strong> : ignored</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>root</strong> : XML etree</p>
@@ -186,21 +248,21 @@ It should not be used directly.</p>
 
 <dl class="function">
 <dt id="xdress.astparsers.pick_parser">
-<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">pick_parser</tt><big>(</big><em>filename</em>, <em>parsers</em><big>)</big><a class="reference internal" href="../_modules/xdress/astparsers.html#pick_parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.astparsers.pick_parser" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">xdress.astparsers.</tt><tt class="descname">pick_parser</tt><big>(</big><em>file_or_lang</em>, <em>parsers</em><big>)</big><a class="reference internal" href="../_modules/xdress/astparsers.html#pick_parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.astparsers.pick_parser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the parse to use for a file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>file_or_lang</strong> : str</p>
 <blockquote>
-<div><p>The path to the file.</p>
+<div><p>The path to the file OR a valid language flag.</p>
 </div></blockquote>
 <p><strong>parsers</strong> : str, list, or dict, optional</p>
 <blockquote>
-<div><p>The parser / AST to use to use for the file.  Currently &#8216;clang&#8217;, &#8216;gccxml&#8217;, 
-and &#8216;pycparser&#8217; are supported, though others may be implemented in the 
-future.  If this is a string, then this parser is used.  If this is a list, 
+<div><p>The parser / AST to use to use for the file.  Currently &#8216;clang&#8217;, &#8216;gccxml&#8217;,
+and &#8216;pycparser&#8217; are supported, though others may be implemented in the
+future.  If this is a string, then this parser is used.  If this is a list,
 this specifies the parser order to use based on availability.  If this is
 a dictionary, it specifies the order to use parser based on language, i.e.
 <tt class="docutils literal"><span class="pre">{'c'</span> <span class="pre">['pycparser',</span> <span class="pre">'gccxml'],</span> <span class="pre">'c++':</span> <span class="pre">['gccxml',</span> <span class="pre">'pycparser']}</span></tt>.</p>
@@ -229,21 +291,25 @@ a dictionary, it specifies the order to use parser based on language, i.e.
 <blockquote>
 <div><p>The path to the file.</p>
 </div></blockquote>
-<p><strong>includes: list of str, optional</strong> :</p>
+<p><strong>includes</strong> : list of str, optional</p>
 <blockquote>
 <div><p>The list of extra include directories to search for header files.</p>
 </div></blockquote>
-<p><strong>defines: list of str, optional</strong> :</p>
+<p><strong>defines</strong> : list of str, optional</p>
 <blockquote>
 <div><p>The list of extra macro definitions to apply.</p>
 </div></blockquote>
-<p><strong>undefines: list of str, optional</strong> :</p>
+<p><strong>undefines</strong> : list of str, optional</p>
 <blockquote>
 <div><p>The list of extra macro undefinitions to apply.</p>
 </div></blockquote>
+<p><strong>extra_parser_args</strong> : list of str, optional</p>
+<blockquote>
+<div><p>Further command line arguments to pass to the parser.</p>
+</div></blockquote>
 <p><strong>verbose</strong> : bool, optional</p>
 <blockquote>
-<div><p>Flag to diplay extra information while describing the class.</p>
+<div><p>Flag to display extra information while describing the class.</p>
 </div></blockquote>
 <p><strong>debug</strong> : bool, optional</p>
 <blockquote>
@@ -253,6 +319,7 @@ a dictionary, it specifies the order to use parser based on language, i.e.
 <blockquote>
 <div><p>Location of &#8211; often temporary &#8211; build files.</p>
 </div></blockquote>
+<p><strong>clang_includes</strong> : ignored</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>root</strong> : AST</p>
@@ -335,7 +402,7 @@ a dictionary, it specifies the order to use parser based on language, i.e.
         <li class="right" >
           <a href="stlwrap.html" title="Standard Library Container Wrappers"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.3 documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.4-rc1 documentation</a> &raquo;</li>
 
           <li><a href="index.html" >Library Reference</a> &raquo;</li> 
       </ul>

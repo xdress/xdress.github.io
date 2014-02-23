@@ -8,12 +8,17 @@
 ################################################
 
 
+cimport dtypes
 cimport hoover
 from mypack cimport cpp_hoover_b
 
+
+
 cdef class B(hoover.A):
+    pass
     pass
 
 
 
 
+{'cpppxd_footer': '', 'pyx_header': '', 'pxd_header': '', 'pxd_footer': '', 'cpppxd_header': '', 'pyx_footer': ''}

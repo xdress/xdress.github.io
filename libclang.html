@@ -1,0 +1,236 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Using libclang &mdash; xdress 0.4-rc1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/numpy_friendly.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.4-rc1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="_static/cloud.js"></script>
+    <link rel="top" title="xdress 0.4-rc1 documentation" href="index.html" />
+    <link rel="next" title="Library Reference" href="libref/index.html" />
+    <link rel="prev" title="Advanced Tutorial" href="advtut.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
+var ga_enabled = !$.cookie('disable-ga');
+if(ga_enabled){
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41934829-1']);
+  _gaq.push(['_setCookiePath', '/']);
+  _gaq.push(['_setDetectFlash', false]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+}
+</script>
+  </head>
+  <body>
+    <div class="relbar-top">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="libref/index.html" title="Library Reference"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="advtut.html" title="Advanced Tutorial"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">xdress 0.4-rc1 documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="using-libclang">
+<h1>Using libclang<a class="headerlink" href="#using-libclang" title="Permalink to this headline">¶</a></h1>
+<p>libclang is an extension module which allows XDress to use the excellent Clang
+compiler for parsing C and C++ source files.</p>
+<p><strong>NOTE</strong>: libclang is an official part of the Clang software distribution. As of
+XDress version 0.4, the libclang used by XDress is a fork of the source code
+in the main Clang distribution (due to missing features in the official version).
+Patches have been submitted upstream, and the fork will be retired once those
+changes are merged.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li>Start by downloading a source tarball for a current <a class="reference external" href="http://llvm.org/releases/">Clang distribution</a></li>
+<li>We highly recommend following the detailed <a class="reference external" href="http://clang.llvm.org/get_started.html">build instructions</a> on the LLVM website.</li>
+<li>Once you&#8217;ve built LLVM/Clang, install it in a location which is appropriate for
+your system. If that location is not part of your executable path, you will need
+to set the <cite>LLVM_CONFIG</cite> environment variable to point to the <cite>llvm-config</cite> program.
+XDress will check the environment variable before searching for an <cite>llvm-config</cite>
+program in your path.</li>
+<li>Build XDress</li>
+<li>Enjoy!</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="os-x-issues">
+<h2>OS X Issues<a class="headerlink" href="#os-x-issues" title="Permalink to this headline">¶</a></h2>
+<p>If you are building on a recent version of OS X, you must take care to use the
+same C++ library for both LLVM/Clang and libclang in XDress. Mixing libc++ and
+libstdc++ will cause link errors and you will not be able to import libclang.</p>
+<p>Because LLVM/Clang will likely use libc++ by default, the easiest solution is
+to add <cite>-stdlib=libc++</cite> to the compiler flags for XDress. This might not be an
+option depending on how your Python installation is configured. If you get an
+error which looks like this:</p>
+<p><cite>clang: error: invalid deployment target for -stdlib=libc++ (requires OS X 10.7 or later)</cite></p>
+<p>Then you will need to build LLVM/Clang against libstdc++ in order to build XDress.</p>
+<div class="section" id="building-llvm-clang-with-libstdc">
+<h3>Building LLVM/Clang with libstdc++<a class="headerlink" href="#building-llvm-clang-with-libstdc" title="Permalink to this headline">¶</a></h3>
+<p>Building LLVM/Clang with libstdc++ is fairly straightforward. All you need to
+do is set a <cite>CPPFLAGS</cite> environment variable before running the included
+<cite>configure</cite> script:</p>
+<div class="highlight-python"><pre># "/usr/include/c++/4.2.1/" should be replaced with the location of the
+# GNU C++ headers on your system.
+$ export CPPFLAGS="-I/usr/include/c++/4.2.1/ -stdlib=libstdc++"
+$ ../configure</pre>
+</div>
+<p>You can confirm that you are linked against libstdc++ by running the following
+command in the output library build directory:</p>
+<div class="highlight-python"><pre>$ strings libLLVMSupport.a | grep __ZN4llvm27install_fatal_error_handler | c++filt</pre>
+</div>
+<p>That command can be run fairly early in the build process because libLLVMSupport
+is one of the first libraries which gets build. Here are the two possible results:</p>
+<ul class="simple">
+<li>libstdc++: <cite>llvm::install_fatal_error_handler(void (*)(void*, std::string const&amp;, bool), void*)</cite></li>
+<li>libc++: <cite>llvm::install_fatal_error_handler(void (*)(void*, std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;, bool), void*)</cite></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+        <p class="logo"><a href="index.html">
+          <img class="logo" src="_static/HooverJoven.jpg" alt="Logo"/>
+        </a></p>
+  <div class="sphinxlocaltoc">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Using libclang</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#os-x-issues">OS X Issues</a><ul>
+<li><a class="reference internal" href="#building-llvm-clang-with-libstdc">Building LLVM/Clang with libstdc++</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="advtut.html"
+                        title="previous chapter">Advanced Tutorial</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="libref/index.html"
+                        title="next chapter">Library Reference</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/libclang.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="libref/index.html" title="Library Reference"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="advtut.html" title="Advanced Tutorial"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">xdress 0.4-rc1 documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, Anthony Scopatz.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div><script type="text/javascript">
+    if(ga_enabled){
+        document.write("<div class=\"footer\">This page uses <a href=\"http://analytics.google.com\">Google Analytics</a> to collect statistics. ");
+        document.write("Click <button title=\"set cookie to disable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', 'true', {expires: 3650, path: '/'}); window.location.reload(); return false; \">here</button> to disable analytics for this site.");
+        document.write("</div>");
+    }else{
+        document.write("<div class=\"footer\">Google Analytics has been disabled. ");
+        document.write("Click <button title=\"set cookie to re-enable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', null, {path: '/'}); window.location.reload(); return false; \">here</button> to re-enable analytics for this site.");
+    };
+</script>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

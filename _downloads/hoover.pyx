@@ -12,10 +12,15 @@ cimport stlcontainers
 from libc.stdlib cimport free
 from libcpp.map cimport map as cpp_map
 
+import collections
 import stlcontainers
 
+
+
 cdef class A:
-    """no docstring for A, please file a bug report!"""
+    """no docstring for {'tarbase': 'hoover', 'tarname': 'A', 'language': 'c++', 'srcname': 'A', 'sidecars': (), 'incfiles': ('hoover.h',), 'srcfiles': ('src/hoover.h', 'src/hoover.cpp')}, please file a bug report!"""
+
+
 
     # constuctors
     def __cinit__(self, *args, **kwargs):
@@ -54,9 +59,13 @@ cdef class A:
     
     
     # methods
+    
+
+    pass
 
 
 
 
 
 
+{'cpppxd_footer': '', 'pyx_header': '', 'pxd_header': '', 'pxd_footer': '', 'cpppxd_header': '', 'pyx_footer': ''}

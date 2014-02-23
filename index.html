@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>XDress &mdash; xdress 0.3 documentation</title>
+    <title>XDress &mdash; xdress 0.4-rc1 documentation</title>
     
     <link rel="stylesheet" href="_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3',
+        VERSION:     '0.4-rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.3 documentation" href="#" />
+    <link rel="top" title="xdress 0.4-rc1 documentation" href="#" />
     <link rel="next" title="Tutorial" href="tutorial.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
@@ -65,7 +65,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="tutorial.html" title="Tutorial"
              accesskey="N">next</a> &nbsp; &nbsp;</li>
-    <li><a href="#">xdress 0.3 documentation</a> &raquo;</li>
+    <li><a href="#">xdress 0.4-rc1 documentation</a> &raquo;</li>
  
       </ul>
     </div>
@@ -93,6 +93,7 @@ the purpose of API generation in mind.</p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advtut.html">Advanced Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libclang.html">Using libclang</a></li>
 <li class="toctree-l1"><a class="reference internal" href="libref/index.html">Library Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rcdocs.html">Run Control Parameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="previous/index.html">Previous Versions</a></li>
@@ -110,7 +111,7 @@ to grab and install the code:</p>
 $ easy_install xdress</pre>
 </div>
 <p>The source code repository for xdress may be found at the
-<a class="reference external" href="http://github.com/scopatz/xdress">GitHub project site</a>.
+<a class="reference external" href="http://github.com/xdress/xdress">GitHub project site</a>.
 You may simply clone the development branch using git:</p>
 <div class="highlight-python"><pre>git clone git://github.com/xdress/xdress.git</pre>
 </div>
@@ -126,6 +127,7 @@ eval "$(register-python-argcomplete xdress)"</pre>
 <p><em>Run Time:</em></p>
 <blockquote>
 <div><ol class="arabic simple">
+<li><a class="reference external" href="http://llvm.org/releases/">Clang/LLVM</a>, optional for C/C++</li>
 <li><a class="reference external" href="https://bitbucket.org/eliben/pycparser">pycparser</a>, optional for C</li>
 <li><a class="reference external" href="http://www.gccxml.org/HTML/Index.html">GCC-XML</a>, optional for C++</li>
 <li><a class="reference external" href="http://www.doxygen.org/">dOxygen</a>, optional for docstrings</li>
@@ -140,25 +142,56 @@ eval "$(register-python-argcomplete xdress)"</pre>
 <li><a class="reference external" href="http://numpy.scipy.org/">NumPy</a></li>
 </ol>
 </div></blockquote>
+<p><em>Test Time:</em></p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><a class="reference external" href="https://nose.readthedocs.org/en/latest/">nose</a></li>
+<li><a class="reference external" href="http://www.cmake.org/">CMake</a>, optional for integration tests</li>
+</ol>
+</div></blockquote>
 </div>
 <div class="section" id="examples-of-use">
 <h3>Examples of Use<a class="headerlink" href="#examples-of-use" title="Permalink to this headline">¶</a></h3>
 <p>To see examples of xdress in action (and sample run control files), here are a
 few places to look:</p>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/xdress/xdress/tree/master/tests">xdress/tests</a>: This is
-a fully functioning sample project which uses xdress locally (no install needed).</li>
+<li><a class="reference external" href="https://github.com/xdress/xdress/tree/master/tests/cproj">xdress/tests/cproj</a>:
+This is a fully functioning sample C project which uses xdress locally.</li>
+<li><a class="reference external" href="https://github.com/xdress/xdress/tree/master/tests/cppproj">xdress/tests/cppproj</a>:
+This is a fully functioning sample C++ project which uses xdress locally.</li>
 <li><a class="reference external" href="http://pynesim.org/">PyNE</a>: This uses xdress to generate STL container wrappers.</li>
 <li><a class="reference external" href="http://bright-dev.github.com/">Bright</a>: This uses xdress to automatically
 wrap a suite of interacting C++ class.  This was the motivating use case for the
 xdress project.</li>
 </ul>
 </div>
+<div class="section" id="testing">
+<h3>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h3>
+<p>XDress has two major test types: unit tests which test library functionality and
+integration tests which test the command line tool, the parsers, compilers, etc.
+The unit tests are generally fast while the integration are slower.  From the
+<cite>tests/</cite> directory you may use nose to run the tests together or individually:</p>
+<div class="highlight-python"><pre># Go into the tests dir
+$ cd tests
+
+# Run just the unit tests
+tests $ nosetests -a unit
+
+# Run just the integration tests
+tests $ nosetests -a integration
+
+# Run all of the tests together
+tests $ nosetests</pre>
+</div>
+<p>Note that the integration tests require CMake in order to build the sample
+projects.</p>
+</div>
 <div class="section" id="contact-us">
 <h3>Contact Us<a class="headerlink" href="#contact-us" title="Permalink to this headline">¶</a></h3>
-<p>If you have questions or comments, please send them to the mailing list
-<a class="reference external" href="mailto:xdress&#37;&#52;&#48;googlegroups&#46;com">xdress<span>&#64;</span>googlegroups<span>&#46;</span>com</a> or contact the author directly or open an issue on
-GitHub.</p>
+<p>If you have questions or comments, please sign up for the the mailing list
+at <a class="reference external" href="https://groups.google.com/forum/#!forum/xdress">https://groups.google.com/forum/#!forum/xdress</a> and send an email to
+<a class="reference external" href="mailto:xdress&#37;&#52;&#48;googlegroups&#46;com">xdress<span>&#64;</span>googlegroups<span>&#46;</span>com</a>. Alternatively, please contact the authors directly or
+open an issue on GitHub.</p>
 </div>
 <div class="section" id="contributing">
 <h3>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h3>
@@ -171,7 +204,8 @@ hesitate to ask the mailing list (<a class="reference external" href="mailto:xdr
 <h3>Helpful Links<a class="headerlink" href="#helpful-links" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="http://xdress.org">Documentation</a></li>
-<li><a class="reference external" href="mailto:xdress&#37;&#52;&#48;googlegroups&#46;com">Mailing list</a></li>
+<li><a class="reference external" href="https://groups.google.com/forum/#!forum/xdress">Mailing list website</a></li>
+<li><a class="reference external" href="mailto:xdress&#37;&#52;&#48;googlegroups&#46;com">Mailing list address</a></li>
 <li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
 <li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
 <li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
@@ -197,6 +231,7 @@ hesitate to ask the mailing list (<a class="reference external" href="mailto:xdr
 <li><a class="reference internal" href="#installation">Installation</a></li>
 <li><a class="reference internal" href="#dependencies">Dependencies</a></li>
 <li><a class="reference internal" href="#examples-of-use">Examples of Use</a></li>
+<li><a class="reference internal" href="#testing">Testing</a></li>
 <li><a class="reference internal" href="#contact-us">Contact Us</a></li>
 <li><a class="reference internal" href="#contributing">Contributing</a></li>
 <li><a class="reference internal" href="#helpful-links">Helpful Links</a></li>
@@ -249,7 +284,7 @@ hesitate to ask the mailing list (<a class="reference external" href="mailto:xdr
         <li class="right" >
           <a href="tutorial.html" title="Tutorial"
              >next</a> &nbsp; &nbsp;</li>
-    <li><a href="#">xdress 0.3 documentation</a> &raquo;</li>
+    <li><a href="#">xdress 0.4-rc1 documentation</a> &raquo;</li>
  
       </ul>
     </div>

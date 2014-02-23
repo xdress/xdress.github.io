@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Description Filter &mdash; xdress 0.3 documentation</title>
+    <title>Description Filter &mdash; xdress 0.4-rc1 documentation</title>
     
     <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.3',
+        VERSION:     '0.4-rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.3 documentation" href="../index.html" />
+    <link rel="top" title="xdress 0.4-rc1 documentation" href="../index.html" />
     <link rel="up" title="Library Reference" href="index.html" />
     <link rel="next" title="dOxygen Docstrings" href="doxygen.html" />
     <link rel="prev" title="API Generation CLI" href="main.html" /> 
@@ -70,7 +70,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="main.html" title="API Generation CLI"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.3 documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.4-rc1 documentation</a> &raquo;</li>
 
           <li><a href="index.html" accesskey="U">Library Reference</a> &raquo;</li> 
       </ul>
@@ -116,6 +116,15 @@ skipped types will be applied to all classes listed in the
 <li><tt class="docutils literal"><span class="pre">skipmethods</span></tt> dictionary. The keys for this dictionary
 are the class names and the values are a list of method names that
 should be excluded from the wrapper.</li>
+<li><tt class="docutils literal"><span class="pre">skipattrs</span></tt> dictionary. The keys for this dictionary are
+the class names and the values are a list of class attributes
+that should be excluded from the wrapper.</li>
+<li><tt class="docutils literal"><span class="pre">includemethods</span></tt> dict. This is the complement of the
+<tt class="docutils literal"><span class="pre">skipmethods</span></tt> dict. The keys are class names and the values are
+list of methods that should be included in the wrapper. All
+other methods are filtered out.</li>
+<li><tt class="docutils literal"><span class="pre">skipauto</span></tt> boolean.  If this is <tt class="docutils literal"><span class="pre">True</span></tt> then methods and attributes
+with any types that are unknown will be filtered out.</li>
 </ol>
 </li>
 </ol>
@@ -209,6 +218,36 @@ xdressrc file:</p>
 <em class="property">class </em><tt class="descclassname">xdress.descfilter.</tt><tt class="descname">XDressPlugin</tt><a class="reference internal" href="../_modules/xdress/descfilter.html#XDressPlugin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.descfilter.XDressPlugin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plugin for filtering API description dictionaries.</p>
 <p>The __init__() method may take no arguments or keyword arguments.</p>
+<dl class="method">
+<dt id="xdress.descfilter.XDressPlugin.include_methods">
+<tt class="descname">include_methods</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/descfilter.html#XDressPlugin.include_methods"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.descfilter.XDressPlugin.include_methods" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alter a class description to include only a subset of methods</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xdress.descfilter.XDressPlugin.skip_attrs">
+<tt class="descname">skip_attrs</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/descfilter.html#XDressPlugin.skip_attrs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.descfilter.XDressPlugin.skip_attrs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove unwanted attributes from classes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xdress.descfilter.XDressPlugin.skip_auto">
+<tt class="descname">skip_auto</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/descfilter.html#XDressPlugin.skip_auto"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.descfilter.XDressPlugin.skip_auto" title="Permalink to this definition">¶</a></dt>
+<dd><p>Automatically remove any methods or attributes that use unknown types</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xdress.descfilter.XDressPlugin.skip_methods">
+<tt class="descname">skip_methods</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/descfilter.html#XDressPlugin.skip_methods"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.descfilter.XDressPlugin.skip_methods" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove unwanted methods from classes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xdress.descfilter.XDressPlugin.skip_types">
+<tt class="descname">skip_types</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/descfilter.html#XDressPlugin.skip_types"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.descfilter.XDressPlugin.skip_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove unwanted types from type descriptions</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="function">
@@ -313,7 +352,7 @@ if any methods need to be removed.</p>
         <li class="right" >
           <a href="main.html" title="API Generation CLI"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.3 documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.4-rc1 documentation</a> &raquo;</li>
 
           <li><a href="index.html" >Library Reference</a> &raquo;</li> 
       </ul>

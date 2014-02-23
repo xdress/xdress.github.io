@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>xdress.main &mdash; xdress 0.3 documentation</title>
+    <title>xdress.main &mdash; xdress 0.4-rc1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.3',
+        VERSION:     '0.4-rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.3 documentation" href="../../index.html" />
+    <link rel="top" title="xdress 0.4-rc1 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
@@ -62,7 +62,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.3 documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.4-rc1 documentation</a> &raquo;</li>
 
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
@@ -244,6 +244,7 @@ if(ga_enabled){
 <span class="kn">import</span> <span class="nn">io</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span><span class="p">,</span> <span class="n">pformat</span>
 
 <span class="k">try</span><span class="p">:</span>
@@ -252,7 +253,7 @@ if(ga_enabled){
     <span class="n">argcomplete</span> <span class="o">=</span> <span class="bp">None</span>
 
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">NotSpecified</span><span class="p">,</span> <span class="n">RunControl</span><span class="p">,</span> <span class="n">DEFAULT_RC_FILE</span><span class="p">,</span> <span class="n">DEFAULT_PLUGINS</span><span class="p">,</span> \
-    <span class="n">exec_file</span>
+    <span class="n">exec_file</span><span class="p">,</span> <span class="n">parse_global_rc</span>
 
 <span class="kn">from</span> <span class="nn">.plugins</span> <span class="kn">import</span> <span class="n">Plugins</span>
 
@@ -262,6 +263,7 @@ if(ga_enabled){
 
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../libref/main.html#xdress.main.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Entry point for xdress API generation.&quot;&quot;&quot;</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s">&#39;default&#39;</span><span class="p">)</span>
     <span class="c"># Preprocess plugin names, which entails preprocessing the rc file</span>
     <span class="n">preparser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="s">&quot;XDress Pre-processor&quot;</span><span class="p">,</span> <span class="n">add_help</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
     <span class="n">preparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--rc&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">,</span> 
@@ -291,11 +293,13 @@ if(ga_enabled){
         <span class="n">argcomplete</span><span class="o">.</span><span class="n">autocomplete</span><span class="p">(</span><span class="n">parser</span><span class="p">)</span>
     <span class="n">ns</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
     <span class="n">rc</span> <span class="o">=</span> <span class="n">plugins</span><span class="o">.</span><span class="n">merge_rcs</span><span class="p">()</span>
+    <span class="n">rc</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">parse_global_rc</span><span class="p">())</span>
     <span class="n">rc</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">rcdict</span><span class="p">)</span>
     <span class="n">rc</span><span class="o">.</span><span class="n">_update</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ns</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
     <span class="n">plugins</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
     <span class="n">plugins</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
     <span class="n">plugins</span><span class="o">.</span><span class="n">teardown</span><span class="p">()</span>
+    <span class="n">plugins</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
 </div>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
@@ -340,7 +344,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.3 documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.4-rc1 documentation</a> &raquo;</li>
 
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>

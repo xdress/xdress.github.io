@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>xdress.utils &mdash; xdress 0.3 documentation</title>
+    <title>xdress.utils &mdash; xdress 0.4-rc1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.3',
+        VERSION:     '0.4-rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.3 documentation" href="../../index.html" />
+    <link rel="top" title="xdress 0.4-rc1 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
@@ -62,7 +62,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.3 documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.4-rc1 documentation</a> &raquo;</li>
 
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
@@ -76,7 +76,7 @@ if(ga_enabled){
           <div class="body">
             
   <h1>Source code for xdress.utils</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;Helper functions for xdress.</span>
+<span class="sd">&quot;&quot;&quot;Helpers for xdress.</span>
 
 <span class="sd">:author: Anthony Scopatz &lt;scopatz@gmail.com&gt;</span>
 
@@ -86,17 +86,28 @@ if(ga_enabled){
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">ast</span>
 <span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pformat</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">namedtuple</span>
 <span class="kn">from</span> <span class="nn">hashlib</span> <span class="kn">import</span> <span class="n">md5</span>
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">cPickle</span> <span class="kn">as</span> <span class="nn">pickle</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">pickle</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">IntEnum</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">._enum</span> <span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">IntEnum</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
     <span class="nb">basestring</span> <span class="o">=</span> <span class="nb">str</span>
@@ -140,24 +151,68 @@ if(ga_enabled){
         <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">super</span><span class="p">(</span><span class="n">indentstr</span><span class="p">,</span> <span class="bp">self</span><span class="p">),</span> <span class="n">key</span><span class="p">)</span>
 
 </div>
+<span class="k">class</span> <span class="nc">Arg</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="n">NONE</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">TYPE</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">LIT</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">VAR</span> <span class="o">=</span> <span class="mi">3</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+
 <div class="viewcode-block" id="expand_default_args"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.expand_default_args">[docs]</a><span class="k">def</span> <span class="nf">expand_default_args</span><span class="p">(</span><span class="n">methods</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;This function takes a collection of method tuples and expands all of</span>
 <span class="sd">    the default arguments, returning a set of all methods possible.&quot;&quot;&quot;</span>
     <span class="n">methitems</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">mkey</span><span class="p">,</span> <span class="n">mrtn</span> <span class="ow">in</span> <span class="n">methods</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">mkey</span><span class="p">,</span> <span class="n">mval</span> <span class="ow">in</span> <span class="n">methods</span><span class="p">:</span>
         <span class="n">mname</span><span class="p">,</span> <span class="n">margs</span> <span class="o">=</span> <span class="n">mkey</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mkey</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-        <span class="n">havedefaults</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">margs</span><span class="p">]</span>
+        <span class="n">mrtn</span> <span class="o">=</span> <span class="n">mval</span><span class="p">[</span><span class="s">&#39;return&#39;</span><span class="p">]</span>
+        <span class="n">mdefargs</span> <span class="o">=</span> <span class="n">mval</span><span class="p">[</span><span class="s">&#39;defaults&#39;</span><span class="p">]</span>
+        <span class="n">havedefaults</span> <span class="o">=</span> <span class="p">[</span><span class="n">arg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">Arg</span><span class="o">.</span><span class="n">NONE</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">margs</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">havedefaults</span><span class="p">):</span>
             <span class="c"># expand default arguments</span>
             <span class="n">n</span> <span class="o">=</span> <span class="n">havedefaults</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
             <span class="n">items</span> <span class="o">=</span> <span class="p">[((</span><span class="n">mname</span><span class="p">,)</span><span class="o">+</span><span class="nb">tuple</span><span class="p">(</span><span class="n">margs</span><span class="p">[:</span><span class="n">n</span><span class="p">]),</span> <span class="n">mrtn</span><span class="p">)]</span> <span class="o">+</span> \
-                    <span class="p">[((</span><span class="n">mname</span><span class="p">,)</span><span class="o">+</span><span class="nb">tuple</span><span class="p">(</span><span class="n">margs</span><span class="p">[:</span><span class="n">i</span><span class="p">]),</span> <span class="n">mrtn</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">margs</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+                <span class="p">[((</span><span class="n">mname</span><span class="p">,)</span><span class="o">+</span><span class="nb">tuple</span><span class="p">(</span><span class="n">margs</span><span class="p">[:</span><span class="n">i</span><span class="p">]),</span> <span class="n">mrtn</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">margs</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
             <span class="n">methitems</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c"># no default args</span>
             <span class="n">methitems</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">mkey</span><span class="p">,</span> <span class="n">mrtn</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">methitems</span>
+</div>
+<span class="n">_bool_literals</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;true&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s">&#39;false&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">}</span>
+<span class="n">_c_literal_int</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;^([+-]?([1-9][0-9]*|0o?[0-7]+|0x[0-9a-f]+|&#39;</span>
+                                   <span class="s">r&#39;0b[01]+|0))u?(l{1,2})?u?$&#39;</span><span class="p">)</span>
+<span class="n">_c_int_bases</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;0x&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="s">&#39;0o&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s">&#39;0b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&#39;0&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                <span class="s">&#39;00&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s">&#39;01&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s">&#39;02&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s">&#39;03&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s">&#39;04&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s">&#39;05&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s">&#39;06&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s">&#39;07&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">}</span>
+<span class="n">_c_float</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;^([+-]?([0-9]+\.[0-9]*|\.[0-9]+)(e[+-]?[0-9]+)?)([lf]?)$&#39;</span><span class="p">)</span>
+<span class="n">_c_float_types</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="s">&#39;f&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="s">&#39;l&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">longfloat</span><span class="p">}</span>
 
+<div class="viewcode-block" id="c_literal"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.c_literal">[docs]</a><span class="k">def</span> <span class="nf">c_literal</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert a C/C++ literal to the corresponding Python value.&quot;&quot;&quot;</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c"># ast.literal_eval isn&#39;t precisely correct, since there are Python</span>
+        <span class="c"># literals which aren&#39;t valid C++, but it is close enough and faster</span>
+        <span class="c"># than the custom code below in the common case.</span>
+        <span class="k">return</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">SyntaxError</span><span class="p">):</span>
+        <span class="k">pass</span>
+    <span class="k">if</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">_bool_literals</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_bool_literals</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
+    <span class="n">lo</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">_c_literal_int</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">lo</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="n">_c_int_bases</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)[:</span><span class="mi">2</span><span class="p">],</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">base</span><span class="p">)</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">_c_float</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">lo</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_c_float_types</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">4</span><span class="p">)](</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;unknown literal: {0!r}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
 </div>
 <div class="viewcode-block" id="newoverwrite"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.newoverwrite">[docs]</a><span class="k">def</span> <span class="nf">newoverwrite</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Useful for not forcing re-compiles and thus playing nicely with the</span>
@@ -230,7 +285,11 @@ if(ga_enabled){
     <span class="n">d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">f</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
-
+</div>
+<div class="viewcode-block" id="touch"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.touch">[docs]</a><span class="k">def</span> <span class="nf">touch</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Opens a file and updates the mtime, like the posix command of the same name.&quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">utime</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="isvardesc"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.isvardesc">[docs]</a><span class="k">def</span> <span class="nf">isvardesc</span><span class="p">(</span><span class="n">desc</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Tests if a description is a variable-type description.&quot;&quot;&quot;</span>
@@ -363,6 +422,24 @@ if(ga_enabled){
                 <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_updaters</span><span class="p">[</span><span class="n">k</span><span class="p">](</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">),</span> <span class="n">v</span><span class="p">)</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
 </div>
+<div class="viewcode-block" id="parse_global_rc"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.parse_global_rc">[docs]</a><span class="k">def</span> <span class="nf">parse_global_rc</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;Search a global xdressrc file and parse if it exists.</span>
+<span class="sd">    If nothing is found, an empty RunControl is returned.&#39;&#39;&#39;</span>
+    <span class="n">home</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s">&#39;~&#39;</span><span class="p">)</span>
+    <span class="n">globalrcs</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">home</span><span class="p">,</span> <span class="s">&#39;.xdressrc&#39;</span><span class="p">),</span>
+                 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">home</span><span class="p">,</span> <span class="s">&#39;.xdressrc.py&#39;</span><span class="p">),</span>
+                 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">home</span><span class="p">,</span> <span class="s">&#39;.config&#39;</span><span class="p">,</span> <span class="s">&#39;xdressrc&#39;</span><span class="p">),</span>
+                 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">home</span><span class="p">,</span> <span class="s">&#39;.config&#39;</span><span class="p">,</span> <span class="s">&#39;xdressrc.py&#39;</span><span class="p">),</span>
+                 <span class="p">]</span>
+    <span class="n">rc</span> <span class="o">=</span> <span class="n">RunControl</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">globalrc</span> <span class="ow">in</span> <span class="n">globalrcs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">globalrc</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="n">globalrcdict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">exec_file</span><span class="p">(</span><span class="n">globalrc</span><span class="p">,</span> <span class="n">globalrcdict</span><span class="p">,</span> <span class="n">globalrcdict</span><span class="p">)</span>
+        <span class="n">rc</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">globalrcdict</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rc</span>
+</div>
 <span class="n">_lang_exts</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s">&#39;c&#39;</span><span class="p">:</span> <span class="s">&#39;c&#39;</span><span class="p">,</span>
     <span class="s">&#39;c++&#39;</span><span class="p">:</span> <span class="s">&#39;cpp&#39;</span><span class="p">,</span>
@@ -413,11 +490,16 @@ if(ga_enabled){
     <span class="n">lang</span> <span class="o">=</span> <span class="n">_exts_lang</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ext</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">lang</span>
 </div>
-<div class="viewcode-block" id="find_source"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.find_source">[docs]</a><span class="k">def</span> <span class="nf">find_source</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="n">sourcedir</span><span class="o">=</span><span class="s">&#39;.&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="find_source"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.find_source">[docs]</a><span class="k">def</span> <span class="nf">find_source</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="n">sourcedir</span><span class="o">=</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Finds a source filename, header filename, language name, and language</span>
 <span class="sd">    source extension given a basename and source directory.&quot;&quot;&quot;</span>
-    <span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">sourcedir</span><span class="p">)</span>
-    <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">basename</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">basename</span> <span class="p">]</span>
+    <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isabs</span><span class="p">(</span><span class="n">basename</span><span class="p">):</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[</span> <span class="n">basename</span> <span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">sourcedir</span><span class="p">)</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">basename</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span><span class="p">)]</span>
     <span class="n">langs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([(</span><span class="n">f</span><span class="p">,</span> <span class="n">guess_language</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">])</span>
     <span class="n">lang</span> <span class="o">=</span> <span class="n">src</span> <span class="o">=</span> <span class="n">hdr</span> <span class="o">=</span> <span class="n">srcext</span> <span class="o">=</span> <span class="bp">None</span>
     <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">langs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -432,9 +514,11 @@ if(ga_enabled){
         <span class="n">src</span> <span class="o">=</span> <span class="n">hdr</span>
         <span class="n">lang</span> <span class="o">=</span> <span class="n">langs</span><span class="p">[</span><span class="n">hdr</span><span class="p">]</span>
         <span class="n">srcext</span> <span class="o">=</span> <span class="n">_lang_exts</span><span class="p">[</span><span class="n">lang</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">language</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">language</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">NotSpecified</span><span class="p">:</span>
+        <span class="n">lang</span> <span class="o">=</span> <span class="n">language</span>
     <span class="k">return</span> <span class="n">src</span><span class="p">,</span> <span class="n">hdr</span><span class="p">,</span> <span class="n">lang</span><span class="p">,</span> <span class="n">srcext</span>
 </div>
-<div class="viewcode-block" id="find_filenames"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.find_filenames">[docs]</a><span class="k">def</span> <span class="nf">find_filenames</span><span class="p">(</span><span class="n">srcname</span><span class="p">,</span> <span class="n">tarname</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">sourcedir</span><span class="o">=</span><span class="s">&#39;src&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="find_filenames"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.find_filenames">[docs]</a><span class="k">def</span> <span class="nf">find_filenames</span><span class="p">(</span><span class="n">srcname</span><span class="p">,</span> <span class="n">tarname</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">sourcedir</span><span class="o">=</span><span class="s">&#39;src&#39;</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Returns a description dictionary for a class or function</span>
 <span class="sd">    implemented in a source file and bound into a target file.</span>
 
@@ -454,7 +538,8 @@ if(ga_enabled){
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">desc</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">srcfname</span><span class="p">,</span> <span class="n">hdrfname</span><span class="p">,</span> <span class="n">lang</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">find_source</span><span class="p">(</span><span class="n">srcname</span><span class="p">,</span> <span class="n">sourcedir</span><span class="o">=</span><span class="n">sourcedir</span><span class="p">)</span>
+    <span class="n">srcfname</span><span class="p">,</span> <span class="n">hdrfname</span><span class="p">,</span> <span class="n">lang</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">find_source</span><span class="p">(</span><span class="n">srcname</span><span class="p">,</span> <span class="n">sourcedir</span><span class="o">=</span><span class="n">sourcedir</span><span class="p">,</span>
+                                                <span class="n">language</span><span class="o">=</span><span class="n">language</span><span class="p">)</span>
     <span class="n">desc</span><span class="p">[</span><span class="s">&#39;source_filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">srcfname</span>
     <span class="n">desc</span><span class="p">[</span><span class="s">&#39;header_filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdrfname</span>
     <span class="n">desc</span><span class="p">[</span><span class="s">&#39;language&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lang</span>
@@ -468,6 +553,38 @@ if(ga_enabled){
         <span class="n">desc</span><span class="p">[</span><span class="s">&#39;pyx_filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;{0}.pyx&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tarname</span><span class="p">)</span>
         <span class="n">desc</span><span class="p">[</span><span class="s">&#39;srcpxd_filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;{0}_{1}.pxd&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ext</span><span class="p">,</span> <span class="n">tarname</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">desc</span>
+</div>
+<div class="viewcode-block" id="extra_filenames"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.extra_filenames">[docs]</a><span class="k">def</span> <span class="nf">extra_filenames</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns a diictionary of extra filenames for an API element</span>
+<span class="sd">    implemented in a given language and bound into a target.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name : apiname</span>
+<span class="sd">        The API element name.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    extra : dict</span>
+<span class="sd">        Extra filenames.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">extra</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">ext</span> <span class="o">=</span> <span class="n">_lang_exts</span><span class="p">[</span><span class="n">name</span><span class="o">.</span><span class="n">language</span><span class="p">]</span>
+    <span class="n">tarbase</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">tarbase</span>
+    <span class="k">if</span> <span class="n">tarbase</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">extra</span><span class="p">[</span><span class="s">&#39;pxd_filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">extra</span><span class="p">[</span><span class="s">&#39;pyx_filename&#39;</span><span class="p">]</span> <span class="o">=</span> \
+                                <span class="n">extra</span><span class="p">[</span><span class="s">&#39;srcpxd_filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">srcbase</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">srcfiles</span><span class="p">[</span><span class="mi">0</span><span class="p">]))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">extra</span><span class="p">[</span><span class="s">&#39;pxd_base&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">srcbase</span>
+        <span class="n">extra</span><span class="p">[</span><span class="s">&#39;cpppxd_base&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;{0}_{1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ext</span><span class="p">,</span> <span class="n">srcbase</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">extra</span><span class="p">[</span><span class="s">&#39;pxd_filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;{0}.pxd&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tarbase</span><span class="p">)</span>
+        <span class="n">extra</span><span class="p">[</span><span class="s">&#39;pyx_filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;{0}.pyx&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tarbase</span><span class="p">)</span>
+        <span class="n">extra</span><span class="p">[</span><span class="s">&#39;srcpxd_filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;{0}_{1}.pxd&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ext</span><span class="p">,</span> <span class="n">tarbase</span><span class="p">)</span>
+        <span class="n">extra</span><span class="p">[</span><span class="s">&#39;pxd_base&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tarbase</span>
+        <span class="n">extra</span><span class="p">[</span><span class="s">&#39;cpppxd_base&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;{0}_{1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ext</span><span class="p">,</span> <span class="n">tarbase</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">extra</span>
 </div>
 <div class="viewcode-block" id="infer_format"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.infer_format">[docs]</a><span class="k">def</span> <span class="nf">infer_format</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">format</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Tries to figure out a file format.&quot;&quot;&quot;</span>
@@ -516,27 +633,37 @@ if(ga_enabled){
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="p">{}</span>
 
-<div class="viewcode-block" id="DescriptionCache.isvalid"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.DescriptionCache.isvalid">[docs]</a>    <span class="k">def</span> <span class="nf">isvalid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">kind</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Boolean on whether the cach value for a (name, filename, kind)</span>
+    <span class="k">def</span> <span class="nf">_hash_srcfiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">srcfiles</span><span class="p">):</span>
+        <span class="n">hashes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">srcfile</span> <span class="ow">in</span> <span class="n">srcfiles</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">srcfile</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">filebytes</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="n">hashes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">md5</span><span class="p">(</span><span class="n">filebytes</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">())</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">hashes</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DescriptionCache.isvalid"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.DescriptionCache.isvalid">[docs]</a>    <span class="k">def</span> <span class="nf">isvalid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">kind</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Boolean on whether the cach value for a (apiname, kind)</span>
 <span class="sd">        tuple matches the state of the file on the system.&quot;&quot;&quot;</span>
-        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">kind</span><span class="p">,)</span>
         <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">False</span>
-        <span class="n">cachehash</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">filebytes</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-        <span class="n">currhash</span> <span class="o">=</span> <span class="n">md5</span><span class="p">(</span><span class="n">filebytes</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">cachehash</span> <span class="o">==</span> <span class="n">currhash</span>
+        <span class="n">cachehashes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">currhashes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hash_srcfiles</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">srcfiles</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cachehashes</span> <span class="o">==</span> <span class="n">currhashes</span>
 </div>
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">apiname</span><span class="p">):</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>  <span class="c"># return the description only</span>
 
     <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="n">name</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">kind</span> <span class="o">=</span> <span class="n">key</span>
-        <span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">filebytes</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-        <span class="n">currhash</span> <span class="o">=</span> <span class="n">md5</span><span class="p">(</span><span class="n">filebytes</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">currhash</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">apiname</span><span class="p">):</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">kind</span> <span class="o">=</span> <span class="n">key</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">kind</span> <span class="o">=</span> <span class="n">apiname</span><span class="p">(</span><span class="o">*</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">currhashes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hash_srcfiles</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">srcfiles</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">currhashes</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
@@ -575,7 +702,7 @@ if(ga_enabled){
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">desc</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
     <span class="c"># now sanitize methods</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">][</span><span class="s">&#39;srcname&#39;</span><span class="p">]</span> <span class="c"># srcname or tarname?</span>
     <span class="n">methods</span> <span class="o">=</span> <span class="n">desc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;methods&#39;</span><span class="p">,</span> <span class="p">{})</span>
     <span class="k">for</span> <span class="n">methkey</span><span class="p">,</span> <span class="n">methval</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">methods</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
         <span class="k">if</span> <span class="n">methval</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -618,7 +745,7 @@ if(ga_enabled){
         <span class="k">return</span> <span class="n">s</span>
     <span class="k">if</span> <span class="n">open_brace</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">s</span> <span class="ow">and</span> <span class="n">close_brace</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">s</span>
-    <span class="n">t</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">open_brace</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">open_brace</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;::&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
     <span class="n">targs</span> <span class="o">=</span> <span class="n">split_template_args</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">open_brace</span><span class="o">=</span><span class="n">open_brace</span><span class="p">,</span>
                                 <span class="n">close_brace</span><span class="o">=</span><span class="n">close_brace</span><span class="p">,</span> <span class="n">separator</span><span class="o">=</span><span class="n">separator</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">targ</span> <span class="ow">in</span> <span class="n">targs</span><span class="p">:</span>
@@ -626,41 +753,6 @@ if(ga_enabled){
                                 <span class="n">close_brace</span><span class="o">=</span><span class="n">close_brace</span><span class="p">,</span> <span class="n">separator</span><span class="o">=</span><span class="n">separator</span><span class="p">))</span>
     <span class="n">t</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-
-<span class="c">#</span>
-<span class="c"># API Name Tuples and Functions</span>
-<span class="c">#</span>
-</div>
-<span class="n">apiname</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;apiname&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;srcname&#39;</span><span class="p">,</span> <span class="s">&#39;srcfile&#39;</span><span class="p">,</span> <span class="s">&#39;tarfile&#39;</span><span class="p">,</span> <span class="s">&#39;tarname&#39;</span><span class="p">])</span>
-
-<span class="n">notspecified_apiname</span> <span class="o">=</span> <span class="n">apiname</span><span class="p">(</span><span class="o">*</span><span class="p">([</span><span class="n">NotSpecified</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">apiname</span><span class="o">.</span><span class="n">_fields</span><span class="p">)))</span>
-
-<div class="viewcode-block" id="ensure_apiname"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.ensure_apiname">[docs]</a><span class="k">def</span> <span class="nf">ensure_apiname</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Takes user input and returns the corresponding apiname named tuple.</span>
-<span class="sd">    If the name is already an apiname instance with no NotSpecified fields,</span>
-<span class="sd">    this does not make a copy.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c"># ensure is a valid apiname</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">apiname</span><span class="p">):</span>
-        <span class="k">pass</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">):</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">notspecified_apiname</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span><span class="o">**</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">apiname</span><span class="o">.</span><span class="n">_fields</span><span class="p">,</span> <span class="n">name</span><span class="p">)))</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">notspecified_apiname</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span><span class="o">**</span><span class="n">name</span><span class="p">)</span>
-
-    <span class="c"># ensure fields are not NotSpecified</span>
-    <span class="n">updates</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">srcname</span> <span class="ow">is</span> <span class="n">NotSpecified</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;apiname.srcname cannot be unspecified&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">srcfile</span> <span class="ow">is</span> <span class="n">NotSpecified</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;apiname.srcfile cannot be unspecified&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">tarfile</span> <span class="ow">is</span> <span class="n">NotSpecified</span><span class="p">:</span>
-        <span class="n">updates</span><span class="p">[</span><span class="s">&#39;tarfile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">srcfile</span>
-    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">tarname</span> <span class="ow">is</span> <span class="n">NotSpecified</span><span class="p">:</span>
-        <span class="n">updates</span><span class="p">[</span><span class="s">&#39;tarname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">srcname</span>
-    <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">updates</span><span class="p">):</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span><span class="o">**</span><span class="n">updates</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">name</span>
 
 <span class="c">#</span>
 <span class="c"># Memoization</span>
@@ -674,7 +766,7 @@ if(ga_enabled){
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
             <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">ishashable</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-         <span class="k">return</span> <span class="bp">True</span>
+            <span class="k">return</span> <span class="bp">True</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">False</span>
 </div>
@@ -723,8 +815,186 @@ if(ga_enabled){
                 <span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meth</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meth</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
-</pre></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meth</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="c">#</span>
+<span class="c"># API Name Tuples and Functions</span>
+<span class="c">#</span>
+</div>
+<div class="viewcode-block" id="apiname"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.apiname">[docs]</a><span class="k">class</span> <span class="nc">apiname</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;apiname&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;srcname&#39;</span><span class="p">,</span> <span class="s">&#39;srcfiles&#39;</span><span class="p">,</span> <span class="s">&#39;tarbase&#39;</span><span class="p">,</span> <span class="s">&#39;tarname&#39;</span><span class="p">,</span>
+                                     <span class="s">&#39;incfiles&#39;</span><span class="p">,</span> <span class="s">&#39;sidecars&#39;</span><span class="p">,</span> <span class="s">&#39;language&#39;</span><span class="p">])):</span>
+    <span class="sd">&quot;&quot;&quot;apiname(srcname=NotSpecified, srcfiles=NotSpecified, tarbase=NotSpecified,</span>
+<span class="sd">               tarname=NotSpecified, incfiles=NotSpecified, sidecars=NotSpecified,</span>
+<span class="sd">               language=NotSpecified)</span>
+
+<span class="sd">    This is a type, based on a named tuple, that represents the API element</span>
+<span class="sd">    names and is used to declare or discover where variables, functions, and</span>
+<span class="sd">    classes live for the rest of xdress.  All of the fields default to</span>
+<span class="sd">    NotSpecified if not given.  These feilds are the sames as what appear in</span>
+<span class="sd">    description dictionaries under the &#39;name&#39; key.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    srcname : str, tuple, or NotSpecified</span>
+<span class="sd">        The element&#39;s API name in the original source code, eg. MyClass.</span>
+<span class="sd">    srcfiles : str, tuple of str, or NotSpecified</span>
+<span class="sd">        This is a sequence of unique strings which represents the file paths where</span>
+<span class="sd">        the API element *may* be defined. For example, (&#39;myfile.c&#39;, &#39;myfile.h&#39;).</span>
+<span class="sd">        If the element is defined outside of these files, then the automatic</span>
+<span class="sd">        discovery or description may fail. When using ensure_apiname(), all strings</span>
+<span class="sd">        are automatically globbed, so &#39;src/myfile.*&#39; will be converted to</span>
+<span class="sd">        (&#39;src/myfile.c&#39;, &#39;src/myfile.h&#39;).  Since these files are parsed they must</span>
+<span class="sd">        actually exist on the filesystem.</span>
+<span class="sd">    tarbase : str or NotSpecified</span>
+<span class="sd">        The base portion of all automatically generated (target) files. This does</span>
+<span class="sd">        not include the directory or the file extension.  For example, if you</span>
+<span class="sd">        wanted cythongen to create a file name &#39;mynewfile.pyx&#39; then the value here</span>
+<span class="sd">        would be simply &#39;mynewfile&#39;.</span>
+<span class="sd">    tarname : str, tuple, or NotSpecified</span>
+<span class="sd">        The element&#39;s API name in the automatically generated (target) files,</span>
+<span class="sd">        e.g. MyNewClass.</span>
+<span class="sd">    incfiles : tuple of str or NotSpecified</span>
+<span class="sd">        This is a sequence of all files which must be #include&#39;d to access the</span>
+<span class="sd">        srcname at compile time.  This should be as minimal of a set as possible,</span>
+<span class="sd">        preferably only one file.  For example even though most HDF5 API</span>
+<span class="sd">        declarations are split across multiple files, to use the public API you</span>
+<span class="sd">        only ever need to include &#39;hdf5.h&#39;. Because these files are not parsed they</span>
+<span class="sd">        do not need to exist for xdress to run.  Thus the strings in incfiles are</span>
+<span class="sd">        not globbed.</span>
+<span class="sd">    sidecars : str, tuple of str, or NotSpecified</span>
+<span class="sd">        This is a sequence of all sidecar files to use for this API element. Like</span>
+<span class="sd">        srcfiles, these files must exist for xdress to run.  They similarly</span>
+<span class="sd">        globbed.  For example, &#39;myfile.py&#39;.</span>
+<span class="sd">    language : str or NotSpecified</span>
+<span class="sd">        Flag for the language that the srcfiles are implemented in. Valid options</span>
+<span class="sd">        are: &#39;c&#39;, &#39;c++&#39;, &#39;f&#39;, &#39;fortran&#39;, &#39;f77&#39;, &#39;f90&#39;, &#39;python&#39;, and &#39;cython&#39;.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    ensure_apiname</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">srcname</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">,</span> <span class="n">srcfiles</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">,</span>
+                <span class="n">tarbase</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">,</span> <span class="n">tarname</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">,</span> <span class="n">incfiles</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">,</span>
+                <span class="n">sidecars</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">apiname</span><span class="p">,</span> <span class="n">cls</span><span class="p">)</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">srcname</span><span class="p">,</span> <span class="n">srcfiles</span><span class="p">,</span> <span class="n">tarbase</span><span class="p">,</span> <span class="n">tarname</span><span class="p">,</span>
+                                           <span class="n">incfiles</span><span class="p">,</span> <span class="n">sidecars</span><span class="p">,</span> <span class="n">language</span><span class="p">)</span>
+</div>
+<span class="n">notspecified_apiname</span> <span class="o">=</span> <span class="n">apiname</span><span class="p">(</span><span class="o">*</span><span class="p">([</span><span class="n">NotSpecified</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">apiname</span><span class="o">.</span><span class="n">_fields</span><span class="p">)))</span>
+
+<span class="k">def</span> <span class="nf">_ensure_srcfiles</span><span class="p">(</span><span class="n">inp</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This ensures that srcsfiles is a tuple of filenames that has been</span>
+<span class="sd">    expanded out and the files actually exist on the file system.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inp</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+        <span class="n">inp</span> <span class="o">=</span> <span class="p">(</span><span class="n">inp</span><span class="p">,)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">inp</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">+=</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">out</span><span class="p">])</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_guess_base</span><span class="p">(</span><span class="n">srcfiles</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Guesses the base name for target files from source file names, or</span>
+<span class="sd">    failing that, a default value.&quot;&quot;&quot;</span>
+    <span class="n">basefiles</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">srcfiles</span><span class="p">]</span>
+    <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">commonprefix</span><span class="p">(</span><span class="n">basefiles</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">basename</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">basename</span> <span class="o">=</span> <span class="n">default</span>
+    <span class="k">return</span> <span class="n">basename</span>
+
+<span class="k">def</span> <span class="nf">_guess_incfiles</span><span class="p">(</span><span class="n">srcfiles</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This function guess potential include files from the headers that are</span>
+<span class="sd">    present in the source files.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">incs</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">srcfiles</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">s</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span> <span class="ow">in</span> <span class="n">_hdr_exts</span><span class="p">]</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">incs</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_ensure_incfiles</span><span class="p">(</span><span class="n">inp</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This ensures that incfiles is a tuple of unique filenames. This does not</span>
+<span class="sd">    test that the files actually exist on the file system nor glob the filenames.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inp</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+        <span class="n">inp</span> <span class="o">=</span> <span class="p">(</span><span class="n">inp</span><span class="p">,)</span>
+    <span class="k">if</span> <span class="n">inp</span> <span class="ow">is</span> <span class="n">NotSpecified</span> <span class="ow">or</span> <span class="n">inp</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">inp</span> <span class="o">=</span> <span class="p">()</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">inp</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;{0!r} must be a string.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">f</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">out</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+<span class="nd">@memoize</span>
+<div class="viewcode-block" id="find_sidecar"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.find_sidecar">[docs]</a><span class="k">def</span> <span class="nf">find_sidecar</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Finds the sidecar for a filename, if it exists. Otherwise returns None.&quot;&quot;&quot;</span>
+    <span class="n">sc</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;.py&#39;</span>
+    <span class="n">sc</span> <span class="o">=</span> <span class="n">sc</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">sc</span><span class="p">)</span> <span class="k">else</span> <span class="bp">None</span>
+    <span class="k">return</span> <span class="n">sc</span>
+</div>
+<span class="k">def</span> <span class="nf">_guess_sidecars</span><span class="p">(</span><span class="n">srcfiles</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Gueses the sidecar file names from the source file names.&quot;&quot;&quot;</span>
+    <span class="n">scs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">find_sidecar</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">srcfiles</span><span class="p">)</span>
+    <span class="n">scs</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">scs</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">_find_language</span><span class="p">(</span><span class="n">lang</span><span class="p">,</span> <span class="n">srcfiles</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Tries to discover the canonical language that the srcfiles are</span>
+<span class="sd">    implmenetd in.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">lang</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+        <span class="n">lang</span> <span class="o">=</span> <span class="n">lang</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">lang</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_lang_exts</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;{0} is not a valid language&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lang</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">lang</span>
+    <span class="n">langs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">guess_language</span><span class="p">,</span> <span class="n">srcfiles</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">langs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">langs</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">precedent</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;cython&#39;</span><span class="p">,</span> <span class="s">&#39;c++&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">,</span> <span class="s">&#39;f90&#39;</span><span class="p">,</span><span class="s">&#39;f77&#39;</span><span class="p">,</span> <span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="s">&#39;fortran&#39;</span><span class="p">,</span> <span class="s">&#39;python&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">precedent</span> <span class="ow">in</span> <span class="n">langs</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">precedent</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;no valid language was found.&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ensure_apiname"><a class="viewcode-back" href="../../libref/utils.html#xdress.utils.ensure_apiname">[docs]</a><span class="k">def</span> <span class="nf">ensure_apiname</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Takes user input and returns the corresponding apiname named tuple.</span>
+<span class="sd">    If the name is already an apiname instance with no NotSpecified fields,</span>
+<span class="sd">    this does not make a copy.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># ensure is a valid apiname</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">apiname</span><span class="p">):</span>
+        <span class="k">pass</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">notspecified_apiname</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span><span class="o">**</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">apiname</span><span class="o">.</span><span class="n">_fields</span><span class="p">,</span> <span class="n">name</span><span class="p">)))</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">apiname</span><span class="p">(</span><span class="o">**</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="c"># ensure fields are not NotSpecified</span>
+    <span class="n">updates</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">srcname</span> <span class="ow">is</span> <span class="n">NotSpecified</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;apiname.srcname cannot be unspecified&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">srcfiles</span> <span class="ow">is</span> <span class="n">NotSpecified</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;apiname.srcfiles cannot be unspecified: {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+    <span class="n">updates</span><span class="p">[</span><span class="s">&#39;srcfiles&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_ensure_srcfiles</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">srcfiles</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">tarname</span> <span class="ow">is</span> <span class="n">NotSpecified</span><span class="p">:</span>
+        <span class="n">updates</span><span class="p">[</span><span class="s">&#39;tarname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">srcname</span>
+    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">tarbase</span> <span class="ow">is</span> <span class="n">NotSpecified</span><span class="p">:</span>
+        <span class="n">updates</span><span class="p">[</span><span class="s">&#39;tarbase&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_guess_base</span><span class="p">(</span><span class="n">updates</span><span class="p">[</span><span class="s">&#39;srcfiles&#39;</span><span class="p">],</span>
+                                         <span class="n">updates</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;tarname&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">.</span><span class="n">tarname</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">incfiles</span> <span class="ow">is</span> <span class="n">NotSpecified</span><span class="p">:</span>
+        <span class="n">updates</span><span class="p">[</span><span class="s">&#39;incfiles&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_guess_incfiles</span><span class="p">(</span><span class="n">updates</span><span class="p">[</span><span class="s">&#39;srcfiles&#39;</span><span class="p">])</span>
+    <span class="n">updates</span><span class="p">[</span><span class="s">&#39;incfiles&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_ensure_incfiles</span><span class="p">(</span><span class="n">updates</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;incfiles&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">.</span><span class="n">incfiles</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">sidecars</span> <span class="ow">is</span> <span class="n">NotSpecified</span><span class="p">:</span>
+        <span class="n">updates</span><span class="p">[</span><span class="s">&#39;sidecars&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_guess_sidecars</span><span class="p">(</span><span class="n">updates</span><span class="p">[</span><span class="s">&#39;srcfiles&#39;</span><span class="p">])</span>
+    <span class="n">updates</span><span class="p">[</span><span class="s">&#39;sidecars&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_ensure_srcfiles</span><span class="p">(</span><span class="n">updates</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;sidecars&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">.</span><span class="n">sidecars</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">language</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_lang_exts</span><span class="p">:</span>
+        <span class="n">updates</span><span class="p">[</span><span class="s">&#39;language&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_find_language</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">language</span><span class="p">,</span> <span class="n">updates</span><span class="p">[</span><span class="s">&#39;srcfiles&#39;</span><span class="p">])</span>
+    <span class="n">ensured</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span><span class="o">**</span><span class="n">updates</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">name</span> <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="n">ensured</span> <span class="k">else</span> <span class="n">ensured</span>
+</pre></div></div>
 
           </div>
         </div>
@@ -765,7 +1035,7 @@ if(ga_enabled){
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">xdress 0.3 documentation</a> &raquo;</li>
+    <li><a href="../../index.html">xdress 0.4-rc1 documentation</a> &raquo;</li>
 
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>

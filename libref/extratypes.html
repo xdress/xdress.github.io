@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Extra Types Plugin &mdash; xdress 0.3 documentation</title>
+    <title>NumPy DTypes Plugin &mdash; xdress 0.4-rc1 documentation</title>
     
     <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.3',
+        VERSION:     '0.4-rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,9 +29,9 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../_static/cloud.js"></script>
-    <link rel="top" title="xdress 0.3 documentation" href="../index.html" />
+    <link rel="top" title="xdress 0.4-rc1 documentation" href="../index.html" />
     <link rel="up" title="Library Reference" href="index.html" />
-    <link rel="next" title="Run Control Parameters" href="../rcdocs.html" />
+    <link rel="next" title="Version Information" href="version.html" />
     <link rel="prev" title="Base Plugin" href="base.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
@@ -65,12 +65,12 @@ if(ga_enabled){
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="../rcdocs.html" title="Run Control Parameters"
+          <a href="version.html" title="Version Information"
              accesskey="N">next</a> &nbsp; &nbsp;</li>
         <li class="right" >
           <a href="base.html" title="Base Plugin"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.3 documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.4-rc1 documentation</a> &raquo;</li>
 
           <li><a href="index.html" accesskey="U">Library Reference</a> &raquo;</li> 
       </ul>
@@ -83,10 +83,10 @@ if(ga_enabled){
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-xdress.extratypes">
-<span id="extra-types-plugin"></span><span id="xdress-extratypes"></span><h1>Extra Types Plugin<a class="headerlink" href="#module-xdress.extratypes" title="Permalink to this headline">¶</a></h1>
-<p>The extra types plugin for XDress.</p>
-<p>This module is available as an xdress plugin by the name <tt class="docutils literal"><span class="pre">xdress.extratypes</span></tt>.</p>
+  <div class="section" id="module-xdress.dtypes">
+<span id="numpy-dtypes-plugin"></span><span id="xdress-dtypes"></span><h1>NumPy DTypes Plugin<a class="headerlink" href="#module-xdress.dtypes" title="Permalink to this headline">¶</a></h1>
+<p>Generates numpy dtypes for C/C++ classes and structs and other types.</p>
+<p>This module is available as an xdress plugin by the name <tt class="docutils literal"><span class="pre">xdress.dtypes</span></tt>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -95,13 +95,49 @@ if(ga_enabled){
 </tr>
 </tbody>
 </table>
-<div class="section" id="extra-types-plugin-api">
-<h2>Extra Types Plugin API<a class="headerlink" href="#extra-types-plugin-api" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="numpy-dtypes-wrapper-api">
+<h2>NumPy Dtypes Wrapper API<a class="headerlink" href="#numpy-dtypes-wrapper-api" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="xdress.extratypes.XDressPlugin">
-<em class="property">class </em><tt class="descclassname">xdress.extratypes.</tt><tt class="descname">XDressPlugin</tt><a class="reference internal" href="../_modules/xdress/extratypes.html#XDressPlugin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.extratypes.XDressPlugin" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class provides extra type functionality for xdress.</p>
+<dt id="xdress.dtypes.XDressPlugin">
+<em class="property">class </em><tt class="descclassname">xdress.dtypes.</tt><tt class="descname">XDressPlugin</tt><a class="reference internal" href="../_modules/xdress/dtypes.html#XDressPlugin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.dtypes.XDressPlugin" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class provides numpy dtype functionality for xdress.</p>
 <p>The __init__() method may take no arguments or keyword arguments.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.dtypes.genfiles">
+<tt class="descclassname">xdress.dtypes.</tt><tt class="descname">genfiles</tt><big>(</big><em>types</em>, <em>fname='dtypes'</em>, <em>pxdname=None</em>, <em>testname=None</em>, <em>pyxheader=None</em>, <em>pxdheader=None</em>, <em>testheader=None</em>, <em>package='..'</em>, <em>ts=None</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="../_modules/xdress/dtypes.html#genfiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.dtypes.genfiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates all cython source files needed to create the numpy dtype wrapper.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.dtypes.genpxd">
+<tt class="descclassname">xdress.dtypes.</tt><tt class="descname">genpxd</tt><big>(</big><em>types</em>, <em>header=None</em>, <em>ts=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/dtypes.html#genpxd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.dtypes.genpxd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a string of a pxd file representing the given dtypes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.dtypes.genpxd_dtype">
+<tt class="descclassname">xdress.dtypes.</tt><tt class="descname">genpxd_dtype</tt><big>(</big><em>t</em>, <em>ts</em><big>)</big><a class="reference internal" href="../_modules/xdress/dtypes.html#genpxd_dtype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.dtypes.genpxd_dtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the pxd snippet for a dtype of type t.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.dtypes.genpyx_dtype">
+<tt class="descclassname">xdress.dtypes.</tt><tt class="descname">genpyx_dtype</tt><big>(</big><em>t</em>, <em>ts</em><big>)</big><a class="reference internal" href="../_modules/xdress/dtypes.html#genpyx_dtype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.dtypes.genpyx_dtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the pyx snippet for a dtype of type t.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.dtypes.gentest">
+<tt class="descclassname">xdress.dtypes.</tt><tt class="descname">gentest</tt><big>(</big><em>types</em>, <em>header=None</em>, <em>package='..'</em>, <em>ts=None</em><big>)</big><a class="reference internal" href="../_modules/xdress/dtypes.html#gentest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.dtypes.gentest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a string of a test file representing the given types.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.dtypes.gentest_dtype">
+<tt class="descclassname">xdress.dtypes.</tt><tt class="descname">gentest_dtype</tt><big>(</big><em>t</em>, <em>ts</em><big>)</big><a class="reference internal" href="../_modules/xdress/dtypes.html#gentest_dtype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.dtypes.gentest_dtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the test snippet for a set of type t.</p>
 </dd></dl>
 
 </div>
@@ -119,8 +155,8 @@ if(ga_enabled){
   <div class="sphinxlocaltoc">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Extra Types Plugin</a><ul>
-<li><a class="reference internal" href="#extra-types-plugin-api">Extra Types Plugin API</a></li>
+<li><a class="reference internal" href="#">NumPy DTypes Plugin</a><ul>
+<li><a class="reference internal" href="#numpy-dtypes-wrapper-api">NumPy Dtypes Wrapper API</a></li>
 </ul>
 </li>
 </ul>
@@ -130,8 +166,8 @@ if(ga_enabled){
   <p class="topless"><a href="base.html"
                         title="previous chapter">Base Plugin</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../rcdocs.html"
-                        title="next chapter">Run Control Parameters</a></p>
+  <p class="topless"><a href="version.html"
+                        title="next chapter">Version Information</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/libref/extratypes.txt"
@@ -169,12 +205,12 @@ if(ga_enabled){
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="../rcdocs.html" title="Run Control Parameters"
+          <a href="version.html" title="Version Information"
              >next</a> &nbsp; &nbsp;</li>
         <li class="right" >
           <a href="base.html" title="Base Plugin"
              >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="../index.html">xdress 0.3 documentation</a> &raquo;</li>
+    <li><a href="../index.html">xdress 0.4-rc1 documentation</a> &raquo;</li>
 
           <li><a href="index.html" >Library Reference</a> &raquo;</li> 
       </ul>
