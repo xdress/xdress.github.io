@@ -1,0 +1,426 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Run Control Parameters &mdash; xdress 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="_static/numpy_friendly.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="_static/cloud.js"></script>
+    <link rel="top" title="xdress 0.4 documentation" href="index.html" />
+    <link rel="next" title="Previous Versions" href="previous/index.html" />
+    <link rel="prev" title="Version Information" href="libref/version.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
+var ga_enabled = !$.cookie('disable-ga');
+if(ga_enabled){
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41934829-1']);
+  _gaq.push(['_setCookiePath', '/']);
+  _gaq.push(['_setDetectFlash', false]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+}
+</script>
+  </head>
+  <body>
+    <div class="relbar-top">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="previous/index.html" title="Previous Versions"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="libref/version.html" title="Version Information"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">xdress 0.4 documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="run-control-parameters">
+<h1>Run Control Parameters<a class="headerlink" href="#run-control-parameters" title="Permalink to this headline">¶</a></h1>
+<p>Run control parameters (rc params, for short) determine how xdress is run in
+and allow the user to customize execution for their project or their system.
+Typically each project will have an <tt class="docutils literal"><span class="pre">xdressrc.py</span></tt> file in the directory where
+they intend to run xdress.  Alternative paths to this file may be specified on
+the command line with <tt class="docutils literal"><span class="pre">--rc</span></tt> option.  This file is simply a python file
+whose module-level variables are the run control parameters.  See below for
+information on specific parameters and their effects.</p>
+<p>Additionally, it is sometimes useful to be able to set global run control parameters
+on a system.  XDress will search the following files in order of increasing
+precedence.</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">$HOME/.xdressrc</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">$HOME/.xdressrc.py</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">$HOME/.config/xdressrc</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">$HOME/.config/xdressrc.py</span></tt></li>
+</ul>
+<p><tt class="docutils literal"><span class="pre">$HOME</span></tt> is the user&#8217;s home directory.  Settings in the project run control file
+take precedence over the values here.</p>
+<div class="section" id="xdress-base">
+<h2>xdress.base<a class="headerlink" href="#xdress-base" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">bash_completion:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">Flag for enabling / disabling BASH completion. This is only
+relevant when using argcomplete., <em>default:</em> True.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">builddir:</th><td class="field-body">Path to build directory, <em>default:</em> &#8216;build&#8217;.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">debug:</th><td class="field-body">Build in debugging mode, <em>default:</em> False.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">dtypes_module:</th><td class="field-body">Module name for numpy dtype wrappers., <em>default:</em> &#8216;dtypes&#8217;.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">dumpdesc:</th><td class="field-body">Print the description cache, <em>default:</em> False.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">package:</th><td class="field-body">The Python package name for the generated wrappers, <em>default:</em>
+NotSpecified.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">packagedir:</th><td class="field-body">Path to package directory, same as &#8216;package&#8217; if not specified,
+<em>default:</em> NotSpecified.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">plugins:</th><td class="field-body">Plugins to include, <em>default:</em> (&#8216;xdress.autoall&#8217;, &#8216;xdress.cythongen&#8217;,
+&#8216;xdress.stlwrap&#8217;).</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rc:</th><td class="field-body">Path to run control file, <em>default:</em> &#8216;xdressrc.py&#8217;.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">sourcedir:</th><td class="field-body">Path to source directory (deprecated), <em>default:</em> NotSpecified.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">stlcontainers_module:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">Module name for C++ standard library container wrappers.,
+<em>default:</em> &#8216;stlcontainers&#8217;.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">ts:</th><td class="field-body">The xdress type system., <em>default:</em> xdress.typesystem.TypeSystem instance.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">verbose:</th><td class="field-body">Print more output., <em>default:</em> False.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">version:</th><td class="field-body">Print version information., <em>default:</em> False.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="xdress-autoall">
+<h2>xdress.autoall<a class="headerlink" href="#xdress-autoall" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">clang_includes:</th><td class="field-body">clang-specific include paths, <em>default:</em> ().</td>
+</tr>
+<tr class="field-even field"><th class="field-name">classes:</th><td class="field-body">A list of class names in sequence, mapping, or apiname format,
+<em>default:</em> ().</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">clear_parser_cache_period:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">Number of parser calls to perform before clearing
+the internal cache.  This prevents nasty memory overflow issues., <em>default:</em>
+50.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">defines:</th><td class="field-body">Set additional macro definitions, <em>default:</em> [&#8216;XDRESS&#8217;].</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">dumpast:</th><td class="field-body">Prints the abstract syntax tree of a file., <em>default:</em> NotSpecified.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">extra_parser_args:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">Further command line arguments to pass to the parser,
+<em>default:</em> ().</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">functions:</th><td class="field-body">A list of function names in sequence, mapping, or apiname format,
+<em>default:</em> ().</td>
+</tr>
+<tr class="field-even field"><th class="field-name">includes:</th><td class="field-body">Additional include directories, <em>default:</em> [&#8216;.&#8217;].</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">parsers:</th><td class="field-body">Parser(s) name, list, or dict, <em>default:</em> {&#8216;c&#8217;: [&#8216;pycparser&#8217;, &#8216;clang&#8217;,
+&#8216;gccxml&#8217;], &#8216;c++&#8217;: [&#8216;clang&#8217;, &#8216;gccxml&#8217;, &#8216;pycparser&#8217;]}.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">undefines:</th><td class="field-body">Unset additional macro definitions, <em>default:</em> [].</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">variables:</th><td class="field-body">A list of variable names in sequence, mapping, or apiname format,
+<em>default:</em> ().</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="xdress-autodescribe">
+<h2>xdress.autodescribe<a class="headerlink" href="#xdress-autodescribe" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">clang_includes:</th><td class="field-body">clang-specific include paths, <em>default:</em> ().</td>
+</tr>
+<tr class="field-even field"><th class="field-name">classes:</th><td class="field-body">A list of class names in sequence, mapping, or apiname format,
+<em>default:</em> ().</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">clear_parser_cache_period:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">Number of parser calls to perform before clearing
+the internal cache.  This prevents nasty memory overflow issues., <em>default:</em>
+50.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">defines:</th><td class="field-body">Set additional macro definitions, <em>default:</em> [&#8216;XDRESS&#8217;].</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">dumpast:</th><td class="field-body">Prints the abstract syntax tree of a file., <em>default:</em> NotSpecified.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">env:</th><td class="field-body">The target environment computed by the autodescriber., <em>default:</em> {}.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">extra_parser_args:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">Further command line arguments to pass to the parser,
+<em>default:</em> ().</td>
+</tr>
+<tr class="field-even field"><th class="field-name">functions:</th><td class="field-body">A list of function names in sequence, mapping, or apiname format,
+<em>default:</em> ().</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">includes:</th><td class="field-body">Additional include directories, <em>default:</em> [&#8216;.&#8217;].</td>
+</tr>
+<tr class="field-even field"><th class="field-name">parsers:</th><td class="field-body">Parser(s) name, list, or dict, <em>default:</em> {&#8216;c&#8217;: [&#8216;pycparser&#8217;, &#8216;clang&#8217;,
+&#8216;gccxml&#8217;], &#8216;c++&#8217;: [&#8216;clang&#8217;, &#8216;gccxml&#8217;, &#8216;pycparser&#8217;]}.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">undefines:</th><td class="field-body">Unset additional macro definitions, <em>default:</em> [].</td>
+</tr>
+<tr class="field-even field"><th class="field-name">variables:</th><td class="field-body">A list of variable names in sequence, mapping, or apiname format,
+<em>default:</em> ().</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="xdress-cythongen">
+<h2>xdress.cythongen<a class="headerlink" href="#xdress-cythongen" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">max_callbacks:</th><td class="field-body">The maximum number of callbacks for function pointers,
+<em>default:</em> 8.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="xdress-descfilter">
+<h2>xdress.descfilter<a class="headerlink" href="#xdress-descfilter" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">includemethods:</th><td class="field-body">Method names to be wrapped (dict, keys are class names),
+<em>default:</em> NotSpecified.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">skipattrs:</th><td class="field-body">Method names to filter out from being wrapped, <em>default:</em>
+NotSpecified.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">skipauto:</th><td class="field-body">Try and skip anything that uses an unknown type, <em>default:</em>
+NotSpecified.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">skipmethods:</th><td class="field-body">Method names to filter out from being wrapped, <em>default:</em>
+NotSpecified.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">skiptypes:</th><td class="field-body">The types to filter out from being wrapped, <em>default:</em> NotSpecified.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="xdress-doxygen">
+<h2>xdress.doxygen<a class="headerlink" href="#xdress-doxygen" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">dox_template_ids:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">Template argument names to hint to doxygen., <em>default:</em> [&#8216;T&#8217;,
+&#8216;S&#8217;].</td>
+</tr>
+<tr class="field-even field"><th class="field-name">doxyfile_name:</th><td class="field-body">The dOxygen configuration file name, <em>default:</em> &#8216;doxyfile&#8217;.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">doxygen_config:</th><td class="field-body">A dictionary representation of a dOxygen configuration,
+<em>default:</em> __builtin__.dict instance.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="xdress-extratypes">
+<h2>xdress.extratypes<a class="headerlink" href="#xdress-extratypes" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">extra_types:</th><td class="field-body">Module and header file name for xdress extra types., <em>default:</em>
+&#8216;xdress_extra_types&#8217;.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">make_extra_types:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">Flag to enable / disable making the extra types module,
+<em>default:</em> True.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="xdress-dtypes">
+<h2>xdress.dtypes<a class="headerlink" href="#xdress-dtypes" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">dtypes:</th><td class="field-body">List of types to create numpy dtypes for., <em>default:</em> [].</td>
+</tr>
+<tr class="field-even field"><th class="field-name">make_dtypes:</th><td class="field-body">Flag for enabling / disabling the generation of numpy dtype
+wrappers., <em>default:</em> True.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="xdress-stlwrap">
+<h2>xdress.stlwrap<a class="headerlink" href="#xdress-stlwrap" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">make_stlcontainers:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">Flag for enabling / disabling creating the C++ standard
+library container wrappers., <em>default:</em> True.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">stlcontainers:</th><td class="field-body">List of C++ standard library containers to wrap., <em>default:</em> [].</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+        <p class="logo"><a href="index.html">
+          <img class="logo" src="_static/HooverJoven.jpg" alt="Logo"/>
+        </a></p>
+  <div class="sphinxlocaltoc">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Run Control Parameters</a><ul>
+<li><a class="reference internal" href="#xdress-base">xdress.base</a></li>
+<li><a class="reference internal" href="#xdress-autoall">xdress.autoall</a></li>
+<li><a class="reference internal" href="#xdress-autodescribe">xdress.autodescribe</a></li>
+<li><a class="reference internal" href="#xdress-cythongen">xdress.cythongen</a></li>
+<li><a class="reference internal" href="#xdress-descfilter">xdress.descfilter</a></li>
+<li><a class="reference internal" href="#xdress-doxygen">xdress.doxygen</a></li>
+<li><a class="reference internal" href="#xdress-extratypes">xdress.extratypes</a></li>
+<li><a class="reference internal" href="#xdress-dtypes">xdress.dtypes</a></li>
+<li><a class="reference internal" href="#xdress-stlwrap">xdress.stlwrap</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="libref/version.html"
+                        title="previous chapter">Version Information</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="previous/index.html"
+                        title="next chapter">Previous Versions</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/rcdocs.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="previous/index.html" title="Previous Versions"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="libref/version.html" title="Version Information"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">xdress 0.4 documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, Anthony Scopatz.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div><script type="text/javascript">
+    if(ga_enabled){
+        document.write("<div class=\"footer\">This page uses <a href=\"http://analytics.google.com\">Google Analytics</a> to collect statistics. ");
+        document.write("Click <button title=\"set cookie to disable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', 'true', {expires: 3650, path: '/'}); window.location.reload(); return false; \">here</button> to disable analytics for this site.");
+        document.write("</div>");
+    }else{
+        document.write("<div class=\"footer\">Google Analytics has been disabled. ");
+        document.write("Click <button title=\"set cookie to re-enable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', null, {path: '/'}); window.location.reload(); return false; \">here</button> to re-enable analytics for this site.");
+    };
+</script>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

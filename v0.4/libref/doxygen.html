@@ -1,0 +1,498 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dOxygen Docstrings &mdash; xdress 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../_static/cloud.js"></script>
+    <link rel="top" title="xdress 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Library Reference" href="index.html" />
+    <link rel="next" title="PEP-8 Names" href="pep8names.html" />
+    <link rel="prev" title="Description Filter" href="descfilter.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
+var ga_enabled = !$.cookie('disable-ga');
+if(ga_enabled){
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41934829-1']);
+  _gaq.push(['_setCookiePath', '/']);
+  _gaq.push(['_setDetectFlash', false]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+}
+</script>
+  </head>
+  <body>
+    <div class="relbar-top">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="pep8names.html" title="PEP-8 Names"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="descfilter.html" title="Description Filter"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">xdress 0.4 documentation</a> &raquo;</li>
+
+          <li><a href="index.html" accesskey="U">Library Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-xdress.doxygen">
+<span id="doxygen-docstrings"></span><span id="xdress-doxygen"></span><h1>dOxygen Docstrings<a class="headerlink" href="#module-xdress.doxygen" title="Permalink to this headline">¶</a></h1>
+<p>Inserts dOxygen documentation into python docstrings. This is done using
+the xml export capabilities of dOxygen. The docstrings are inserted into
+the desc dictionary for each function/class and will then be merged with
+standard auto-docstrings as well as any user input from sidecar files.</p>
+<p>This module is available as an xdress plugin by the name
+<tt class="docutils literal"><span class="pre">xdress.doxygen</span></tt>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">Spencer Lyon &lt;<a class="reference external" href="mailto:spencerlyon2&#37;&#52;&#48;gmail&#46;com">spencerlyon2<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="giving-your-project-doxygen">
+<h2>Giving Your Project dOxygen<a class="headerlink" href="#giving-your-project-doxygen" title="Permalink to this headline">¶</a></h2>
+<p>This plugin works in two phases:</p>
+<ol class="arabic simple">
+<li>It takes user given doxygen settings (with sane defaults if not
+given) and runs dOxygen on the source project in <tt class="docutils literal"><span class="pre">rc.sourcedir</span></tt>.</li>
+<li>Alters the description dictionary generated by other xdress
+plugins (mainly <tt class="docutils literal"><span class="pre">xdress.autodescribe</span></tt>) by inserting dOxygen output
+as class, method, and function docstrings in the
+<a class="reference external" href="https://pypi.python.org/pypi/numpydoc">numpydoc</a> format</li>
+</ol>
+<div class="section" id="usage">
+<h3>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h3>
+<p>The usage of this plugin is very straightforward and comes in two steps:</p>
+<ol class="arabic simple">
+<li>Add <tt class="docutils literal"><span class="pre">xdress.doxygen</span></tt> to the list of plugins in your xdressrc.py</li>
+<li>Define zero, or more of the (optional) rc variables given below.
+If These are not defined in xdressrc, the plugin will provide some
+sane initial values.<ol class="loweralpha">
+<li><tt class="docutils literal"><span class="pre">doxygen_config</span></tt>: A python dictionary mapping doxygen keys to
+their desired values. See
+<a class="reference external" href="http://www.stack.nl/~dimitri/doxygen/manual/config.html">this</a>
+page in the dOxygen documentation for more information regarding
+the possible keys.</li>
+<li><tt class="docutils literal"><span class="pre">doxyfile_name</span></tt>: This is the name that should be given to the
+doxygen config file. The file will be written out in the directory
+containing xdressrc.py unless a path is specified for this
+variable. The path is assumed to be relative to the directory
+where <tt class="docutils literal"><span class="pre">xdress</span></tt> is run. The default value for this variable is
+<tt class="docutils literal"><span class="pre">'doxyfile'</span></tt>.</li>
+<li><tt class="docutils literal"><span class="pre">dox_template_ids</span></tt>: This is list of strings that contain the
+template identifiers used in the C++ source. This is necessary
+for docstrings to be inserted for templated functions or classes.
+The default value is <tt class="docutils literal"><span class="pre">['T',</span> <span class="pre">'S']</span></tt>.</li>
+</ol>
+</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you would like to see the default values for <tt class="docutils literal"><span class="pre">doxygen_config</span></tt>,
+try <tt class="docutils literal"><span class="pre">from</span> <span class="pre">xdress.doxygen</span> <span class="pre">import</span> <span class="pre">default_doxygen_config</span></tt>. The
+only changes that need to take place are as follows:
+<tt class="docutils literal"><span class="pre">PROJECT_NAME</span></tt> is assigned to <tt class="docutils literal"><span class="pre">rc.package</span></tt>,  <tt class="docutils literal"><span class="pre">INPUT</span></tt> is
+assigned to <tt class="docutils literal"><span class="pre">rc.sourcedir</span></tt> and <tt class="docutils literal"><span class="pre">OUTPUT_DIRECTORY</span></tt> is assigned
+to <tt class="docutils literal"><span class="pre">rc.builddir</span></tt>.</p>
+</div>
+<p>The user might accomplish these steps as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plugins</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;xdress.stlwrap&#39;</span><span class="p">,</span> <span class="s">&#39;xdress.autoall&#39;</span><span class="p">,</span> <span class="s">&#39;xdress.autodescribe&#39;</span><span class="p">,</span>
+           <span class="s">&#39;xdress.doxygen&#39;</span><span class="p">,</span> <span class="s">&#39;xdress.cythongen&#39;</span><span class="p">)</span>
+
+<span class="c"># Set various doxygen configuration keys</span>
+<span class="n">doxygen_config</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;PROJECT_NAME&#39;</span><span class="p">:</span> <span class="s">&#39;My Awesome Project&#39;</span><span class="p">,</span>
+                  <span class="s">&#39;EXTRACT_ALL&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>  <span class="c"># Note usage of python False</span>
+                  <span class="s">&#39;GENERATE_DOCBOOK&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                  <span class="s">&#39;GENERATE_LATEX&#39;</span><span class="p">:</span> <span class="bp">True</span>  <span class="c"># Could be &#39;YES&#39; or True</span>
+                  <span class="p">}</span>
+
+<span class="c"># Write the config file in the build directory</span>
+<span class="n">doxyfile_name</span> <span class="o">=</span> <span class="s">&#39;./build/the_best_doxyfile&#39;</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The most common issue users make with this plugin is including it in
+the plugins list in the wrong order. Because xdress tries to execute
+plugins in the order they are listed in xdressrc, it is important
+that <tt class="docutils literal"><span class="pre">xdress.doxygen</span></tt> come after <tt class="docutils literal"><span class="pre">xdress.autodescribe</span></tt>, but
+before <tt class="docutils literal"><span class="pre">xdress.cythongen</span></tt>. autodescribe will ensure that the
+description dictionary is in place and ready for dOxygen to alter
+before cythongen has a chance to produce wrapper code.</p>
+</div>
+</div>
+</div>
+<div class="section" id="doygen-api">
+<h2>dOygen API<a class="headerlink" href="#doygen-api" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="xdress.doxygen.XDressPlugin">
+<em class="property">class </em><tt class="descclassname">xdress.doxygen.</tt><tt class="descname">XDressPlugin</tt><a class="reference internal" href="../_modules/xdress/doxygen.html#XDressPlugin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.doxygen.XDressPlugin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add python docstrings (in numpydoc format) from dOxygen markup in
+the source to the generated cython wrapper.</p>
+<p>The __init__() method may take no arguments or keyword arguments.</p>
+<dl class="method">
+<dt id="xdress.doxygen.XDressPlugin.execute">
+<tt class="descname">execute</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/doxygen.html#XDressPlugin.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.doxygen.XDressPlugin.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs doxygen to produce the xml, then parses it and adds
+docstrings to the desc dictionary.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xdress.doxygen.XDressPlugin.setup">
+<tt class="descname">setup</tt><big>(</big><em>rc</em><big>)</big><a class="reference internal" href="../_modules/xdress/doxygen.html#XDressPlugin.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.doxygen.XDressPlugin.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Need setup method to get project, output_dir, and src_dir from
+rc and put them in the default_doxygen_config before running
+doxygen</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.doxygen.class_docstr">
+<tt class="descclassname">xdress.doxygen.</tt><tt class="descname">class_docstr</tt><big>(</big><em>class_dict</em>, <em>desc_funcs=False</em><big>)</big><a class="reference internal" href="../_modules/xdress/doxygen.html#class_docstr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.doxygen.class_docstr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate the main docstring for a class given a dictionary of the
+parsed dOxygen xml.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>class_dict</strong> : dict</p>
+<blockquote>
+<div><p>This is a dictionary that should be the return value of the
+function parse_class defined in this module</p>
+</div></blockquote>
+<p><strong>desc_funcs</strong> : bool, optional(default=False)</p>
+<blockquote>
+<div><p>Whether or not to include the brief description of class methods
+in the main list of methods.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>msg</strong> : str</p>
+<blockquote class="last">
+<div><p>The docstring to be inserted into the desc dictionary for the
+class.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.doxygen.fix_xml_links">
+<tt class="descclassname">xdress.doxygen.</tt><tt class="descname">fix_xml_links</tt><big>(</big><em>file_name</em><big>)</big><a class="reference internal" href="../_modules/xdress/doxygen.html#fix_xml_links"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.doxygen.fix_xml_links" title="Permalink to this definition">¶</a></dt>
+<dd><p>For some reason I can&#8217;t get doxygen to remove hyperlinks to members
+defined in the same file. This messes up the parsing. To overcome this
+I will just use a little regex magic to do it myself.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.doxygen.func_docstr">
+<tt class="descclassname">xdress.doxygen.</tt><tt class="descname">func_docstr</tt><big>(</big><em>func_dict</em>, <em>is_method=False</em><big>)</big><a class="reference internal" href="../_modules/xdress/doxygen.html#func_docstr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.doxygen.func_docstr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate the docstring for a function given a dictionary of the
+parsed dOxygen xml.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>func_dict</strong> : dict</p>
+<blockquote>
+<div><p>This is a dictionary that should be the return value of the
+function parse_function defined in this module. If this is a
+class method it can be a sub-dictionary of the return value of
+the parse_class function.</p>
+</div></blockquote>
+<p><strong>is_method</strong> : bool, optional(default=False)</p>
+<blockquote>
+<div><p>Whether or not to the function is a class method. If it is,
+the text will be wrapped 4 spaces earlier to offset additional
+indentation</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>msg</strong> : str</p>
+<blockquote class="last">
+<div><p>The docstring to be inserted into the desc dictionary for the
+function.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.doxygen.parse_class">
+<tt class="descclassname">xdress.doxygen.</tt><tt class="descname">parse_class</tt><big>(</big><em>class_dict</em><big>)</big><a class="reference internal" href="../_modules/xdress/doxygen.html#parse_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.doxygen.parse_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses a single class and returns a dictionary of dictionaries
+containing all the data for that class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>class_dict</strong> : dict</p>
+<blockquote>
+<div><p>A dictionary containing the following keys:
+[&#8216;file_name&#8217;, &#8216;methods&#8217;, &#8216;vars&#8217;]</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>data</strong> : dict</p>
+<blockquote class="last">
+<div><p>A dictionary with all docstrings for instance variables and
+class methods. This object is structured as follows:</p>
+<div class="highlight-python"><pre>data
+    'protected-func'
+        'prot_func1'
+            arg_string
+            args
+            briefdescription
+            detaileddescription
+            ret_type
+            definition
+
+    'public-func'
+        'pub_func_1'
+            arg_string
+            args
+            briefdescription
+            detaileddescription
+            ret_type
+            definition
+
+    'protected-attrib'
+        'prot-attrib1'
+            briefdescription
+            detaileddescription
+            type
+            definition</pre>
+</div>
+<p>This means that data is a 3-level dictionary. The levels go as
+follows:</p>
+<ol class="arabic">
+<li><p class="first">data</p>
+<blockquote>
+<div><ul class="simple">
+<li>keys: Some of the following (more?): &#8216;protected-func&#8217;,
+&#8216;protected-attrib&#8217;, &#8216;public-func&#8217;,  &#8216;public-static-attrib&#8217;,
+&#8216;publib-static-func&#8217;, &#8216;public-type&#8217;</li>
+<li>values: dictionaries of attribute types</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">dictionaries of attribute types</p>
+<blockquote>
+<div><ul class="simple">
+<li>keys: attribute names</li>
+<li>values: attribute dictionaries</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">attribute dictionaries</p>
+<blockquote>
+<div><ul class="simple">
+<li>keys: arg_string, args, briefdescription, type, definition
+detaileddescription,</li>
+<li>values: objects containing the actual data we care about</li>
+</ul>
+</div></blockquote>
+</li>
+</ol>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The inner &#8216;arg_string&#8217; key is only applicable to methods as it
+contains the function signature for the arguments.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.doxygen.parse_function">
+<tt class="descclassname">xdress.doxygen.</tt><tt class="descname">parse_function</tt><big>(</big><em>func_dict</em><big>)</big><a class="reference internal" href="../_modules/xdress/doxygen.html#parse_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.doxygen.parse_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a dictionary defining where the xml for the function is, does
+some function specific parsing and returns a new dictionary with
+the parsed xml.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xdress.doxygen.parse_index_xml">
+<tt class="descclassname">xdress.doxygen.</tt><tt class="descname">parse_index_xml</tt><big>(</big><em>index_path</em><big>)</big><a class="reference internal" href="../_modules/xdress/doxygen.html#parse_index_xml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xdress.doxygen.parse_index_xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses index.xml to get list of dictionaries for class and function
+names. Each dictionary will have as keys the object (function
+or class) names and the values will be dictionaries with (at least)
+key-value pairs representing the .xml file name where the
+information for that object can be found.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>index_path</strong> : str</p>
+<blockquote>
+<div><p>The path to index.xml. This is most likely to be provided by the
+run control instance.</p>
+</div></blockquote>
+<p><strong>Returns</strong> :</p>
+<p><strong>classes</strong> : dict</p>
+<blockquote>
+<div><p>A dictionary of dictionaries, one for each class.</p>
+</div></blockquote>
+<p><strong>funcs</strong> : dict</p>
+<blockquote class="last">
+<div><p>A dictionary of dictionaries, one for each function.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+        <p class="logo"><a href="../index.html">
+          <img class="logo" src="../_static/HooverJoven.jpg" alt="Logo"/>
+        </a></p>
+  <div class="sphinxlocaltoc">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">dOxygen Docstrings</a><ul>
+<li><a class="reference internal" href="#giving-your-project-doxygen">Giving Your Project dOxygen</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#doygen-api">dOygen API</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="descfilter.html"
+                        title="previous chapter">Description Filter</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pep8names.html"
+                        title="next chapter">PEP-8 Names</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/libref/doxygen.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="pep8names.html" title="PEP-8 Names"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="descfilter.html" title="Description Filter"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">xdress 0.4 documentation</a> &raquo;</li>
+
+          <li><a href="index.html" >Library Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, Anthony Scopatz.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div><script type="text/javascript">
+    if(ga_enabled){
+        document.write("<div class=\"footer\">This page uses <a href=\"http://analytics.google.com\">Google Analytics</a> to collect statistics. ");
+        document.write("Click <button title=\"set cookie to disable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', 'true', {expires: 3650, path: '/'}); window.location.reload(); return false; \">here</button> to disable analytics for this site.");
+        document.write("</div>");
+    }else{
+        document.write("<div class=\"footer\">Google Analytics has been disabled. ");
+        document.write("Click <button title=\"set cookie to re-enable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', null, {path: '/'}); window.location.reload(); return false; \">here</button> to re-enable analytics for this site.");
+    };
+</script>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

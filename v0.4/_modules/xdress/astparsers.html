@@ -1,0 +1,637 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>xdress.astparsers &mdash; xdress 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/numpy_friendly.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../../_static/cloud.js"></script>
+    <link rel="top" title="xdress 0.4 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
+var ga_enabled = !$.cookie('disable-ga');
+if(ga_enabled){
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41934829-1']);
+  _gaq.push(['_setCookiePath', '/']);
+  _gaq.push(['_setDetectFlash', false]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+}
+</script>
+  </head>
+  <body>
+    <div class="relbar-top">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">xdress 0.4 documentation</a> &raquo;</li>
+
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for xdress.astparsers</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;This module creates abstract syntax trees using external tools</span>
+<span class="sd">(GCC-XML, pycparser) of C/C++ code.</span>
+
+<span class="sd">:author: Anthony Scopatz &lt;scopatz@gmail.com&gt;</span>
+
+<span class="sd">AST Parsers API</span>
+<span class="sd">==========================</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">import</span> <span class="nn">linecache</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span><span class="p">,</span> <span class="n">pformat</span>
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">import</span> <span class="nn">gzip</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">cPickle</span> <span class="kn">as</span> <span class="nn">pickle</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">pickle</span>
+
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;nt&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">ntpath</span>
+    <span class="kn">import</span> <span class="nn">posixpath</span>
+
+<span class="c"># GCC-XML conditional imports</span>
+<span class="n">HAVE_LXML</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+    <span class="n">HAVE_LXML</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c"># Python 2.5</span>
+        <span class="kn">import</span> <span class="nn">xml.etree.cElementTree</span> <span class="kn">as</span> <span class="nn">etree</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c"># Python 2.5</span>
+            <span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="kn">as</span> <span class="nn">etree</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c"># normal cElementTree install</span>
+                <span class="kn">import</span> <span class="nn">cElementTree</span> <span class="kn">as</span> <span class="nn">etree</span>
+            <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c"># normal ElementTree install</span>
+                    <span class="kn">import</span> <span class="nn">elementtree.ElementTree</span> <span class="kn">as</span> <span class="nn">etree</span>
+                <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+<span class="c"># pycparser conditional imports</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">pycparser</span>
+    <span class="n">PycparserNodeVisitor</span> <span class="o">=</span> <span class="n">pycparser</span><span class="o">.</span><span class="n">c_ast</span><span class="o">.</span><span class="n">NodeVisitor</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">pycparser</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">PycparserNodeVisitor</span> <span class="o">=</span> <span class="nb">object</span>  <span class="c"># fake this for class definitions</span>
+
+<span class="c"># clang conditional imports</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">clang</span>
+    <span class="kn">from</span> <span class="nn">.clang</span> <span class="kn">import</span> <span class="n">cindex</span>
+    <span class="c"># Make sure we use our own version of libclang.so</span>
+    <span class="kn">from</span> <span class="nn">.clang</span> <span class="kn">import</span> <span class="n">libclang</span>
+    <span class="n">cindex</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">set_library_file</span><span class="p">(</span><span class="n">libclang</span><span class="o">.</span><span class="n">__file__</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">clang</span> <span class="o">=</span> <span class="bp">None</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">guess_language</span><span class="p">,</span> <span class="n">RunControl</span><span class="p">,</span> <span class="n">NotSpecified</span><span class="p">,</span> <span class="n">ensuredirs</span>
+<span class="kn">from</span> <span class="nn">.plugins</span> <span class="kn">import</span> <span class="n">Plugin</span>
+
+<span class="n">PARSERS_AVAILABLE</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;clang&#39;</span><span class="p">:</span> <span class="n">clang</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="s">&#39;pycparser&#39;</span><span class="p">:</span> <span class="n">pycparser</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="c"># If gccxml is not availble, an OSError is raised.  Otherwise, it will</span>
+    <span class="c"># return 0 (typically indicates successful invocation).</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">retcode</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s">&#39;gccxml&#39;</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">retcode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">PARSERS_AVAILABLE</span><span class="p">[</span><span class="s">&#39;gccxml&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">PARSERS_AVAILABLE</span><span class="p">[</span><span class="s">&#39;gccxml&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+        <span class="n">PARSERS_AVAILABLE</span><span class="p">[</span><span class="s">&#39;gccxml&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="k">del</span> <span class="n">f</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+    <span class="nb">basestring</span> <span class="o">=</span> <span class="nb">str</span>
+
+<span class="k">def</span> <span class="nf">_makekey</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">obj</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">_makekey</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Set</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">frozenset</span><span class="p">([</span><span class="n">_makekey</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">([(</span><span class="n">_makekey</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">_makekey</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">())])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">obj</span>
+
+<span class="k">def</span> <span class="nf">_memoize_parser</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="c"># based off code from http://wiki.python.org/moin/PythonDecoratorLibrary</span>
+    <span class="n">cache</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="nd">@functools.wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">memoizer</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">_makekey</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">+</span> <span class="n">_makekey</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">cache</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">return</span> <span class="n">memoizer</span>
+
+<div class="viewcode-block" id="clearmemo"><a class="viewcode-back" href="../../libref/astparsers.html#xdress.astparsers.clearmemo">[docs]</a><span class="k">def</span> <span class="nf">clearmemo</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Clears all function memoizations for autodescribers.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">globals</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s">&#39;cache&#39;</span><span class="p">):</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+</div>
+<span class="k">def</span> <span class="nf">not_implemented</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">__doc__</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">+=</span> <span class="p">(</span><span class="s">&quot;</span><span class="se">\n\n</span><span class="s">.. warning:: This has not yet been implemented &quot;</span>
+                        <span class="s">&quot;fully or at all.</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="p">)</span>
+    <span class="nd">@functools.wraps</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s">&quot;The functionality in {0} has not been implemented fully or at all&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">func</span>
+
+<span class="c">#</span>
+<span class="c"># GCC-XML Describers</span>
+<span class="c">#</span>
+
+<span class="nd">@_memoize_parser</span>
+<div class="viewcode-block" id="gccxml_parse"><a class="viewcode-back" href="../../libref/astparsers.html#xdress.astparsers.gccxml_parse">[docs]</a><span class="k">def</span> <span class="nf">gccxml_parse</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">includes</span><span class="o">=</span><span class="p">(),</span> <span class="n">defines</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;XDRESS&#39;</span><span class="p">,),</span> <span class="n">undefines</span><span class="o">=</span><span class="p">(),</span>
+                 <span class="n">extra_parser_args</span><span class="o">=</span><span class="p">(),</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">builddir</span><span class="o">=</span><span class="s">&#39;build&#39;</span><span class="p">,</span>
+                 <span class="n">clang_includes</span><span class="o">=</span><span class="p">()):</span>
+    <span class="sd">&quot;&quot;&quot;Use GCC-XML to parse a file. This function is automatically memoized.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        The path to the file.</span>
+<span class="sd">    includes : list of str, optional</span>
+<span class="sd">        The list of extra include directories to search for header files.</span>
+<span class="sd">    defines : list of str, optional</span>
+<span class="sd">        The list of extra macro definitions to apply.</span>
+<span class="sd">    undefines : list of str, optional</span>
+<span class="sd">        The list of extra macro undefinitions to apply.</span>
+<span class="sd">    extra_parser_args : list of str, optional</span>
+<span class="sd">        Further command line arguments to pass to the parser.</span>
+<span class="sd">    verbose : bool, optional</span>
+<span class="sd">        Flag to display extra information while describing the class.</span>
+<span class="sd">    debug : bool, optional</span>
+<span class="sd">        Flag to enable/disable debug mode.</span>
+<span class="sd">    builddir : str, optional</span>
+<span class="sd">        Location of -- often temporary -- build files.</span>
+<span class="sd">    clang_includes : ignored</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    root : XML etree</span>
+<span class="sd">        An in memory tree representing the parsed file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">drive</span><span class="p">,</span> <span class="n">xmlname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitdrive</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">drive</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c"># Windows drive handling, &#39;C:&#39; -&gt; &#39;C_&#39;</span>
+        <span class="n">xmlname</span> <span class="o">=</span> <span class="n">drive</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">,</span> <span class="s">&#39;_&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">xmlname</span>
+    <span class="n">xmlname</span> <span class="o">=</span> <span class="n">xmlname</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span><span class="p">,</span> <span class="s">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;.xml&#39;</span>
+    <span class="n">xmlname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">builddir</span><span class="p">,</span> <span class="n">xmlname</span><span class="p">)</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;gccxml&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="s">&#39;-fxml=&#39;</span> <span class="o">+</span> <span class="n">xmlname</span><span class="p">]</span>
+    <span class="n">cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&#39;-I&#39;</span> <span class="o">+</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">includes</span><span class="p">]</span>
+    <span class="n">cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&#39;-D&#39;</span> <span class="o">+</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">defines</span><span class="p">]</span>
+    <span class="n">cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&#39;-U&#39;</span> <span class="o">+</span> <span class="n">u</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">undefines</span><span class="p">]</span>
+    <span class="n">cmd</span> <span class="o">+=</span> <span class="n">extra_parser_args</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">xmlname</span><span class="p">):</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">xmlname</span><span class="p">,</span> <span class="s">&#39;r+b&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ensuredirs</span><span class="p">(</span><span class="n">xmlname</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">xmlname</span><span class="p">,</span> <span class="s">&#39;w+b&#39;</span><span class="p">)</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">root</span>
+
+<span class="c">#</span>
+<span class="c"># clang parser</span>
+<span class="c">#</span></div>
+<span class="nd">@_memoize_parser</span>
+<div class="viewcode-block" id="clang_parse"><a class="viewcode-back" href="../../libref/astparsers.html#xdress.astparsers.clang_parse">[docs]</a><span class="k">def</span> <span class="nf">clang_parse</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">includes</span><span class="o">=</span><span class="p">(),</span> <span class="n">defines</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;XDRESS&#39;</span><span class="p">,),</span> <span class="n">undefines</span><span class="o">=</span><span class="p">(),</span>
+                <span class="n">extra_parser_args</span><span class="o">=</span><span class="p">(),</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">builddir</span><span class="o">=</span><span class="s">&#39;build&#39;</span><span class="p">,</span>
+                <span class="n">language</span><span class="o">=</span><span class="s">&#39;c++&#39;</span><span class="p">,</span> <span class="n">clang_includes</span><span class="o">=</span><span class="p">()):</span>
+    <span class="sd">&quot;&quot;&quot;Use clang to parse a file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        The path to the file.</span>
+<span class="sd">    includes: list of str, optional</span>
+<span class="sd">        The list of extra include directories to search for header files.</span>
+<span class="sd">    defines: list of str, optional</span>
+<span class="sd">        The list of extra macro definitions to apply.</span>
+<span class="sd">    undefines: list of str, optional</span>
+<span class="sd">        The list of extra macro undefinitions to apply.</span>
+<span class="sd">    extra_parser_args : list of str, optional</span>
+<span class="sd">        Further command line arguments to pass to the parser.</span>
+<span class="sd">    verbose : bool, optional</span>
+<span class="sd">        Flag to display extra information while describing the class.  Ignored.</span>
+<span class="sd">    debug : bool, optional</span>
+<span class="sd">        Flag to enable/disable debug mode.  Currently ignored.</span>
+<span class="sd">    builddir : str, optional</span>
+<span class="sd">        Ignored.  Exists only for compatibility with gccxml_describe.</span>
+<span class="sd">    language : str</span>
+<span class="sd">        Valid language flag.</span>
+<span class="sd">    clang_includes : list of str, optional</span>
+<span class="sd">        clang-specific includes paths.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tu : libclang TranslationUnit object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">cindex</span><span class="o">.</span><span class="n">Index</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="n">cindex</span><span class="o">.</span><span class="n">TranslationUnit</span><span class="o">.</span><span class="n">PARSE_SKIP_FUNCTION_BODIES</span>
+    <span class="n">tu</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
+                     <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;-x&#39;</span><span class="p">,</span> <span class="n">language</span><span class="p">]</span>
+                        <span class="o">+</span> <span class="p">[</span><span class="s">&#39;-I&#39;</span> <span class="o">+</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">clang_includes</span><span class="p">)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">includes</span><span class="p">)]</span>
+                        <span class="o">+</span> <span class="p">[</span><span class="s">&#39;-D&#39;</span> <span class="o">+</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">defines</span><span class="p">]</span>
+                        <span class="o">+</span> <span class="p">[</span><span class="s">&#39;-U&#39;</span> <span class="o">+</span> <span class="n">u</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">undefines</span><span class="p">]</span>
+                        <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">extra_parser_args</span><span class="p">))</span>
+    <span class="c"># Check for fatal errors</span>
+    <span class="n">failed</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">tu</span><span class="o">.</span><span class="n">diagnostics</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">severity</span> <span class="o">&gt;=</span> <span class="n">cindex</span><span class="o">.</span><span class="n">Diagnostic</span><span class="o">.</span><span class="n">Error</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">format</span><span class="p">())</span>
+            <span class="n">failed</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">if</span> <span class="n">failed</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;failed to parse {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">tu</span>
+
+<span class="c">#</span>
+<span class="c"># pycparser Describers</span>
+<span class="c">#</span>
+</div>
+<span class="nd">@_memoize_parser</span>
+<div class="viewcode-block" id="pycparser_parse"><a class="viewcode-back" href="../../libref/astparsers.html#xdress.astparsers.pycparser_parse">[docs]</a><span class="k">def</span> <span class="nf">pycparser_parse</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">includes</span><span class="o">=</span><span class="p">(),</span> <span class="n">defines</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;XDRESS&#39;</span><span class="p">,),</span> <span class="n">undefines</span><span class="o">=</span><span class="p">(),</span>
+                    <span class="n">extra_parser_args</span><span class="o">=</span><span class="p">(),</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                    <span class="n">builddir</span><span class="o">=</span><span class="s">&#39;build&#39;</span><span class="p">,</span> <span class="n">clang_includes</span><span class="o">=</span><span class="p">()):</span>
+    <span class="sd">&quot;&quot;&quot;Use pycparser to parse a file.  This functions is automatically memoized.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        The path to the file.</span>
+<span class="sd">    includes : list of str, optional</span>
+<span class="sd">        The list of extra include directories to search for header files.</span>
+<span class="sd">    defines : list of str, optional</span>
+<span class="sd">        The list of extra macro definitions to apply.</span>
+<span class="sd">    undefines : list of str, optional</span>
+<span class="sd">        The list of extra macro undefinitions to apply.</span>
+<span class="sd">    extra_parser_args : list of str, optional</span>
+<span class="sd">        Further command line arguments to pass to the parser.</span>
+<span class="sd">    verbose : bool, optional</span>
+<span class="sd">        Flag to display extra information while describing the class.</span>
+<span class="sd">    debug : bool, optional</span>
+<span class="sd">        Flag to enable/disable debug mode.</span>
+<span class="sd">    builddir : str, optional</span>
+<span class="sd">        Location of -- often temporary -- build files.</span>
+<span class="sd">    clang_includes : ignored</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    root : AST</span>
+<span class="sd">        A pycparser abstract syntax tree.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pklgzname</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span><span class="p">,</span> <span class="s">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;.pkl.gz&#39;</span>
+    <span class="n">pklgzname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">builddir</span><span class="p">,</span> <span class="n">pklgzname</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">pklgzname</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pklgzname</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">root</span>
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;cpp_args&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">r&#39;-D__attribute__(x)=&#39;</span><span class="p">,</span>  <span class="c"># Workaround for GNU libc</span>
+                <span class="s">r&#39;-D__asm__(x)=&#39;</span><span class="p">,</span> <span class="s">r&#39;-D__const=&#39;</span><span class="p">,</span>
+                <span class="s">r&#39;-D__builtin_va_list=int&#39;</span><span class="p">,</span> <span class="c"># just fake this</span>
+                <span class="s">r&#39;-D__restrict=&#39;</span><span class="p">,</span> <span class="s">r&#39;-D__extension__=&#39;</span><span class="p">,</span>
+                <span class="s">r&#39;-D__inline__=&#39;</span><span class="p">,</span> <span class="s">r&#39;-D__inline=&#39;</span><span class="p">,</span>
+                <span class="p">]}</span>
+    <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cpp_args&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&#39;-I&#39;</span> <span class="o">+</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">includes</span><span class="p">]</span>
+    <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cpp_args&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&#39;-D&#39;</span> <span class="o">+</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">defines</span><span class="p">]</span>
+    <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cpp_args&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&#39;-U&#39;</span> <span class="o">+</span> <span class="n">u</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">undefines</span><span class="p">]</span>
+    <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cpp_args&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">extra_parser_args</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">pycparser</span><span class="o">.</span><span class="n">parse_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">use_cpp</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pklgzname</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">pickle</span><span class="o">.</span><span class="n">HIGHEST_PROTOCOL</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">root</span>
+
+<span class="c">#</span>
+<span class="c">#  General utilities</span>
+<span class="c">#</span>
+</div>
+<div class="viewcode-block" id="pick_parser"><a class="viewcode-back" href="../../libref/astparsers.html#xdress.astparsers.pick_parser">[docs]</a><span class="k">def</span> <span class="nf">pick_parser</span><span class="p">(</span><span class="n">file_or_lang</span><span class="p">,</span> <span class="n">parsers</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Determines the parse to use for a file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    file_or_lang : str</span>
+<span class="sd">        The path to the file OR a valid language flag.</span>
+<span class="sd">    parsers : str, list, or dict, optional</span>
+<span class="sd">        The parser / AST to use to use for the file.  Currently &#39;clang&#39;, &#39;gccxml&#39;,</span>
+<span class="sd">        and &#39;pycparser&#39; are supported, though others may be implemented in the</span>
+<span class="sd">        future.  If this is a string, then this parser is used.  If this is a list,</span>
+<span class="sd">        this specifies the parser order to use based on availability.  If this is</span>
+<span class="sd">        a dictionary, it specifies the order to use parser based on language, i.e.</span>
+<span class="sd">        ``{&#39;c&#39; [&#39;pycparser&#39;, &#39;gccxml&#39;], &#39;c++&#39;: [&#39;gccxml&#39;, &#39;pycparser&#39;]}``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    parser : str</span>
+<span class="sd">        The name of the parser to use.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parsers</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+        <span class="n">parser</span> <span class="o">=</span> <span class="n">parsers</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parsers</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">):</span>
+        <span class="n">ps</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parsers</span> <span class="k">if</span> <span class="n">PARSERS_AVAILABLE</span><span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">lower</span><span class="p">()]]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&quot;Parsers not available: {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parsers</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="n">parser</span> <span class="o">=</span> <span class="n">ps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parsers</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
+        <span class="n">lang</span> <span class="o">=</span> <span class="n">file_or_lang</span> <span class="k">if</span> <span class="n">file_or_lang</span> <span class="ow">in</span> <span class="n">parsers</span> \
+                            <span class="k">else</span> <span class="n">guess_language</span><span class="p">(</span><span class="n">file_or_lang</span><span class="p">)</span>
+        <span class="n">ps</span> <span class="o">=</span> <span class="n">parsers</span><span class="p">[</span><span class="n">lang</span><span class="p">]</span>
+        <span class="n">ps</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">ps</span> <span class="k">if</span> <span class="n">PARSERS_AVAILABLE</span><span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">lower</span><span class="p">()]]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&quot;{0} parsers not available: {1}&quot;</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lang</span><span class="o">.</span><span class="n">capitalize</span><span class="p">(),</span> <span class="s">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parsers</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="n">parser</span> <span class="o">=</span> <span class="n">ps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;type of parsers not intelligible&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">parser</span>
+</div>
+<span class="k">def</span> <span class="nf">_pformat_etree_inplace</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">+</span> <span class="n">level</span><span class="o">*</span><span class="s">&quot;  &quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">elem</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">elem</span><span class="o">.</span><span class="n">text</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">elem</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+            <span class="n">elem</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="s">&quot;  &quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">elem</span><span class="o">.</span><span class="n">tail</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">elem</span><span class="o">.</span><span class="n">tail</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+            <span class="n">elem</span><span class="o">.</span><span class="n">tail</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">elem</span><span class="p">:</span>
+            <span class="n">_pformat_etree_inplace</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">level</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">elem</span><span class="o">.</span><span class="n">tail</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">elem</span><span class="o">.</span><span class="n">tail</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+            <span class="n">elem</span><span class="o">.</span><span class="n">tail</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">level</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">elem</span><span class="o">.</span><span class="n">tail</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">elem</span><span class="o">.</span><span class="n">tail</span><span class="o">.</span><span class="n">strip</span><span class="p">()):</span>
+            <span class="n">elem</span><span class="o">.</span><span class="n">tail</span> <span class="o">=</span> <span class="n">i</span>
+
+<div class="viewcode-block" id="dumpast"><a class="viewcode-back" href="../../libref/astparsers.html#xdress.astparsers.dumpast">[docs]</a><span class="k">def</span> <span class="nf">dumpast</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">parsers</span><span class="p">,</span> <span class="n">sourcedir</span><span class="p">,</span> <span class="n">includes</span><span class="o">=</span><span class="p">(),</span> <span class="n">defines</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;XDRESS&#39;</span><span class="p">,),</span>
+            <span class="n">undefines</span><span class="o">=</span><span class="p">(),</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">builddir</span><span class="o">=</span><span class="s">&#39;build&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Prints an abstract syntax tree to stdout.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sourcedir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s">&quot; is not a regular file&quot;</span><span class="p">)</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">pick_parser</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">parsers</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">parser</span> <span class="o">==</span> <span class="s">&#39;pycparser&#39;</span><span class="p">:</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">pycparser_parse</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">includes</span><span class="o">=</span><span class="n">includes</span><span class="p">,</span> <span class="n">defines</span><span class="o">=</span><span class="n">defines</span><span class="p">,</span>
+                               <span class="n">undefines</span><span class="o">=</span><span class="n">undefines</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">,</span>
+                               <span class="n">builddir</span><span class="o">=</span><span class="n">builddir</span><span class="p">)</span>
+        <span class="n">root</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">parser</span> <span class="o">==</span> <span class="s">&#39;gccxml&#39;</span><span class="p">:</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">gccxml_parse</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">includes</span><span class="o">=</span><span class="n">includes</span><span class="p">,</span> <span class="n">defines</span><span class="o">=</span><span class="n">defines</span><span class="p">,</span>
+                            <span class="n">undefines</span><span class="o">=</span><span class="n">undefines</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">,</span>
+                            <span class="n">builddir</span><span class="o">=</span><span class="n">builddir</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">HAVE_LXML</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_pformat_etree_inplace</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">root</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">parser</span> <span class="o">+</span> <span class="s">&quot; is not a valid parser&quot;</span><span class="p">)</span>
+
+
+
+<span class="c">#</span>
+<span class="c"># Plugin</span>
+<span class="c">#</span>
+</div>
+<div class="viewcode-block" id="ParserPlugin"><a class="viewcode-back" href="../../libref/astparsers.html#xdress.astparsers.ParserPlugin">[docs]</a><span class="k">class</span> <span class="nc">ParserPlugin</span><span class="p">(</span><span class="n">Plugin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This is a base plugin for tools that wish to wrap parsing.</span>
+<span class="sd">    It should not be used directly.&quot;&quot;&quot;</span>
+
+    <span class="n">requires</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;xdress.base&#39;</span><span class="p">,)</span>
+    <span class="sd">&quot;&quot;&quot;This plugin requires &#39;xdress.base&#39;.&quot;&quot;&quot;</span>
+
+    <span class="n">defaultrc</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">RunControl</span><span class="p">(</span>
+        <span class="n">includes</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;.&#39;</span><span class="p">],</span>
+        <span class="n">clang_includes</span><span class="o">=</span><span class="p">(),</span>
+        <span class="n">defines</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;XDRESS&quot;</span><span class="p">],</span>
+        <span class="n">undefines</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">variables</span><span class="o">=</span><span class="p">(),</span>
+        <span class="n">functions</span><span class="o">=</span><span class="p">(),</span>
+        <span class="n">classes</span><span class="o">=</span><span class="p">(),</span>
+        <span class="n">parsers</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;c&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;pycparser&#39;</span><span class="p">,</span> <span class="s">&#39;clang&#39;</span><span class="p">,</span> <span class="s">&#39;gccxml&#39;</span><span class="p">],</span>
+                 <span class="s">&#39;c++&#39;</span><span class="p">:[</span><span class="s">&#39;clang&#39;</span><span class="p">,</span> <span class="s">&#39;gccxml&#39;</span><span class="p">,</span> <span class="s">&#39;pycparser&#39;</span><span class="p">]},</span>
+        <span class="n">clear_parser_cache_period</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+        <span class="n">dumpast</span><span class="o">=</span><span class="n">NotSpecified</span><span class="p">,</span>
+        <span class="n">extra_parser_args</span><span class="o">=</span><span class="p">(),</span>
+        <span class="p">)</span>
+
+    <span class="n">rcupdaters</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;includes&#39;</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">new</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">old</span><span class="p">)),</span>
+        <span class="s">&#39;extra_parser_args&#39;</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">old</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">new</span><span class="p">)),</span>
+        <span class="p">}</span>
+
+    <span class="n">rcdocs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;includes&#39;</span><span class="p">:</span> <span class="s">&quot;Additional include directories&quot;</span><span class="p">,</span>
+        <span class="s">&#39;defines&#39;</span><span class="p">:</span> <span class="s">&quot;Set additional macro definitions&quot;</span><span class="p">,</span>
+        <span class="s">&#39;undefines&#39;</span><span class="p">:</span> <span class="s">&quot;Unset additional macro definitions&quot;</span><span class="p">,</span>
+        <span class="s">&#39;variables&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&quot;A list of variable names in sequence, mapping, &quot;</span>
+                      <span class="s">&quot;or apiname format&quot;</span><span class="p">),</span>
+        <span class="s">&#39;functions&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&quot;A list of function names in sequence, mapping, &quot;</span>
+                      <span class="s">&quot;or apiname format&quot;</span><span class="p">),</span>
+        <span class="s">&#39;classes&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&quot;A list of class names in sequence, mapping, &quot;</span>
+                    <span class="s">&quot;or apiname format&quot;</span><span class="p">),</span>
+        <span class="s">&#39;parsers&#39;</span><span class="p">:</span> <span class="s">&quot;Parser(s) name, list, or dict&quot;</span><span class="p">,</span>
+        <span class="s">&#39;clear_parser_cache_period&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&quot;Number of parser calls to perform before &quot;</span>
+                                      <span class="s">&quot;clearing the internal cache.  This prevents &quot;</span>
+                                      <span class="s">&quot;nasty memory overflow issues.&quot;</span><span class="p">),</span>
+        <span class="s">&#39;dumpast&#39;</span><span class="p">:</span> <span class="s">&quot;Prints the abstract syntax tree of a file.&quot;</span><span class="p">,</span>
+        <span class="s">&#39;clang_includes&#39;</span><span class="p">:</span> <span class="s">&quot;clang-specific include paths&quot;</span><span class="p">,</span>
+        <span class="s">&#39;extra_parser_args&#39;</span><span class="p">:</span> <span class="s">&quot;Further command line arguments to pass to the parser&quot;</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">update_argparser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
+        <span class="n">rcdocs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rcdocs</span><span class="p">()</span> <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rcdocs</span><span class="p">)</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">rcdocs</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-I&#39;</span><span class="p">,</span> <span class="s">&#39;--includes&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&#39;includes&#39;</span><span class="p">,</span>
+                            <span class="n">nargs</span><span class="o">=</span><span class="s">&quot;+&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">rcdocs</span><span class="p">[</span><span class="s">&quot;includes&quot;</span><span class="p">])</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-D&#39;</span><span class="p">,</span> <span class="s">&#39;--defines&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&#39;defines&#39;</span><span class="p">,</span>
+                            <span class="n">nargs</span><span class="o">=</span><span class="s">&quot;+&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">rcdocs</span><span class="p">[</span><span class="s">&quot;defines&quot;</span><span class="p">])</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-U&#39;</span><span class="p">,</span> <span class="s">&#39;--undefines&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&#39;undefines&#39;</span><span class="p">,</span>
+                            <span class="n">nargs</span><span class="o">=</span><span class="s">&quot;+&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">rcdocs</span><span class="p">[</span><span class="s">&quot;undefines&quot;</span><span class="p">])</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-p&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&#39;parsers&#39;</span><span class="p">,</span>
+                            <span class="n">help</span><span class="o">=</span><span class="n">rcdocs</span><span class="p">[</span><span class="s">&quot;parsers&quot;</span><span class="p">])</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--clear-parser-cache-period&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span>
+                            <span class="n">dest</span><span class="o">=</span><span class="s">&#39;clear_parser_cache_period&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                            <span class="n">help</span><span class="o">=</span><span class="n">rcdocs</span><span class="p">[</span><span class="s">&quot;clear_parser_cache_period&quot;</span><span class="p">])</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--dumpast&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&#39;dumpast&#39;</span><span class="p">,</span>
+                            <span class="n">metavar</span><span class="o">=</span><span class="s">&quot;FILE&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">rcdocs</span><span class="p">[</span><span class="s">&quot;dumpast&quot;</span><span class="p">])</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--clang-includes&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&#39;clang_includes&#39;</span><span class="p">,</span>
+                            <span class="n">nargs</span><span class="o">=</span><span class="s">&quot;+&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">rcdocs</span><span class="p">[</span><span class="s">&quot;clang_includes&quot;</span><span class="p">])</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--extra-parser-args&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store&#39;</span><span class="p">,</span>
+                            <span class="n">dest</span><span class="o">=</span><span class="s">&#39;extra_parser_args&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s">&quot;+&quot;</span><span class="p">,</span>
+                            <span class="n">help</span><span class="o">=</span><span class="n">rcdocs</span><span class="p">[</span><span class="s">&quot;extra_parser_args&quot;</span><span class="p">])</span>
+
+<div class="viewcode-block" id="ParserPlugin.setup"><a class="viewcode-back" href="../../libref/astparsers.html#xdress.astparsers.ParserPlugin.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Remember to call super() on subclasses!&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">parsers</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s">&#39;[&#39;</span> <span class="ow">in</span> <span class="n">rc</span><span class="o">.</span><span class="n">parsers</span> <span class="ow">or</span> <span class="s">&#39;{&#39;</span> <span class="ow">in</span> <span class="n">rc</span><span class="o">.</span><span class="n">parsers</span><span class="p">:</span>
+                <span class="n">rc</span><span class="o">.</span><span class="n">parsers</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">parsers</span><span class="p">)</span>
+        <span class="c"># This should go last</span>
+        <span class="k">if</span> <span class="n">rc</span><span class="o">.</span><span class="n">dumpast</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">NotSpecified</span><span class="p">:</span>
+            <span class="n">dumpast</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">dumpast</span><span class="p">,</span> <span class="n">rc</span><span class="o">.</span><span class="n">parsers</span><span class="p">,</span> <span class="n">rc</span><span class="o">.</span><span class="n">sourcedir</span><span class="p">,</span> <span class="n">includes</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">includes</span><span class="p">,</span>
+                    <span class="n">defines</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">defines</span><span class="p">,</span> <span class="n">undefines</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">undefines</span><span class="p">,</span>
+                    <span class="n">verbose</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">debug</span><span class="p">,</span> <span class="n">builddir</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">builddir</span><span class="p">,</span>
+                    <span class="n">clang_includes</span><span class="o">=</span><span class="n">rc</span><span class="o">.</span><span class="n">clang_includes</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+</div>
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;ParserPlugin is not a complete plugin.  Do not use directly&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ParserPlugin.report_debug"><a class="viewcode-back" href="../../libref/astparsers.html#xdress.astparsers.ParserPlugin.report_debug">[docs]</a>    <span class="k">def</span> <span class="nf">report_debug</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Remember to call super() on subclasses!&quot;&quot;&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Autodescriber parsers available:</span><span class="se">\n\n</span><span class="s">{0}</span><span class="se">\n\n</span><span class="s">&#39;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pformat</span><span class="p">(</span><span class="n">PARSERS_AVAILABLE</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">msg</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+        <p class="logo"><a href="../../index.html">
+          <img class="logo" src="../../_static/HooverJoven.jpg" alt="Logo"/>
+        </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">xdress 0.4 documentation</a> &raquo;</li>
+
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, Anthony Scopatz.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div><script type="text/javascript">
+    if(ga_enabled){
+        document.write("<div class=\"footer\">This page uses <a href=\"http://analytics.google.com\">Google Analytics</a> to collect statistics. ");
+        document.write("Click <button title=\"set cookie to disable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', 'true', {expires: 3650, path: '/'}); window.location.reload(); return false; \">here</button> to disable analytics for this site.");
+        document.write("</div>");
+    }else{
+        document.write("<div class=\"footer\">Google Analytics has been disabled. ");
+        document.write("Click <button title=\"set cookie to re-enable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', null, {path: '/'}); window.location.reload(); return false; \">here</button> to re-enable analytics for this site.");
+    };
+</script>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

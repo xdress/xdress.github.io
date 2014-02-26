@@ -1,0 +1,327 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>XDress 0.2 Release Notes &mdash; xdress 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../_static/cloud.js"></script>
+    <link rel="top" title="xdress 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Previous Versions" href="index.html" />
+    <link rel="next" title="XDress 0.1 Release Notes" href="0.1_release_notes.html" />
+    <link rel="prev" title="XDress 0.3 Release Notes" href="0.3_release_notes.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
+var ga_enabled = !$.cookie('disable-ga');
+if(ga_enabled){
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41934829-1']);
+  _gaq.push(['_setCookiePath', '/']);
+  _gaq.push(['_setDetectFlash', false]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+}
+</script>
+  </head>
+  <body>
+    <div class="relbar-top">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="0.1_release_notes.html" title="XDress 0.1 Release Notes"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="0.3_release_notes.html" title="XDress 0.3 Release Notes"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">xdress 0.4 documentation</a> &raquo;</li>
+
+          <li><a href="index.html" accesskey="U">Previous Versions</a> &raquo;</li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="xdress-0-2-release-notes">
+<h1>XDress 0.2 Release Notes<a class="headerlink" href="#xdress-0-2-release-notes" title="Permalink to this headline">¶</a></h1>
+<p>XDress is an automatic wrapper generator for C/C++ written in pure Python. Currently,
+xdress may generate Python bindings (via Cython) for C++ classes, functions, and
+certain variable types. It also contains idiomatic wrappers for C++ standard library
+containers (sets, vectors, maps). In the future, other tools and bindings will be
+supported.</p>
+<p>The main enabling feature of xdress is a dynamic type system that was designed with
+the purpose of API generation in mind.</p>
+<p>Release highlights:</p>
+<blockquote>
+<div><ul>
+<li><p class="first">First class support for C via pycparser.</p>
+</li>
+<li><p class="first">Python 3 support, by popular demand!</p>
+</li>
+<li><dl class="first docutils">
+<dt>A plethora of awesome type system updates, including:</dt>
+<dd><ul class="first last simple">
+<li>type matching</li>
+<li>lambda-valued converters</li>
+<li>function pointer support</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">Easy to use and implement plugin architecture.</p>
+</li>
+</ul>
+</div></blockquote>
+<p>Please visit the website for more information: <a class="reference external" href="http://xdress.org/">http://xdress.org/</a></p>
+<p>Ask questions on the mailing list: <a class="reference external" href="mailto:xdress&#37;&#52;&#48;googlegroups&#46;com">xdress<span>&#64;</span>googlegroups<span>&#46;</span>com</a></p>
+<p>Download the code from GitHub: <a class="reference external" href="http://github.com/xdress/xdress">http://github.com/xdress/xdress</a></p>
+<p>XDress is free &amp; open source (BSD 2-clause license) and requires Python 2.7,
+NumPy 1.5+, Cython 0.19+, and optionally GCC-XML, pycparser, and lxml.</p>
+<div class="section" id="new-features">
+<h2>New Features<a class="headerlink" href="#new-features" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="first-class-c-support">
+<h3>First Class C Support<a class="headerlink" href="#first-class-c-support" title="Permalink to this headline">¶</a></h3>
+<p>Wrapping C code is now fully handled through with the optional pycparser.
+This means that you don&#8217;t have to worry about whether or not the GCC-XML
+parser will work on your particular bit of code.  Furthermore, C structs
+and their members are now handled idiomatically.  (C++ structs are actually
+treated as C++ classes, which means that their are allowed to have
+constructors and other C++ concepts not present in C.)</p>
+</div>
+<div class="section" id="python-3-support">
+<h3>Python 3 Support<a class="headerlink" href="#python-3-support" title="Permalink to this headline">¶</a></h3>
+<p>The entire code base is built and tested under Python 3.3.  This uses the single
+code base model, as most development takes pace in Python 2.7.  The Cython code
+that is generated may be used by both Python 2 &amp; 3.</p>
+</div>
+<div class="section" id="type-system">
+<h3>Type System<a class="headerlink" href="#type-system" title="Permalink to this headline">¶</a></h3>
+<p>The type system has been expanded and hardened to handle additional use cases,
+largely motivated by the desire for realistic C support.</p>
+<p>A new function pointer (<tt class="docutils literal"><span class="pre">fucntion_pointer</span></tt>) refinement type has been added.
+When converting from C to Python, a new function object is created that wraps
+the underlying call.  For converting from Python to C, a virtual table of
+callback functions is constructed that have the same signature of the pointer
+but hold a reference to a Python function.  The size of the table and thus how
+many callbacks you can have before overwriting previous ones, is set by the
+<tt class="docutils literal"><span class="pre">max_callbacks</span></tt> key in the extra dictionary in class descriptions.  This
+defaults to 8.</p>
+<p>A new enum refinement type now also comes stock. These may be exposed to Python
+in the <tt class="docutils literal"><span class="pre">rc.variables</span></tt> list.</p>
+<p>The type system now also comes with basic type matching tools.  There is a new
+<tt class="docutils literal"><span class="pre">TypeMatcher</span></tt> class, a <tt class="docutils literal"><span class="pre">matches()</span></tt> function, and a singleton <tt class="docutils literal"><span class="pre">MatchAny</span></tt>
+that may be used for determining whether a type adheres to a pattern.  The
+TypeMatcher class itself is immutable and hashable and therefore may be used
+anywhere other type elements (tuples, str, int) may be used including as dict
+keys!  This is helpful for specifying conversions for large groups of types.</p>
+<p>Finally, the type system conversion dictionaries now accept callable objects
+as values.  This was put in to handle templated types where the number of
+argument is not in general know beforehand, e.g. enums and function pointers.
+The values must be callable with only a single argument &#8211; the type itself.
+For example, <tt class="docutils literal"><span class="pre">lambda</span> <span class="pre">t:</span> <span class="pre">rtnvalue</span></tt> is valid.</p>
+</div>
+<div class="section" id="plugins">
+<h3>Plugins!<a class="headerlink" href="#plugins" title="Permalink to this headline">¶</a></h3>
+<p>XDress is a suite of tools written on top of a type system.  Thus the entire
+core has been refactored to implement a very nimble and easy plugin system.
+The plugin mechanism enables external projects with their own code generators
+to easily hook into the xdress tools.  Additionally, this allows users to
+decide at run time which plugins they want to use.</p>
+</div>
+</div>
+<div class="section" id="mini-faq">
+<h2>Mini-FAQ<a class="headerlink" href="#mini-faq" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Why not use an existing solution (eg, SWIG)?</p>
+<blockquote>
+<div><p>Their type systems don&#8217;t support run-time, user provided refinement types,
+and thus are unsuited for verification &amp; validation use cases that often
+arise in computational science.</p>
+<p>Furthermore, they tend to not handle C++ dependent types well (i.e. vector&lt;T&gt;
+does not come back as a np.view(..., dtype=T)).</p>
+</div></blockquote>
+</li>
+<li><p class="first">Why GCC-XML and not Clang&#8217;s AST?</p>
+<blockquote>
+<div><p>I tried using Clang&#8217;s AST (and the remnants of a broken visitor class remain
+in the code base).  However, the official Clang AST Python bindings lack
+support for template argument types.  This is a really big deal. Other C++ ASTs
+may be supported in the future &#8211; including Clang&#8217;s.</p>
+</div></blockquote>
+</li>
+<li><p class="first">I run xdress and it creates these files, now what?!</p>
+<blockquote>
+<div><p>It is your job to integrate the files created by xdress into your build system.</p>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="join-in-the-fun">
+<h2>Join in the Fun!<a class="headerlink" href="#join-in-the-fun" title="Permalink to this headline">¶</a></h2>
+<p>If you are interested in using xdress on your project (and need help), contributing
+back to xdress, starting up a development team, or writing your own code generation
+plugin tool on top of the type system and autodescriber, please let us know.
+Participation is very welcome!</p>
+</div>
+<div class="section" id="authors">
+<h2>Authors<a class="headerlink" href="#authors" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://scopatz.com/">Anthony Scopatz</a></li>
+<li>Spencer Lyon *</li>
+<li>Gerald Dalley *</li>
+<li>Alexander Eisenhuth *</li>
+</ul>
+<p>An * indicates a first time contributor.</p>
+</div>
+<div class="section" id="links">
+<h2>Links<a class="headerlink" href="#links" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Homepage - <a class="reference external" href="http://xdress.org/">http://xdress.org/</a></li>
+<li>Mailing List - <a class="reference external" href="mailto:xdress&#37;&#52;&#48;googlegroups&#46;com">xdress<span>&#64;</span>googlegroups<span>&#46;</span>com</a></li>
+<li>GitHub Organization - <a class="reference external" href="https://github.com/xdress">https://github.com/xdress</a></li>
+<li>Pycparser - <a class="reference external" href="https://pypi.python.org/pypi/pycparser">https://pypi.python.org/pypi/pycparser</a></li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+        <p class="logo"><a href="../index.html">
+          <img class="logo" src="../_static/HooverJoven.jpg" alt="Logo"/>
+        </a></p>
+  <div class="sphinxlocaltoc">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">XDress 0.2 Release Notes</a><ul>
+<li><a class="reference internal" href="#new-features">New Features</a><ul>
+<li><a class="reference internal" href="#first-class-c-support">First Class C Support</a></li>
+<li><a class="reference internal" href="#python-3-support">Python 3 Support</a></li>
+<li><a class="reference internal" href="#type-system">Type System</a></li>
+<li><a class="reference internal" href="#plugins">Plugins!</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mini-faq">Mini-FAQ</a></li>
+<li><a class="reference internal" href="#join-in-the-fun">Join in the Fun!</a></li>
+<li><a class="reference internal" href="#authors">Authors</a></li>
+<li><a class="reference internal" href="#links">Links</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="0.3_release_notes.html"
+                        title="previous chapter">XDress 0.3 Release Notes</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="0.1_release_notes.html"
+                        title="next chapter">XDress 0.1 Release Notes</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/previous/0.2_release_notes.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="0.1_release_notes.html" title="XDress 0.1 Release Notes"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="0.3_release_notes.html" title="XDress 0.3 Release Notes"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">xdress 0.4 documentation</a> &raquo;</li>
+
+          <li><a href="index.html" >Previous Versions</a> &raquo;</li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, Anthony Scopatz.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div><script type="text/javascript">
+    if(ga_enabled){
+        document.write("<div class=\"footer\">This page uses <a href=\"http://analytics.google.com\">Google Analytics</a> to collect statistics. ");
+        document.write("Click <button title=\"set cookie to disable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', 'true', {expires: 3650, path: '/'}); window.location.reload(); return false; \">here</button> to disable analytics for this site.");
+        document.write("</div>");
+    }else{
+        document.write("<div class=\"footer\">Google Analytics has been disabled. ");
+        document.write("Click <button title=\"set cookie to re-enable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', null, {path: '/'}); window.location.reload(); return false; \">here</button> to re-enable analytics for this site.");
+    };
+</script>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

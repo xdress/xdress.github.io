@@ -1,0 +1,306 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>XDress 0.4 Release Notes &mdash; xdress 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../_static/cloud.js"></script>
+    <link rel="top" title="xdress 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Previous Versions" href="index.html" />
+    <link rel="next" title="XDress 0.3 Release Notes" href="0.3_release_notes.html" />
+    <link rel="prev" title="Previous Versions" href="index.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
+var ga_enabled = !$.cookie('disable-ga');
+if(ga_enabled){
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41934829-1']);
+  _gaq.push(['_setCookiePath', '/']);
+  _gaq.push(['_setDetectFlash', false]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+}
+</script>
+  </head>
+  <body>
+    <div class="relbar-top">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="0.3_release_notes.html" title="XDress 0.3 Release Notes"
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="index.html" title="Previous Versions"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">xdress 0.4 documentation</a> &raquo;</li>
+
+          <li><a href="index.html" accesskey="U">Previous Versions</a> &raquo;</li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="xdress-0-4-release-notes">
+<h1>XDress 0.4 Release Notes<a class="headerlink" href="#xdress-0-4-release-notes" title="Permalink to this headline">¶</a></h1>
+<p>XDress is a numpy-aware automatic wrapper generator for C/C++ written in pure Python.
+Currently, xdress may generate Python bindings (via Cython) for C++ classes,
+functions, and certain variable types. It also contains idiomatic wrappers for
+C++ standard library containers (sets, vectors, maps). In the future, other tools
+and bindings will be supported.</p>
+<p>The main enabling feature of xdress is a dynamic type system that was designed with
+the purpose of API generation in mind.</p>
+<p>Release highlights:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Clang support! All kudos to Geoffrey Irving!</li>
+<li>NumPy dtypes may be created independently of C++ STL vectors</li>
+<li>A complete test suite refactor</li>
+<li>Arbitrary source code locations</li>
+<li>Global run control files</li>
+<li>A plethora of useful bug fixes</li>
+</ul>
+</div></blockquote>
+<p>This version of xdress is <em>not</em> 100% backwards compatible with previous versions
+of xdress. We apologize in the name of progress.  It represents ans impressive
+245 files changed, 44917 aggregate line insertions (+), and 7893 deletions (-).</p>
+<p>Please visit the website for more information: <a class="reference external" href="http://xdress.org/">http://xdress.org/</a></p>
+<p>Ask questions on the mailing list: <a class="reference external" href="https://groups.google.com/forum/#!forum/xdress">https://groups.google.com/forum/#!forum/xdress</a></p>
+<p>Download the code from GitHub: <a class="reference external" href="http://github.com/xdress/xdress">http://github.com/xdress/xdress</a></p>
+<p>XDress is free &amp; open source (BSD 2-clause license) and requires Python 2.7+,
+NumPy 1.5+, Cython 0.19+, and optionally Clang, GCC-XML, pycparser, dOxygen, or lxml.</p>
+<div class="section" id="new-features">
+<h2>New Features<a class="headerlink" href="#new-features" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="clang-support">
+<h3>Clang Support<a class="headerlink" href="#clang-support" title="Permalink to this headline">¶</a></h3>
+<p>Through the herculean efforts of Geoffrey Irving xdress finally has full, first-class
+Clang/LLVM support! This is major advancement as it allows xdress to wrap more modern
+versions of C++ than GCC-XML can handle. Because of deficiencies in the existing
+libclang and Python bindings it was necessary for us to fork libclang for xdress
+in the short term. We hope to integrate these changes upstream.  Clang
+versions 3.2 - 3.4 are supported.</p>
+</div>
+<div class="section" id="independent-numpy-dtypes">
+<h3>Independent NumPy Dtypes<a class="headerlink" href="#independent-numpy-dtypes" title="Permalink to this headline">¶</a></h3>
+<p>In previous versions of xdress, to create a dtype of type T the user needed to
+declare the desire for a wrapper of an STL vector of type T. These two desires have
+now been separated.  It is now possible to create a dtype via the <tt class="docutils literal"><span class="pre">dtypes</span></tt> run
+control parameter.  STL vectors are still wrapped via dtypes.  See the dtypes module
+for more information.</p>
+</div>
+<div class="section" id="shiny-new-test-suite">
+<h3>Shiny New Test Suite<a class="headerlink" href="#shiny-new-test-suite" title="Permalink to this headline">¶</a></h3>
+<p>The xdress test suite has been completely revamped to include both unit and
+integration tests which are run for all available parsers.  The integration tests
+are accomplished though two fake projects - cproj and cppproj - on which the xdress
+CLI is run.  These tests are now fully platform independent, unlike the previous
+BASH-based test suite.</p>
+</div>
+<div class="section" id="source-paths">
+<h3>Source Paths<a class="headerlink" href="#source-paths" title="Permalink to this headline">¶</a></h3>
+<p>Source file paths are now given by either their absolute or relative path. This
+allows source code to be located anywhere on the user&#8217;s file system and enable
+the wrapping of dependencies or externally supplied libraries as needed. The run
+control parameter <tt class="docutils literal"><span class="pre">sourcedir</span></tt> has been deprecated.</p>
+</div>
+<div class="section" id="global-run-control-files">
+<h3>Global Run Control Files<a class="headerlink" href="#global-run-control-files" title="Permalink to this headline">¶</a></h3>
+<p>It is sometimes useful to be able to set system-wide run control parameters.
+XDress will now search the following files in order of increasing precedence.</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">$HOME/.xdressrc</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">$HOME/.xdressrc.py</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">$HOME/.config/xdressrc</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">$HOME/.config/xdressrc.py</span></tt></li>
+</ul>
+<p><tt class="docutils literal"><span class="pre">$HOME</span></tt> is the user&#8217;s home directory.  Settings in the project run control file
+take precedence over the values here.</p>
+</div>
+</div>
+<div class="section" id="major-bug-fixes">
+<h2>Major Bug Fixes<a class="headerlink" href="#major-bug-fixes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Debug file now always written when in debug mode.</li>
+<li>STL sets of custom types now allowed.</li>
+<li>Template parameters now allowed to be enum values.</li>
+<li>Allow classes with no default constructor.</li>
+</ul>
+</div>
+<div class="section" id="join-in-the-fun">
+<h2>Join in the Fun!<a class="headerlink" href="#join-in-the-fun" title="Permalink to this headline">¶</a></h2>
+<p>If you are interested in using xdress on your project (and need help), contributing
+back to xdress, starting up a development team, or writing your own code generation
+plugin tool, please let us know. Participation is very welcome!</p>
+</div>
+<div class="section" id="authors">
+<h2>Authors<a class="headerlink" href="#authors" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://scopatz.com/">Anthony Scopatz</a></li>
+<li>Geoffrey Irving *</li>
+<li>James Casbon *</li>
+<li>Kevin Tew *</li>
+<li>Spencer Lyon</li>
+<li>John Wiggins</li>
+<li>Matt McCormick</li>
+<li>Brad Buran</li>
+<li>Chris Harris *</li>
+<li>Gerald Dalley *</li>
+<li>Micky Latowicki *</li>
+<li>Mike C. Fletcher *</li>
+<li>Robert Schwarz *</li>
+</ul>
+<p>An * indicates a first time contributor.</p>
+</div>
+<div class="section" id="links">
+<h2>Links<a class="headerlink" href="#links" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Homepage - <a class="reference external" href="http://xdress.org/">http://xdress.org/</a></li>
+<li>Mailing List - <a class="reference external" href="https://groups.google.com/forum/#!forum/xdress">https://groups.google.com/forum/#!forum/xdress</a></li>
+<li>GitHub Organization - <a class="reference external" href="https://github.com/xdress">https://github.com/xdress</a></li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+        <p class="logo"><a href="../index.html">
+          <img class="logo" src="../_static/HooverJoven.jpg" alt="Logo"/>
+        </a></p>
+  <div class="sphinxlocaltoc">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">XDress 0.4 Release Notes</a><ul>
+<li><a class="reference internal" href="#new-features">New Features</a><ul>
+<li><a class="reference internal" href="#clang-support">Clang Support</a></li>
+<li><a class="reference internal" href="#independent-numpy-dtypes">Independent NumPy Dtypes</a></li>
+<li><a class="reference internal" href="#shiny-new-test-suite">Shiny New Test Suite</a></li>
+<li><a class="reference internal" href="#source-paths">Source Paths</a></li>
+<li><a class="reference internal" href="#global-run-control-files">Global Run Control Files</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#major-bug-fixes">Major Bug Fixes</a></li>
+<li><a class="reference internal" href="#join-in-the-fun">Join in the Fun!</a></li>
+<li><a class="reference internal" href="#authors">Authors</a></li>
+<li><a class="reference internal" href="#links">Links</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Previous Versions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="0.3_release_notes.html"
+                        title="next chapter">XDress 0.3 Release Notes</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/previous/0.4_release_notes.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="0.3_release_notes.html" title="XDress 0.3 Release Notes"
+             >next</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="index.html" title="Previous Versions"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="../index.html">xdress 0.4 documentation</a> &raquo;</li>
+
+          <li><a href="index.html" >Previous Versions</a> &raquo;</li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, Anthony Scopatz.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div><script type="text/javascript">
+    if(ga_enabled){
+        document.write("<div class=\"footer\">This page uses <a href=\"http://analytics.google.com\">Google Analytics</a> to collect statistics. ");
+        document.write("Click <button title=\"set cookie to disable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', 'true', {expires: 3650, path: '/'}); window.location.reload(); return false; \">here</button> to disable analytics for this site.");
+        document.write("</div>");
+    }else{
+        document.write("<div class=\"footer\">Google Analytics has been disabled. ");
+        document.write("Click <button title=\"set cookie to re-enable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', null, {path: '/'}); window.location.reload(); return false; \">here</button> to re-enable analytics for this site.");
+    };
+</script>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>
