@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>XDress 0.2 Release Notes &mdash; xdress 0.4 documentation</title>
+    <title>XDress 0.4 Release Notes &mdash; xdress 0.4 documentation</title>
     
     <link rel="stylesheet" href="../_static/numpy_friendly.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -31,8 +31,8 @@
     <script type="text/javascript" src="../_static/cloud.js"></script>
     <link rel="top" title="xdress 0.4 documentation" href="../index.html" />
     <link rel="up" title="Previous Versions" href="index.html" />
-    <link rel="next" title="XDress 0.1 Release Notes" href="0.1_release_notes.html" />
-    <link rel="prev" title="XDress 0.3 Release Notes" href="0.3_release_notes.html" /> 
+    <link rel="next" title="XDress 0.3 Release Notes" href="0.3_release_notes.html" />
+    <link rel="prev" title="Previous Versions" href="index.html" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1"><script type="text/javascript">
 var ga_enabled = !$.cookie('disable-ga');
 if(ga_enabled){
@@ -65,10 +65,10 @@ if(ga_enabled){
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="0.1_release_notes.html" title="XDress 0.1 Release Notes"
+          <a href="0.3_release_notes.html" title="XDress 0.3 Release Notes"
              accesskey="N">next</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="0.3_release_notes.html" title="XDress 0.3 Release Notes"
+          <a href="index.html" title="Previous Versions"
              accesskey="P">previous</a> &nbsp; &nbsp;</li>
     <li><a href="../index.html">xdress 0.4 documentation</a> &raquo;</li>
 
@@ -83,134 +83,113 @@ if(ga_enabled){
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="xdress-0-2-release-notes">
-<h1>XDress 0.2 Release Notes<a class="headerlink" href="#xdress-0-2-release-notes" title="Permalink to this headline">¶</a></h1>
-<p>XDress is an automatic wrapper generator for C/C++ written in pure Python. Currently,
-xdress may generate Python bindings (via Cython) for C++ classes, functions, and
-certain variable types. It also contains idiomatic wrappers for C++ standard library
-containers (sets, vectors, maps). In the future, other tools and bindings will be
-supported.</p>
+  <div class="section" id="xdress-0-4-release-notes">
+<h1>XDress 0.4 Release Notes<a class="headerlink" href="#xdress-0-4-release-notes" title="Permalink to this headline">¶</a></h1>
+<p>XDress is a numpy-aware automatic wrapper generator for C/C++ written in pure Python.
+Currently, xdress may generate Python bindings (via Cython) for C++ classes,
+functions, and certain variable types. It also contains idiomatic wrappers for
+C++ standard library containers (sets, vectors, maps). In the future, other tools
+and bindings will be supported.</p>
 <p>The main enabling feature of xdress is a dynamic type system that was designed with
 the purpose of API generation in mind.</p>
 <p>Release highlights:</p>
 <blockquote>
-<div><ul>
-<li><p class="first">First class support for C via pycparser.</p>
-</li>
-<li><p class="first">Python 3 support, by popular demand!</p>
-</li>
-<li><dl class="first docutils">
-<dt>A plethora of awesome type system updates, including:</dt>
-<dd><ul class="first last simple">
-<li>type matching</li>
-<li>lambda-valued converters</li>
-<li>function pointer support</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><p class="first">Easy to use and implement plugin architecture.</p>
-</li>
+<div><ul class="simple">
+<li>Clang support! All kudos to Geoffrey Irving!</li>
+<li>NumPy dtypes may be created independently of C++ STL vectors</li>
+<li>A complete test suite refactor</li>
+<li>Arbitrary source code locations</li>
+<li>Global run control files</li>
+<li>A plethora of useful bug fixes</li>
 </ul>
 </div></blockquote>
+<p>This version of xdress is <em>not</em> 100% backwards compatible with previous versions
+of xdress. We apologize in the name of progress.  It represents ans impressive
+245 files changed, 44917 aggregate line insertions (+), and 7893 deletions (-).</p>
 <p>Please visit the website for more information: <a class="reference external" href="http://xdress.org/">http://xdress.org/</a></p>
-<p>Ask questions on the mailing list: <a class="reference external" href="mailto:xdress&#37;&#52;&#48;googlegroups&#46;com">xdress<span>&#64;</span>googlegroups<span>&#46;</span>com</a></p>
+<p>Ask questions on the mailing list: <a class="reference external" href="https://groups.google.com/forum/#!forum/xdress">https://groups.google.com/forum/#!forum/xdress</a></p>
 <p>Download the code from GitHub: <a class="reference external" href="http://github.com/xdress/xdress">http://github.com/xdress/xdress</a></p>
-<p>XDress is free &amp; open source (BSD 2-clause license) and requires Python 2.7,
-NumPy 1.5+, Cython 0.19+, and optionally GCC-XML, pycparser, and lxml.</p>
+<p>XDress is free &amp; open source (BSD 2-clause license) and requires Python 2.7+,
+NumPy 1.5+, Cython 0.19+, and optionally Clang, GCC-XML, pycparser, dOxygen, or lxml.</p>
 <div class="section" id="new-features">
 <h2>New Features<a class="headerlink" href="#new-features" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="first-class-c-support">
-<h3>First Class C Support<a class="headerlink" href="#first-class-c-support" title="Permalink to this headline">¶</a></h3>
-<p>Wrapping C code is now fully handled through with the optional pycparser.
-This means that you don&#8217;t have to worry about whether or not the GCC-XML
-parser will work on your particular bit of code.  Furthermore, C structs
-and their members are now handled idiomatically.  (C++ structs are actually
-treated as C++ classes, which means that their are allowed to have
-constructors and other C++ concepts not present in C.)</p>
+<div class="section" id="clang-support">
+<h3>Clang Support<a class="headerlink" href="#clang-support" title="Permalink to this headline">¶</a></h3>
+<p>Through the herculean efforts of Geoffrey Irving xdress finally has full, first-class
+Clang/LLVM support! This is major advancement as it allows xdress to wrap more modern
+versions of C++ than GCC-XML can handle. Because of deficiencies in the existing
+libclang and Python bindings it was necessary for us to fork libclang for xdress
+in the short term. We hope to integrate these changes upstream.  Clang
+versions 3.2 - 3.4 are supported.</p>
 </div>
-<div class="section" id="python-3-support">
-<h3>Python 3 Support<a class="headerlink" href="#python-3-support" title="Permalink to this headline">¶</a></h3>
-<p>The entire code base is built and tested under Python 3.3.  This uses the single
-code base model, as most development takes pace in Python 2.7.  The Cython code
-that is generated may be used by both Python 2 &amp; 3.</p>
+<div class="section" id="independent-numpy-dtypes">
+<h3>Independent NumPy Dtypes<a class="headerlink" href="#independent-numpy-dtypes" title="Permalink to this headline">¶</a></h3>
+<p>In previous versions of xdress, to create a dtype of type T the user needed to
+declare the desire for a wrapper of an STL vector of type T. These two desires have
+now been separated.  It is now possible to create a dtype via the <tt class="docutils literal"><span class="pre">dtypes</span></tt> run
+control parameter.  STL vectors are still wrapped via dtypes.  See the dtypes module
+for more information.</p>
 </div>
-<div class="section" id="type-system">
-<h3>Type System<a class="headerlink" href="#type-system" title="Permalink to this headline">¶</a></h3>
-<p>The type system has been expanded and hardened to handle additional use cases,
-largely motivated by the desire for realistic C support.</p>
-<p>A new function pointer (<tt class="docutils literal"><span class="pre">fucntion_pointer</span></tt>) refinement type has been added.
-When converting from C to Python, a new function object is created that wraps
-the underlying call.  For converting from Python to C, a virtual table of
-callback functions is constructed that have the same signature of the pointer
-but hold a reference to a Python function.  The size of the table and thus how
-many callbacks you can have before overwriting previous ones, is set by the
-<tt class="docutils literal"><span class="pre">max_callbacks</span></tt> key in the extra dictionary in class descriptions.  This
-defaults to 8.</p>
-<p>A new enum refinement type now also comes stock. These may be exposed to Python
-in the <tt class="docutils literal"><span class="pre">rc.variables</span></tt> list.</p>
-<p>The type system now also comes with basic type matching tools.  There is a new
-<tt class="docutils literal"><span class="pre">TypeMatcher</span></tt> class, a <tt class="docutils literal"><span class="pre">matches()</span></tt> function, and a singleton <tt class="docutils literal"><span class="pre">MatchAny</span></tt>
-that may be used for determining whether a type adheres to a pattern.  The
-TypeMatcher class itself is immutable and hashable and therefore may be used
-anywhere other type elements (tuples, str, int) may be used including as dict
-keys!  This is helpful for specifying conversions for large groups of types.</p>
-<p>Finally, the type system conversion dictionaries now accept callable objects
-as values.  This was put in to handle templated types where the number of
-argument is not in general know beforehand, e.g. enums and function pointers.
-The values must be callable with only a single argument &#8211; the type itself.
-For example, <tt class="docutils literal"><span class="pre">lambda</span> <span class="pre">t:</span> <span class="pre">rtnvalue</span></tt> is valid.</p>
+<div class="section" id="shiny-new-test-suite">
+<h3>Shiny New Test Suite<a class="headerlink" href="#shiny-new-test-suite" title="Permalink to this headline">¶</a></h3>
+<p>The xdress test suite has been completely revamped to include both unit and
+integration tests which are run for all available parsers.  The integration tests
+are accomplished though two fake projects - cproj and cppproj - on which the xdress
+CLI is run.  These tests are now fully platform independent, unlike the previous
+BASH-based test suite.</p>
 </div>
-<div class="section" id="plugins">
-<h3>Plugins!<a class="headerlink" href="#plugins" title="Permalink to this headline">¶</a></h3>
-<p>XDress is a suite of tools written on top of a type system.  Thus the entire
-core has been refactored to implement a very nimble and easy plugin system.
-The plugin mechanism enables external projects with their own code generators
-to easily hook into the xdress tools.  Additionally, this allows users to
-decide at run time which plugins they want to use.</p>
+<div class="section" id="source-paths">
+<h3>Source Paths<a class="headerlink" href="#source-paths" title="Permalink to this headline">¶</a></h3>
+<p>Source file paths are now given by either their absolute or relative path. This
+allows source code to be located anywhere on the user&#8217;s file system and enable
+the wrapping of dependencies or externally supplied libraries as needed. The run
+control parameter <tt class="docutils literal"><span class="pre">sourcedir</span></tt> has been deprecated.</p>
+</div>
+<div class="section" id="global-run-control-files">
+<h3>Global Run Control Files<a class="headerlink" href="#global-run-control-files" title="Permalink to this headline">¶</a></h3>
+<p>It is sometimes useful to be able to set system-wide run control parameters.
+XDress will now search the following files in order of increasing precedence.</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">$HOME/.xdressrc</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">$HOME/.xdressrc.py</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">$HOME/.config/xdressrc</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">$HOME/.config/xdressrc.py</span></tt></li>
+</ul>
+<p><tt class="docutils literal"><span class="pre">$HOME</span></tt> is the user&#8217;s home directory.  Settings in the project run control file
+take precedence over the values here.</p>
 </div>
 </div>
-<div class="section" id="mini-faq">
-<h2>Mini-FAQ<a class="headerlink" href="#mini-faq" title="Permalink to this headline">¶</a></h2>
-<ul>
-<li><p class="first">Why not use an existing solution (eg, SWIG)?</p>
-<blockquote>
-<div><p>Their type systems don&#8217;t support run-time, user provided refinement types,
-and thus are unsuited for verification &amp; validation use cases that often
-arise in computational science.</p>
-<p>Furthermore, they tend to not handle C++ dependent types well (i.e. vector&lt;T&gt;
-does not come back as a np.view(..., dtype=T)).</p>
-</div></blockquote>
-</li>
-<li><p class="first">Why GCC-XML and not Clang&#8217;s AST?</p>
-<blockquote>
-<div><p>I tried using Clang&#8217;s AST (and the remnants of a broken visitor class remain
-in the code base).  However, the official Clang AST Python bindings lack
-support for template argument types.  This is a really big deal. Other C++ ASTs
-may be supported in the future &#8211; including Clang&#8217;s.</p>
-</div></blockquote>
-</li>
-<li><p class="first">I run xdress and it creates these files, now what?!</p>
-<blockquote>
-<div><p>It is your job to integrate the files created by xdress into your build system.</p>
-</div></blockquote>
-</li>
+<div class="section" id="major-bug-fixes">
+<h2>Major Bug Fixes<a class="headerlink" href="#major-bug-fixes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Debug file now always written when in debug mode.</li>
+<li>STL sets of custom types now allowed.</li>
+<li>Template parameters now allowed to be enum values.</li>
+<li>Allow classes with no default constructor.</li>
 </ul>
 </div>
 <div class="section" id="join-in-the-fun">
 <h2>Join in the Fun!<a class="headerlink" href="#join-in-the-fun" title="Permalink to this headline">¶</a></h2>
 <p>If you are interested in using xdress on your project (and need help), contributing
 back to xdress, starting up a development team, or writing your own code generation
-plugin tool on top of the type system and autodescriber, please let us know.
-Participation is very welcome!</p>
+plugin tool, please let us know. Participation is very welcome!</p>
 </div>
 <div class="section" id="authors">
 <h2>Authors<a class="headerlink" href="#authors" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><a class="reference external" href="http://scopatz.com/">Anthony Scopatz</a></li>
-<li>Spencer Lyon *</li>
+<li>Geoffrey Irving *</li>
+<li>James Casbon *</li>
+<li>Kevin Tew *</li>
+<li>Spencer Lyon</li>
+<li>John Wiggins</li>
+<li>Matt McCormick</li>
+<li>Brad Buran</li>
+<li>Chris Harris *</li>
 <li>Gerald Dalley *</li>
-<li>Alexander Eisenhuth *</li>
+<li>Micky Latowicki *</li>
+<li>Mike C. Fletcher *</li>
+<li>Robert Schwarz *</li>
 </ul>
 <p>An * indicates a first time contributor.</p>
 </div>
@@ -218,9 +197,8 @@ Participation is very welcome!</p>
 <h2>Links<a class="headerlink" href="#links" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li>Homepage - <a class="reference external" href="http://xdress.org/">http://xdress.org/</a></li>
-<li>Mailing List - <a class="reference external" href="mailto:xdress&#37;&#52;&#48;googlegroups&#46;com">xdress<span>&#64;</span>googlegroups<span>&#46;</span>com</a></li>
+<li>Mailing List - <a class="reference external" href="https://groups.google.com/forum/#!forum/xdress">https://groups.google.com/forum/#!forum/xdress</a></li>
 <li>GitHub Organization - <a class="reference external" href="https://github.com/xdress">https://github.com/xdress</a></li>
-<li>Pycparser - <a class="reference external" href="https://pypi.python.org/pypi/pycparser">https://pypi.python.org/pypi/pycparser</a></li>
 </ol>
 </div>
 </div>
@@ -237,15 +215,16 @@ Participation is very welcome!</p>
   <div class="sphinxlocaltoc">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">XDress 0.2 Release Notes</a><ul>
+<li><a class="reference internal" href="#">XDress 0.4 Release Notes</a><ul>
 <li><a class="reference internal" href="#new-features">New Features</a><ul>
-<li><a class="reference internal" href="#first-class-c-support">First Class C Support</a></li>
-<li><a class="reference internal" href="#python-3-support">Python 3 Support</a></li>
-<li><a class="reference internal" href="#type-system">Type System</a></li>
-<li><a class="reference internal" href="#plugins">Plugins!</a></li>
+<li><a class="reference internal" href="#clang-support">Clang Support</a></li>
+<li><a class="reference internal" href="#independent-numpy-dtypes">Independent NumPy Dtypes</a></li>
+<li><a class="reference internal" href="#shiny-new-test-suite">Shiny New Test Suite</a></li>
+<li><a class="reference internal" href="#source-paths">Source Paths</a></li>
+<li><a class="reference internal" href="#global-run-control-files">Global Run Control Files</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#mini-faq">Mini-FAQ</a></li>
+<li><a class="reference internal" href="#major-bug-fixes">Major Bug Fixes</a></li>
 <li><a class="reference internal" href="#join-in-the-fun">Join in the Fun!</a></li>
 <li><a class="reference internal" href="#authors">Authors</a></li>
 <li><a class="reference internal" href="#links">Links</a></li>
@@ -255,14 +234,14 @@ Participation is very welcome!</p>
 
   </div>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="0.3_release_notes.html"
-                        title="previous chapter">XDress 0.3 Release Notes</a></p>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Previous Versions</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="0.1_release_notes.html"
-                        title="next chapter">XDress 0.1 Release Notes</a></p>
+  <p class="topless"><a href="0.3_release_notes.html"
+                        title="next chapter">XDress 0.3 Release Notes</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../_sources/previous/0.2_release_notes.txt"
+    <li><a href="../_sources/previous/0.4_release_notes.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -297,10 +276,10 @@ Participation is very welcome!</p>
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="0.1_release_notes.html" title="XDress 0.1 Release Notes"
+          <a href="0.3_release_notes.html" title="XDress 0.3 Release Notes"
              >next</a> &nbsp; &nbsp;</li>
         <li class="right" >
-          <a href="0.3_release_notes.html" title="XDress 0.3 Release Notes"
+          <a href="index.html" title="Previous Versions"
              >previous</a> &nbsp; &nbsp;</li>
     <li><a href="../index.html">xdress 0.4 documentation</a> &raquo;</li>
 
